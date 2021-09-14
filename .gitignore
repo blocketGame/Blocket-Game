@@ -36,3 +36,6 @@ sysinfo.txt
 *.apk
 *.unitypackage
 *.log
+
+#Files
+.\Logs
