@@ -204,7 +204,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6895963600825941101, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6895963600825941101, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
@@ -415,9 +419,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b62b494d2f78d5f48a5a9ef0d5ddf2b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 30
-  height: 30
-  maxsmoothness: 20
+  width: 300
+  height: 50
+  maxsmoothness: 40
   seed: 0
   seedrandomness: 1
   groundTile: {fileID: 11400000, guid: 0bcc34212cd215a4584d42c3c4ba8f29, type: 2}

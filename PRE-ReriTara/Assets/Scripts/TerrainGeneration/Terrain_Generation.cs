@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Unity.Mathematics;
 
-public class Terrain_Generation_Script : MonoBehaviour
+public class Terrain_Generation: MonoBehaviour
 {
     // Start is called before the first frame update
 
@@ -49,7 +50,7 @@ public class Terrain_Generation_Script : MonoBehaviour
     private int[,] TerrainGeneration(int[,] map)
     {
         if (seedrandomness == true)
-            seed = Random.Range(0f, 10000f);
+            seed = UnityEngine.Random.Range (0f, 10000f);
         
         for (int x = 0; x < width; x++)
         {
