@@ -39,3 +39,4 @@ sysinfo.txt
 
 #Files
 .\Logs\.
+*.log

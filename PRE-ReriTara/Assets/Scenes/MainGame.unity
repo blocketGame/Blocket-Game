@@ -421,7 +421,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 300
   height: 50
-  maxsmoothness: 40
+  maxsmoothness: 50
   seed: 0
   seedrandomness: 1
   groundTile: {fileID: 11400000, guid: 0bcc34212cd215a4584d42c3c4ba8f29, type: 2}
