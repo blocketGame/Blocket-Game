@@ -131,6 +131,30 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 923924914436478962, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
+      propertyPath: orthographic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 923924914436478962, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
+      propertyPath: field of view
+      value: 23
+      objectReference: {fileID: 0}
+    - target: {fileID: 923924914436478962, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
+      propertyPath: m_FocalLength
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 923924914436478962, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
+      propertyPath: m_SensorSize.x
+      value: 70.41
+      objectReference: {fileID: 0}
+    - target: {fileID: 923924914436478962, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
+      propertyPath: m_SensorSize.y
+      value: 52.63
+      objectReference: {fileID: 0}
+    - target: {fileID: 923924914436478962, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
+      propertyPath: orthographic size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 923924914436478962, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
       propertyPath: m_BackGroundColor.b
       value: 0.764151
       objectReference: {fileID: 0}
@@ -199,12 +223,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6895963600825941101, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6895963600825941101, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6895963600825941101, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
       propertyPath: m_LocalPosition.z
