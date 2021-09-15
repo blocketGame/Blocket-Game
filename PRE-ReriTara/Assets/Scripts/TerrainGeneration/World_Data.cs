@@ -38,3 +38,28 @@ public class World_Data : MonoBehaviour
 
     }
 }
+
+public struct Biom
+{
+    public string name;
+    public OreData[] ores;
+    public RegionData[] regions;
+    public AnimationCurve heightCurve;
+    public float noiseValueFrom;
+    public float noiseValueTo;
+}
+
+public struct OreData
+{
+    public string name;
+    public float noiseValueFrom;
+    public float noiseValueTo;
+    public byte blockID;
+}
+
+public struct RegionData
+{
+    public string name;
+    public int startHeight;
+    public byte blockID;
+}
