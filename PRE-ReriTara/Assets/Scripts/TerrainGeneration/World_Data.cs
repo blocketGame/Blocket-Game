@@ -2,13 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * @Author : Cse19455 / Thomas Boigner
+ */
 public class World_Data : MonoBehaviour
 {
 
     public GameObject player;
     public Terrain_Generation terraingeneration;
-    //public TerrainChunk[] chunk;
-    //public Biom[] biom;
+    public TerrainChunk[] chunk;
+    public Biom[] biom;
     public int chunkDistance;
     public int seed;
     public float scale;
@@ -20,14 +23,11 @@ public class World_Data : MonoBehaviour
 
 
 
-
-    // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         

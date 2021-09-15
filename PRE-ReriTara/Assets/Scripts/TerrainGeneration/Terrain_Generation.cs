@@ -4,46 +4,49 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Unity.Mathematics;
 
+/*
+ * @Author : Cse19455 / Thomas Boigner
+ */
 public class Terrain_Generation: MonoBehaviour
 {
-    // Start is called before the first frame update
-
+    //public variables
     public int width, height;
     public float maxsmoothness,seed;
     public bool seedrandomness;
+
     [Header("Tile Settings")]
     public TileBase groundTile,topTile;
     public Tilemap groundTilemap;
 
-    
-    int[,] map;
+    //private variables
+    private int[,] map;
 
-    public delegate void Perform(int x, int y);
+    //delegates
+    public delegate void loopContent(int x, int y);
+
 
     public void Start()
     {
         Generation();
     }
 
-    // Update is called once per frame
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-            Generation();
+        //Generation();
     }
 
     private void Generation()
     {
         groundTilemap.ClearAllTiles();
-        map = GenerateArray(width, height, true);
+        map = GenerateArray(width, height);
         map = TerrainGeneration(map);
-        RenderMap(map, groundTilemap, groundTile , topTile);
+        RenderMap(map);
     }
 
-    private int[,] GenerateArray(int width, int height, bool empty)
+    private int[,] GenerateArray(int width, int height)
     {
         int[,] map = new int[width, height];
-        loopXY((x, y) => {map[x, y] = (empty) ? 0 : 1;});
+        loopXY((x, y) => {map[x, y] = 0;});
         return map;
     }
 
@@ -62,31 +65,31 @@ public class Terrain_Generation: MonoBehaviour
         return map;
     }
 
-    private int[,] RenderMap(
-            int[,] map,
-            Tilemap groundTileMap, 
-            TileBase groundTilebase , TileBase topTile
-            )
+    private int[,] RenderMap(int[,] map)
     {
         loopXY(
             (x,y) =>
                 {
-                if (map[x, y] == 1)
-                    groundTileMap.SetTile(new Vector3Int(x, y, 0), groundTilebase);
-                if (y != 0 && map[x, y - 1] == 1 && map[x, y] == 0)
-                    groundTileMap.SetTile(new Vector3Int(x, y, 0), topTile);
+                    if (map[x, y] == 1)
+                        PlaceTile(x, y, groundTile);
+                    else if (y != 0 && map[x, y - 1] == 1)
+                        PlaceTile(x, y, topTile);
                 }
             );
-
         return map;
     }
 
-    private void loopXY(Perform perform)
+    /*
+     * Automatition functions
+     */
+
+    private void loopXY(loopContent function)
     {
         for (int x = 0; x < width; x++)
             for (int y = 0; y < height; y++)
-                perform(x,y);
+                function(x,y);
     }
 
-
+    
+    private void PlaceTile(int x,int y,TileBase tile)=> groundTilemap.SetTile(new Vector3Int(x, y, 0), tile);
 }
