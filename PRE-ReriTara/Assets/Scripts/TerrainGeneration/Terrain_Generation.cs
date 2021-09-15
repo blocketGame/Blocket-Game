@@ -20,13 +20,13 @@ public class Terrain_Generation: MonoBehaviour
 
     public delegate void Perform(int x, int y);
 
-    void Start()
+    public void Start()
     {
         Generation();
     }
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
             Generation();
