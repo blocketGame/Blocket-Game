@@ -36,7 +36,9 @@ sysinfo.txt
 *.apk
 *.unitypackage
 *.log
+.settings
 
 #Files
 *.log
 Game-Blocket/Logs/*
+Game-Blocket/UserSettings/*
