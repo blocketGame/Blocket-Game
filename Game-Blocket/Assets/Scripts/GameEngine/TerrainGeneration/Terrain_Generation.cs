@@ -9,87 +9,126 @@ using Unity.Mathematics;
  */
 public class Terrain_Generation: MonoBehaviour
 {
-    //public variables
-    public int width, height;
-    public float maxsmoothness,seed;
-    public bool seedrandomness;
+    [SerializeField]
+    private World_Data world;
+    [SerializeField]
+    private List<TerrainChunk> chunksVisibleLastUpdate;
+    [SerializeField]
+    private GameObject chunkParent;
 
-    [Header("Tile Settings")]
-    public TileBase groundTile,topTile;
-    public Tilemap groundTilemap;
+    private Transform playerPosition;
+    private Queue<TerrainChunk> chunkCollisionQueue = new Queue<TerrainChunk>();
 
-    //private variables
-    private int[,] map;
+    //------------------------------------------------------- Properties ------------------------------------------------------------------
 
-    //delegates
-    public delegate void loopContent(int x, int y);
-
+    public World_Data World { get => world; set => world = value; }
+    public List<TerrainChunk> ChunksVisibleLastUpdate { get => chunksVisibleLastUpdate; set => chunksVisibleLastUpdate = value; }
+    public GameObject ChunkParent { get => chunkParent; set => chunkParent = value; }
+    public Transform PlayerPosition { get => playerPosition; set => playerPosition = value; }
+    public Queue<TerrainChunk> ChunkCollisionQueue { get => chunkCollisionQueue; set => chunkCollisionQueue = value; }
 
     public void Start()
     {
-        Generation();
+        ChunksVisibleLastUpdate = new List<TerrainChunk>();
+        PlayerPosition = World.Player.transform;
     }
 
     public void Update()
     {
-        //Generation();
-    }
 
-    private void Generation()
-    {
-        groundTilemap.ClearAllTiles();
-        map = GenerateArray(width, height);
-        map = TerrainGeneration(map);
-        RenderMap(map);
-    }
-
-    private int[,] GenerateArray(int width, int height)
-    {
-        int[,] map = new int[width, height];
-        loopXY((x, y) => {map[x, y] = 0;});
-        return map;
-    }
-
-    private int[,] TerrainGeneration(int[,] map)
-    {
-        if (seedrandomness == true)
-            seed = UnityEngine.Random.Range (0f, 10000f);
-        
-        for (int x = 0; x < width; x++)
+        UpdateChunks();
+        foreach (TerrainChunk tc in ChunkCollisionQueue)
         {
-            int perlinHeight = Mathf.RoundToInt(Mathf.PerlinNoise(x / maxsmoothness, seed) * height);
-            for (int y = 0; y < perlinHeight; y++)
-                map[x, y] = 1;
+            tc.BuildCollisions();
         }
-        
-        return map;
+        ChunkCollisionQueue.Clear();
+
     }
 
-    private int[,] RenderMap(int[,] map)
+    public void UpdateChunks()
     {
-        loopXY(
-            (x,y) =>
-                {
-                    if (map[x, y] == 1)
-                        PlaceTile(x, y, groundTile);
-                    else if (y != 0 && map[x, y - 1] == 1)
-                        PlaceTile(x, y, topTile);
-                }
-            );
-        return map;
+        foreach(TerrainChunk t in ChunksVisibleLastUpdate)
+        {
+            t.ChunkObject.SetActive(false);
+        }
+        ChunksVisibleLastUpdate.Clear();
+        CheckChunksAroundPlayer();
     }
 
-    /*
-     * Automatition functions
-     */
-
-    private void loopXY(loopContent function)
+    /// <summary>
+    /// Activates and deactivates Chunks
+    /// </summary>
+    public void CheckChunksAroundPlayer()
     {
-        for (int x = 0; x < width; x++)
-            for (int y = 0; y < height; y++)
-                function(x,y);
+        int currentChunkCoordX = Mathf.RoundToInt(PlayerPosition.position.x / World.ChunkWidth);
+
+        for(int xOffset = -World.ChunkDistance; xOffset < World.ChunkDistance; xOffset++)
+        {
+            int viewedChunkCoord = currentChunkCoordX + xOffset;
+            if (!World.Chunks.ContainsKey(viewedChunkCoord))
+            {
+                BiomsizeCheck(viewedChunkCoord);
+            }
+            if (World.Chunks.ContainsKey(viewedChunkCoord))
+            {
+                World.Chunks[viewedChunkCoord].ChunkObject.SetActive(true);
+                ChunksVisibleLastUpdate.Add(World.Chunks[viewedChunkCoord]);
+            }
+        }
     }
 
     
-    private void PlaceTile(int x,int y,TileBase tile)=> groundTilemap.SetTile(new Vector3Int(x, y, 0), tile);
+    /// <summary>
+    ///     Generates Chunk From Noisemap without any extra consideration
+    /// </summary>
+    private void BuildChunk(int position)
+    {
+        TerrainChunk chunk = new TerrainChunk(position, World, ChunkParent,null);
+        int Biom = new System.Random(World.Seed+World.ChunkWidth*position).Next(0,World.Biom.Length);
+        chunk.GenerateChunk(NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position*World.ChunkWidth), Biom);
+        chunk.BiomNr = 1;
+        World.Chunks[position] = chunk;
+        ChunksVisibleLastUpdate.Add(chunk);
+        ChunkCollisionQueue.Enqueue(chunk);
+    }
+    /// <summary>
+    ///     Generates Chunk From Noisemap with Biom (min) size in consideration
+    /// </summary>
+    /// <param name="Biomindex">index that specifice which Biom to use</param>
+    /// <param name="Biomnr">iterative index for the new chunk</param>
+    private void BuildChunk(int position,int Biomindex,int Biomnr)
+    {
+        TerrainChunk chunk = new TerrainChunk(position, World, ChunkParent,null);
+        chunk.GenerateChunk(NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position * World.ChunkWidth), Biomindex);
+        chunk.BiomNr = Biomnr+1;
+        World.Chunks[position] = chunk;
+        ChunksVisibleLastUpdate.Add(chunk);
+        ChunkCollisionQueue.Enqueue(chunk);
+    }
+
+    /// <summary>
+    /// Checks whether or not a Biom is complete 
+    /// (Biomnr/Biomsize)
+    /// </summary>
+    private void BiomsizeCheck(int viewedChunkCoord)
+    {
+        if (viewedChunkCoord == -1)
+            BuildChunk(viewedChunkCoord);
+        else if (World.Chunks.ContainsKey(viewedChunkCoord - 1))
+        {
+            if (World.Chunks[viewedChunkCoord - 1].BiomNr < World.Chunks[viewedChunkCoord - 1].Biom.Size)
+            {
+                BuildChunk(viewedChunkCoord, World.Chunks[viewedChunkCoord - 1].Biom.Index, World.Chunks[viewedChunkCoord - 1].BiomNr);
+            }
+        }
+        if (World.Chunks.ContainsKey(viewedChunkCoord + 1))
+        {
+            if (World.Chunks[viewedChunkCoord + 1].BiomNr < World.Chunks[viewedChunkCoord + 1].Biom.Size)
+            {
+                BuildChunk(viewedChunkCoord, World.Chunks[viewedChunkCoord + 1].Biom.Index, World.Chunks[viewedChunkCoord + 1].BiomNr);
+            }
+        }
+        else
+            BuildChunk(viewedChunkCoord);
+    }
 }
