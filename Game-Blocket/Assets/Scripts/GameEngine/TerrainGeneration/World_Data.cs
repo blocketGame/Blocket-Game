@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 
 /*
  * @Author : Cse19455 / Thomas Boigner
@@ -117,6 +121,37 @@ public class World_Data : MonoBehaviour
             }
         }
         return Blocks[0];
+    }
+
+
+    public bool getBlocksFromTxt()
+    {
+        string[] lines = System.IO.File.ReadAllLines(@"Docs/Blocks.txt");
+        if(lines[lines.Length-1].Equals("Changed : true"))
+        {
+            Debug.Log("HI I AM HERE");
+            //Auslesen der Daten im Txt file In den Block array
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Creates Blocks.txt file as documentation for the blocks array
+    /// </summary>
+    public void putBlocksIntoTxt()
+    {
+        string writeContent="# This File is considered as documentation tool for the Blocks and their Ids \n";
+        for(int x =0; x < blocks.Length; x++)
+        {
+            writeContent += "\n" +
+                " ID :" + blocks[x].BlockID + "\n" +
+                " Name : " + blocks[x].Name +"\n";
+        }
+
+        writeContent += "\nChanged : false";
+
+        File.WriteAllText("Docs/Blocks.txt", writeContent);
     }
 }
 

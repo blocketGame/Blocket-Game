@@ -31,6 +31,8 @@ public class Terrain_Generation: MonoBehaviour
     {
         ChunksVisibleLastUpdate = new List<TerrainChunk>();
         PlayerPosition = World.Player.transform;
+        if(!world.getBlocksFromTxt())
+        world.putBlocksIntoTxt();
     }
 
     public void Update()
