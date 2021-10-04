@@ -14,5 +14,9 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public static class GlobalVariables
 {
-	///TODO: ...
+	public static readonly Inventory inventory = new Inventory();
+
+	#region Debug Variables
+	public static bool itemSlotButtonPressedLog = false;
+	#endregion
 }
