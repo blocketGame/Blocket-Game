@@ -31,8 +31,8 @@ public class Terrain_Generation: MonoBehaviour
     {
         ChunksVisibleLastUpdate = new List<TerrainChunk>();
         PlayerPosition = World.Player.transform;
-        if(!world.getBlocksFromTxt())
         world.putBlocksIntoTxt();
+        world.putBiomsIntoTxt();
     }
 
     public void Update()
@@ -51,7 +51,7 @@ public class Terrain_Generation: MonoBehaviour
     {
         foreach(TerrainChunk t in ChunksVisibleLastUpdate)
         {
-            t.ChunkObject.SetActive(false);
+            t.SetChunkState(false);
         }
         ChunksVisibleLastUpdate.Clear();
         CheckChunksAroundPlayer();
@@ -71,9 +71,9 @@ public class Terrain_Generation: MonoBehaviour
             {
                 BiomsizeCheck(viewedChunkCoord);
             }
-            if (World.Chunks.ContainsKey(viewedChunkCoord))
+            else if (World.Chunks.ContainsKey(viewedChunkCoord))
             {
-                World.Chunks[viewedChunkCoord].ChunkObject.SetActive(true);
+                World.Chunks[viewedChunkCoord].SetChunkState(true);
                 ChunksVisibleLastUpdate.Add(World.Chunks[viewedChunkCoord]);
             }
         }
@@ -121,6 +121,7 @@ public class Terrain_Generation: MonoBehaviour
             if (World.Chunks[viewedChunkCoord - 1].BiomNr < World.Chunks[viewedChunkCoord - 1].Biom.Size)
             {
                 BuildChunk(viewedChunkCoord, World.Chunks[viewedChunkCoord - 1].Biom.Index, World.Chunks[viewedChunkCoord - 1].BiomNr);
+                return;
             }
         }
         if (World.Chunks.ContainsKey(viewedChunkCoord + 1))

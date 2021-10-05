@@ -18,11 +18,15 @@ public class TerrainChunk
     [SerializeField]
     private Tilemap chunkTileMap;
     [SerializeField]
+    private Tilemap collisionTileMap;
+
+    private Tilemap backgroundTilemap;
+
+    private GameObject backgroundObject;
+    [SerializeField]
     private TilemapRenderer chunkTileMapRenderer;
     [SerializeField]
     private GameObject collisionObject;
-    [SerializeField]
-    private Tilemap collisionTileMap;
     [SerializeField]
     private TilemapCollider2D chunkTileMapCollider;
     [SerializeField]
@@ -44,29 +48,44 @@ public class TerrainChunk
     public int BiomNr { get => biomNr; set => biomNr = value; }
     public Drop[] Drops { get => drops; set => drops = value; }
     public GameObject ChunkObject { get => chunkObject; set => chunkObject = value; }
+    public Tilemap BackgroundTilemap { get => backgroundTilemap; set => backgroundTilemap = value; }
+    public GameObject BackgroundObject { get => backgroundObject; set => backgroundObject = value; }
+
 
     public TerrainChunk(int chunkID, World_Data world, GameObject chunkParent, GameObject chunkObject)
     {
         this.ChunkID = chunkID;
         this.World = world;
         this.BlockIDs = new byte[world.ChunkWidth, world.ChunkHeight];
+        this.ChunkObject = BuildAllChunkLayers(chunkParent, chunkObject);
+    }
 
-        chunkObject = new GameObject($"Chunk {chunkID}");
+    /// <summary>
+    /// Creates Chunk - Bg / Collision / - tilemaps
+    /// </summary>
+    /// <returns></returns>
+    private GameObject BuildAllChunkLayers(GameObject chunkParent, GameObject chunkObject)
+    {
+        chunkObject = new GameObject($"Chunk {ChunkID}");
         chunkObject.transform.SetParent(chunkParent.transform);
-        chunkObject.transform.position = new Vector3(chunkID * world.ChunkWidth, 0f, 0f);
+        chunkObject.transform.position = new Vector3(ChunkID * World.ChunkWidth, 0f, 0f);
 
         ChunkTileMap = chunkObject.AddComponent<Tilemap>();
         ChunkTileMapRenderer = chunkObject.AddComponent<TilemapRenderer>();
         ChunkTileMap.tileAnchor = new Vector3(0.5f, 0.5f, 0f);
 
-        CollisionObject = new GameObject($"Chunk {chunkID} collision");
-        CollisionObject.transform.SetParent(ChunkTileMap.transform);
-        CollisionObject.transform.position = new Vector3(chunkID * world.ChunkWidth, 0f, 0f);
+        BackgroundObject = new GameObject($"Chunk {ChunkID} background");
+        BackgroundObject.transform.SetParent(ChunkTileMap.transform);
+        BackgroundObject.transform.position = new Vector3(ChunkID * World.ChunkWidth, 0f, 0f);
+        BackgroundTilemap = BackgroundObject.AddComponent<Tilemap>();
 
+        CollisionObject = new GameObject($"Chunk {ChunkID} collision");
+        CollisionObject.transform.SetParent(ChunkTileMap.transform);
+        CollisionObject.transform.position = new Vector3(ChunkID * World.ChunkWidth, 0f, 0f);
         CollisionTileMap = CollisionObject.AddComponent<Tilemap>();
         ChunkTileMapCollider = CollisionObject.AddComponent<TilemapCollider2D>();
         CollisionTileMap.tileAnchor = new Vector3(0.5f, 0.5f, 0f);
-        this.ChunkObject = chunkObject;
+        return chunkObject;
     }
 
     /// <summary>
@@ -149,6 +168,15 @@ public class TerrainChunk
                 }
             }
         }
+    }
+    /// <summary>
+    /// Is used to load Chunks in and out
+    /// </summary>
+    /// <param name="value">represents the state the chunk switches to</param>
+    public void SetChunkState(bool value)
+    {
+        BackgroundObject.SetActive(value);
+        ChunkObject.SetActive(value);
     }
 
 }

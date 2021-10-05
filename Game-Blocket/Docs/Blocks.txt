@@ -1,27 +1,25 @@
 # This File is considered as documentation tool for the Blocks and their Ids 
 
- ID :0
+ ID : 0
  Name : air
 
- ID :1
+ ID : 1
  Name : Collision
 
- ID :2
+ ID : 2
  Name : Grass
 
- ID :3
+ ID : 3
  Name : Dirt
 
- ID :4
+ ID : 4
  Name : Sand-Top
 
- ID :5
+ ID : 5
  Name : Sand
 
- ID :6
+ ID : 6
  Name : Snow-Block
 
- ID :7
+ ID : 7
  Name : Snow
-
-Changed : false

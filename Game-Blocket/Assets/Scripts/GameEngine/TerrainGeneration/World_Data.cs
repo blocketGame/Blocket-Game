@@ -1,11 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using System;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 
 /*
  * @Author : Cse19455 / Thomas Boigner
@@ -123,7 +119,7 @@ public class World_Data : MonoBehaviour
         return Blocks[0];
     }
 
-
+    /**
     public bool getBlocksFromTxt()
     {
         string[] lines = System.IO.File.ReadAllLines(@"Docs/Blocks.txt");
@@ -135,6 +131,7 @@ public class World_Data : MonoBehaviour
         }
         return false;
     }
+    **/
 
     /// <summary>
     /// Creates Blocks.txt file as documentation for the blocks array
@@ -145,13 +142,33 @@ public class World_Data : MonoBehaviour
         for(int x =0; x < blocks.Length; x++)
         {
             writeContent += "\n" +
-                " ID :" + blocks[x].BlockID + "\n" +
+                " ID : " + blocks[x].BlockID + "\n" +
                 " Name : " + blocks[x].Name +"\n";
         }
 
-        writeContent += "\nChanged : false";
-
         File.WriteAllText("Docs/Blocks.txt", writeContent);
+    }
+
+    public void putBiomsIntoTxt()
+    {
+        string writeContent = "# This File is considered as documentation tool for the Bioms and their Indizes \n";
+        for (int x = 0; x < biom.Length; x++)
+        {
+            writeContent += "\n" +
+                " ID : " + biom[x].Index + "\n" +
+                " BiomName : " + biom[x].BiomName + "\n";
+                for(int y = 0;y<biom[x].Regions.Length;y++)
+            {
+                writeContent += "\n" +
+                "\t ID : " + biom[x].Regions[y].BlockID + "\n" +
+                "\t Range : " + biom[x].Regions[y].RegionRange + "\n";
+            }
+
+        }
+
+        writeContent += "\n ---------------------------- Rules ---------------------------------- \n Range : -1 => Infinity";
+
+        File.WriteAllText("Docs/Bioms.txt", writeContent);
     }
 }
 
