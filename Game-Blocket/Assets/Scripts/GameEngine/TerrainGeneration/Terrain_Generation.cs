@@ -115,7 +115,10 @@ public class Terrain_Generation: MonoBehaviour
     private void BiomsizeCheck(int viewedChunkCoord)
     {
         if (viewedChunkCoord == -1)
+        {
             BuildChunk(viewedChunkCoord);
+            return;
+        }
         else if (World.Chunks.ContainsKey(viewedChunkCoord - 1))
         {
             if (World.Chunks[viewedChunkCoord - 1].BiomNr < World.Chunks[viewedChunkCoord - 1].Biom.Size)

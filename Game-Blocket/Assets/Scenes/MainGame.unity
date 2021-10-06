@@ -1692,13 +1692,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae66a57fe4a7cee4eae09b5b604a5eaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilemap: {fileID: 0}
   player: {fileID: 110355387}
   delete: 323
   create: 324
   grid: {fileID: 696983657}
   mainCamera: {fileID: 672288910}
-  selectedBlock: {fileID: 11400000, guid: 0bcc34212cd215a4584d42c3c4ba8f29, type: 2}
+  selectedBlock: 2
+  world: {fileID: 1818566158}
 --- !u!4 &1140740554
 Transform:
   m_ObjectHideFlags: 0

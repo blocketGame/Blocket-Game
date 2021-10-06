@@ -36,6 +36,8 @@ public class TerrainChunk
     [SerializeField]
     private Drop[] drops;
 
+    //----------------------------------------------- Properties ----------------------------------------------------------------------------
+
     public World_Data World { get => world; set => world = value; }
     public int ChunkID { get => chunkID; set => chunkID = value; }
     public byte[,] BlockIDs { get => blockIDs; set => blockIDs = value; }
@@ -57,7 +59,7 @@ public class TerrainChunk
         this.ChunkID = chunkID;
         this.World = world;
         this.BlockIDs = new byte[world.ChunkWidth, world.ChunkHeight];
-        this.ChunkObject = BuildAllChunkLayers(chunkParent, chunkObject);
+        this.ChunkObject = BuildAllChunkLayers(chunkParent, chunkObject); 
     }
 
     /// <summary>
@@ -65,7 +67,7 @@ public class TerrainChunk
     /// </summary>
     /// <returns></returns>
     private GameObject BuildAllChunkLayers(GameObject chunkParent, GameObject chunkObject)
-    {
+    { 
         chunkObject = new GameObject($"Chunk {ChunkID}");
         chunkObject.transform.SetParent(chunkParent.transform);
         chunkObject.transform.position = new Vector3(ChunkID * World.ChunkWidth, 0f, 0f);

@@ -10,13 +10,13 @@ public class Block_Editing : MonoBehaviour
     ///  CONTACT @CSE19455 FOR FURTHER INFORMATION
     /// </summary>
 
-    public Tilemap tilemap;
     public GameObject player;
     public KeyCode delete;
     public KeyCode create;
     public Grid grid;
     public Camera mainCamera;
-    public TileBase selectedBlock;
+    public int selectedBlock;
+    public World_Data world;
 
     // Start is called before the first frame update
     public void Start()
@@ -31,14 +31,19 @@ public class Block_Editing : MonoBehaviour
         coordinate.z = 0;
         if (Input.mousePosition.x-959 < -200 || Input.mousePosition.x-959 > 200 )
             return;
-        //print(Input.mousePosition.x-959);
         if (Input.GetKeyDown(delete))
         {
-            //RemoveTile(tilemap, coordinate);
+            world.GetChunkFromCoordinate(coordinate.x).CollisionTileMap.SetTile(new Vector3Int(coordinate.x-world.ChunkWidth* world.GetChunkFromCoordinate(coordinate.x).ChunkID,coordinate.y,0), null);
+            world.GetChunkFromCoordinate(coordinate.x).ChunkTileMap.SetTile(new Vector3Int(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID, coordinate.y, 0), null);
+            world.GetChunkFromCoordinate(coordinate.x).BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID), coordinate.y] = 0;
+            world.GetChunkFromCoordinate(coordinate.x).BuildCollisions();
         }
         if (Input.GetKeyDown(create))
         {
-            //CreateTile(tilemap, coordinate, selectedBlock);
+            world.GetChunkFromCoordinate(coordinate.x).CollisionTileMap.SetTile(new Vector3Int(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID, coordinate.y, 0), world.Blocks[selectedBlock].Tile);
+            world.GetChunkFromCoordinate(coordinate.x).ChunkTileMap.SetTile(new Vector3Int(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID, coordinate.y, 0), world.Blocks[selectedBlock].Tile);
+            world.GetChunkFromCoordinate(coordinate.x).BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID), coordinate.y] = world.Blocks[selectedBlock].BlockID;
+            world.GetChunkFromCoordinate(coordinate.x).BuildCollisions();
         }
     }
 

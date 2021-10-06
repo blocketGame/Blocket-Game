@@ -14,10 +14,12 @@ public class Decoration
     [SerializeField]
     private Drop[] _drops;
 
-    byte DecorationID { get; set; }
-    TileBase Tile { get; set; }
-    string Name { get; set; }
-    Drop[] Drops { get; set; }
+    //----------------------------------------------- Properties ----------------------------------------------------------------------------
+
+    public byte DecorationID { get; set; }
+    public TileBase Tile { get; set; }
+    public string Name { get; set; }
+    public Drop[] Drops { get; set; }
 
 }
 

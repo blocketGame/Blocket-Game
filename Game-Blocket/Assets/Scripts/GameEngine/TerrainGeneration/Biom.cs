@@ -20,6 +20,8 @@ public class Biom : MonoBehaviour
     [SerializeField]
     private AnimationCurve heightCurve;
 
+    //----------------------------------------------- Properties ----------------------------------------------------------------------------
+
     public int Index { get => index; set => index = value; }
     public int Size { get => size; set => size = value; }
     public string BiomName { get => biomName; set => biomName = value; }
