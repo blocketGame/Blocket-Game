@@ -41,7 +41,7 @@ public class Terrain_Generation: MonoBehaviour
         UpdateChunks();
         foreach (TerrainChunk tc in ChunkCollisionQueue)
         {
-            tc.BuildCollisions();
+            tc.BuildCollisions(false);
         }
         ChunkCollisionQueue.Clear();
 

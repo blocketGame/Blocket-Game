@@ -16,6 +16,8 @@ public class Biom : MonoBehaviour
     [SerializeField]
     private RegionData[] regions;
     [SerializeField]
+    private RegionData[] bgRegions;
+    [SerializeField]
     private Decoration[] decorations;
     [SerializeField]
     private AnimationCurve heightCurve;
@@ -29,4 +31,5 @@ public class Biom : MonoBehaviour
     public AnimationCurve HeightCurve { get => heightCurve; set => heightCurve = value; }
     public RegionData[] Regions { get => regions; set => regions = value; }
     public OreData[] Ores { get => ores; set => ores = value; }
+    public RegionData[] BgRegions { get => bgRegions; set => bgRegions = value; }
 }
