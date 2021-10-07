@@ -5,7 +5,7 @@ using UnityEngine;
 public class Drop
 {
     [SerializeField]
-    private GameObject _dropObject;
+    private Sprite _dropObject;
     [SerializeField]
     private string _dropName;
     [SerializeField]
@@ -15,7 +15,7 @@ public class Drop
 
     public byte DropID { get => _dropID; set => _dropID = value; }
     public string DropName { get => _dropName; set => _dropName = value; }
-    public GameObject DropObject { get => _dropObject; set => _dropObject = value; }
+    public Sprite DropObject { get => _dropObject; set => _dropObject = value; }
 }
 
 public class Item

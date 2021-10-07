@@ -36,6 +36,8 @@ public class TerrainChunk
     [SerializeField]
     private Drop[] drops;
 
+    private GameObject DROPS;
+
     //----------------------------------------------- Properties ----------------------------------------------------------------------------
 
     public World_Data World { get => world; set => world = value; }
@@ -52,7 +54,7 @@ public class TerrainChunk
     public GameObject ChunkObject { get => chunkObject; set => chunkObject = value; }
     public Tilemap BackgroundTilemap { get => backgroundTilemap; set => backgroundTilemap = value; }
     public GameObject BackgroundObject { get => backgroundObject; set => backgroundObject = value; }
-
+    public GameObject DROPS1 { get => DROPS; set => DROPS = value; }
 
     public TerrainChunk(int chunkID, World_Data world, GameObject chunkParent, GameObject chunkObject)
     {
@@ -87,6 +89,14 @@ public class TerrainChunk
         CollisionTileMap = CollisionObject.AddComponent<Tilemap>();
         ChunkTileMapCollider = CollisionObject.AddComponent<TilemapCollider2D>();
         CollisionTileMap.tileAnchor = new Vector3(0.5f, 0.5f, 0f);
+
+
+        DROPS = new GameObject($"Chunk {ChunkID} drops");
+        DROPS.transform.SetParent(ChunkTileMap.transform);
+        //for(int x = 0; x < drops.Length; x++)
+        //{
+            //LOL
+        //}
         return chunkObject;
     }
 
