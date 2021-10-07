@@ -84,7 +84,7 @@ public class Terrain_Generation: MonoBehaviour
     ///     Generates Chunk From Noisemap without any extra consideration
     /// </summary>
     private void BuildChunk(int position)
-    {
+    { 
         TerrainChunk chunk = new TerrainChunk(position, World, ChunkParent,null);
         int Biom = new System.Random(World.Seed+World.ChunkWidth*position).Next(0,World.Biom.Length);
         chunk.GenerateChunk(NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position*World.ChunkWidth), Biom);
@@ -119,20 +119,14 @@ public class Terrain_Generation: MonoBehaviour
             BuildChunk(viewedChunkCoord);
             return;
         }
-        else if (World.Chunks.ContainsKey(viewedChunkCoord - 1))
+        else if (World.Chunks.ContainsKey(viewedChunkCoord - 1) && World.Chunks[viewedChunkCoord - 1].BiomNr < World.Chunks[viewedChunkCoord - 1].Biom.Size)
         {
-            if (World.Chunks[viewedChunkCoord - 1].BiomNr < World.Chunks[viewedChunkCoord - 1].Biom.Size)
-            {
                 BuildChunk(viewedChunkCoord, World.Chunks[viewedChunkCoord - 1].Biom.Index, World.Chunks[viewedChunkCoord - 1].BiomNr);
-                return;
-            }
+                
         }
-        if (World.Chunks.ContainsKey(viewedChunkCoord + 1))
+        else if (World.Chunks.ContainsKey(viewedChunkCoord + 1) && World.Chunks[viewedChunkCoord + 1].BiomNr < World.Chunks[viewedChunkCoord + 1].Biom.Size)
         {
-            if (World.Chunks[viewedChunkCoord + 1].BiomNr < World.Chunks[viewedChunkCoord + 1].Biom.Size)
-            {
                 BuildChunk(viewedChunkCoord, World.Chunks[viewedChunkCoord + 1].Biom.Index, World.Chunks[viewedChunkCoord + 1].BiomNr);
-            }
         }
         else
             BuildChunk(viewedChunkCoord);
