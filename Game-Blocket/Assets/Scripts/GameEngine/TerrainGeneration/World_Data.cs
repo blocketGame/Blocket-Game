@@ -214,12 +214,12 @@ public struct BlockData
     [SerializeField]
     private TileBase _tile;
     [SerializeField]
-    private Drop[] _drops;
+    private Sprite sprite;
 
     public string Name { get =>_name; set => _name = value; }
     public byte BlockID { get => _blockID; set => _blockID = value; }
     public TileBase Tile { get => _tile; set => _tile = value; }
-    public Drop[] Drops { get => _drops; set => _drops = value; }
+    public Sprite Sprite { get => sprite; set => sprite = value; }
 }
 
 

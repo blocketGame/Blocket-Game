@@ -34,7 +34,7 @@ public class TerrainChunk
     [SerializeField]
     private int biomNr;
     [SerializeField]
-    private Drop[] drops;
+    private List<Drop> drops;
 
     private GameObject DROPS;
 
@@ -50,7 +50,7 @@ public class TerrainChunk
     public TilemapCollider2D ChunkTileMapCollider { get => chunkTileMapCollider; set => chunkTileMapCollider = value; }
     public Biom Biom { get => biom; set => biom = value; }
     public int BiomNr { get => biomNr; set => biomNr = value; }
-    public Drop[] Drops { get => drops; set => drops = value; }
+    public List<Drop> Drops { get => drops; set => drops = value; }
     public GameObject ChunkObject { get => chunkObject; set => chunkObject = value; }
     public Tilemap BackgroundTilemap { get => backgroundTilemap; set => backgroundTilemap = value; }
     public GameObject BackgroundObject { get => backgroundObject; set => backgroundObject = value; }
@@ -61,6 +61,7 @@ public class TerrainChunk
         this.ChunkID = chunkID;
         this.World = world;
         this.BlockIDs = new byte[world.ChunkWidth, world.ChunkHeight];
+        this.drops = new List<Drop>();
         this.ChunkObject = BuildAllChunkLayers(chunkParent, chunkObject); 
     }
 
@@ -93,10 +94,8 @@ public class TerrainChunk
 
         DROPS = new GameObject($"Chunk {ChunkID} drops");
         DROPS.transform.SetParent(ChunkTileMap.transform);
-        //for(int x = 0; x < drops.Length; x++)
-        //{
-            //LOL
-        //}
+        InsertDrops();
+        
         return chunkObject;
     }
 
@@ -190,6 +189,40 @@ public class TerrainChunk
     {
         BackgroundObject.SetActive(value);
         ChunkObject.SetActive(value);
+    }
+
+    public void DeleteBlock(Vector3Int coordinate)
+    {
+        Drop d = new Drop();
+        d.DropID = BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID), coordinate.y];
+        d.DropName = world.Blocks[BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID), coordinate.y]].Name;
+        d.DropObject = new GameObject($"Drops");
+        d.DropObject.AddComponent<SpriteRenderer>();
+        d.DropObject.GetComponent<SpriteRenderer>().sprite = world.Blocks[BlockIDs[(coordinate.x - world.ChunkWidth * ChunkID), coordinate.y]].Sprite;
+        Vector3Int c = coordinate;
+        c.y = coordinate.y + 1;
+        c.x = coordinate.x + 1;
+        d.DropObject.transform.SetPositionAndRotation(c, new Quaternion());
+        d.DropObject.transform.localScale.Set(0.5f, 0.5f, 1f);
+        d.DropObject.transform.lossyScale.Set(0.5f, 0.5f, 1f);
+        d.DropObject.AddComponent<Rigidbody2D>();
+        d.DropObject.AddComponent<BoxCollider2D>();
+        d.DropObject.GetComponent<BoxCollider2D>().isTrigger = true;
+        
+        drops.Add(d);
+        InsertDrops();
+
+        ChunkTileMap.SetTile(new Vector3Int(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID, coordinate.y, 0), null);
+        BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID), coordinate.y] = 0;
+        
+    }
+
+    public void InsertDrops()
+    {
+        for (int x = 0; x < drops?.Count; x++)
+        {
+            Drops[x].DropObject.transform.SetParent(DROPS.transform);
+        }
     }
 
 }

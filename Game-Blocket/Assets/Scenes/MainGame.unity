@@ -2592,27 +2592,35 @@ MonoBehaviour:
   - _name: air
     _blockID: 0
     _tile: {fileID: 0}
+    sprite: {fileID: 0}
   - _name: Collision
     _blockID: 1
     _tile: {fileID: 11400000, guid: 0bcc34212cd215a4584d42c3c4ba8f29, type: 2}
+    sprite: {fileID: 0}
   - _name: Grass
     _blockID: 2
     _tile: {fileID: 11400000, guid: 02761f359227ea640b301f8ed4704793, type: 2}
+    sprite: {fileID: 21300000, guid: 6f4fbf8d0cb7b434093d695044c35a3c, type: 3}
   - _name: Dirt
     _blockID: 3
     _tile: {fileID: 11400000, guid: 0bcc34212cd215a4584d42c3c4ba8f29, type: 2}
+    sprite: {fileID: 21300000, guid: f01308597c751ff40bb35eecf55b550d, type: 3}
   - _name: Sand-Top
     _blockID: 4
     _tile: {fileID: 11400000, guid: 6db0c34d3b5fc7b49a67163528b99ce5, type: 2}
+    sprite: {fileID: 21300000, guid: 437b61b5542854c4ea56f52b0ba0be81, type: 3}
   - _name: Sand
     _blockID: 5
     _tile: {fileID: 11400000, guid: 240b651a1bc670d4793c99d2d9d9748e, type: 2}
+    sprite: {fileID: 21300000, guid: 2df48377b487aa243b5a6e0e637890bc, type: 3}
   - _name: Snow-Block
     _blockID: 6
     _tile: {fileID: 11400000, guid: cf38a69b1c9243a4a98ca4aca2367547, type: 2}
+    sprite: {fileID: 21300000, guid: ef8a05a4ebd504240914473cda9b6542, type: 3}
   - _name: Snow
     _blockID: 7
     _tile: {fileID: 11400000, guid: 0230af7654f2e154f8a8cfe6ab61bdd1, type: 2}
+    sprite: {fileID: 21300000, guid: f3dcd218662f73e47a7c65d283539553, type: 3}
   chunkWidth: 25
   chunkHeight: 100
   chunkGroundLevel: 50
