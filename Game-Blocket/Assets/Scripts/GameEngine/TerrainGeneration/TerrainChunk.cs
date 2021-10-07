@@ -227,7 +227,7 @@ public class TerrainChunk
         d.DropObject.AddComponent<Rigidbody2D>();
         d.DropObject.AddComponent<BoxCollider2D>();
         d.DropObject.GetComponent<BoxCollider2D>().isTrigger = true;
-        
+         
         drops.Add(d);
         InsertDrops();
 
