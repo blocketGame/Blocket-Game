@@ -93,13 +93,15 @@ public class World_Data : MonoBehaviour
     public byte getBlockFormCoordinate(int x, int y)
     {
         TerrainChunk chunk = GetChunkFromCoordinate(x);
-       
         if (chunk != null)
         {
             int chunkX = x - ChunkWidth * chunk.ChunkID;
-            return chunk.BlockIDs[chunkX, y];
+            if (chunkX < ChunkWidth && y < ChunkHeight && y > 0)
+            {
+                return chunk.BlockIDs[chunkX, y];
+            }
         }
-        return 0;
+        return 1;
     }
 
     /// <summary>

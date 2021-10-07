@@ -103,7 +103,7 @@ public class TerrainChunk
             int positionHeight = Mathf.FloorToInt(World.Heightcurve.Evaluate(noisemap[x])*World.HeightMultiplier) + World.ChunkGroundLevel;
             int heightvalue = 0;
             int blockIDpos = 0;
-            for (int y = positionHeight-1; y > 0; y--)
+            for (int y = positionHeight-1; y >= 0; y--)
             {
                     //Debug.Log("Layerhaeight :"+ world.biom[biomindex].regions[blockIDpos].layerheight + " Heightvalue"+heightvalue);
                     if(heightvalue == World.Biom[biomindex].Regions[blockIDpos].RegionRange)
@@ -130,7 +130,7 @@ public class TerrainChunk
         {
             int heightvalue = 0;
             int blockIDpos = World.Biom[biomindex].Regions.Length-1;
-            for (int y = World.ChunkHeight-1; y > 0; y--)
+            for (int y = World.ChunkHeight-1; y >= 0; y--)
             { 
                 if (BlockIDs[x, y] != 0)
                 {
