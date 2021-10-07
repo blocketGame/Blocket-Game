@@ -2617,42 +2617,51 @@ MonoBehaviour:
   chunkHeight: 100
   chunkGroundLevel: 50
   chunkDistance: 2
-  seed: 1237
+  seed: 1337
   scale: 50
   octives: 5
   persistance: 0.5
   lacurinarity: 2
   offsetX: 0
-  heightMultiplier: 10
+  heightMultiplier: 20
   heightcurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 1.846932
-      outSlope: 1.846932
+      inSlope: 0.5493201
+      outSlope: 0.5493201
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.101666786
+      outWeight: 0.43764392
     - serializedVersion: 3
-      time: 0.7352532
-      value: 0.32978195
-      inSlope: 1.490036
-      outSlope: 1.490036
-      tangentMode: 34
+      time: 0.21436474
+      value: 0.18364772
+      inSlope: 1.4330088
+      outSlope: 1.4330088
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 2.5315437
-      outSlope: 2.5315437
-      tangentMode: 34
+      time: 0.6353784
+      value: 0.8817877
+      inSlope: 1.5912246
+      outSlope: 1.5912246
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
+      outWeight: 0.21315224
+    - serializedVersion: 3
+      time: 1
+      value: 1.1122195
+      inSlope: 0.18434896
+      outSlope: 0.18434896
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.6513615
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
