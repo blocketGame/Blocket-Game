@@ -154,6 +154,7 @@ public class TerrainChunk
 
     public void BuildCollisions()
     {
+        collisionTileMap.ClearAllTiles();
         for (int x = 0; x < World.ChunkWidth; x++)
         {
             for (int y = 0; y < World.ChunkHeight; y++)

@@ -97,7 +97,7 @@ public class World_Data : MonoBehaviour
         if (chunk != null)
         {
             int chunkX = x - ChunkWidth * chunk.ChunkID;
-            return chunk.BlockIDs[chunkX, y];   
+            return chunk.BlockIDs[chunkX, y];
         }
         return 0;
     }

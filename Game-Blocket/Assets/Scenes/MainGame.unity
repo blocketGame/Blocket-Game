@@ -2616,7 +2616,7 @@ MonoBehaviour:
   chunkWidth: 25
   chunkHeight: 100
   chunkGroundLevel: 50
-  chunkDistance: 3
+  chunkDistance: 2
   seed: 1237
   scale: 50
   octives: 5
