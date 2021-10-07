@@ -17,7 +17,7 @@ public class Drop
     public string DropName { get => _dropName; set => _dropName = value; }
     public GameObject DropObject { get => _dropObject; set => _dropObject = value; }
 }
-
+/*
 public class Item
 {
     [SerializeField]
@@ -33,4 +33,4 @@ public class Item
     public byte ItemID { get => _itemID; set => _itemID = value; }
     public string Itemname { get => _itemname; set => _itemname = value; }
     public GameObject ItemObject { get => _itemObject; set => _itemObject = value; }
-}
+}*/
