@@ -2623,12 +2623,12 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: f3dcd218662f73e47a7c65d283539553, type: 3}
   - _name: Dirt-Bg
     _blockID: 8
-    _tile: {fileID: 11400000, guid: f94ca285108f8e341a2c7e7e4cc30f11, type: 2}
-    sprite: {fileID: 21300000, guid: 826149ed2a9af9f4891329f3d0f91f83, type: 3}
+    _tile: {fileID: 11400000, guid: 4ca7802749b97a74f9fe7f6e97f196a0, type: 2}
+    sprite: {fileID: 21300000, guid: 51dbe2573721e8f4da2e403eab3961e5, type: 3}
   - _name: Dirt-Bg-Top
     _blockID: 9
-    _tile: {fileID: 11400000, guid: d3865433f1677ff41b26eb7ec333cbdf, type: 2}
-    sprite: {fileID: 21300000, guid: ff06c4eaa06fa2c40bc2620a1da5e9e2, type: 3}
+    _tile: {fileID: 11400000, guid: 5de53b3fb691aad4694cf2a56f70e531, type: 2}
+    sprite: {fileID: 21300000, guid: 4f423c5c83b91ed4a9eca01ae17683e8, type: 3}
   chunkWidth: 25
   chunkHeight: 100
   chunkGroundLevel: 50

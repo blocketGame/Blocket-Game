@@ -148,7 +148,7 @@ public class TerrainChunk
     /// <summary>
     /// places the tiles in the Tilemap according to the blockIDs array
     /// </summary>
-    /// <param name="biomindex">Index of the biom of the chunk</param>
+    /// <param name="biomindex">Index of the biom of the chunk</param>b
     public void PlaceTiles(int biomindex , bool init)
     {
         for (int x = 0; x < World.ChunkWidth; x++)
