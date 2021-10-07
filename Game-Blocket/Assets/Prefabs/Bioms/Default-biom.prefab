@@ -53,6 +53,8 @@ MonoBehaviour:
   - regionRange: -1
     blockID: 3
   bgRegions:
+  - regionRange: 1
+    blockID: 9
   - regionRange: -1
     blockID: 8
   heightCurve:

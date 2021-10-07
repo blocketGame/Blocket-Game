@@ -226,7 +226,7 @@ public class TerrainChunk
         d.DropObject.transform.lossyScale.Set(0.5f, 0.5f, 1f);
         d.DropObject.AddComponent<Rigidbody2D>();
         d.DropObject.AddComponent<BoxCollider2D>();
-        d.DropObject.GetComponent<BoxCollider2D>().isTrigger = false;
+        d.DropObject.GetComponent<BoxCollider2D>().isTrigger = true;
         
         drops.Add(d);
         InsertDrops();
@@ -236,7 +236,7 @@ public class TerrainChunk
         
     }
 
-    public void InsertDrops()
+    public void InsertDrops() 
     {
         for (int x = 0; x < drops?.Count; x++)
         {
