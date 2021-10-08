@@ -62,5 +62,7 @@ public class MovementScript : MonoBehaviour
                 transform.position += Time.deltaTime * new Vector3(movement, (Rigidbody.velocity.y) * fallMulti, 0);
             }
         }
+
+        w.IgnoreDropCollision();
     }
 }

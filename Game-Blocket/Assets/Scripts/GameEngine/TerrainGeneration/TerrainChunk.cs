@@ -79,6 +79,7 @@ public class TerrainChunk
         chunkObject = new GameObject($"Chunk {ChunkID}");
         chunkObject.transform.SetParent(chunkParent.transform);
         chunkObject.transform.position = new Vector3(ChunkID * World.ChunkWidth, 0f, 0f);
+        
 
         ChunkTileMap = chunkObject.AddComponent<Tilemap>();
         ChunkTileMapRenderer = chunkObject.AddComponent<TilemapRenderer>();
@@ -96,10 +97,12 @@ public class TerrainChunk
         CollisionTileMap = CollisionObject.AddComponent<Tilemap>();
         ChunkTileMapCollider = CollisionObject.AddComponent<TilemapCollider2D>();
         CollisionTileMap.tileAnchor = new Vector3(0.5f, 0.5f, 0f);
+        CollisionObject.layer = LayerMask.NameToLayer("Collision");
 
 
         DROPS = new GameObject($"Chunk {ChunkID} drops");
         DROPS.transform.SetParent(ChunkTileMap.transform);
+        DROPS.layer = LayerMask.NameToLayer("Drops");
         InsertDrops();
         
         return chunkObject;
@@ -216,18 +219,20 @@ public class TerrainChunk
         d.DropID = BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID), coordinate.y];
         d.DropName = world.Blocks[BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID), coordinate.y]].Name;
         d.DropObject = new GameObject($"Drops");
+        d.DropObject.transform.localScale= new Vector3(0.5f, 0.5f, 1f);
         d.DropObject.AddComponent<SpriteRenderer>();
         d.DropObject.GetComponent<SpriteRenderer>().sprite = world.Blocks[BlockIDs[(coordinate.x - world.ChunkWidth * ChunkID), coordinate.y]].Sprite;
-        Vector3Int c = coordinate;
-        c.y = coordinate.y + 1;
-        c.x = coordinate.x + 1;
+        Vector3 c = coordinate;
+        c.y = coordinate.y + 0.5f;
+        c.x = coordinate.x + 0.5f;
         d.DropObject.transform.SetPositionAndRotation(c, new Quaternion());
-        d.DropObject.transform.localScale.Set(0.5f, 0.5f, 1f);
-        d.DropObject.transform.lossyScale.Set(0.5f, 0.5f, 1f);
+        //d.DropObject.transform.lossyScale.Set(0.5f, 0.5f, 1f);
         d.DropObject.AddComponent<Rigidbody2D>();
+
+        d.DropObject.GetComponent<Rigidbody2D>().gravityScale = 10;
         d.DropObject.AddComponent<BoxCollider2D>();
-        d.DropObject.GetComponent<BoxCollider2D>().isTrigger = true;
-         
+        d.DropObject.layer = LayerMask.NameToLayer("Drops"); //WIESO GEHT DAS NICHT
+
         drops.Add(d);
         InsertDrops();
 
