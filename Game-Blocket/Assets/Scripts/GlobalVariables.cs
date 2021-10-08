@@ -10,13 +10,17 @@ using UnityEngine.SceneManagement;
 /// Used for Global (Unique) Variables/Settings
 /// <br></br>
 /// <b>Use it gently!</b>
-/// 
 /// </summary>
 public static class GlobalVariables
 {
-	public static readonly Inventory inventory = new Inventory();
+	public static readonly ushort maxItemCountForMultiple = 128;
 
 	#region Debug Variables
-	public static bool itemSlotButtonPressedLog = false;
+	public static readonly bool itemSlotButtonPressedLog = false;
+	public static readonly bool itemTest = true;
+	#endregion
+
+	#region Setted Keys
+	public static KeyCode openInventoryKey = KeyCode.E;
 	#endregion
 }

@@ -7,7 +7,7 @@ public class ItemAssets : MonoBehaviour
     public List<BlockItem> BlockItemsInGame = new List<BlockItem>();
     public List<ToolItem> ToolItemsInGame = new List<ToolItem>();
     public List<EquipableItem> EquipableItemsInGame = new List<EquipableItem>();
-    public List<UseableItem> UseableItemsInGame = new List<UseableItem>();
+    public List<UseAbleItem> UseableItemsInGame = new List<UseAbleItem>();
 
     public Sprite GetSpriteFromItemID(int itemId) {
         foreach(Item item in BlockItemsInGame)

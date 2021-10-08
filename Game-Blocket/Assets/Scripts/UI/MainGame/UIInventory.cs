@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
+using UnityEngine.XR;
 
 /// <summary>
 /// Sets the Changable Settings for the Main-Game UI
@@ -13,6 +16,7 @@ public class UIInventory : MonoBehaviour
 	public Color inventoryBackground;
 	/// <summary>Space to Edge of the GameObject</summary>
 	public int spaceToBorderX, spaceToBorderY;
+	public GameObject atHandSlot;
 	#endregion
 
 	#region InventorySlotSettings
@@ -47,17 +51,21 @@ public class UIInventory : MonoBehaviour
 	[Header("Static: Player Stats")]
 	public Text heartStat, shieldStat, swordStat;
 	[Header("Static: Description")]
-	public Text titleText, descitonText;
+	public Text titleText, descriptonText;
 	#endregion
 
 	#region Static Resources !DO NOT TOUCH!
 	[Header("Static: General")]
 	///<summary>Gameobject from Inspector</summary>
-	public GameObject uiParent, slotField;
+	public GameObject uiParent, slotField, uiHud;
 	/// <summary>Image from Inspector</summary>
 	public Image inventoryBackgroundImage;
 	/// <summary>Prefab from Inspector</summary>
 	public GameObject prefabItemSlot;
+	/// <summary>ItemAssets - Prefab </summary>
+	public ItemAssets itemAssets;
+	/// <summary><see cref="Inventory"/></summary>
+	private Inventory _inventory;
 	#endregion
 
 	#region Initzializement
@@ -68,10 +76,16 @@ public class UIInventory : MonoBehaviour
 	private void InitUI() {
 		InitSlots();
 		//InitPlayerInfo();
-
+		InitAtHand();
 		///Initzialize the Inventory class;
-		///
+		itemAssets = GameObject.Find("Assets").gameObject.GetComponent<ItemAssets>();
+		if(!itemAssets)
+			Debug.LogException(new NullReferenceException("Item Assets not found!"));
+		if(GlobalVariables.itemTest)
+			foreach(Item i in itemAssets.BlockItemsInGame)
+				_inventory.AddItem(i);
 	}
+
 	/// <summary>
 	/// Initzialize the PlayerInfoUI
 	/// </summary>
@@ -100,7 +114,6 @@ public class UIInventory : MonoBehaviour
 	/// Initzialize the ItemSlotField
 	/// </summary>
 	private void InitSlots() {
-		GlobalVariables.inventory.invSlots = new List<UIInventorySlot>();
 		//Get With and height from the Prefab
 		float prefW = prefabItemSlot.GetComponent<RectTransform>().rect.width,
 			prefH = prefabItemSlot.GetComponent<RectTransform>().rect.height;
@@ -115,21 +128,44 @@ public class UIInventory : MonoBehaviour
 				//Name it
 				itemSlot.name = $"Slot {a} - {b}";
 				//Add to Inventory Logic
-				GlobalVariables.inventory.invSlots.Add(itemSlot.GetComponent<UIInventorySlot>());
+				_inventory.InvSlots.Add(itemSlot.GetComponent<UIInventorySlot>());
 			}
 		}
 	}
-
-
 	#endregion
 
 	/// <summary>"Reload" at the beginning</summary>
 	public void Awake() {
+		_inventory = GameObject.Find("Player").GetComponent<Inventory>();
 		ReloadSettings();
 		InitUI();
-		GlobalVariables.inventory.armorSlots = armorSlots;
-		GlobalVariables.inventory.accessoiresSlots = accessoiresSlots;
+		_inventory.ArmorSlots = armorSlots;
+		_inventory.AccessoiresSlots = accessoiresSlots;
 		InventoryOpened = false;
+	}
+
+	public void Update() {
+		if(Input.anyKeyDown)
+			if(Input.GetKeyDown(GlobalVariables.openInventoryKey)) {
+				InventoryOpened = !InventoryOpened;
+				uiHud.SetActive(!uiHud.activeSelf);
+			}
+	}
+
+	private void InitAtHand() {
+		atHandSlot = Instantiate(prefabItemSlot, GameObject.Find("Inventory").transform);
+		atHandSlot.name = "SlotAtHand";
+		atHandSlot.SetActive(false);
+		Destroy(atHandSlot.GetComponentInChildren<Image>());
+		Destroy(atHandSlot.GetComponentInChildren<Button>());
+
+		UIInventorySlot atHandUISlot = atHandSlot.GetComponent<UIInventorySlot>();
+		_inventory.atHand = atHandUISlot;
+		atHandUISlot.itemImage.raycastTarget = false;
+		
+		RectTransform atHandT = atHandSlot.GetComponent<RectTransform>();
+		atHandT.localScale = new Vector3(0.8f, 0.8f, 1);
+		_inventory.atHandVariables = new Vector2(-atHandT.rect.width/2, atHandT.rect.height/2);
 	}
 
 	/// <summary>Reloads all UI Settings</summary>
@@ -141,7 +177,7 @@ public class UIInventory : MonoBehaviour
 	}
 
 	/// <summary>Returns and sets if the inventory should open</summary>
-	public static bool InventoryOpened {
+	public bool InventoryOpened {
 		get {
 			return inventoryOpened;
 		}
@@ -149,13 +185,25 @@ public class UIInventory : MonoBehaviour
 			inventoryOpened = value;
 			if(value) {
 				//TODO: Optional things to do... Example: Lock Mouseplace or break
-				GameObject.Find("Inventory").gameObject.SetActive(true);
+				uiParent.SetActive(true);
 			} else {
 				//TODO: Optional things to do...
-				GameObject.Find("Inventory").gameObject.SetActive(false);
+				uiParent.SetActive(false);
 			}
 
 		}
 	}
 	private static bool inventoryOpened;
+
+	public string DescriptionText { 
+		get { return descriptonText.text; } 
+		set { descriptonText.text = value; } 
+	}
+
+	public string TitleText {
+		get { return titleText.text; }
+		set { titleText.text = value; }
+	}
+
+
 }
