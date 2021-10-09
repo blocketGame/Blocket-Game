@@ -110,7 +110,7 @@ public class TerrainChunk
     /// </summary>
     /// <param name="noisemap">Noisemap that determines the hight of hills and mountains</param>
     /// <param name="biomindex">Index of the biom of the chunk</param>
-    public void GenerateChunk(float[] noisemap,int biomindex)
+    public void GenerateChunk(float[] noisemap, float[,] caveNoisepmap, int biomindex)
     {
         Biom = World.Biom[biomindex];
         for (int x = 0; x < World.ChunkWidth; x++)
@@ -137,9 +137,19 @@ public class TerrainChunk
                 }
                 else
                     heightvalueBG++;
-                BlockIDs[x, y] = World.Biom[biomindex].Regions[blockIDpos].BlockID;
+                if (caveNoisepmap[x, y] > world.CaveSize)
+                {
+                    BlockIDs[x, y] = World.Biom[biomindex].Regions[blockIDpos].BlockID;
+                    foreach (OreData oreData in Biom.Ores)
+                    {
+                        if (caveNoisepmap[x, y] > oreData.NoiseValueFrom && caveNoisepmap[x, y] < oreData.NoiseValueTo)
+                        {
+                            BlockIDs[x, y] = oreData.BlockID;
+                        }
+                    }
+                    //PlaceTile(x, y, World.Blocks[BlockIDs[x, y]].Tile);
+                }
                 BlockIDsBG1[x, y] = World.Biom[biomindex].BgRegions[blockIDposBG].BlockID;
-                PlaceTile(x, y, World.Blocks[BlockIDs[x, y]].Tile);
             }
         }
         PlaceTiles(biomindex,true);
@@ -166,9 +176,10 @@ public class TerrainChunk
                     }
                     else
                         heightvalue++;
-                   PlaceTile(x, y, World.Blocks[BlockIDs[x,y]].Tile);
+                    //@Philipp: wird des Tile nicht zwei mal in die Tilemap gesetzt? (siehe Zeile 143)
+                    PlaceTile(x, y, World.Blocks[BlockIDs[x,y]].Tile);
                     if(init)
-                   PlaceTileInBG(x,y,World.Blocks[BlockIDsBG1[x,y]].Tile);
+                    PlaceTileInBG(x,y,World.Blocks[BlockIDsBG1[x,y]].Tile);
                 }
             }
         }
@@ -180,6 +191,7 @@ public class TerrainChunk
     private void PlaceTile(int x, int y, TileBase tile) => ChunkTileMap.SetTile(new Vector3Int(x, y, 0), tile);
 
     private void PlaceTileInBG(int x, int y, TileBase tile) => BackgroundTilemap.SetTile(new Vector3Int(x, y, 0), tile);
+
     public void BuildCollisions(bool init)
     {
         collisionTileMap.ClearAllTiles();

@@ -29,6 +29,8 @@ public class World_Data : MonoBehaviour
     [SerializeField]
     private int chunkDistance;
     [SerializeField]
+    private float caveSize;
+    [SerializeField]
     private int seed;
     [SerializeField]
     private float scale;
@@ -42,6 +44,8 @@ public class World_Data : MonoBehaviour
     [SerializeField]
     private float offsetX;
     [SerializeField]
+    private float offsetY;
+    [SerializeField]
     private int heightMultiplier;
     [SerializeField]
     private AnimationCurve heightcurve;
@@ -52,10 +56,12 @@ public class World_Data : MonoBehaviour
     public float Persistance { get => persistance; set => persistance = value; }
     public float Lacurinarity { get => lacurinarity; set => lacurinarity = value; }
     public float OffsetX { get => offsetX; set => offsetX = value; }
+    public float OffsetY { get => offsetX; set => offsetX = value; }
     public int HeightMultiplier { get => heightMultiplier; set => heightMultiplier = value; }
     public AnimationCurve Heightcurve { get => heightcurve; set => heightcurve = value; }
     public int Octives { get => octives; set => octives = value; }
     public float Scale { get => scale; set => scale = value; }
+    public float CaveSize { get => caveSize; set => caveSize = value; }
     public int Seed { get => seed; set => seed = value; }
     public int ChunkDistance { get => chunkDistance; set => chunkDistance = value; }
     public int ChunkGroundLevel { get => chunkGroundLevel; set => chunkGroundLevel = value; }
