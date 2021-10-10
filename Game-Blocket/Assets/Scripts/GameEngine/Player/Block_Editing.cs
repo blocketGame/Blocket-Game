@@ -25,12 +25,12 @@ public class Block_Editing : MonoBehaviour
 
     // Update is called once per frame
     public void Update()
-    {        
+    {
         Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         Vector3Int coordinate = grid.WorldToCell(mouseWorldPos);
         coordinate.z = 0;
         //Debug.Log("x =" + (Input.mousePosition.x - 959));
-        if (Input.mousePosition.x-959 < -200 || Input.mousePosition.x-959 > 200 ||Input.mousePosition.y - 429 < -150 || Input.mousePosition.y - 429 > 150 )//|| (Input.mousePosition.y - 429 < 55 && Input.mousePosition.y - 429 > -5 && Input.mousePosition.x - 959 > -40 && Input.mousePosition.x - 959 < 40)) //50 -5
+        if (Input.mousePosition.x - 959 < -200 || Input.mousePosition.x - 959 > 200 || Input.mousePosition.y - 429 < -150 || Input.mousePosition.y - 429 > 150)//|| (Input.mousePosition.y - 429 < 55 && Input.mousePosition.y - 429 > -5 && Input.mousePosition.x - 959 > -40 && Input.mousePosition.x - 959 < 40)) //50 -5
             return;
         if (Input.GetKeyDown(delete))
         {
@@ -56,9 +56,8 @@ public class Block_Editing : MonoBehaviour
         tileMap.SetTile(position, null);
     }
 
-    private void CreateTile(Tilemap tileMap, Vector3Int position , TileBase block)
+    private void CreateTile(Tilemap tileMap, Vector3Int position, TileBase block)
     {
         tileMap.SetTile(position, block);
     }
 }
- 

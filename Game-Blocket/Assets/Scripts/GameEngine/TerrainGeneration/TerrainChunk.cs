@@ -159,27 +159,30 @@ public class TerrainChunk
     /// places the tiles in the Tilemap according to the blockIDs array
     /// </summary>
     /// <param name="biomindex">Index of the biom of the chunk</param>b
-    public void PlaceTiles(int biomindex , bool init)
+    public void PlaceTiles(int biomindex, bool init)
     {
         for (int x = 0; x < World.ChunkWidth; x++)
         {
             int heightvalue = 0;
-            int blockIDpos = World.Biom[biomindex].Regions.Length-1;
-            for (int y = World.ChunkHeight-1; y >= 0; y--)
-            { 
+            int blockIDpos = World.Biom[biomindex].Regions.Length - 1;
+            for (int y = World.ChunkHeight - 1; y >= 0; y--)
+            {
                 if (BlockIDs[x, y] != 0)
                 {
-                    if (heightvalue == World.Biom[biomindex].Regions[blockIDpos].RegionRange )
+                    if (heightvalue == World.Biom[biomindex].Regions[blockIDpos].RegionRange)
                     {
                         blockIDpos--;
                         heightvalue = 0;
                     }
                     else
                         heightvalue++;
-                    //@Philipp: wird des Tile nicht zwei mal in die Tilemap gesetzt? (siehe Zeile 143)
-                    PlaceTile(x, y, World.Blocks[BlockIDs[x,y]].Tile);
-                    if(init)
-                    PlaceTileInBG(x,y,World.Blocks[BlockIDsBG1[x,y]].Tile);
+                    PlaceTile(x, y, World.Blocks[BlockIDs[x, y]].Tile);
+                }
+                if (BlockIDsBG1[x, y] != 0)
+                {
+                    if (init)
+                        PlaceTileInBG(x, y, World.Blocks[BlockIDsBG1[x, y]].Tile);
+
                 }
             }
         }
@@ -228,31 +231,50 @@ public class TerrainChunk
         d.DropID = BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID), coordinate.y];
         d.DropName = world.Blocks[BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID), coordinate.y]].Name;
         d.DropObject = new GameObject($"Drops");
+        d.DropObject.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
         d.DropObject.AddComponent<SpriteRenderer>();
         d.DropObject.GetComponent<SpriteRenderer>().sprite = world.Blocks[BlockIDs[(coordinate.x - world.ChunkWidth * ChunkID), coordinate.y]].Sprite;
-        Vector3Int c = coordinate;
-        c.y = coordinate.y + 1;
-        c.x = coordinate.x + 1;
+        Vector3 c = coordinate;
+        c.y = coordinate.y + 0.5f;
+        c.x = coordinate.x + 0.5f;
         d.DropObject.transform.SetPositionAndRotation(c, new Quaternion());
-        d.DropObject.transform.localScale.Set(0.5f, 0.5f, 1f);
-        d.DropObject.transform.lossyScale.Set(0.5f, 0.5f, 1f);
+        //d.DropObject.transform.lossyScale.Set(0.5f, 0.5f, 1f);
         d.DropObject.AddComponent<Rigidbody2D>();
+
+        d.DropObject.GetComponent<Rigidbody2D>().gravityScale = 20;
         d.DropObject.AddComponent<BoxCollider2D>();
-        d.DropObject.GetComponent<BoxCollider2D>().isTrigger = true;
-         
-        drops.Add(d);
+        d.DropObject.layer = LayerMask.NameToLayer("Drops"); //WIESO GEHT DAS NICHT
+
+        Drops.Add(d);
         InsertDrops();
 
         ChunkTileMap.SetTile(new Vector3Int(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID, coordinate.y, 0), null);
         BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID), coordinate.y] = 0;
-        
+
     }
 
-    public void InsertDrops() 
+    public void InsertDrops()
     {
         for (int x = 0; x < drops?.Count; x++)
         {
-            Drops[x].DropObject.transform.SetParent(DROPS.transform);
+            for (int y = 0; y < drops?.Count; y++)
+            {
+                /*
+                int dropgrouprange = 1;
+                if (!Drops[x].DropObject?.Equals(Drops[y].DropObject) ?? false&& Drops[x].DropObject.transform.position.x+ dropgrouprange > Drops[y].DropObject.transform.position.x&& Drops[x].DropObject.transform.position.x - dropgrouprange < Drops[y].DropObject.transform.position.x&&
+                    Drops[x].DropObject.transform.position.y + dropgrouprange > Drops[y].DropObject.transform.position.y && Drops[x].DropObject.transform.position.y - dropgrouprange < Drops[y].DropObject.transform.position.y
+                    && !Drops[x].DropObject.GetComponent<SpriteRenderer>().sprite.Equals(Drops[y].DropObject.GetComponent<SpriteRenderer>().sprite))
+                {
+                    Debug.Log("HERE" + DROPS.transform.childCount);
+                    Drops[x].Anzahl++;
+                    Drops[y].DropObject.transform.parent = null;
+                    Drops.Remove(Drops[y]);
+                    DROPS.SetActive(true);
+                    //ES GROUPED ABER AKTUALISIERT NICHT
+                }
+                else*/
+                Drops[x].DropObject.transform.SetParent(DROPS.transform);
+            }
         }
     }
 

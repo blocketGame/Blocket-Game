@@ -127,6 +127,15 @@ public class World_Data : MonoBehaviour
         return Blocks[0];
     }
 
+
+    //Method at wrong PLACE
+    public void IgnoreDropCollision()
+    {
+        foreach (TerrainChunk t in terraingeneration.ChunksVisibleLastUpdate)
+            foreach (Drop d in t.Drops)
+                Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Drops"), LayerMask.NameToLayer("Player"));
+    }
+
     /**
     public bool getBlocksFromTxt()
     {
