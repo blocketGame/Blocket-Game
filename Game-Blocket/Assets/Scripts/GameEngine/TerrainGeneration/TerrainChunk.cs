@@ -233,7 +233,7 @@ public class TerrainChunk
         d.DropObject.AddComponent<BoxCollider2D>();
         d.DropObject.layer = LayerMask.NameToLayer("Drops"); //WIESO GEHT DAS NICHT
 
-        drops.Add(d);
+        Drops.Add(d);
         InsertDrops();
 
         ChunkTileMap.SetTile(new Vector3Int(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID, coordinate.y, 0), null);
@@ -241,12 +241,31 @@ public class TerrainChunk
         
     }
 
-    public void InsertDrops() 
+    public void InsertDrops()
     {
         for (int x = 0; x < drops?.Count; x++)
         {
-            Drops[x].DropObject.transform.SetParent(DROPS.transform);
+            for(int y = 0; y < drops?.Count; y++)
+            {
+                /*
+                int dropgrouprange = 1;
+                if (!Drops[x].DropObject?.Equals(Drops[y].DropObject) ?? false&& Drops[x].DropObject.transform.position.x+ dropgrouprange > Drops[y].DropObject.transform.position.x&& Drops[x].DropObject.transform.position.x - dropgrouprange < Drops[y].DropObject.transform.position.x&&
+                    Drops[x].DropObject.transform.position.y + dropgrouprange > Drops[y].DropObject.transform.position.y && Drops[x].DropObject.transform.position.y - dropgrouprange < Drops[y].DropObject.transform.position.y
+                    && !Drops[x].DropObject.GetComponent<SpriteRenderer>().sprite.Equals(Drops[y].DropObject.GetComponent<SpriteRenderer>().sprite))
+                {
+                    Debug.Log("HERE" + DROPS.transform.childCount);
+                    Drops[x].Anzahl++;
+                    Drops[y].DropObject.transform.parent = null;
+                    Drops.Remove(Drops[y]);
+                    DROPS.SetActive(true);
+                    //ES GROUPED ABER AKTUALISIERT NICHT
+                }
+                else*/
+                    Drops[x].DropObject.transform.SetParent(DROPS.transform);
+            }
         }
     }
+
+   
 
 }
