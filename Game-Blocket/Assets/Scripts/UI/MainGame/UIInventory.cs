@@ -148,7 +148,7 @@ public class UIInventory : MonoBehaviour
 		if(Input.anyKeyDown)
 			if(Input.GetKeyDown(GlobalVariables.openInventoryKey)) {
 				InventoryOpened = !InventoryOpened;
-				uiHud.SetActive(!uiHud.activeSelf);
+				uiHud.SetActive(!InventoryOpened);
 			}
 	}
 
@@ -165,7 +165,7 @@ public class UIInventory : MonoBehaviour
 		
 		RectTransform atHandT = atHandSlot.GetComponent<RectTransform>();
 		atHandT.localScale = new Vector3(0.8f, 0.8f, 1);
-		_inventory.atHandVariables = new Vector2(-atHandT.rect.width/2, atHandT.rect.height/2);
+		_inventory.atHandVector = new Vector2(-atHandT.rect.width/2, atHandT.rect.height/2);
 	}
 
 	/// <summary>Reloads all UI Settings</summary>

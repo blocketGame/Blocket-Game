@@ -33,7 +33,7 @@ public class UIInventorySlot : MonoBehaviour
 	public ushort itemCount = 1;
 
 	public Item Item { 
-		get { return _item; }
+		get => _item;
 		set {
 			_item = value;
 			ReloadSlot();
@@ -71,29 +71,21 @@ public class UIInventorySlot : MonoBehaviour
 	public void Awake() {
 		button.onClick.AddListener(() => {
 			//TODO ..
-			GameObject.Find("Player").GetComponent<Inventory>().PressedSlot(this);
+			GameObject.FindWithTag("Player").GetComponent<Inventory>().PressedSlot(this);
 			if(GlobalVariables.itemSlotButtonPressedLog)
 				Debug.Log("Button Pressed");
 		});
 	}
 
-	
+	public void OnMouseOver() {
+		Debug.Log("A");
+	}
 
 	/// <summary>
 	/// Asign <see cref="EventHandler"/> (Listeners) for Button-Presses Event
 	/// </summary>
 	public void Start() {
 		_uIInventory = GameObject.Find("UI").GetComponent<UIInventory>();
-		/*
-		///<see cref="Buttons.offlineBtn"/>
-		offlineBtn.onClick.AddListener(() => {
-			SceneManager.LoadScene("MainGame");
-		});
-
-		///<see cref="Buttons.onlineBtn"/>
-		onlineBtn.onClick.AddListener(() => { });
-
-		///<see cref="Buttons.settingsBtn"/>
-		settingsBtn.onClick.AddListener(() => { });*/
+		
 	}
 }

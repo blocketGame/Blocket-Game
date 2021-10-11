@@ -17,13 +17,13 @@ public class MovementScript : MonoBehaviour
     public World_Data W { get => w; set => w = value; }
     public Rigidbody2D Rigidbody { get => _rigidbody; set => _rigidbody = value; }
 
-    void Start() 
+    public void Start() 
     {
-        Rigidbody = GetComponent<Rigidbody2D>();
+        Rigidbody = GetComponentInChildren<Rigidbody2D>();
     }
-    void Update()
+    public void Update()
     {
-        if (Input.GetButtonDown("Jump") && Mathf.Abs(Rigidbody.velocity.y) < 0.001f)
+        if (Input.GetKeyDown(KeyCode.Space) && Mathf.Abs(Rigidbody.velocity.y) < 0.001f)
         {
             jump = true;
         }

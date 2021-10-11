@@ -18,8 +18,7 @@ public class Inventory : MonoBehaviour{
 
 	/// <summary>Last slot active pressed</summary>
 	public UIInventorySlot atHand;
-
-	public Vector2 atHandVariables;
+	public Vector2 atHandVector;
 
 	public void PressedSlot(UIInventorySlot slotPressed) {
 		Item temp = atHand.Item;
@@ -28,9 +27,9 @@ public class Inventory : MonoBehaviour{
 		atHand.gameObject.SetActive(atHand.Item != null);
 	}
 
-	void Update() {
+	public void Update() {
 		if(atHand.Item != null)
-			atHand.transform.position = atHandVariables + new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+			atHand.transform.position = atHandVector + new Vector2(Input.mousePosition.x, Input.mousePosition.y);
 	}
 
 	/// <summary>
