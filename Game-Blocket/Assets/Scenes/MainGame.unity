@@ -160,7 +160,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5781843397233719131, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1000
+      value: 32
       objectReference: {fileID: 0}
     - target: {fileID: 5781843397233719131, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2712,9 +2712,8 @@ MonoBehaviour:
     _blockID: 9
     _tile: {fileID: 11400000, guid: 4ca7802749b97a74f9fe7f6e97f196a0, type: 2}
     sprite: {fileID: 21300000, guid: 51dbe2573721e8f4da2e403eab3961e5, type: 3}
-  chunkWidth: 25
-  chunkHeight: 100
-  chunkGroundLevel: 50
+  chunkWidth: 32
+  chunkHeight: 32
   chunkDistance: 2
   caveSize: 0.5
   seed: 1337

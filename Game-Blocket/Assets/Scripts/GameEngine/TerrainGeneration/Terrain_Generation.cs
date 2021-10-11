@@ -37,7 +37,6 @@ public class Terrain_Generation: MonoBehaviour
 
     public void Update()
     {
-
         UpdateChunks();
         foreach (TerrainChunk tc in ChunkCollisionQueue)
         {
@@ -62,34 +61,59 @@ public class Terrain_Generation: MonoBehaviour
     /// </summary>
     public void CheckChunksAroundPlayer()
     {
-        int currentChunkCoordX = Mathf.RoundToInt(PlayerPosition.position.x / World.ChunkWidth);
+        Vector2Int currentChunkCoord = new Vector2Int(Mathf.RoundToInt(PlayerPosition.position.x / World.ChunkWidth), Mathf.RoundToInt(PlayerPosition.position.y / World.ChunkHeight));
 
         for(int xOffset = -World.ChunkDistance; xOffset < World.ChunkDistance; xOffset++)
         {
-            int viewedChunkCoord = currentChunkCoordX + xOffset;
-            if (!World.Chunks.ContainsKey(viewedChunkCoord))
+            for (int yOffset = -World.ChunkDistance; yOffset<World.ChunkDistance; yOffset++)
             {
-                BiomsizeCheck(viewedChunkCoord);
-            }
-            else if (World.Chunks.ContainsKey(viewedChunkCoord))
-            {
-                World.Chunks[viewedChunkCoord].SetChunkState(true);
-                ChunksVisibleLastUpdate.Add(World.Chunks[viewedChunkCoord]);
+                Vector2Int viewedChunkCoord = new Vector2Int(currentChunkCoord.x + xOffset, currentChunkCoord.y + yOffset);
+                if (!World.Chunks.ContainsKey(viewedChunkCoord))
+                {
+                    BiomsizeCheck(viewedChunkCoord);
+                }
+                else if (World.Chunks.ContainsKey(viewedChunkCoord))
+                {
+                    World.Chunks[viewedChunkCoord].SetChunkState(true);
+                    ChunksVisibleLastUpdate.Add(World.Chunks[viewedChunkCoord]);
+                }
             }
         }
     }
 
+    /// <summary>
+    /// Checks whether or not a Biom is complete 
+    /// (Biomnr/Biomsize)
+    /// </summary>
+    private void BiomsizeCheck(Vector2Int viewedChunkCoord)
+    {
+        if (viewedChunkCoord.x == -1)
+        {
+            BuildChunk(viewedChunkCoord);
+            return;
+        }
+        else if (World.Chunks.ContainsKey(new Vector2Int(viewedChunkCoord.x - 1, 0)) && World.Chunks[new Vector2Int(viewedChunkCoord.x - 1, 0)].BiomNr < World.Chunks[new Vector2Int(viewedChunkCoord.x - 1, 0)].Biom.Size)
+        {
+                BuildChunk(viewedChunkCoord, World.Chunks[new Vector2Int(viewedChunkCoord.x - 1, 0)].Biom.Index, World.Chunks[new Vector2Int(viewedChunkCoord.x - 1, 0)].BiomNr);
+        }
+        else if (World.Chunks.ContainsKey(new Vector2Int(viewedChunkCoord.x + 1, 0)) && World.Chunks[new Vector2Int(viewedChunkCoord.x + 1, 0)].BiomNr < World.Chunks[new Vector2Int(viewedChunkCoord.x + 1, 0)].Biom.Size)
+        {
+                BuildChunk(viewedChunkCoord, World.Chunks[new Vector2Int(viewedChunkCoord.x + 1, 0)].Biom.Index, World.Chunks[new Vector2Int(viewedChunkCoord.x + 1, 0)].BiomNr);
+        }
+        else
+            BuildChunk(viewedChunkCoord);
+    }
     
     /// <summary>
     ///     Generates Chunk From Noisemap without any extra consideration
     /// </summary>
-    private void BuildChunk(int position)
+    private void BuildChunk(Vector2Int position)
     { 
         TerrainChunk chunk = new TerrainChunk(position, World, ChunkParent,null);
-        int Biom = new System.Random(World.Seed+World.ChunkWidth*position).Next(0,World.Biom.Length);
+        int Biom = new System.Random(World.Seed+World.ChunkWidth*position.x).Next(0,World.Biom.Length);
         chunk.GenerateChunk(
-            NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position * World.ChunkWidth),
-            NoiseGenerator.GenerateNoiseMap2D(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position * World.ChunkWidth, world.OffsetY), NoiseGenerator.NoiseMode.Cave),
+            NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position.x * World.ChunkWidth),
+            NoiseGenerator.GenerateNoiseMap2D(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.y * World.ChunkHeight), NoiseGenerator.NoiseMode.Cave),
             Biom);
         chunk.BiomNr = 1;
         World.Chunks[position] = chunk;
@@ -101,40 +125,16 @@ public class Terrain_Generation: MonoBehaviour
     /// </summary>
     /// <param name="Biomindex">index that specifice which Biom to use</param>
     /// <param name="Biomnr">iterative index for the new chunk</param>
-    private void BuildChunk(int position,int Biomindex,int Biomnr)
+    private void BuildChunk(Vector2Int position,int Biomindex,int Biomnr)
     {
         TerrainChunk chunk = new TerrainChunk(position, World, ChunkParent,null);
         chunk.GenerateChunk(
-            NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position * World.ChunkWidth),
-            NoiseGenerator.GenerateNoiseMap2D(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position * World.ChunkWidth, world.OffsetY), NoiseGenerator.NoiseMode.Cave),
+            NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position.x * World.ChunkWidth),
+            NoiseGenerator.GenerateNoiseMap2D(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.x * World.ChunkHeight), NoiseGenerator.NoiseMode.Cave),
             Biomindex);
         chunk.BiomNr = Biomnr+1;
         World.Chunks[position] = chunk;
         ChunksVisibleLastUpdate.Add(chunk);
         ChunkCollisionQueue.Enqueue(chunk);
-    }
-
-    /// <summary>
-    /// Checks whether or not a Biom is complete 
-    /// (Biomnr/Biomsize)
-    /// </summary>
-    private void BiomsizeCheck(int viewedChunkCoord)
-    {
-        if (viewedChunkCoord == -1)
-        {
-            BuildChunk(viewedChunkCoord);
-            return;
-        }
-        else if (World.Chunks.ContainsKey(viewedChunkCoord - 1) && World.Chunks[viewedChunkCoord - 1].BiomNr < World.Chunks[viewedChunkCoord - 1].Biom.Size)
-        {
-                BuildChunk(viewedChunkCoord, World.Chunks[viewedChunkCoord - 1].Biom.Index, World.Chunks[viewedChunkCoord - 1].BiomNr);
-                
-        }
-        else if (World.Chunks.ContainsKey(viewedChunkCoord + 1) && World.Chunks[viewedChunkCoord + 1].BiomNr < World.Chunks[viewedChunkCoord + 1].Biom.Size)
-        {
-                BuildChunk(viewedChunkCoord, World.Chunks[viewedChunkCoord + 1].Biom.Index, World.Chunks[viewedChunkCoord + 1].BiomNr);
-        }
-        else
-            BuildChunk(viewedChunkCoord);
     }
 }

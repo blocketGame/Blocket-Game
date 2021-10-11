@@ -35,19 +35,19 @@ public class Block_Editing : MonoBehaviour
         if (Input.GetKeyDown(delete))
         {
             //world.GetChunkFromCoordinate(coordinate.x).CollisionTileMap.SetTile(new Vector3Int(coordinate.x-world.ChunkWidth* world.GetChunkFromCoordinate(coordinate.x).ChunkID,coordinate.y,0), null);
-            world.GetChunkFromCoordinate(coordinate.x).DeleteBlock(coordinate);
-            world.GetChunkFromCoordinate(coordinate.x).BuildCollisions(false);
-            world.GetChunkFromCoordinate(coordinate.x + world.ChunkWidth).BuildCollisions(false);
-            world.GetChunkFromCoordinate(coordinate.x - world.ChunkWidth).BuildCollisions(false);
+            world.GetChunkFromCoordinate(coordinate.x, coordinate.y).DeleteBlock(coordinate);
+            world.GetChunkFromCoordinate(coordinate.x, coordinate.y).BuildCollisions(false);
+            world.GetChunkFromCoordinate(coordinate.x + world.ChunkWidth, coordinate.y).BuildCollisions(false);
+            world.GetChunkFromCoordinate(coordinate.x - world.ChunkWidth, coordinate.y).BuildCollisions(false);
         }
-        if (Input.GetKeyDown(create) && world.GetChunkFromCoordinate(coordinate.x).BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID), coordinate.y] == 0 && !(Input.mousePosition.y - 429 < 55 && Input.mousePosition.y - 429 > -5 && Input.mousePosition.x - 959 > -40 && Input.mousePosition.x - 959 < 40))
+        if (Input.GetKeyDown(create) && world.GetChunkFromCoordinate(coordinate.x, coordinate.y).BlockIDs[coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x, coordinate.y] == 0 && !(Input.mousePosition.y - 429 < 55 && Input.mousePosition.y - 429 > -5 && Input.mousePosition.x - 959 > -40 && Input.mousePosition.x - 959 < 40))
         {
             //world.GetChunkFromCoordinate(coordinate.x).CollisionTileMap.SetTile(new Vector3Int(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID, coordinate.y, 0), world.Blocks[selectedBlock].Tile);
-            world.GetChunkFromCoordinate(coordinate.x).ChunkTileMap.SetTile(new Vector3Int(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID, coordinate.y, 0), world.Blocks[selectedBlock].Tile);
-            world.GetChunkFromCoordinate(coordinate.x).BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID), coordinate.y] = world.Blocks[selectedBlock].BlockID;
-            world.GetChunkFromCoordinate(coordinate.x).BuildCollisions(false);
-            world.GetChunkFromCoordinate(coordinate.x + world.ChunkWidth).BuildCollisions(false);
-            world.GetChunkFromCoordinate(coordinate.x - world.ChunkWidth).BuildCollisions(false);
+            world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkTileMap.SetTile(new Vector3Int(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x, coordinate.y, 0), world.Blocks[selectedBlock].Tile);
+            world.GetChunkFromCoordinate(coordinate.x, coordinate.y).BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x), coordinate.y] = world.Blocks[selectedBlock].BlockID;
+            world.GetChunkFromCoordinate(coordinate.x, coordinate.y).BuildCollisions(false);
+            world.GetChunkFromCoordinate(coordinate.x + world.ChunkWidth, coordinate.y).BuildCollisions(false);
+            world.GetChunkFromCoordinate(coordinate.x - world.ChunkWidth, coordinate.y).BuildCollisions(false);
         }
     }
 

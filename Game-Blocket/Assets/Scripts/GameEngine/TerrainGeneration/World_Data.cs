@@ -14,8 +14,7 @@ public class World_Data : MonoBehaviour
     private GameObject player;
     [SerializeField]
     private Terrain_Generation terraingeneration;
-    [SerializeField]
-    private Dictionary<int, TerrainChunk> chunks = new Dictionary<int, TerrainChunk>();
+    private Dictionary<Vector2Int, TerrainChunk> chunks = new Dictionary<Vector2Int, TerrainChunk>();
     [SerializeField]
     private Biom[] biom;
     [SerializeField]
@@ -24,8 +23,6 @@ public class World_Data : MonoBehaviour
     private int chunkWidth;
     [SerializeField]
     private int chunkHeight;
-    [SerializeField]
-    private int chunkGroundLevel;
     [SerializeField]
     private int chunkDistance;
     [SerializeField]
@@ -64,12 +61,11 @@ public class World_Data : MonoBehaviour
     public float CaveSize { get => caveSize; set => caveSize = value; }
     public int Seed { get => seed; set => seed = value; }
     public int ChunkDistance { get => chunkDistance; set => chunkDistance = value; }
-    public int ChunkGroundLevel { get => chunkGroundLevel; set => chunkGroundLevel = value; }
     public int ChunkHeight { get => chunkHeight; set => chunkHeight = value; }
     public int ChunkWidth { get => chunkWidth; set => chunkWidth = value; }
     public BlockData[] Blocks { get => blocks; set => blocks = value; }
     public Biom[] Biom { get => biom; set => biom = value; }
-    public Dictionary<int, TerrainChunk> Chunks { get => chunks; set => chunks = value; }
+    public Dictionary<Vector2Int, TerrainChunk> Chunks { get => chunks; set => chunks = value; }
     public Terrain_Generation Terraingeneration { get => terraingeneration; set => terraingeneration = value; }
     public GameObject Player { get => player; set => player = value; }
 
@@ -80,12 +76,12 @@ public class World_Data : MonoBehaviour
     /// </summary>
     /// <param name="x">coordinate in a chunk</param>
     /// <returns></returns>
-    public TerrainChunk GetChunkFromCoordinate(float x)
+    public TerrainChunk GetChunkFromCoordinate(float x, float y)
     {
-        int chunkIndex = Mathf.FloorToInt(x / ChunkWidth);
-        if (Chunks.ContainsKey(chunkIndex))
+        Vector2Int chunkPosition = new Vector2Int(Mathf.FloorToInt(x / ChunkWidth), Mathf.FloorToInt(y / ChunkHeight));
+        if (Chunks.ContainsKey(chunkPosition))
         {
-            return Chunks[chunkIndex];
+            return Chunks[chunkPosition];
         }
         return null;
     }
@@ -98,13 +94,14 @@ public class World_Data : MonoBehaviour
     /// <returns></returns>
     public byte getBlockFormCoordinate(int x, int y)
     {
-        TerrainChunk chunk = GetChunkFromCoordinate(x);
+        TerrainChunk chunk = GetChunkFromCoordinate(x, y);
         if (chunk != null)
         {
-            int chunkX = x - ChunkWidth * chunk.ChunkID;
-            if (chunkX < ChunkWidth && y < ChunkHeight && y > 0)
+            int chunkX = x - ChunkWidth * chunk.ChunkPosition.x;
+            int chunkY = y - ChunkHeight * chunk.ChunkPosition.y;
+            if (chunkX < ChunkWidth && y < ChunkHeight)
             {
-                return chunk.BlockIDs[chunkX, y];
+                return chunk.BlockIDs[chunkX, chunkY];
             }
         }
         return 1;
@@ -227,5 +224,3 @@ public struct BlockData
     public TileBase Tile { get => _tile; set => _tile = value; }
     public Sprite Sprite { get => sprite; set => sprite = value; }
 }
-
-

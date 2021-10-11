@@ -10,7 +10,7 @@ public class TerrainChunk
     [SerializeField]
     private World_Data world;
     [SerializeField]
-    private int chunkID;
+    private Vector2Int chunkPosition;
     [SerializeField]
     private byte[,] blockIDs;
 
@@ -44,7 +44,7 @@ public class TerrainChunk
     //----------------------------------------------- Properties ----------------------------------------------------------------------------
 
     public World_Data World { get => world; set => world = value; }
-    public int ChunkID { get => chunkID; set => chunkID = value; }
+    public Vector2Int ChunkPosition { get => chunkPosition; set => chunkPosition = value; }
     public byte[,] BlockIDs { get => blockIDs; set => blockIDs = value; }
     public Tilemap ChunkTileMap { get => chunkTileMap; set => chunkTileMap = value; }
     public TilemapRenderer ChunkTileMapRenderer { get => chunkTileMapRenderer; set => chunkTileMapRenderer = value; }
@@ -60,9 +60,9 @@ public class TerrainChunk
     public GameObject DROPS1 { get => DROPS; set => DROPS = value; }
     public byte[,] BlockIDsBG1 { get => blockIDsBG; set => blockIDsBG = value; }
 
-    public TerrainChunk(int chunkID, World_Data world, GameObject chunkParent, GameObject chunkObject)
+    public TerrainChunk(Vector2Int chunkPosition, World_Data world, GameObject chunkParent, GameObject chunkObject)
     {
-        this.ChunkID = chunkID;
+        this.ChunkPosition = chunkPosition;
         this.World = world;
         this.BlockIDs = new byte[world.ChunkWidth, world.ChunkHeight];
         this.blockIDsBG = new byte[world.ChunkWidth, world.ChunkHeight];
@@ -76,29 +76,29 @@ public class TerrainChunk
     /// <returns></returns>
     private GameObject BuildAllChunkLayers(GameObject chunkParent, GameObject chunkObject)
     { 
-        chunkObject = new GameObject($"Chunk {ChunkID}");
+        chunkObject = new GameObject($"Chunk {ChunkPosition.x} {ChunkPosition.y}");
         chunkObject.transform.SetParent(chunkParent.transform);
-        chunkObject.transform.position = new Vector3(ChunkID * World.ChunkWidth, 0f, 0f);
+        chunkObject.transform.position = new Vector3(ChunkPosition.x * World.ChunkWidth, ChunkPosition.y * World.ChunkHeight, 0f);
 
         ChunkTileMap = chunkObject.AddComponent<Tilemap>();
         ChunkTileMapRenderer = chunkObject.AddComponent<TilemapRenderer>();
         ChunkTileMap.tileAnchor = new Vector3(0.5f, 0.5f, 0f);
 
-        BackgroundObject = new GameObject($"Chunk {ChunkID} background");
+        BackgroundObject = new GameObject($"Chunk {ChunkPosition.x} {ChunkPosition.y} background");
         BackgroundObject.transform.SetParent(ChunkTileMap.transform);
-        BackgroundObject.transform.position = new Vector3(ChunkID * World.ChunkWidth, 0f, 0f);
+        BackgroundObject.transform.position = new Vector3(ChunkPosition.x * World.ChunkWidth, ChunkPosition.y * World.ChunkHeight, 0f);
         BackgroundTilemap = BackgroundObject.AddComponent<Tilemap>();
         BackgroundObject.AddComponent<TilemapRenderer>();
 
-        CollisionObject = new GameObject($"Chunk {ChunkID} collision");
+        CollisionObject = new GameObject($"Chunk {ChunkPosition.x} {ChunkPosition.y} collision");
         CollisionObject.transform.SetParent(ChunkTileMap.transform);
-        CollisionObject.transform.position = new Vector3(ChunkID * World.ChunkWidth, 0f, 0f);
+        CollisionObject.transform.position = new Vector3(ChunkPosition.x * World.ChunkWidth, ChunkPosition.y * World.ChunkHeight, 0f);
         CollisionTileMap = CollisionObject.AddComponent<Tilemap>();
         ChunkTileMapCollider = CollisionObject.AddComponent<TilemapCollider2D>();
         CollisionTileMap.tileAnchor = new Vector3(0.5f, 0.5f, 0f);
 
 
-        DROPS = new GameObject($"Chunk {ChunkID} drops");
+        DROPS = new GameObject($"Chunk {ChunkPosition.x} {ChunkPosition.y} drops");
         DROPS.transform.SetParent(ChunkTileMap.transform);
         InsertDrops();
         
@@ -115,21 +115,21 @@ public class TerrainChunk
         Biom = World.Biom[biomindex];
         for (int x = 0; x < World.ChunkWidth; x++)
         {
-            int positionHeight = Mathf.FloorToInt(World.Heightcurve.Evaluate(noisemap[x])*World.HeightMultiplier) + World.ChunkGroundLevel;
+            int positionHeight = Mathf.FloorToInt(World.Heightcurve.Evaluate(noisemap[x])*World.HeightMultiplier);
             int heightvalue = 0;
             int blockIDpos = 0;
             int heightvalueBG = 0;
             int blockIDposBG = 0;
-            for (int y = positionHeight-1; y >= 0; y--)
+            for (int y = world.ChunkHeight - 1; y >= 0; y--)
             {
-                    //Debug.Log("Layerhaeight :"+ world.biom[biomindex].regions[blockIDpos].layerheight + " Heightvalue"+heightvalue);
-                    if(heightvalue == World.Biom[biomindex].Regions[blockIDpos].RegionRange)
-                    {
-                        blockIDpos++;
-                        heightvalue = 0;
-                    }
-                    else
-                    heightvalue++;
+                //Debug.Log("Layerhaeight :"+ world.biom[biomindex].regions[blockIDpos].layerheight + " Heightvalue"+heightvalue);
+                if(heightvalue == World.Biom[biomindex].Regions[blockIDpos].RegionRange)
+                {
+                    blockIDpos++;
+                    heightvalue = 0;
+                }
+                else
+                heightvalue++;
                 if (heightvalueBG == World.Biom[biomindex].BgRegions[blockIDposBG].RegionRange)
                 {
                     blockIDposBG++;
@@ -137,7 +137,7 @@ public class TerrainChunk
                 }
                 else
                     heightvalueBG++;
-                if (caveNoisepmap[x, y] > world.CaveSize)
+                if (caveNoisepmap[x, y] > world.CaveSize && y + chunkPosition.y * world.ChunkHeight < positionHeight)
                 {
                     BlockIDs[x, y] = World.Biom[biomindex].Regions[blockIDpos].BlockID;
                     foreach (OreData oreData in Biom.Ores)
@@ -176,7 +176,6 @@ public class TerrainChunk
                     }
                     else
                         heightvalue++;
-                    //@Philipp: wird des Tile nicht zwei mal in die Tilemap gesetzt? (siehe Zeile 143)
                     PlaceTile(x, y, World.Blocks[BlockIDs[x,y]].Tile);
                     if(init)
                     PlaceTileInBG(x,y,World.Blocks[BlockIDsBG1[x,y]].Tile);
@@ -199,13 +198,13 @@ public class TerrainChunk
         {
             for (int y = 0; y < World.ChunkHeight; y++)
             {
-                int worldX = x + ChunkID * World.ChunkWidth;
-                //Wird tatsächlich ausgeführt
+                int worldX = x + ChunkPosition.x * World.ChunkWidth;
+                int worldY = y + ChunkPosition.y * World.ChunkHeight;
                 if (BlockIDs[x, y] != 0 &&
-                    (World.getBlockFormCoordinate(worldX + 1, y) == 0 ||
-                    World.getBlockFormCoordinate(worldX, y + 1) == 0 ||
-                    World.getBlockFormCoordinate(worldX - 1, y) == 0 ||
-                    World.getBlockFormCoordinate(worldX, y - 1) == 0))
+                    (World.getBlockFormCoordinate(worldX + 1, worldY) == 0 ||
+                    World.getBlockFormCoordinate(worldX, worldY + 1) == 0 ||
+                    World.getBlockFormCoordinate(worldX - 1, worldY) == 0 || 
+                    World.getBlockFormCoordinate(worldX, worldY - 1) == 0))
                 {
                     CollisionTileMap.SetTile(new Vector3Int(x, y, 0), World.getBlockbyId(1).Tile);
                 }
@@ -225,11 +224,11 @@ public class TerrainChunk
     public void DeleteBlock(Vector3Int coordinate)
     {
         Drop d = new Drop();
-        d.DropID = BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID), coordinate.y];
-        d.DropName = world.Blocks[BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID), coordinate.y]].Name;
+        d.DropID = BlockIDs[coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x, coordinate.y];
+        d.DropName = world.Blocks[BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x), coordinate.y]].Name;
         d.DropObject = new GameObject($"Drops");
         d.DropObject.AddComponent<SpriteRenderer>();
-        d.DropObject.GetComponent<SpriteRenderer>().sprite = world.Blocks[BlockIDs[(coordinate.x - world.ChunkWidth * ChunkID), coordinate.y]].Sprite;
+        d.DropObject.GetComponent<SpriteRenderer>().sprite = world.Blocks[BlockIDs[(coordinate.x - world.ChunkWidth * ChunkPosition.x), coordinate.y]].Sprite;
         Vector3Int c = coordinate;
         c.y = coordinate.y + 1;
         c.x = coordinate.x + 1;
@@ -243,8 +242,8 @@ public class TerrainChunk
         drops.Add(d);
         InsertDrops();
 
-        ChunkTileMap.SetTile(new Vector3Int(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID, coordinate.y, 0), null);
-        BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID), coordinate.y] = 0;
+        ChunkTileMap.SetTile(new Vector3Int(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x, coordinate.y, 0), null);
+        BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x), coordinate.y] = 0;
         
     }
 
