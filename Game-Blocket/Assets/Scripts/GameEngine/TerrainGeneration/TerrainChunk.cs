@@ -281,7 +281,7 @@ public class TerrainChunk
     /// </summary>
     public void CheckDropCollision(int x, int y)
     {
-        float dropgrouprange = 0.5f;
+        float dropgrouprange = world.Groupdistance;
         if (world.Grid.WorldToCell(Drops[x].DropObject.transform.position).x + dropgrouprange > world.Grid.WorldToCell(Drops[y].DropObject.transform.position).x &&
             world.Grid.WorldToCell(Drops[x].DropObject.transform.position).x - dropgrouprange < world.Grid.WorldToCell(Drops[y].DropObject.transform.position).x &&
             world.Grid.WorldToCell(Drops[x].DropObject.transform.position).y + dropgrouprange > world.Grid.WorldToCell(Drops[y].DropObject.transform.position).y &&

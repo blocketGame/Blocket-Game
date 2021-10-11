@@ -49,8 +49,6 @@ MonoBehaviour:
   ores: []
   regions:
   - regionRange: 1
-    blockID: 6
-  - regionRange: 0
     blockID: 7
   - regionRange: -1
     blockID: 3

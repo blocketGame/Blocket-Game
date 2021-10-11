@@ -51,6 +51,8 @@ public class World_Data : MonoBehaviour
     private AnimationCurve heightcurve;
     [SerializeField]
     private Grid grid;
+    [SerializeField]
+    private float groupdistance;
 
 
 //----------------------------------------------- Properties ----------------------------------------------------------------------------
@@ -75,6 +77,7 @@ public class World_Data : MonoBehaviour
     public Terrain_Generation Terraingeneration { get => terraingeneration; set => terraingeneration = value; }
     public GameObject Player { get => player; set => player = value; }
     public Grid Grid { get => grid; set => grid = value; }
+    public float Groupdistance { get => groupdistance; set => groupdistance = value; }
 
 
 

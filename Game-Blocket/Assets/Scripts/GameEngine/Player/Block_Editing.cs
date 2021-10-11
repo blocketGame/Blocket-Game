@@ -17,6 +17,7 @@ public class Block_Editing : MonoBehaviour
     public Camera mainCamera;
     public int selectedBlock;
     public World_Data world;
+    public bool kcdown;
 
     // Start is called before the first frame update
     public void Start()
@@ -34,11 +35,23 @@ public class Block_Editing : MonoBehaviour
             return;
         if (Input.GetKeyDown(delete))
         {
-            //world.GetChunkFromCoordinate(coordinate.x).CollisionTileMap.SetTile(new Vector3Int(coordinate.x-world.ChunkWidth* world.GetChunkFromCoordinate(coordinate.x).ChunkID,coordinate.y,0), null);
-            world.GetChunkFromCoordinate(coordinate.x).DeleteBlock(coordinate);
-            world.GetChunkFromCoordinate(coordinate.x).BuildCollisions(false);
-            world.GetChunkFromCoordinate(coordinate.x + world.ChunkWidth).BuildCollisions(false);
-            world.GetChunkFromCoordinate(coordinate.x - world.ChunkWidth).BuildCollisions(false);
+            kcdown = true;
+        }
+        if(Input.GetKeyUp(delete))
+        {
+            kcdown = false;
+        }
+        if (kcdown)
+        {
+            try
+            {
+                //world.GetChunkFromCoordinate(coordinate.x).CollisionTileMap.SetTile(new Vector3Int(coordinate.x-world.ChunkWidth* world.GetChunkFromCoordinate(coordinate.x).ChunkID,coordinate.y,0), null);
+                world.GetChunkFromCoordinate(coordinate.x).DeleteBlock(coordinate);
+                world.GetChunkFromCoordinate(coordinate.x).BuildCollisions(false);
+                world.GetChunkFromCoordinate(coordinate.x + world.ChunkWidth).BuildCollisions(false);
+                world.GetChunkFromCoordinate(coordinate.x - world.ChunkWidth).BuildCollisions(false);
+            }
+            catch { }
         }
         if (Input.GetKeyDown(create) && world.GetChunkFromCoordinate(coordinate.x).BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID), coordinate.y] == 0 && !(Input.mousePosition.y - 429 < 55 && Input.mousePosition.y - 429 > -5 && Input.mousePosition.x - 959 > -40 && Input.mousePosition.x - 959 < 40))
         {
