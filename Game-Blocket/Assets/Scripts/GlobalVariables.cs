@@ -14,5 +14,6 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public static class GlobalVariables
 {
-	///TODO: ...
+	public static int currentHealth { get; set; }
+	public static int maxHealth { get; set; }
 }
