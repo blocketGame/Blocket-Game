@@ -71,6 +71,5 @@ public class MovementScript : MonoBehaviour
             }
         }
 
-        w.IgnoreDropCollision();
     }
 }

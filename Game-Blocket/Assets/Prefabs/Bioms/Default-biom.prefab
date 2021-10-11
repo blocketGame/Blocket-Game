@@ -47,14 +47,10 @@ MonoBehaviour:
   size: 2
   biomName: default-biom
   ores:
-  - name: Test 1
-    noiseValueFrom: 0.7
-    noiseValueTo: 0.71
-    blockID: 5
   - name: Test 2
     noiseValueFrom: 0.8
     noiseValueTo: 0.81
-    blockID: 7
+    blockID: 12
   regions:
   - regionRange: 1
     blockID: 2

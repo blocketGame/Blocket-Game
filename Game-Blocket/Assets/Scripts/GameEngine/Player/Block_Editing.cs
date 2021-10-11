@@ -51,6 +51,15 @@ public class Block_Editing : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        world.IgnoreDropCollision();
+        for (int x = 0; x < world.Terraingeneration.ChunksVisibleLastUpdate.Count; x++)
+        {
+            world.Terraingeneration.ChunksVisibleLastUpdate[x].InsertDrops();
+        }
+    }
+
     private void RemoveTile(Tilemap tileMap, Vector3Int position)
     {
         tileMap.SetTile(position, null);

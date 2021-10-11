@@ -49,6 +49,8 @@ public class World_Data : MonoBehaviour
     private int heightMultiplier;
     [SerializeField]
     private AnimationCurve heightcurve;
+    [SerializeField]
+    private Grid grid;
 
 
 //----------------------------------------------- Properties ----------------------------------------------------------------------------
@@ -72,6 +74,7 @@ public class World_Data : MonoBehaviour
     public Dictionary<int, TerrainChunk> Chunks { get => chunks; set => chunks = value; }
     public Terrain_Generation Terraingeneration { get => terraingeneration; set => terraingeneration = value; }
     public GameObject Player { get => player; set => player = value; }
+    public Grid Grid { get => grid; set => grid = value; }
 
 
 

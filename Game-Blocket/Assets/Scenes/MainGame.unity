@@ -2724,6 +2724,18 @@ MonoBehaviour:
     _blockID: 9
     _tile: {fileID: 11400000, guid: fc57694823c009c4e84b01d380db4a6a, type: 2}
     sprite: {fileID: 21300000, guid: 88bfb298082e7e74d8eea4d2c8dcfa04, type: 3}
+  - _name: Sand-Top-BG
+    _blockID: 10
+    _tile: {fileID: 11400000, guid: b44d80ef215d62d4495127d45c86d3b7, type: 2}
+    sprite: {fileID: 21300000, guid: b5bfb34f1bcbe3642aa808489174a3c0, type: 3}
+  - _name: Sand-BG
+    _blockID: 11
+    _tile: {fileID: 11400000, guid: b98d62f7fb34b8d4082fe6245cf7c48e, type: 2}
+    sprite: {fileID: 21300000, guid: 277e2ff3d2a180140ae72dcae5380b0b, type: 3}
+  - _name: Wurzel
+    _blockID: 12
+    _tile: {fileID: 11400000, guid: 8e208899bf4176a4aad98301d70ec4b5, type: 2}
+    sprite: {fileID: 21300000, guid: ab6eea2be0b1a7549aeb9c3632d91bbf, type: 3}
   chunkWidth: 25
   chunkHeight: 100
   chunkGroundLevel: 50
