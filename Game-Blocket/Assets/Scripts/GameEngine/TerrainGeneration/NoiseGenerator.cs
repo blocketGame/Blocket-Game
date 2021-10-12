@@ -47,7 +47,7 @@ public class NoiseGenerator : MonoBehaviour
 			{
 				float sample = (x - halfWidth + octaveOffsets[i]) / scale * frequency;
 
-				float perlinValue = ((Unity.Mathematics.noise.snoise(new Vector2(sample, 0)) + 1) / 2) * 2 - 1;
+				float perlinValue = Unity.Mathematics.noise.snoise(new Vector2(sample, 0));
 				noiseHeight += perlinValue * amplitude;
 
 				amplitude *= persistance;
@@ -100,12 +100,12 @@ public class NoiseGenerator : MonoBehaviour
 
 					if (noiseMode == NoiseMode.Terrain)
                     {
-						perlinValue = ((Unity.Mathematics.noise.snoise(new Vector2(sampleX, sampleY)) + 1) / 2) * 2 - 1;
+						perlinValue = Unity.Mathematics.noise.snoise(new Vector2(sampleX, sampleY));
 					}
 					else
 					if(noiseMode == NoiseMode.Cave)
                     {
-						perlinValue = Unity.Mathematics.noise.cellular(new Unity.Mathematics.float2(sampleX, sampleY)) * 2 - 1;
+						perlinValue = Unity.Mathematics.noise.cellular(new Unity.Mathematics.float2(sampleX, sampleY));
 					}
 					noiseHeight += perlinValue.x * amplitude;
 

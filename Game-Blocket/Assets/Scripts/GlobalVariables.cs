@@ -23,4 +23,6 @@ public static class GlobalVariables
 	#region Setted Keys
 	public static KeyCode openInventoryKey = KeyCode.E;
 	#endregion
+	public static int currentHealth { get; set; }
+	public static int maxHealth { get; set; }
 }

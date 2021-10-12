@@ -46,7 +46,11 @@ MonoBehaviour:
   index: 0
   size: 2
   biomName: default-biom
-  ores: []
+  ores:
+  - name: Test 2
+    noiseValueFrom: 0.8
+    noiseValueTo: 0.81
+    blockID: 12
   regions:
   - regionRange: 1
     blockID: 2

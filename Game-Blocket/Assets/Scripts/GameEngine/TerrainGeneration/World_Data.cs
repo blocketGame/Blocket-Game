@@ -29,6 +29,8 @@ public class World_Data : MonoBehaviour
     [SerializeField]
     private int chunkDistance;
     [SerializeField]
+    private float caveSize;
+    [SerializeField]
     private int seed;
     [SerializeField]
     private float scale;
@@ -42,9 +44,15 @@ public class World_Data : MonoBehaviour
     [SerializeField]
     private float offsetX;
     [SerializeField]
+    private float offsetY;
+    [SerializeField]
     private int heightMultiplier;
     [SerializeField]
     private AnimationCurve heightcurve;
+    [SerializeField]
+    private Grid grid;
+    [SerializeField]
+    private float groupdistance;
 
 
 //----------------------------------------------- Properties ----------------------------------------------------------------------------
@@ -52,10 +60,12 @@ public class World_Data : MonoBehaviour
     public float Persistance { get => persistance; set => persistance = value; }
     public float Lacurinarity { get => lacurinarity; set => lacurinarity = value; }
     public float OffsetX { get => offsetX; set => offsetX = value; }
+    public float OffsetY { get => offsetX; set => offsetX = value; }
     public int HeightMultiplier { get => heightMultiplier; set => heightMultiplier = value; }
     public AnimationCurve Heightcurve { get => heightcurve; set => heightcurve = value; }
     public int Octives { get => octives; set => octives = value; }
     public float Scale { get => scale; set => scale = value; }
+    public float CaveSize { get => caveSize; set => caveSize = value; }
     public int Seed { get => seed; set => seed = value; }
     public int ChunkDistance { get => chunkDistance; set => chunkDistance = value; }
     public int ChunkGroundLevel { get => chunkGroundLevel; set => chunkGroundLevel = value; }
@@ -66,6 +76,8 @@ public class World_Data : MonoBehaviour
     public Dictionary<int, TerrainChunk> Chunks { get => chunks; set => chunks = value; }
     public Terrain_Generation Terraingeneration { get => terraingeneration; set => terraingeneration = value; }
     public GameObject Player { get => player; set => player = value; }
+    public Grid Grid { get => grid; set => grid = value; }
+    public float Groupdistance { get => groupdistance; set => groupdistance = value; }
 
 
 
@@ -119,6 +131,15 @@ public class World_Data : MonoBehaviour
             }
         }
         return Blocks[0];
+    }
+
+
+    //Method at wrong PLACE
+    public void IgnoreDropCollision()
+    {
+        foreach (TerrainChunk t in terraingeneration.ChunksVisibleLastUpdate)
+            foreach (Drop d in t.Drops)
+                Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Drops"), LayerMask.NameToLayer("Player"));
     }
 
     /**

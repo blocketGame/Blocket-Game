@@ -87,7 +87,10 @@ public class Terrain_Generation: MonoBehaviour
     { 
         TerrainChunk chunk = new TerrainChunk(position, World, ChunkParent,null);
         int Biom = new System.Random(World.Seed+World.ChunkWidth*position).Next(0,World.Biom.Length);
-        chunk.GenerateChunk(NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position*World.ChunkWidth), Biom);
+        chunk.GenerateChunk(
+            NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position * World.ChunkWidth),
+            NoiseGenerator.GenerateNoiseMap2D(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position * World.ChunkWidth, world.OffsetY), NoiseGenerator.NoiseMode.Cave),
+            Biom);
         chunk.BiomNr = 1;
         World.Chunks[position] = chunk;
         ChunksVisibleLastUpdate.Add(chunk);
@@ -101,7 +104,10 @@ public class Terrain_Generation: MonoBehaviour
     private void BuildChunk(int position,int Biomindex,int Biomnr)
     {
         TerrainChunk chunk = new TerrainChunk(position, World, ChunkParent,null);
-        chunk.GenerateChunk(NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position * World.ChunkWidth), Biomindex);
+        chunk.GenerateChunk(
+            NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position * World.ChunkWidth),
+            NoiseGenerator.GenerateNoiseMap2D(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position * World.ChunkWidth, world.OffsetY), NoiseGenerator.NoiseMode.Cave),
+            Biomindex);
         chunk.BiomNr = Biomnr+1;
         World.Chunks[position] = chunk;
         ChunksVisibleLastUpdate.Add(chunk);
