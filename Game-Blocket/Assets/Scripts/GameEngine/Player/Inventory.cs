@@ -17,7 +17,9 @@ public class Inventory : MonoBehaviour{
 	public List<UIInventorySlot> InvSlots { get; } = new List<UIInventorySlot>();
 
 	/// <summary>Last slot active pressed</summary>
+	[HideInInspector]
 	public UIInventorySlot atHand;
+	[HideInInspector]
 	public Vector2 atHandVector;
 
 	public void PressedSlot(UIInventorySlot slotPressed) {

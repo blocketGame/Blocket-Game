@@ -56,15 +56,16 @@ public class UIInventory : MonoBehaviour
 
 	#region Static Resources !DO NOT TOUCH!
 	[Header("Static: General")]
+	/// <summary>Prefab from Inspector</summary>
+	public GameObject prefabItemSlot;
 	///<summary>Gameobject from Inspector</summary>
 	public GameObject uiParent, slotField, uiHud;
 	/// <summary>Image from Inspector</summary>
 	public Image inventoryBackgroundImage;
-	/// <summary>Prefab from Inspector</summary>
-	public GameObject prefabItemSlot;
 	/// <summary>ItemAssets - Prefab </summary>
 	public ItemAssets itemAssets;
 	/// <summary><see cref="Inventory"/></summary>
+	[SerializeField]
 	private Inventory _inventory;
 	#endregion
 
@@ -136,7 +137,6 @@ public class UIInventory : MonoBehaviour
 
 	/// <summary>"Reload" at the beginning</summary>
 	public void Awake() {
-		_inventory = GameObject.Find("Player").GetComponent<Inventory>();
 		ReloadSettings();
 		InitUI();
 		_inventory.ArmorSlots = armorSlots;
