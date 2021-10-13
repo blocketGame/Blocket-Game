@@ -43,7 +43,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a6077fd26507ab40869d28be7f9c94a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BlockItemsInGame: []
+  BlockItemsInGame:
+  - name: Dirt
+    id: 1
+    description: A simple Dirt Block
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: f01308597c751ff40bb35eecf55b550d, type: 3}
+    blockId: 1
   ToolItemsInGame: []
   EquipableItemsInGame: []
   UseableItemsInGame: []

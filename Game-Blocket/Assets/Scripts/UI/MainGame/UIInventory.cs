@@ -83,8 +83,11 @@ public class UIInventory : MonoBehaviour
 		if(!itemAssets)
 			Debug.LogException(new NullReferenceException("Item Assets not found!"));
 		if(GlobalVariables.itemTest)
-			foreach(Item i in itemAssets.BlockItemsInGame)
-				_inventory.AddItem(i);
+			foreach(Item i in itemAssets.BlockItemsInGame) {
+				short ret = _inventory.AddItem(i, 50);
+				if(GlobalVariables.itemTest)
+					Debug.Log(ret);
+			} 
 	}
 
 	/// <summary>
