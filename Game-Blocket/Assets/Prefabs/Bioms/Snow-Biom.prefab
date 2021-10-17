@@ -50,6 +50,7 @@ MonoBehaviour:
   regions:
   - regionRange: 1
     blockID: 6
+<<<<<<< HEAD
   - regionRange: -1
     blockID: 3
   bgRegions:
@@ -58,6 +59,14 @@ MonoBehaviour:
   - regionRange: 0
     blockID: 8
   - regionRange: -1
+=======
+  - regionRange: 2
+    blockID: 7
+  - regionRange: 3
+    blockID: 3
+  bgRegions:
+  - regionRange: 1
+>>>>>>> 398efb49b956f6c7bc29561ddab419ee4a5287c7
     blockID: 8
   heightCurve:
     serializedVersion: 2
