@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 2
-  size: 2
+  size: 1000
   biomName: desert
   ores: []
   regions:
@@ -53,6 +53,10 @@ MonoBehaviour:
   - regionRange: -1
     blockID: 5
   bgRegions:
+  - regionRange: 1
+    blockID: 8
+  - regionRange: 0
+    blockID: 8
   - regionRange: -1
     blockID: 8
   heightCurve:
@@ -79,3 +83,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  biomtype: 0

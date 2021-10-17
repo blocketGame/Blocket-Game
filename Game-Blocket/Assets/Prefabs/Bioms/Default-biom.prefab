@@ -44,17 +44,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 0
-  size: 2
+  size: 1000
   biomName: default-biom
-  ores:
-  - name: Test 1
-    noiseValueFrom: 0.7
-    noiseValueTo: 0.71
-    blockID: 5
-  - name: Test 2
-    noiseValueFrom: 0.8
-    noiseValueTo: 0.81
-    blockID: 7
+  ores: []
   regions:
   - regionRange: 1
     blockID: 2
@@ -63,6 +55,8 @@ MonoBehaviour:
   bgRegions:
   - regionRange: 1
     blockID: 9
+  - regionRange: -1
+    blockID: 8
   - regionRange: -1
     blockID: 8
   heightCurve:
@@ -89,3 +83,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  biomtype: 0

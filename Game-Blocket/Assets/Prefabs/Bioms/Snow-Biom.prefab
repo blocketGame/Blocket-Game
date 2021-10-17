@@ -44,17 +44,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 1
-  size: 2
+  size: 1000
   biomName: snow
   ores: []
   regions:
   - regionRange: 1
     blockID: 6
-  - regionRange: 0
-    blockID: 7
   - regionRange: -1
     blockID: 3
   bgRegions:
+  - regionRange: 1
+    blockID: 8
+  - regionRange: 0
+    blockID: 8
   - regionRange: -1
     blockID: 8
   heightCurve:
@@ -99,3 +101,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  biomtype: 0

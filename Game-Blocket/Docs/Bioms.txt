@@ -15,9 +15,6 @@
 	 ID : 6
 	 Range : 1
 
-	 ID : 7
-	 Range : 0
-
 	 ID : 3
 	 Range : -1
 
