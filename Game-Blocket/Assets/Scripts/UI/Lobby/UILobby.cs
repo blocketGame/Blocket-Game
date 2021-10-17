@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
+using MLAPI;
+
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UILobby : MonoBehaviour
@@ -30,13 +33,16 @@ public class UILobby : MonoBehaviour
 		StartSiteOpen = true;
 
 		serverBtn.onClick.AddListener(() => {
-
+			NetworkManager.Singleton.StartServer();
 		});
 		hostBtn.onClick.AddListener(() => {
-
+			NetworkManager.Singleton.StartHost();
+			SceneManager.LoadScene("MainGame", LoadSceneMode.Single);
+			//TODO... Better
+			SceneManager.MoveGameObjectToScene(GameObject.Find("NetworkManager"), SceneManager.GetSceneByName("MainGame"));
 		});
 		clientBtn.onClick.AddListener(() => {
-
+			NetworkManager.Singleton.StartClient();
 		});
 	}
 }

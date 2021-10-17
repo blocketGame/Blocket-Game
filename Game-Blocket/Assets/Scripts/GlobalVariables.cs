@@ -15,7 +15,7 @@ public static class GlobalVariables
 
 	#region Debug Variables
 	public static readonly bool itemSlotButtonPressedLog = false;
-	public static readonly bool itemTest = true;
+	public static readonly bool itemTest = false;
 	#endregion
 
 	#region Setted Keys
