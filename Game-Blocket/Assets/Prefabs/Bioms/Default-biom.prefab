@@ -58,13 +58,13 @@ MonoBehaviour:
   regions:
   - regionRange: 1
     blockID: 2
-  - regionRange: -1
+  - regionRange: 2
     blockID: 3
   bgRegions:
   - regionRange: 1
-    blockID: 9
-  - regionRange: -1
     blockID: 8
+  - regionRange: 2
+    blockID: 9
   heightCurve:
     serializedVersion: 2
     m_Curve:

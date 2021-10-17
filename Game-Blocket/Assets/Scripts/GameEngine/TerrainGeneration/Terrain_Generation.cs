@@ -130,7 +130,7 @@ public class Terrain_Generation: MonoBehaviour
         TerrainChunk chunk = new TerrainChunk(position, World, ChunkParent,null);
         chunk.GenerateChunk(
             NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position.x * World.ChunkWidth),
-            NoiseGenerator.GenerateNoiseMap2D(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.x * World.ChunkHeight), NoiseGenerator.NoiseMode.Cave),
+            NoiseGenerator.GenerateNoiseMap2D(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.y * World.ChunkHeight), NoiseGenerator.NoiseMode.Cave),
             Biomindex);
         chunk.BiomNr = Biomnr+1;
         World.Chunks[position] = chunk;

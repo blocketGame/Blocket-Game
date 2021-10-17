@@ -204,7 +204,7 @@ public struct RegionData
     private byte blockID;
 
     public int RegionRange { get => regionRange; set => regionRange = value; }
-    public byte BlockID { get => blockID; set => blockID = value; }
+    public byte BlockID { get => blockID; set => blockID = value; }   
 }
 
 [System.Serializable]

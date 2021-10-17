@@ -115,44 +115,42 @@ public class TerrainChunk
         Biom = World.Biom[biomindex];
         for (int x = 0; x < World.ChunkWidth; x++)
         {
-            int positionHeight = Mathf.FloorToInt(World.Heightcurve.Evaluate(noisemap[x])*World.HeightMultiplier);
-            int heightvalue = 0;
-            int blockIDpos = 0;
-            int heightvalueBG = 0;
-            int blockIDposBG = 0;
+            int positionHeight = Mathf.FloorToInt(World.Heightcurve.Evaluate(noisemap[x])*World.HeightMultiplier) + 1;
             for (int y = world.ChunkHeight - 1; y >= 0; y--)
             {
-                //Debug.Log("Layerhaeight :"+ world.biom[biomindex].regions[blockIDpos].layerheight + " Heightvalue"+heightvalue);
-                if(heightvalue == World.Biom[biomindex].Regions[blockIDpos].RegionRange)
+                if (y + chunkPosition.y * world.ChunkHeight < positionHeight)
                 {
-                    blockIDpos++;
-                    heightvalue = 0;
-                }
-                else
-                heightvalue++;
-                if (heightvalueBG == World.Biom[biomindex].BgRegions[blockIDposBG].RegionRange)
-                {
-                    blockIDposBG++;
-                    heightvalueBG = 0;
-                }
-                else
-                    heightvalueBG++;
-                if (caveNoisepmap[x, y] > world.CaveSize && y + chunkPosition.y * world.ChunkHeight < positionHeight)
-                {
-                    BlockIDs[x, y] = World.Biom[biomindex].Regions[blockIDpos].BlockID;
-                    foreach (OreData oreData in Biom.Ores)
+                    if (caveNoisepmap[x, y] > world.CaveSize)
                     {
-                        if (caveNoisepmap[x, y] > oreData.NoiseValueFrom && caveNoisepmap[x, y] < oreData.NoiseValueTo)
+                        foreach (RegionData region in biom.Regions)
                         {
-                            BlockIDs[x, y] = oreData.BlockID;
+                            if (region.RegionRange <= positionHeight - (y + ChunkPosition.y * world.ChunkHeight))
+                            {
+                                BlockIDs[x, y] = region.BlockID;
+                            }
+                        }
+
+                        foreach (OreData oreData in Biom.Ores)
+                        {
+                            if (caveNoisepmap[x, y] > oreData.NoiseValueFrom && caveNoisepmap[x, y] < oreData.NoiseValueTo)
+                            {
+                                BlockIDs[x, y] = oreData.BlockID;
+                            }
+                        }
+                        PlaceTile(x, y, World.Blocks[BlockIDs[x, y]].Tile);
+                    }
+                    foreach (RegionData regionBG in biom.BgRegions)
+                    {
+                        if (regionBG.RegionRange <= positionHeight - (y + ChunkPosition.y * world.ChunkHeight))
+                        { 
+                            BlockIDsBG1[x, y] = regionBG.BlockID;
+                            PlaceTileInBG(x, y, World.Blocks[BlockIDsBG1[x, y]].Tile);
                         }
                     }
-                    //PlaceTile(x, y, World.Blocks[BlockIDs[x, y]].Tile);
                 }
-                BlockIDsBG1[x, y] = World.Biom[biomindex].BgRegions[blockIDposBG].BlockID;
             }
         }
-        PlaceTiles(biomindex,true);
+        //PlaceTiles(biomindex,true);
     }
 
     /// <summary>
@@ -169,7 +167,7 @@ public class TerrainChunk
             { 
                 if (BlockIDs[x, y] != 0)
                 {
-                    if (heightvalue == World.Biom[biomindex].Regions[blockIDpos].RegionRange )
+                    if (heightvalue == World.Biom[biomindex].Regions[blockIDpos].RegionRange)
                     {
                         blockIDpos--;
                         heightvalue = 0;

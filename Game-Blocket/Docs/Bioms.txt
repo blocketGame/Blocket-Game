@@ -7,7 +7,7 @@
 	 Range : 1
 
 	 ID : 3
-	 Range : -1
+	 Range : 2
 
  ID : 1
  BiomName : snow
@@ -16,10 +16,10 @@
 	 Range : 1
 
 	 ID : 7
-	 Range : 0
+	 Range : 2
 
 	 ID : 3
-	 Range : -1
+	 Range : 3
 
  ID : 2
  BiomName : desert
@@ -28,7 +28,7 @@
 	 Range : 1
 
 	 ID : 5
-	 Range : -1
+	 Range : 2
 
  ---------------------------- Rules ---------------------------------- 
  Range : -1 => Infinity
