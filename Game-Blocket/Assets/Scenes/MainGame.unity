@@ -2674,6 +2674,7 @@ MonoBehaviour:
   biom:
   - {fileID: -2858538114153597020, guid: 59ccb409df051e540837002175876753, type: 3}
   - {fileID: 7807629658044612248, guid: 61cf1ca9dbb46b14e9d4a1dad1c4b736, type: 3}
+  - {fileID: -3600785353560310458, guid: d3e2ff527c183d14d9e65539a1065e0f, type: 3}
   blocks:
   - _name: air
     _blockID: 0
