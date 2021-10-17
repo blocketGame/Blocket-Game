@@ -12,7 +12,7 @@ using UnityEngine.UI;
 /// Handles the <see cref="Button"/>-Click-Events
 /// 
 /// </summary>
-public class Buttons : MonoBehaviour
+public class UIMainMenu : MonoBehaviour
 {
 
 	/// <summary>
@@ -30,7 +30,10 @@ public class Buttons : MonoBehaviour
 		});
 
 		///<see cref="Buttons.onlineBtn"/>
-		onlineBtn.onClick.AddListener(() => { });
+		onlineBtn.onClick.AddListener(() => {
+			SceneManager.LoadScene("Lobby");
+			SceneManager.UnloadSceneAsync("MainMenu");
+		});
 
 		///<see cref="Buttons.settingsBtn"/>
 		settingsBtn.onClick.AddListener(() => { });
