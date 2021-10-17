@@ -551,27 +551,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100174990}
   m_CullTransparentMesh: 1
---- !u!1 &110355387 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2087673791013750826, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
-  m_PrefabInstance: {fileID: 31102985}
-  m_PrefabAsset: {fileID: 0}
---- !u!70 &110355388
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 110355387}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
-  m_Direction: 0
 --- !u!1 &161138315
 GameObject:
   m_ObjectHideFlags: 0
@@ -3024,6 +3003,7 @@ GameObject:
   - component: {fileID: 1818566156}
   - component: {fileID: 1818566157}
   - component: {fileID: 1818566158}
+  - component: {fileID: 1818566159}
   m_Layer: 7
   m_Name: World-Generation
   m_TagString: Untagged
@@ -3188,6 +3168,23 @@ MonoBehaviour:
     m_RotationOrder: 4
   grid: {fileID: 696983657}
   groupdistance: 1.2
+--- !u!114 &1818566159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818566155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NetworkInstanceId: 0
+  PrefabHash: 10531459685951762738
+  PrefabHashGenerator: World-Generation
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 1
 --- !u!1001 &2011328257
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -31,6 +31,8 @@ public class MovementScript : MonoBehaviour
 
     void FixedUpdate()
     {
+        if(W == null)
+            W = GameObject.Find("World-Generation").GetComponent<World_Data>();
         //right,left movement
         float thisX = transform.position.x;
 

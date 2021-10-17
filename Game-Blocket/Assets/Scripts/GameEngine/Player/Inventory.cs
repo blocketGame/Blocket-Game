@@ -33,6 +33,10 @@ public class Inventory : MonoBehaviour{
 	}
 
 	public void Update() {
+		if(atHand == null)
+			atHand = GameObject.Find("SlotAtHand").GetComponent<UIInventorySlot>();
+		if(atHandVector == null)
+			atHandVector = GameObject.Find("SlotAtHand").GetComponent<RectTransform>().anchoredPosition;
 		if(atHand.Item != null)
 			atHand.transform.position = atHandVector + new Vector2(Input.mousePosition.x, Input.mousePosition.y);
 	}
