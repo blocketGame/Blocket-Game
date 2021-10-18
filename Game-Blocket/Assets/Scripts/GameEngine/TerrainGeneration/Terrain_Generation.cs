@@ -88,26 +88,6 @@ public class Terrain_Generation : MonoBehaviour
     /// Checks whether or not a Biom is complete 
     /// (Biomnr/Biomsize)
     /// </summary>
-    private void BiomsizeCheck(Vector2Int viewedChunkCoord)
-    {
-        //NOCH NICHT GANZ KORREKT
-        /*
-        * BIOMNRX && BIOMNRY
-        * BIOME SOLLEN SICH NICHT NUR ÜBER DIE X ODER DIE Y VERBREITEN SONDERN ÜBER BEIDES GLEICHZEITIG
-        * BIOMNRX + BIOMNRY = SIZE 
-        * DANN WIRD EIN NEUES BIOM REROLLED
-        * Root Biom = 1,1
-        */
-
-        //Derzeit absolut random
-        /* float[,] biomnoisemap = NoiseGenerator.generateBiom(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + viewedChunkCoord.x * World.ChunkWidth, world.OffsetY + viewedChunkCoord.y * World.ChunkHeight), new List<Biom>(world.Biom));
-         foreach(float f in biomnoisemap)
-         {
-             Debug.Log(f);
-         }
-         Debug.Break();*/
-        BuildChunk(viewedChunkCoord);
-    }
 
     /// <summary>
     ///     Generates Chunk From Noisemap without any extra consideration
@@ -115,13 +95,19 @@ public class Terrain_Generation : MonoBehaviour
     private void BuildChunk(Vector2Int position)
     {
         TerrainChunk chunk = new TerrainChunk(position, World, ChunkParent, null);
+        List<Biom> bioms;
+        if (position.y > -20)
+            bioms = world.getBiomsByType(Biomtype.OVERWORLD);
+        else 
+            bioms = world.getBiomsByType(Biomtype.UNDERGROUND);
         chunk.GenerateChunk(
-            NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position.x * World.ChunkWidth),
-            NoiseGenerator.GenerateNoiseMap2D(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.y * World.ChunkHeight), NoiseGenerator.NoiseMode.Cave),
-            NoiseGenerator.generateBiom(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.y * World.ChunkHeight), new List<Biom>(world.Biom)));
+              NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position.x * World.ChunkWidth),
+              NoiseGenerator.GenerateNoiseMap2D(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.y * World.ChunkHeight), NoiseGenerator.NoiseMode.Cave),
+              NoiseGenerator.generateBiom(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.y * World.ChunkHeight), bioms));
         World.Chunks[position] = chunk;
         ChunksVisibleLastUpdate.Add(chunk);
         ChunkCollisionQueue.Enqueue(chunk);
+        
     }
 
 }

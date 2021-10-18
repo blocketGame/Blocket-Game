@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 0
-  size: 1000
+  size: 700
   biomName: default-biom
   ores: []
   regions:
@@ -81,4 +81,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  biomtype: 0
+  biomtype: 00000000

@@ -46,6 +46,10 @@ public class World_Data : MonoBehaviour
     private int heightMultiplier;
     [SerializeField]
     private AnimationCurve heightcurve;
+    [SerializeField]
+    private Grid grid;
+    [SerializeField]
+    private float groupdistance;
 
 
     //----------------------------------------------- Properties ----------------------------------------------------------------------------
@@ -66,12 +70,14 @@ public class World_Data : MonoBehaviour
     public BlockData[] Blocks { get => blocks; set => blocks = value; }
     public Biom[] Biom
     {
-        get => biom; set =>
-biom = value;
+        get => biom; set =>biom = value;
     }
     public Dictionary<Vector2Int, TerrainChunk> Chunks { get => chunks; set => chunks = value; }
     public Terrain_Generation Terraingeneration { get => terraingeneration; set => terraingeneration = value; }
     public GameObject Player { get => player; set => player = value; }
+
+    public Grid Grid { get => grid; set => grid = value; }
+    public float Groupdistance { get => groupdistance; set => groupdistance = value; }
 
 
 
@@ -142,9 +148,18 @@ biom = value;
     }
     **/
 
+    //Method at wrong PLACE
+    public void IgnoreDropCollision()
+    {
+        foreach (TerrainChunk t in terraingeneration.ChunksVisibleLastUpdate)
+            foreach (Drop d in t.Drops)
+                Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Drops"), LayerMask.NameToLayer("Player"));
+    }
+
     /// <summary>
     /// Creates Blocks.txt file as documentation for the blocks array
     /// </summary>
+
     public void putBlocksIntoTxt()
     {
         string writeContent = "# This File is considered as documentation tool for the Blocks and their Ids \n";
@@ -185,7 +200,7 @@ biom = value;
         List<Biom> biomlist = new List<Biom>();
         foreach (Biom b in biom)
         {
-            if (b.Biomtype.Equals(type))
+            if (b.Biomtype.Contains(type))
                 biomlist.Add(b);
         }
         return biomlist;
