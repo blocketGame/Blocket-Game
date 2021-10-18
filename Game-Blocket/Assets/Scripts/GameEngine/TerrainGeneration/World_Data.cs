@@ -8,10 +8,7 @@ using UnityEngine.Tilemaps;
  */
 public class World_Data : MonoBehaviour
 {
-
-
-    [SerializeField]
-    private GameObject player;
+    public GameObject player;
     [SerializeField]
     private Terrain_Generation terraingeneration;
     [SerializeField]

@@ -37,7 +37,7 @@ public class Terrain_Generation: MonoBehaviour
 
     public void Update()
     {
-
+        gameObject.GetComponent<World_Data>().player = GameObject.FindGameObjectWithTag("Player");
         UpdateChunks();
         foreach (TerrainChunk tc in ChunkCollisionQueue)
         {

@@ -8,8 +8,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class UILobby : MonoBehaviour
-{
+public class UILobby : MonoBehaviour {
 	#region UIResources
 	[Header("Static: General")]
 	public NetworkObject playerNetPrefab;
@@ -36,12 +35,12 @@ public class UILobby : MonoBehaviour
 			_startSiteOpen = value;
 			startSite.SetActive(value);
 			lobbySite.SetActive(!value);
-		} 
-	} 
+		}
+	}
 
 	public void Awake() {
-		
 		NetworkManager.Singleton.OnClientConnectedCallback += ClientConnectCallback;
+		SceneManager.sceneLoaded += SceneSwitched;
 		StartSiteOpen = true;
 
 		serverBtn.onClick.AddListener(() => {
@@ -67,21 +66,27 @@ public class UILobby : MonoBehaviour
 			SceneManager.MoveGameObjectToScene(GameObject.Find("NetworkManager"), SceneManager.GetSceneByName("MainGame"));
 			*/
 			NetworkSceneManager.SwitchScene("MainGame");
-			GameObject.Find("Player").SetActive(false);
-			if(_instaceRole == 1)
-				foreach(ulong clientId in NetworkManager.Singleton.ConnectedClients.Keys) {
-					Debug.Log(clientId);
-					GameObject go = Instantiate(playerNetPrefab.gameObject);
-					go.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
-				}
 		});
 
-		goBackBtn.onClick.AddListener(() => {StartSiteOpen = !StartSiteOpen; startGame.gameObject.SetActive(true); });
+		goBackBtn.onClick.AddListener(() => { StartSiteOpen = !StartSiteOpen; startGame.gameObject.SetActive(true); });
 
 		testBtn.onClick.AddListener(() => {
 			Debug.Log("Pending: " + NetworkManager.Singleton.PendingClients.Keys.ToList<ulong>().Count);
 			Debug.Log("Connected: " + NetworkManager.Singleton.ConnectedClientsList.Count);
 		});
+	}
+
+	public void SceneSwitched(Scene s1, LoadSceneMode s2){
+		if(s1.name != "MainGame")
+			return;
+		Debug.LogWarning($"Switched");
+		GameObject.FindGameObjectWithTag("Player")?.SetActive(false);
+		if(_instaceRole == 1)
+			foreach(ulong clientId in NetworkManager.Singleton.ConnectedClients.Keys) {
+			Debug.Log(clientId);
+			GameObject go = Instantiate(playerNetPrefab.gameObject);
+			go.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
+		}
 	}
 
 	private void ClientConnectCallback(ulong clientId) {
