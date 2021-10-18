@@ -1730,19 +1730,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7291855000701013668, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
---- !u!114 &1007003747 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7291855000701013668, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
-  m_PrefabInstance: {fileID: 1007003746}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a6077fd26507ab40869d28be7f9c94a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1126536682
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2203,7 +2193,7 @@ MonoBehaviour:
   slotField: {fileID: 2064132922}
   uiHud: {fileID: 801615219}
   inventoryBackgroundImage: {fileID: 539881255}
-  itemAssets: {fileID: 1007003747}
+  itemAssets: {fileID: 0}
   _inventory: {fileID: 0}
 --- !u!1 &1311209056
 GameObject:
@@ -2999,7 +2989,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 13060c59b36fda546afbf192cbce1b31, type: 3}
   - _name: Sand
     _blockID: 5
-    _tile: {fileID: 11400000, guid: cd1f3486b0fe80343b20b2be87e8ec39, type: 2}
+    _tile: {fileID: 0}
     sprite: {fileID: 21300000, guid: 2df48377b487aa243b5a6e0e637890bc, type: 3}
   - _name: Snow-Block
     _blockID: 6
@@ -3011,23 +3001,23 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 161ee3179deafa74994e408328fa9b2a, type: 3}
   - _name: Dirt-Bg
     _blockID: 8
-    _tile: {fileID: 11400000, guid: 9e8f61b273b94064caef3825336b6d64, type: 2}
+    _tile: {fileID: 0}
     sprite: {fileID: 21300000, guid: 84c9eaebb9f7a9444a7da5329990933b, type: 3}
   - _name: Dirt-Bg-Top
     _blockID: 9
-    _tile: {fileID: 11400000, guid: 925803b677123c6418b177c0c58f54d8, type: 2}
+    _tile: {fileID: 0}
     sprite: {fileID: 21300000, guid: 484556da1e8e5db4a848e08d81c55fbe, type: 3}
   - _name: Sand-Top-BG
     _blockID: 10
-    _tile: {fileID: 11400000, guid: 9347fb72086ca384899c50424352f96a, type: 2}
+    _tile: {fileID: 0}
     sprite: {fileID: 21300000, guid: 099a6ef885e1a4848a0cf844548c37d2, type: 3}
   - _name: Sand-BG
     _blockID: 11
-    _tile: {fileID: 11400000, guid: 8c004db70edc85941b9126dcfcabe005, type: 2}
+    _tile: {fileID: 0}
     sprite: {fileID: 21300000, guid: 41c8ddcb511ffaf4c949923d7e6394ea, type: 3}
   - _name: Wurzel
     _blockID: 12
-    _tile: {fileID: 11400000, guid: fb7ac6fc568382e4fa6a2428491e9bd9, type: 2}
+    _tile: {fileID: 0}
     sprite: {fileID: 21300000, guid: 708a48dc5ce8a3d42947a6901268042e, type: 3}
   chunkWidth: 25
   chunkHeight: 100

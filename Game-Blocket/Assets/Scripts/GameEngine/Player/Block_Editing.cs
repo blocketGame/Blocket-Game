@@ -27,6 +27,8 @@ public class Block_Editing : MonoBehaviour
     // Update is called once per frame
     public void Update()
     {
+        if(!GlobalVariables.gameStarted)
+            return;
         Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         Vector3Int coordinate = grid.WorldToCell(mouseWorldPos);
         coordinate.z = 0;

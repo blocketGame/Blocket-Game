@@ -30,13 +30,14 @@ public class Terrain_Generation: MonoBehaviour
     public void Start()
     {
         ChunksVisibleLastUpdate = new List<TerrainChunk>();
-        PlayerPosition = World.Player.transform;
         world.putBlocksIntoTxt();
         world.putBiomsIntoTxt();
     }
 
     public void Update()
     {
+        if(!GlobalVariables.gameStarted)
+            return;
         gameObject.GetComponent<World_Data>().player = GameObject.FindGameObjectWithTag("Player");
         UpdateChunks();
         foreach (TerrainChunk tc in ChunkCollisionQueue)

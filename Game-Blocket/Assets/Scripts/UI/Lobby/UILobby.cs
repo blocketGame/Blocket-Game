@@ -81,12 +81,22 @@ public class UILobby : MonoBehaviour {
 			return;
 		Debug.LogWarning($"Switched");
 		GameObject.FindGameObjectWithTag("Player")?.SetActive(false);
+		GameObject thisPlayer = null;
 		if(_instaceRole == 1)
 			foreach(ulong clientId in NetworkManager.Singleton.ConnectedClients.Keys) {
-			Debug.Log(clientId);
-			GameObject go = Instantiate(playerNetPrefab.gameObject);
-			go.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
-		}
+				Debug.Log(clientId);
+				GameObject go = Instantiate(playerNetPrefab.gameObject);
+				go.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
+				if(clientId == NetworkManager.Singleton.LocalClientId)
+					thisPlayer = go;
+			}
+		GameObject.Find("UI").GetComponent<UIInventory>().inventory = thisPlayer.GetComponent<Inventory>();
+		GameObject.Find("Block Editing").GetComponent<Block_Editing>().mainCamera = thisPlayer.GetComponentInChildren<Camera>();
+		GameObject.Find("Block Editing").GetComponent<Block_Editing>().player = thisPlayer;
+		GameObject.Find("World-Generation").GetComponent<World_Data>().player = thisPlayer;
+		GameObject.Find("UI").GetComponent<UIInventory>().Load();
+		GameObject.Find("World-Generation").GetComponent<World_Data>().;
+		GlobalVariables.gameStarted = true;
 	}
 
 	private void ClientConnectCallback(ulong clientId) {

@@ -12,6 +12,7 @@ using UnityEngine.SceneManagement;
 public static class GlobalVariables
 {
 	public static readonly ushort maxItemCountForMultiple = 128;
+	public static bool gameStarted;
 
 	#region Debug Variables
 	public static readonly bool itemSlotButtonPressedLog = false;

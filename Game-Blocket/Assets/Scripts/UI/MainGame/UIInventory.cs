@@ -65,8 +65,7 @@ public class UIInventory : MonoBehaviour
 	/// <summary>ItemAssets - Prefab </summary>
 	public ItemAssets itemAssets;
 	/// <summary><see cref="Inventory"/></summary>
-	[SerializeField]
-	private Inventory _inventory;
+	public Inventory inventory;
 	#endregion
 
 	#region Initzializement
@@ -84,7 +83,7 @@ public class UIInventory : MonoBehaviour
 			Debug.LogException(new NullReferenceException("Item Assets not found!"));
 		if(GlobalVariables.itemTest)
 			foreach(Item i in itemAssets.BlockItemsInGame) {
-				short ret = _inventory.AddItem(i, 50);
+				short ret = inventory.AddItem(i, 50);
 				if(GlobalVariables.itemTest)
 					Debug.Log(ret);
 			} 
@@ -132,18 +131,18 @@ public class UIInventory : MonoBehaviour
 				//Name it
 				itemSlot.name = $"Slot {a} - {b}";
 				//Add to Inventory Logic
-				_inventory.InvSlots.Add(itemSlot.GetComponent<UIInventorySlot>());
+				inventory.InvSlots.Add(itemSlot.GetComponent<UIInventorySlot>());
 			}
 		}
 	}
 	#endregion
 
 	/// <summary>"Reload" at the beginning</summary>
-	public void Awake() {
+	public void Load() {
 		ReloadSettings();
 		InitUI();
-		_inventory.ArmorSlots = armorSlots;
-		_inventory.AccessoiresSlots = accessoiresSlots;
+		inventory.ArmorSlots = armorSlots;
+		inventory.AccessoiresSlots = accessoiresSlots;
 		InventoryOpened = false;
 	}
 
@@ -163,12 +162,12 @@ public class UIInventory : MonoBehaviour
 		Destroy(atHandSlot.GetComponentInChildren<Button>());
 
 		UIInventorySlot atHandUISlot = atHandSlot.GetComponent<UIInventorySlot>();
-		_inventory.atHand = atHandUISlot;
+		inventory.atHand = atHandUISlot;
 		atHandUISlot.itemImage.raycastTarget = false;
 		
 		RectTransform atHandT = atHandSlot.GetComponent<RectTransform>();
 		atHandT.localScale = new Vector3(0.8f, 0.8f, 1);
-		_inventory.atHandVector = new Vector2(-atHandT.rect.width/2, atHandT.rect.height/2);
+		inventory.atHandVector = new Vector2(-atHandT.rect.width/2, atHandT.rect.height/2);
 	}
 
 	/// <summary>Reloads all UI Settings</summary>
