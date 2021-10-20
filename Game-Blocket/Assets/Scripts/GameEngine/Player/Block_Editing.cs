@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -46,25 +47,26 @@ public class Block_Editing : MonoBehaviour
         {
             try
             {
+                TerrainChunk chunk = world.GetChunkFromCoordinate(coordinate.x, coordinate.y);
                 //world.GetChunkFromCoordinate(coordinate.x).CollisionTileMap.SetTile(new Vector3Int(coordinate.x-world.ChunkWidth* world.GetChunkFromCoordinate(coordinate.x).ChunkID,coordinate.y,0), null);
-                world.GetChunkFromCoordinate(coordinate.x, coordinate.y).DeleteBlock(coordinate);
-                world.GetChunkFromCoordinate(coordinate.x, coordinate.y).BuildCollisions(false);
-                world.GetChunkFromCoordinate(coordinate.x + world.ChunkWidth, coordinate.y + world.ChunkHeight).BuildCollisions(false);
-                world.GetChunkFromCoordinate(coordinate.x - world.ChunkWidth, coordinate.y - world.ChunkHeight).BuildCollisions(false);
+                chunk.DeleteBlock(coordinate);
             }
-            catch
+            catch(Exception e)
             {
-                Debug.Log("HERE");
+                Debug.Log(e.Message);
             }
         }
         if (Input.GetKeyDown(create) && world.GetChunkFromCoordinate(coordinate.x, coordinate.y).BlockIDs[coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x, coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.y] == 0 && !(Input.mousePosition.y - 429 < 55 && Input.mousePosition.y - 429 > -5 && Input.mousePosition.x - 959 > -40 && Input.mousePosition.x - 959 < 40))
         {
+            TerrainChunk chunk = world.GetChunkFromCoordinate(coordinate.x, coordinate.y);
             //world.GetChunkFromCoordinate(coordinate.x).CollisionTileMap.SetTile(new Vector3Int(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x).ChunkID, coordinate.y, 0), world.Blocks[selectedBlock].Tile);
-            world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkTileMap.SetTile(new Vector3Int(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x, coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.y, 0), world.Blocks[selectedBlock].Tile);
-            world.GetChunkFromCoordinate(coordinate.x, coordinate.y).BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x), coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.y] = world.Blocks[selectedBlock].BlockID;
-            world.GetChunkFromCoordinate(coordinate.x, coordinate.y).BuildCollisions(false);
-            world.GetChunkFromCoordinate(coordinate.x + world.ChunkWidth, coordinate.y + world.ChunkHeight).BuildCollisions(false);
-            world.GetChunkFromCoordinate(coordinate.x - world.ChunkWidth, coordinate.y - world.ChunkHeight).BuildCollisions(false);
+            chunk.ChunkTileMap.SetTile(new Vector3Int(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x, coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.y, 0), world.Blocks[selectedBlock].Tile);
+            chunk.BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x), coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.y] = world.Blocks[selectedBlock].BlockID;
+            world.UpdateCollisionsAt(coordinate);
+            world.UpdateCollisionsAt(new Vector3Int(coordinate.x + 1, coordinate.y, coordinate.z));
+            world.UpdateCollisionsAt(new Vector3Int(coordinate.x, coordinate.y + 1, coordinate.z));
+            world.UpdateCollisionsAt(new Vector3Int(coordinate.x - 1, coordinate.y, coordinate.z));
+            world.UpdateCollisionsAt(new Vector3Int(coordinate.x, coordinate.y - 1, coordinate.z));
         }
     }
 

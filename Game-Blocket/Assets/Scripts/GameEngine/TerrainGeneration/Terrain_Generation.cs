@@ -43,7 +43,7 @@ public class Terrain_Generation : MonoBehaviour
         UpdateChunks();
         foreach (TerrainChunk tc in ChunkCollisionQueue)
         {
-            tc.BuildCollisions(false);
+            tc.BuildCollisions();
         }
         ChunkCollisionQueue.Clear();
 
@@ -107,7 +107,5 @@ public class Terrain_Generation : MonoBehaviour
         World.Chunks[position] = chunk;
         ChunksVisibleLastUpdate.Add(chunk);
         ChunkCollisionQueue.Enqueue(chunk);
-        
     }
-
 }

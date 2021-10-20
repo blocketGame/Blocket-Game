@@ -184,7 +184,7 @@ public class TerrainChunk
 
     private void PlaceTileInBG(int x, int y, TileBase tile) => BackgroundTilemap.SetTile(new Vector3Int(x, y, 0), tile);
 
-    public void BuildCollisions(bool init)
+    public void BuildCollisions()
     {
         collisionTileMap.ClearAllTiles();
         for (int x = 0; x < World.ChunkWidth; x++)
@@ -194,16 +194,17 @@ public class TerrainChunk
                 int worldX = x + ChunkPosition.x * World.ChunkWidth;
                 int worldY = y + ChunkPosition.y * World.ChunkHeight;
                 if (BlockIDs[x, y] != 0 &&
-                    (World.getBlockFormCoordinate(worldX + 1, worldY) == 0 ||
-                    World.getBlockFormCoordinate(worldX, worldY + 1) == 0 ||
-                    World.getBlockFormCoordinate(worldX - 1, worldY) == 0 ||
-                    World.getBlockFormCoordinate(worldX, worldY - 1) == 0))
+                    (World.GetBlockFormCoordinate(worldX + 1, worldY) == 0 ||
+                    World.GetBlockFormCoordinate(worldX, worldY + 1) == 0 ||
+                    World.GetBlockFormCoordinate(worldX - 1, worldY) == 0 ||
+                    World.GetBlockFormCoordinate(worldX, worldY - 1) == 0))
                 {
                     CollisionTileMap.SetTile(new Vector3Int(x, y, 0), World.getBlockbyId(1).Tile);
                 }
             }
         }
     }
+
     /// <summary>
     /// Is used to load Chunks in and out
     /// </summary>
@@ -224,7 +225,11 @@ public class TerrainChunk
         InstantiateDrop(coordinate);
         ChunkTileMap.SetTile(new Vector3Int(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).chunkPosition.x, coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).chunkPosition.y, 0), null);
         BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).chunkPosition.x), coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).chunkPosition.y] = 0;
-
+        world.UpdateCollisionsAt(coordinate);
+        world.UpdateCollisionsAt(new Vector3Int(coordinate.x + 1, coordinate.y, coordinate.z));
+        world.UpdateCollisionsAt(new Vector3Int(coordinate.x, coordinate.y + 1, coordinate.z));
+        world.UpdateCollisionsAt(new Vector3Int(coordinate.x - 1, coordinate.y, coordinate.z));
+        world.UpdateCollisionsAt(new Vector3Int(coordinate.x, coordinate.y - 1, coordinate.z));
     }
     /// <summary>
     /// Creating Drop + rigidbody and other Components
