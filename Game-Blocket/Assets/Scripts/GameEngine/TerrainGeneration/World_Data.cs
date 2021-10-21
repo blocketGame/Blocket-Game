@@ -109,7 +109,7 @@ public class World_Data : MonoBehaviour
         {
             int chunkX = x - ChunkWidth * chunk.ChunkPosition.x;
             int chunkY = y - ChunkHeight * chunk.ChunkPosition.y;
-            if (chunkX < ChunkWidth && y < ChunkHeight)
+            if (chunkX < ChunkWidth && chunkY < ChunkHeight)
             {
                 return chunk.BlockIDs[chunkX, chunkY];
             }

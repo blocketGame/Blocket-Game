@@ -184,7 +184,7 @@ public class TerrainChunk
 
     private void PlaceTileInBG(int x, int y, TileBase tile) => BackgroundTilemap.SetTile(new Vector3Int(x, y, 0), tile);
 
-    public void BuildCollisions(bool init)
+    public void BuildCollisions()
     {
         collisionTileMap.ClearAllTiles();
         for (int x = 0; x < World.ChunkWidth; x++)

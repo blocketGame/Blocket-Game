@@ -23,7 +23,7 @@ public class MovementScript : MonoBehaviour
     }
     void Update()
     {
-        if (Input.GetButtonDown("Jump") && Mathf.Abs(Rigidbody.velocity.y) < 0.001f)
+        if (Input.GetButton("Jump") && Mathf.Abs(Rigidbody.velocity.y) < 0.001f)
         {
             jump = true;
         }

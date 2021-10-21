@@ -2981,8 +2981,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a43b82a7ca681d946952c7e413c4f74f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  globalLight: {fileID: 583641876}
-  playerLight: {fileID: 1871010091}
+  lightRegions:
+  - options: 0
+    startY: -10
+    endY: -20
+    value: 0.3
+    lightSource: 0
+  - options: 1
+    startY: -10
+    endY: -20
+    value: 0.5
+    lightSource: 1
+  - options: 1
+    startY: -5
+    endY: -9
+    value: 0
+    lightSource: 0
+  - options: 0
+    startY: -5
+    endY: -9
+    value: 1
+    lightSource: 1
+  lights:
+  - {fileID: 1871010091}
+  - {fileID: 583641876}
   player: {fileID: 110355387}
 --- !u!1 &1847488317
 GameObject:
