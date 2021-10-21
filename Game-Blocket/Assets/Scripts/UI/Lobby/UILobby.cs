@@ -3,12 +3,13 @@ using System.Linq;
 using MLAPI;
 using MLAPI.Configuration;
 using MLAPI.SceneManagement;
+using MLAPI.Spawning;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class UILobby : MonoBehaviour {
+public class UILobby : NetworkBehaviour {
 	#region UIResources
 	[Header("Static: General")]
 	public NetworkObject playerNetPrefab;
@@ -39,7 +40,7 @@ public class UILobby : MonoBehaviour {
 	}
 
 	public void Awake() {
-		NetworkManager.Singleton.OnClientConnectedCallback += ClientConnectCallback;
+		//NetworkManager.Singleton.OnClientConnectedCallback += ClientConnectCallback;
 		SceneManager.sceneLoaded += SceneSwitched;
 		StartSiteOpen = true;
 
@@ -80,23 +81,37 @@ public class UILobby : MonoBehaviour {
 		if(s1.name != "MainGame")
 			return;
 		Debug.LogWarning($"Switched");
-		GameObject.FindGameObjectWithTag("Player")?.SetActive(false);
+		//GameObject.FindGameObjectWithTag("Player")?.SetActive(false);
 		GameObject thisPlayer = null;
-		if(_instaceRole == 1)
-			foreach(ulong clientId in NetworkManager.Singleton.ConnectedClients.Keys) {
-				Debug.Log(clientId);
-				GameObject go = Instantiate(playerNetPrefab.gameObject);
-				go.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
-				if(clientId == NetworkManager.Singleton.LocalClientId)
-					thisPlayer = go;
-			}
+
+
+		foreach(ulong clientNow in NetworkManager.Singleton.ConnectedClients.Keys) {
+			GameObject go = Instantiate(playerNetPrefab.gameObject, new Vector3Int(0,100,0), Quaternion.identity);
+			go.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientNow);
+			if(clientNow == NetworkManager.Singleton.LocalClientId)
+				thisPlayer = go;
+			/*
+			if(clientNow == NetworkManager.Singleton.LocalClientId) {
+				//if player is localplayer
+				thisPlayer = go;
+				
+				GameObject.Find("UI").GetComponent<UIInventory>().inventory = thisPlayer.GetComponent<Inventory>();
+				GameObject.Find("Block Editing").GetComponent<Block_Editing>().mainCamera = thisPlayer.GetComponentInChildren<Camera>();
+				GameObject.Find("Block Editing").GetComponent<Block_Editing>().player = thisPlayer;
+				GameObject.Find("World-Generation").GetComponent<World_Data>().player = thisPlayer;
+				GameObject.Find("UI").GetComponent<UIInventory>().Load();
+				GameObject.Find("World-Generation").GetComponent<Terrain_Generation>().PlayerPosition = thisPlayer.transform;
+				
+				thisPlayer.transform.position = new Vector3Int(0, 100, 0);
+				GlobalVariables.gameStarted = true;
+			} else {
+				go.GetComponentInChildren<Camera>().enabled = false;
+			}*/
+
+		}
+		GameObject.Find("World-Generation").GetComponent<Terrain_Generation>().PlayerPosition = thisPlayer.transform;
 		GameObject.Find("UI").GetComponent<UIInventory>().inventory = thisPlayer.GetComponent<Inventory>();
-		GameObject.Find("Block Editing").GetComponent<Block_Editing>().mainCamera = thisPlayer.GetComponentInChildren<Camera>();
-		GameObject.Find("Block Editing").GetComponent<Block_Editing>().player = thisPlayer;
-		GameObject.Find("World-Generation").GetComponent<World_Data>().player = thisPlayer;
 		GameObject.Find("UI").GetComponent<UIInventory>().Load();
-		GameObject.Find("World-Generation").GetComponent<World_Data>().;
-		GlobalVariables.gameStarted = true;
 	}
 
 	private void ClientConnectCallback(ulong clientId) {

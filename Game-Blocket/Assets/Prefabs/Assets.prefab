@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8512227375263116681}
-  - component: {fileID: 7291855000701013668}
+  - component: {fileID: 2010163288635604201}
   m_Layer: 0
   m_Name: Assets
   m_TagString: Untagged
@@ -31,7 +31,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7291855000701013668
+--- !u!114 &2010163288635604201
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,13 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a6077fd26507ab40869d28be7f9c94a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BlockItemsInGame:
-  - name: Dirt
-    id: 1
-    description: A simple Dirt Block
-    itemType: 1
-    itemImage: {fileID: 21300000, guid: f01308597c751ff40bb35eecf55b550d, type: 3}
-    blockId: 1
+  BlockItemsInGame: []
   ToolItemsInGame: []
   EquipableItemsInGame: []
   UseableItemsInGame: []

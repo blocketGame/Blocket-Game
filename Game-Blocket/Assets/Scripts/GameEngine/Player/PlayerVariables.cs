@@ -1,10 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+
+using MLAPI.NetworkVariable;
+
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
-public class PlayerVariables : MonoBehaviour
-{
+public class PlayerVariables : MonoBehaviour { 
+
+	public NetworkVariableVector3 Position = new NetworkVariableVector3(new NetworkVariableSettings {
+		WritePermission = NetworkVariablePermission.Everyone,
+		ReadPermission = NetworkVariablePermission.Everyone
+	});
+
 	#region Static Resources
 	public UIInventory uIInventory;
 	#endregion
@@ -62,6 +71,8 @@ public class PlayerVariables : MonoBehaviour
 	}
 
 	public void Awake() {
+		Position.OnValueChanged += (x, y) => { transform.position = y; };
+
 		MaxHealth = 40;
 		MaxArmor = 40;
 		MaxStrength = 40;
@@ -69,4 +80,6 @@ public class PlayerVariables : MonoBehaviour
 		Armor = 1;
 		Strength = 1; 
 	}
+
+
 }

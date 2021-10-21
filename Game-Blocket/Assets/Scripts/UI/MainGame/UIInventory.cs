@@ -27,7 +27,7 @@ public class UIInventory : MonoBehaviour
 	/// <summary>Space between Rows and Colums</summary>
 	public int rowspacingInvSlot = 15, colspacingInvSlot = 15;
 
-
+	public GameObject atHandSlotParent;
 	#endregion
 
 	#region InventoryPlayerInfoSettings
@@ -155,7 +155,7 @@ public class UIInventory : MonoBehaviour
 	}
 
 	private void InitAtHand() {
-		atHandSlot = Instantiate(prefabItemSlot, GameObject.Find("Inventory").transform);
+		atHandSlot = Instantiate(prefabItemSlot, atHandSlotParent.transform);
 		atHandSlot.name = "SlotAtHand";
 		atHandSlot.SetActive(false);
 		Destroy(atHandSlot.GetComponentInChildren<Image>());

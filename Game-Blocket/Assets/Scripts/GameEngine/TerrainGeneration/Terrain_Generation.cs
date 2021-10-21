@@ -36,9 +36,6 @@ public class Terrain_Generation: MonoBehaviour
 
     public void Update()
     {
-        if(!GlobalVariables.gameStarted)
-            return;
-        gameObject.GetComponent<World_Data>().player = GameObject.FindGameObjectWithTag("Player");
         UpdateChunks();
         foreach (TerrainChunk tc in ChunkCollisionQueue)
         {
@@ -63,6 +60,8 @@ public class Terrain_Generation: MonoBehaviour
     /// </summary>
     public void CheckChunksAroundPlayer()
     {
+        if(PlayerPosition == null)
+            return;
         int currentChunkCoordX = Mathf.RoundToInt(PlayerPosition.position.x / World.ChunkWidth);
 
         for(int xOffset = -World.ChunkDistance; xOffset < World.ChunkDistance; xOffset++)

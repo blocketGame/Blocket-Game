@@ -1138,7 +1138,6 @@ GameObject:
   m_Component:
   - component: {fileID: 696983656}
   - component: {fileID: 696983657}
-  - component: {fileID: 696983658}
   m_Layer: 7
   m_Name: Chunks
   m_TagString: Untagged
@@ -1172,23 +1171,6 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
---- !u!114 &696983658
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 696983655}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  NetworkInstanceId: 0
-  PrefabHash: 17540478480598738231
-  PrefabHashGenerator: Chunks
-  AlwaysReplicateAsRoot: 0
-  DontDestroyWithOwner: 0
 --- !u!1001 &730629543
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1730,9 +1712,19 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 7291855000701013668, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
+--- !u!114 &1007003747 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2010163288635604201, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
+  m_PrefabInstance: {fileID: 1007003746}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a6077fd26507ab40869d28be7f9c94a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1126536682
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1873,7 +1865,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1140740553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2167,6 +2159,7 @@ MonoBehaviour:
   coloums: 9
   rowspacingInvSlot: 15
   colspacingInvSlot: 15
+  atHandSlotParent: {fileID: 539881253}
   countAccessoireSlots: 7
   rowspacingPlayerInfo: 15
   scaleIndicator: 0
@@ -2193,8 +2186,8 @@ MonoBehaviour:
   slotField: {fileID: 2064132922}
   uiHud: {fileID: 801615219}
   inventoryBackgroundImage: {fileID: 539881255}
-  itemAssets: {fileID: 0}
-  _inventory: {fileID: 0}
+  itemAssets: {fileID: 1007003747}
+  inventory: {fileID: 0}
 --- !u!1 &1311209056
 GameObject:
   m_ObjectHideFlags: 0
@@ -2911,7 +2904,6 @@ GameObject:
   - component: {fileID: 1818566156}
   - component: {fileID: 1818566157}
   - component: {fileID: 1818566158}
-  - component: {fileID: 1818566159}
   m_Layer: 7
   m_Name: World-Generation
   m_TagString: Untagged
@@ -3076,23 +3068,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   grid: {fileID: 696983657}
   groupdistance: 1.2
---- !u!114 &1818566159
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1818566155}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  NetworkInstanceId: 0
-  PrefabHash: 10531459685951762738
-  PrefabHashGenerator: World-Generation
-  AlwaysReplicateAsRoot: 0
-  DontDestroyWithOwner: 1
 --- !u!1001 &2011328257
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class MovementScript : MonoBehaviour
 {
-    [SerializeField]
-    private World_Data w;
     public float MovementSpeed = 6f;
     public float JumpForce = 6f;
     public float fallMulti = 1.06f;
@@ -14,7 +12,6 @@ public class MovementScript : MonoBehaviour
 
     private Rigidbody2D _rigidbody;
 
-    public World_Data W { get => w; set => w = value; }
     public Rigidbody2D Rigidbody { get => _rigidbody; set => _rigidbody = value; }
 
     void Start()
@@ -31,8 +28,6 @@ public class MovementScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(W == null)
-            W = GameObject.Find("World-Generation").GetComponent<World_Data>();
         //right,left movement
         float thisX = transform.position.x;
 
@@ -44,24 +39,6 @@ public class MovementScript : MonoBehaviour
         {
             Rigidbody.AddForce(new Vector2(0, JumpForce), ForceMode2D.Impulse);
             jump = false;
-        }
-
-        //walk over block
-        if (W.Blocks[W.getBlockFormCoordinate((int)((transform.position.x) - 0.5), (int)((transform.position.y) - 0.1))].BlockID != 0)
-        {
-            if (Mathf.Abs(Rigidbody.velocity.y) < 0.001f && W.Blocks[W.getBlockFormCoordinate((int)((transform.position.x) - 0.5), (int)((transform.position.y) + 1.1))].BlockID == 0)
-            {
-                transform.position = new Vector3(transform.position.x, (transform.position.y) + 1, transform.position.z);
-            }
-        }
-        else
-        if (W.Blocks[W.getBlockFormCoordinate((int)((transform.position.x) + 0.5), (int)((transform.position.y) - 0.1))].BlockID != 0)
-        {
-            if (Mathf.Abs(Rigidbody.velocity.y) < 0.001f && W.Blocks[W.getBlockFormCoordinate((int)((transform.position.x) + 0.5), (int)((transform.position.y) + 1.1))].BlockID == 0)
-            {
-                transform.position = new Vector3(transform.position.x, (transform.position.y) + 1, transform.position.z);
-            }
-
         }
 
         //fall

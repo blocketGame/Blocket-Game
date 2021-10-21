@@ -1121,7 +1121,7 @@ MonoBehaviour:
     EnableSceneManagement: 1
     ForceSamePrefabs: 0
     UsePrefabSync: 1
-    RecycleNetworkIds: 1
+    RecycleNetworkIds: 0
     NetworkIdRecycleDelay: 120
     RpcHashSize: 0
     LoadSceneTimeOut: 120
@@ -1399,9 +1399,9 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 723270149}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4528d05e09d490e40b864f5274297169, type: 3}
+  m_Script: {fileID: 11500000, guid: 98cb05757d9214e429f2d91f7e62a6c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerNetPrefab: {fileID: 3409126840080751584, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}

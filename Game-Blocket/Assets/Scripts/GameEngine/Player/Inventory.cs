@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using MLAPI;
+
 using UnityEngine;
 
 /// <summary>
 /// <b>Inventory Logic</b><br></br>
 /// Feel free  to use it!
 /// </summary>
-public class Inventory : MonoBehaviour{
+public class Inventory : NetworkBehaviour{
 	/// <summary>List of ArmorSlots in the inventory => <seealso cref="UIInventorySlot"/><br></br>[0]->Head,</summary>
 	public List<UIInventorySlot> ArmorSlots { get; set; }
 	/// <summary>List of acessoiresslots in the inventory => <seealso cref="UIInventorySlot"/></summary>
