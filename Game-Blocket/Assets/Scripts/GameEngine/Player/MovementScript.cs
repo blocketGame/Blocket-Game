@@ -53,7 +53,6 @@ public class MovementScript : MonoBehaviour
             if (Mathf.Abs(Rigidbody.velocity.y) < 0.001f && W.Blocks[W.GetBlockFormCoordinate((int)((transform.position.x) + 0.5), (int)((transform.position.y) + 1.1))].BlockID == 0) {            
                 transform.position = new Vector3(transform.position.x, (transform.position.y) + 1, transform.position.z);
             }
-                
         }
 
         //fall

@@ -18,17 +18,5 @@
 	 ID : 5
 	 Range : 2
 
- ID : 2
- BiomName : Snow 
-
-	 ID : 6
-	 Range : 1
-
-	 ID : 7
-	 Range : 2
-
-	 ID : 3
-	 Range : 3
-
  ---------------------------- Rules ---------------------------------- 
  Range : -1 => Infinity

@@ -18,18 +18,33 @@ public class Block_Editing : MonoBehaviour
     public Camera mainCamera;
     public int selectedBlock;
     public World_Data world;
+    public Vector3Int coordinate;
+    public float count;
 
     // Start is called before the first frame update
     public void Start()
     {
     }
 
+    
+
     // Update is called once per frame
     public void Update()
-    {        
+    {
         Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        Vector3Int coordinate = grid.WorldToCell(mouseWorldPos);
-        coordinate.z = 0;
+        bool changed;
+        //Debug.Log(grid.WorldToCell(mouseWorldPos));
+        //Debug.Log(coordinate);
+        if (!(coordinate.x.Equals(grid.WorldToCell(mouseWorldPos).x)&&coordinate.y.Equals(grid.WorldToCell(mouseWorldPos).y)))
+        {
+            changed = true;
+            coordinate = grid.WorldToCell(mouseWorldPos);
+            coordinate.z = 0;
+            count = world.getBlockbyId(world.GetBlockFormCoordinate(coordinate.x, coordinate.y)).RemoveDuration;
+        }
+        else
+            changed = false;
+        
         //Debug.Log("x =" + (Input.mousePosition.x - 959));
         if (Input.mousePosition.x-959 < -200 || Input.mousePosition.x-959 > 200 ||Input.mousePosition.y - 429 < -150 || Input.mousePosition.y - 429 > 150 )//|| (Input.mousePosition.y - 429 < 55 && Input.mousePosition.y - 429 > -5 && Input.mousePosition.x - 959 > -40 && Input.mousePosition.x - 959 < 40)) //50 -5
             return;
@@ -39,9 +54,14 @@ public class Block_Editing : MonoBehaviour
             try
             {
                 TerrainChunk chunk = world.GetChunkFromCoordinate(coordinate.x, coordinate.y);
-                //world.GetChunkFromCoordinate(coordinate.x).CollisionTileMap.SetTile(new Vector3Int(coordinate.x-world.ChunkWidth* world.GetChunkFromCoordinate(coordinate.x).ChunkID,coordinate.y,0), null);
-                world.GetChunkFromCoordinate(coordinate.x, coordinate.y).DeleteBlock(coordinate);
-                world.GetChunkFromCoordinate(coordinate.x, coordinate.y).BuildCollisions();
+
+                StartCoroutine("Count");
+                if (!(count > 0))
+                {
+                    world.GetChunkFromCoordinate(coordinate.x, coordinate.y).DeleteBlock(coordinate);
+                    world.GetChunkFromCoordinate(coordinate.x, coordinate.y).BuildCollisions();
+                }
+
             }
             catch(Exception e)
             {
@@ -62,7 +82,14 @@ public class Block_Editing : MonoBehaviour
         }
     }
 
-
+    IEnumerator Count()
+    {
+        while (count > 0)
+        {
+            count -= 0.01f;
+            yield return null;
+        }
+    }
     private void FixedUpdate()
     {
         world.IgnoreDropCollision();

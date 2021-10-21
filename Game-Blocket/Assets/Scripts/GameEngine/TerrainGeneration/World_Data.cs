@@ -268,9 +268,12 @@ public struct BlockData
     private TileBase _tile;
     [SerializeField]
     private Sprite sprite;
+    [SerializeField]
+    private byte removeDuration;
 
     public string Name { get =>_name; set => _name = value; }
     public byte BlockID { get => _blockID; set => _blockID = value; }
     public TileBase Tile { get => _tile; set => _tile = value; }
     public Sprite Sprite { get => sprite; set => sprite = value; }
+    public byte RemoveDuration { get => removeDuration; set => removeDuration = value; }
 }
