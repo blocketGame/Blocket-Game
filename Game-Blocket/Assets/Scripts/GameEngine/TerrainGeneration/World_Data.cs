@@ -259,7 +259,7 @@ public struct RegionData
 
 [System.Serializable]
 public struct BlockData
-{
+{ 
     [SerializeField]
     private string _name;
     [SerializeField]
