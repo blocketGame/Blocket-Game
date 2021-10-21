@@ -2867,7 +2867,7 @@ MonoBehaviour:
   biom:
   - {fileID: -2858538114153597020, guid: 59ccb409df051e540837002175876753, type: 3}
   - {fileID: 7807629658044612248, guid: 61cf1ca9dbb46b14e9d4a1dad1c4b736, type: 3}
-  - {fileID: -3600785353560310458, guid: d3e2ff527c183d14d9e65539a1065e0f, type: 3}
+  - {fileID: -3600785353560310458, guid: 5187c4f1d3553054f8d25da7a37f454a, type: 3}
   blocks:
   - _name: air
     _blockID: 0
@@ -2903,15 +2903,15 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: f3dcd218662f73e47a7c65d283539553, type: 3}
   - _name: Dirt-Bg
     _blockID: 8
-    _tile: {fileID: 11400000, guid: 5b65e6d2acd22754fa567bf7e3641843, type: 2}
+    _tile: {fileID: 0}
     sprite: {fileID: 21300000, guid: 5dc8ef344183da742997bb29906167eb, type: 3}
   - _name: Dirt-Bg-Top
     _blockID: 9
-    _tile: {fileID: 11400000, guid: fc57694823c009c4e84b01d380db4a6a, type: 2}
+    _tile: {fileID: 0}
     sprite: {fileID: 21300000, guid: 88bfb298082e7e74d8eea4d2c8dcfa04, type: 3}
   - _name: Dirt-Bg-Top
     _blockID: 10
-    _tile: {fileID: 11400000, guid: 5b65e6d2acd22754fa567bf7e3641843, type: 2}
+    _tile: {fileID: 0}
     sprite: {fileID: 21300000, guid: 5dc8ef344183da742997bb29906167eb, type: 3}
   chunkWidth: 32
   chunkHeight: 32
@@ -2981,6 +2981,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a43b82a7ca681d946952c7e413c4f74f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   lightRegions:
   - options: 0
     startY: -10
@@ -3006,6 +3007,8 @@ MonoBehaviour:
   - {fileID: 1871010091}
   - {fileID: 583641876}
   player: {fileID: 110355387}
+=======
+>>>>>>> 308bf7f6a6e95b2ee7f22eadca14dc04e9001fdc
 --- !u!1 &1847488317
 GameObject:
   m_ObjectHideFlags: 0

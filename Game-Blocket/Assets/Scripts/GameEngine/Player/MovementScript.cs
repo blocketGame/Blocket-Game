@@ -44,13 +44,13 @@ public class MovementScript : MonoBehaviour
         }
 
         //walk over block
-        if (W.Blocks[W.getBlockFormCoordinate((int) ((transform.position.x) - 0.5), (int) ((transform.position.y)-0.1))].BlockID != 0) {
-            if (Mathf.Abs(Rigidbody.velocity.y) < 0.001f && W.Blocks[W.getBlockFormCoordinate((int)((transform.position.x) - 0.5), (int)((transform.position.y) + 1.1))].BlockID == 0) {
+        if (W.Blocks[W.GetBlockFormCoordinate((int) ((transform.position.x) - 0.5), (int) ((transform.position.y)-0.1))].BlockID != 0) {
+            if (Mathf.Abs(Rigidbody.velocity.y) < 0.001f && W.Blocks[W.GetBlockFormCoordinate((int)((transform.position.x) - 0.5), (int)((transform.position.y) + 1.1))].BlockID == 0) {
                 transform.position = new Vector3(transform.position.x, (transform.position.y) + 1, transform.position.z);
             }
         } else
-        if (W.Blocks[W.getBlockFormCoordinate((int) ((transform.position.x) + 0.5), (int)((transform.position.y)-0.1))].BlockID != 0) {        
-            if (Mathf.Abs(Rigidbody.velocity.y) < 0.001f && W.Blocks[W.getBlockFormCoordinate((int)((transform.position.x) + 0.5), (int)((transform.position.y) + 1.1))].BlockID == 0) {            
+        if (W.Blocks[W.GetBlockFormCoordinate((int) ((transform.position.x) + 0.5), (int)((transform.position.y)-0.1))].BlockID != 0) {        
+            if (Mathf.Abs(Rigidbody.velocity.y) < 0.001f && W.Blocks[W.GetBlockFormCoordinate((int)((transform.position.x) + 0.5), (int)((transform.position.y) + 1.1))].BlockID == 0) {            
                 transform.position = new Vector3(transform.position.x, (transform.position.y) + 1, transform.position.z);
             }
                 

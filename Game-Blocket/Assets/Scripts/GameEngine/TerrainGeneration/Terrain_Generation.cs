@@ -107,7 +107,5 @@ public class Terrain_Generation : MonoBehaviour
         World.Chunks[position] = chunk;
         ChunksVisibleLastUpdate.Add(chunk);
         ChunkCollisionQueue.Enqueue(chunk);
-        
     }
-
 }

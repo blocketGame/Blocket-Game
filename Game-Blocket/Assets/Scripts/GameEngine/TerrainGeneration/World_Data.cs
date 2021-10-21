@@ -102,7 +102,7 @@ public class World_Data : MonoBehaviour
     /// <param name="x">x coordinate</param>
     /// <param name="y">y coordinate</param>
     /// <returns></returns>
-    public byte getBlockFormCoordinate(int x, int y)
+    public byte GetBlockFormCoordinate(int x, int y)
     {
         TerrainChunk chunk = GetChunkFromCoordinate(x, y);
         if (chunk != null)
@@ -117,12 +117,32 @@ public class World_Data : MonoBehaviour
         return 1;
     }
 
-    /// <summary>
-    /// returns the BlockData object of the index
-    /// </summary>
-    /// <param name="id">index of the block</param>
-    /// <returns></returns>
-    public BlockData getBlockbyId(byte id)
+
+    public void UpdateCollisionsAt(Vector3Int coordinate)
+    {
+        TerrainChunk chunk = GetChunkFromCoordinate(coordinate.x, coordinate.y);
+
+        int chunkX = coordinate.x - chunk.ChunkPosition.x * ChunkWidth;
+        int chunkY = coordinate.y - chunk.ChunkPosition.y * ChunkHeight;
+
+        chunk.CollisionTileMap.SetTile(new Vector3Int(chunkX, chunkY, 0), null);
+
+        if (GetBlockFormCoordinate(coordinate.x, coordinate.y) != 0 &&
+            (GetBlockFormCoordinate(coordinate.x + 1, coordinate.y) == 0 ||
+            GetBlockFormCoordinate(coordinate.x, coordinate.y + 1) == 0 ||
+            GetBlockFormCoordinate(coordinate.x - 1, coordinate.y) == 0 ||
+            GetBlockFormCoordinate(coordinate.x, coordinate.y - 1) == 0))
+        {
+            chunk.CollisionTileMap.SetTile(new Vector3Int(chunkX, chunkY, 0), getBlockbyId(1).Tile);
+        }
+    }
+
+        /// <summary>
+        /// returns the BlockData object of the index
+        /// </summary>
+        /// <param name="id">index of the block</param>
+        /// <returns></returns>
+        public BlockData getBlockbyId(byte id)
     {
         foreach (BlockData bd in Blocks)
         {
