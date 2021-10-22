@@ -21,6 +21,8 @@ public class Biom : MonoBehaviour
     private Decoration[] decorations;
     [SerializeField]
     private AnimationCurve heightCurve;
+    [SerializeField]
+    private List<Biomtype> biomtype;
 
     //----------------------------------------------- Properties ----------------------------------------------------------------------------
 
@@ -32,4 +34,10 @@ public class Biom : MonoBehaviour
     public RegionData[] Regions { get => regions; set => regions = value; }
     public OreData[] Ores { get => ores; set => ores = value; }
     public RegionData[] BgRegions { get => bgRegions; set => bgRegions = value; }
+    public List<Biomtype> Biomtype { get => biomtype; set => biomtype = value; }
+}
+
+public enum Biomtype {
+    
+    OVERWORLD,UNDERGROUND,FLYING,SPACE,DEPTH
 }

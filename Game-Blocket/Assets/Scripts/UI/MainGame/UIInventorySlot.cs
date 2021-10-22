@@ -30,12 +30,20 @@ public class UIInventorySlot : MonoBehaviour
 	/// <summary><see cref="Item"/></summary>
 	private Item _item;
 
-	public ushort itemCount = 1;
+	private ushort _itemCount = 0;
 
 	public Item Item { 
 		get => _item;
 		set {
 			_item = value;
+			ReloadSlot();
+		}
+	}
+
+	public ushort ItemCount {
+		get => _itemCount;
+		set {
+			_itemCount = value;
 			ReloadSlot();
 		}
 	}
@@ -46,11 +54,9 @@ public class UIInventorySlot : MonoBehaviour
 		itemImage.sprite ??= defaultSprite;
 		//Hide counttext if item is Single type
 		if(_item != null) {
-			if(itemCount == 0)
-				itemCount = 1;
 			textDown.gameObject.SetActive(_item.itemType == Item.ItemType.STACKABLE);
 			//Write itemCount into the texfield
-			textDown.text = string.Empty+itemCount;
+			textDown.text = string.Empty+_itemCount;
 		}
 		itemImage.gameObject.SetActive(_item != null);
 		textDown.gameObject.SetActive(_item != null);

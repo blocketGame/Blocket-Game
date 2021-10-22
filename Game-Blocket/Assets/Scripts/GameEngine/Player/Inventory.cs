@@ -54,7 +54,7 @@ public class Inventory : MonoBehaviour{
 		///If item has ItemType: <see cref="Item.ItemType.STACKABLE"/>
 		//Try to find a slot with the same Item
 		foreach(UIInventorySlot inventorySlotNow in FindItem(itemToAdd))
-			if(inventorySlotNow.itemCount <= GlobalVariables.maxItemCountForMultiple) {
+			if(inventorySlotNow.ItemCount <= GlobalVariables.maxItemCountForMultiple) {
 				wannaAddThere = inventorySlotNow;
 				break;
 			}
@@ -66,7 +66,7 @@ public class Inventory : MonoBehaviour{
 			if(wannaAddThere.Item == null)
 				wannaAddThere.Item = itemToAdd;
 			else
-				wannaAddThere.itemCount++;
+				wannaAddThere.ItemCount++;
 			return true;
 		}
 		return false;
@@ -131,14 +131,14 @@ public class Inventory : MonoBehaviour{
 		if(!(itemToRemove != null && CanBeRemoved(itemToRemove, countToRemove)))
 			return false;
 		UIInventorySlot slotToRemove = FindFirstItem(itemToRemove);
-		if(slotToRemove.itemCount < countToRemove) {
-			int toRemoveAfter = countToRemove - slotToRemove.itemCount;
+		if(slotToRemove.ItemCount < countToRemove) {
+			int toRemoveAfter = countToRemove - slotToRemove.ItemCount;
 			slotToRemove.Item = null;
 			RemoveItem(itemToRemove, (ushort)toRemoveAfter);
-		} else if(slotToRemove.itemCount == countToRemove)
+		} else if(slotToRemove.ItemCount == countToRemove)
 			slotToRemove.Item = null;
 		else
-			slotToRemove.itemCount -= countToRemove;
+			slotToRemove.ItemCount -= countToRemove;
 		return true;
 	}
 	/// <summary>
@@ -149,7 +149,7 @@ public class Inventory : MonoBehaviour{
 	public ushort GetItemCountFromType(Item itemToFind) {
 		ushort sum = 0;
 		foreach(UIInventorySlot slot in FindItem(itemToFind))
-			sum += slot.itemCount;
+			sum += slot.ItemCount;
 		return sum;
 	}
 }

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5308107220056266632
+--- !u!1 &9203269797234606307
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,22 +8,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 130492751787026265}
-  - component: {fileID: 8950956458296952525}
+  - component: {fileID: 1510718297016233738}
+  - component: {fileID: -3600785353560310458}
   m_Layer: 0
-  m_Name: Default-Biom
+  m_Name: Snow - Biom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &130492751787026265
+--- !u!4 &1510718297016233738
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5308107220056266632}
+  m_GameObject: {fileID: 9203269797234606307}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -31,26 +31,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8950956458296952525
+--- !u!114 &-3600785353560310458
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5308107220056266632}
+  m_GameObject: {fileID: 9203269797234606307}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e47b045bfe515ff45afe88645f743998, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  index: 0
-  size: 1000
-  biomName: Default - Biom
+  index: 2
+  size: 700
+  biomName: 'Snow '
   ores: []
   regions:
   - regionRange: 1
-    blockID: 2
+    blockID: 6
   - regionRange: 2
+    blockID: 7
+  - regionRange: 3
     blockID: 3
   bgRegions:
   - regionRange: 1
@@ -72,8 +74,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: 2
+      outSlope: 2
       tangentMode: 0
       weightedMode: 0
       inWeight: 0

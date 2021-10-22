@@ -14,8 +14,7 @@ public class World_Data : MonoBehaviour
     private GameObject player;
     [SerializeField]
     private Terrain_Generation terraingeneration;
-    [SerializeField]
-    private Dictionary<int, TerrainChunk> chunks = new Dictionary<int, TerrainChunk>();
+    private Dictionary<Vector2Int, TerrainChunk> chunks = new Dictionary<Vector2Int, TerrainChunk>();
     [SerializeField]
     private Biom[] biom;
     [SerializeField]
@@ -25,9 +24,9 @@ public class World_Data : MonoBehaviour
     [SerializeField]
     private int chunkHeight;
     [SerializeField]
-    private int chunkGroundLevel;
-    [SerializeField]
     private int chunkDistance;
+    [SerializeField]
+    private float caveSize;
     [SerializeField]
     private int seed;
     [SerializeField]
@@ -42,30 +41,43 @@ public class World_Data : MonoBehaviour
     [SerializeField]
     private float offsetX;
     [SerializeField]
+    private float offsetY;
+    [SerializeField]
     private int heightMultiplier;
     [SerializeField]
     private AnimationCurve heightcurve;
+    [SerializeField]
+    private Grid grid;
+    [SerializeField]
+    private float groupdistance;
 
 
-//----------------------------------------------- Properties ----------------------------------------------------------------------------
+    //----------------------------------------------- Properties ----------------------------------------------------------------------------
 
     public float Persistance { get => persistance; set => persistance = value; }
     public float Lacurinarity { get => lacurinarity; set => lacurinarity = value; }
     public float OffsetX { get => offsetX; set => offsetX = value; }
+    public float OffsetY { get => offsetX; set => offsetX = value; }
     public int HeightMultiplier { get => heightMultiplier; set => heightMultiplier = value; }
     public AnimationCurve Heightcurve { get => heightcurve; set => heightcurve = value; }
     public int Octives { get => octives; set => octives = value; }
     public float Scale { get => scale; set => scale = value; }
+    public float CaveSize { get => caveSize; set => caveSize = value; }
     public int Seed { get => seed; set => seed = value; }
     public int ChunkDistance { get => chunkDistance; set => chunkDistance = value; }
-    public int ChunkGroundLevel { get => chunkGroundLevel; set => chunkGroundLevel = value; }
     public int ChunkHeight { get => chunkHeight; set => chunkHeight = value; }
     public int ChunkWidth { get => chunkWidth; set => chunkWidth = value; }
     public BlockData[] Blocks { get => blocks; set => blocks = value; }
-    public Biom[] Biom { get => biom; set => biom = value; }
-    public Dictionary<int, TerrainChunk> Chunks { get => chunks; set => chunks = value; }
+    public Biom[] Biom
+    {
+        get => biom; set => biom = value;
+    }
+    public Dictionary<Vector2Int, TerrainChunk> Chunks { get => chunks; set => chunks = value; }
     public Terrain_Generation Terraingeneration { get => terraingeneration; set => terraingeneration = value; }
     public GameObject Player { get => player; set => player = value; }
+
+    public Grid Grid { get => grid; set => grid = value; }
+    public float Groupdistance { get => groupdistance; set => groupdistance = value; }
 
 
 
@@ -74,12 +86,12 @@ public class World_Data : MonoBehaviour
     /// </summary>
     /// <param name="x">coordinate in a chunk</param>
     /// <returns></returns>
-    public TerrainChunk GetChunkFromCoordinate(float x)
+    public TerrainChunk GetChunkFromCoordinate(float x, float y)
     {
-        int chunkIndex = Mathf.FloorToInt(x / ChunkWidth);
-        if (Chunks.ContainsKey(chunkIndex))
+        Vector2Int chunkPosition = new Vector2Int(Mathf.FloorToInt(x / ChunkWidth), Mathf.FloorToInt(y / ChunkHeight));
+        if (Chunks.ContainsKey(chunkPosition))
         {
-            return Chunks[chunkIndex];
+            return Chunks[chunkPosition];
         }
         return null;
     }
@@ -90,18 +102,39 @@ public class World_Data : MonoBehaviour
     /// <param name="x">x coordinate</param>
     /// <param name="y">y coordinate</param>
     /// <returns></returns>
-    public byte getBlockFormCoordinate(int x, int y)
+    public byte GetBlockFormCoordinate(int x, int y)
     {
-        TerrainChunk chunk = GetChunkFromCoordinate(x);
+        TerrainChunk chunk = GetChunkFromCoordinate(x, y);
         if (chunk != null)
         {
-            int chunkX = x - ChunkWidth * chunk.ChunkID;
-            if (chunkX < ChunkWidth && y < ChunkHeight && y > 0)
+            int chunkX = x - ChunkWidth * chunk.ChunkPosition.x;
+            int chunkY = y - ChunkHeight * chunk.ChunkPosition.y;
+            if (chunkX < ChunkWidth && chunkY < ChunkHeight)
             {
-                return chunk.BlockIDs[chunkX, y];
+                return chunk.BlockIDs[chunkX, chunkY];
             }
         }
         return 1;
+    }
+
+
+    public void UpdateCollisionsAt(Vector3Int coordinate)
+    {
+        TerrainChunk chunk = GetChunkFromCoordinate(coordinate.x, coordinate.y);
+
+        int chunkX = coordinate.x - chunk.ChunkPosition.x * ChunkWidth;
+        int chunkY = coordinate.y - chunk.ChunkPosition.y * ChunkHeight;
+
+        chunk.CollisionTileMap.SetTile(new Vector3Int(chunkX, chunkY, 0), null);
+
+        if (GetBlockFormCoordinate(coordinate.x, coordinate.y) != 0 &&
+            (GetBlockFormCoordinate(coordinate.x + 1, coordinate.y) == 0 ||
+            GetBlockFormCoordinate(coordinate.x, coordinate.y + 1) == 0 ||
+            GetBlockFormCoordinate(coordinate.x - 1, coordinate.y) == 0 ||
+            GetBlockFormCoordinate(coordinate.x, coordinate.y - 1) == 0))
+        {
+            chunk.CollisionTileMap.SetTile(new Vector3Int(chunkX, chunkY, 0), getBlockbyId(1).Tile);
+        }
     }
 
     /// <summary>
@@ -111,9 +144,9 @@ public class World_Data : MonoBehaviour
     /// <returns></returns>
     public BlockData getBlockbyId(byte id)
     {
-        foreach(BlockData bd in Blocks)
+        foreach (BlockData bd in Blocks)
         {
-            if(bd.BlockID == id)
+            if (bd.BlockID == id)
             {
                 return bd;
             }
@@ -135,17 +168,26 @@ public class World_Data : MonoBehaviour
     }
     **/
 
+    //Method at wrong PLACE
+    public void IgnoreDropCollision()
+    {
+        foreach (TerrainChunk t in terraingeneration.ChunksVisibleLastUpdate)
+            foreach (Drop d in t.Drops)
+                Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Drops"), LayerMask.NameToLayer("Player"));
+    }
+
     /// <summary>
     /// Creates Blocks.txt file as documentation for the blocks array
     /// </summary>
+
     public void putBlocksIntoTxt()
     {
-        string writeContent="# This File is considered as documentation tool for the Blocks and their Ids \n";
-        for(int x =0; x < blocks.Length; x++)
+        string writeContent = "# This File is considered as documentation tool for the Blocks and their Ids \n";
+        for (int x = 0; x < blocks.Length; x++)
         {
             writeContent += "\n" +
                 " ID : " + blocks[x].BlockID + "\n" +
-                " Name : " + blocks[x].Name +"\n";
+                " Name : " + blocks[x].Name + "\n";
         }
 
         File.WriteAllText("Docs/Blocks.txt", writeContent);
@@ -159,7 +201,7 @@ public class World_Data : MonoBehaviour
             writeContent += "\n" +
                 " ID : " + biom[x].Index + "\n" +
                 " BiomName : " + biom[x].BiomName + "\n";
-                for(int y = 0;y<biom[x].Regions.Length;y++)
+            for (int y = 0; y < biom[x].Regions.Length; y++)
             {
                 writeContent += "\n" +
                 "\t ID : " + biom[x].Regions[y].BlockID + "\n" +
@@ -171,6 +213,17 @@ public class World_Data : MonoBehaviour
         writeContent += "\n ---------------------------- Rules ---------------------------------- \n Range : -1 => Infinity";
 
         File.WriteAllText("Docs/Bioms.txt", writeContent);
+    }
+
+    public List<Biom> getBiomsByType(Biomtype type)
+    {
+        List<Biom> biomlist = new List<Biom>();
+        foreach (Biom b in biom)
+        {
+            if (b.Biomtype.Contains(type))
+                biomlist.Add(b);
+        }
+        return biomlist;
     }
 }
 
@@ -194,7 +247,7 @@ public struct OreData
 
 [System.Serializable]
 public struct RegionData
-{ 
+{
     [SerializeField]
     private int regionRange; //-1 => infinite range
     [SerializeField]
@@ -215,11 +268,12 @@ public struct BlockData
     private TileBase _tile;
     [SerializeField]
     private Sprite sprite;
+    [SerializeField]
+    private byte removeDuration;
 
-    public string Name { get =>_name; set => _name = value; }
+    public string Name { get => _name; set => _name = value; }
     public byte BlockID { get => _blockID; set => _blockID = value; }
     public TileBase Tile { get => _tile; set => _tile = value; }
     public Sprite Sprite { get => sprite; set => sprite = value; }
+    public byte RemoveDuration { get => removeDuration; set => removeDuration = value; }
 }
-
-

@@ -1,34 +1,22 @@
 # This File is considered as documentation tool for the Bioms and their Indizes 
 
  ID : 0
- BiomName : default-biom
+ BiomName : Default - Biom
 
 	 ID : 2
 	 Range : 1
 
 	 ID : 3
-	 Range : -1
+	 Range : 2
 
  ID : 1
- BiomName : snow
-
-	 ID : 6
-	 Range : 1
-
-	 ID : 7
-	 Range : 0
-
-	 ID : 3
-	 Range : -1
-
- ID : 2
- BiomName : desert
+ BiomName : Desert
 
 	 ID : 4
 	 Range : 1
 
 	 ID : 5
-	 Range : -1
+	 Range : 2
 
  ---------------------------- Rules ---------------------------------- 
  Range : -1 => Infinity
