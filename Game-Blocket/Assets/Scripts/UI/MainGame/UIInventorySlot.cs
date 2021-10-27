@@ -56,6 +56,8 @@ public class UIInventorySlot : MonoBehaviour
 		if(_item != null) {
 			textDown.gameObject.SetActive(_item.itemType == Item.ItemType.STACKABLE);
 			//Write itemCount into the texfield
+			textDown.color = Color.white;
+			//textDown.gameObject.transform.position.Set(textDown.gameObject.transform.position.x,textDown.gameObject.transform.position.y + 100, textDown.gameObject.transform.position.z);
 			textDown.text = string.Empty+_itemCount;
 		}
 		itemImage.gameObject.SetActive(_item != null);

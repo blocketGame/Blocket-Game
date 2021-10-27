@@ -77,13 +77,13 @@ public class UIInventory : MonoBehaviour
 		InitSlots();
 		//InitPlayerInfo();
 		InitAtHand();
-		///Initzialize the Inventory class;
+		///Initzialize the Inventory class;............................................................................
 		itemAssets = GameObject.Find("Assets").gameObject.GetComponent<ItemAssets>();
 		if(!itemAssets)
 			Debug.LogException(new NullReferenceException("Item Assets not found!"));
-		if(GlobalVariables.itemTest)
+		/*if(GlobalVariables.itemTest)
 			foreach(Item i in itemAssets.BlockItemsInGame)
-				_inventory.AddItem(i);
+				_inventory.AddItem(i);*/
 	}
 
 	/// <summary>

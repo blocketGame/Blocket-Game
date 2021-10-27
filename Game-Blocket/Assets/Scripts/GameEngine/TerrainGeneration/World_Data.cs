@@ -50,6 +50,8 @@ public class World_Data : MonoBehaviour
     private Grid grid;
     [SerializeField]
     private float groupdistance;
+    [SerializeField]
+    private float pickUpDistance;
 
 
     //----------------------------------------------- Properties ----------------------------------------------------------------------------
@@ -78,6 +80,7 @@ public class World_Data : MonoBehaviour
 
     public Grid Grid { get => grid; set => grid = value; }
     public float Groupdistance { get => groupdistance; set => groupdistance = value; }
+    public float PickUpDistance { get => pickUpDistance; set => pickUpDistance = value; }
 
 
 
@@ -260,20 +263,33 @@ public struct RegionData
 [System.Serializable]
 public struct BlockData
 {
+    #region Specification
     [SerializeField]
     private string _name;
     [SerializeField]
     private byte _blockID;
+
+    public string Name { get => _name; set => _name = value; }
+    public byte BlockID { get => _blockID; set => _blockID = value; }
+    #endregion
+
+    #region Graphics
     [SerializeField]
     private TileBase _tile;
     [SerializeField]
     private Sprite sprite;
-    [SerializeField]
-    private byte removeDuration;
 
-    public string Name { get => _name; set => _name = value; }
-    public byte BlockID { get => _blockID; set => _blockID = value; }
     public TileBase Tile { get => _tile; set => _tile = value; }
     public Sprite Sprite { get => sprite; set => sprite = value; }
+    #endregion
+
+    #region Settings
+    [SerializeField]
+    private byte removeDuration;
+    [SerializeField]
+    private byte item;
+
     public byte RemoveDuration { get => removeDuration; set => removeDuration = value; }
+    public byte Item1 { get => item; set => item = value; }
+    #endregion
 }

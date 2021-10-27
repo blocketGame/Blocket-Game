@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -7,53 +6,61 @@ using UnityEngine.Tilemaps;
 */
 public class TerrainChunk
 {
+    #region WorldSpecifications
     [SerializeField]
     private World_Data world;
     [SerializeField]
     private Vector2Int chunkPosition;
     [SerializeField]
     private byte[,] blockIDs;
-
-    [SerializeField]
-    private byte[,] blockIDsBG;
     [SerializeField]
     private GameObject chunkObject;
     [SerializeField]
-    private Tilemap chunkTileMap;
-    [SerializeField]
-    private Tilemap collisionTileMap;
-
-    private Tilemap backgroundTilemap;
-
-    private GameObject backgroundObject;
-    [SerializeField]
-    private TilemapRenderer chunkTileMapRenderer;
-    [SerializeField]
     private GameObject collisionObject;
-    [SerializeField]
-    private TilemapCollider2D chunkTileMapCollider;
-
-    [SerializeField]
-    private List<Drop> drops;
-
-    private GameObject DROPS;
-
-    //----------------------------------------------- Properties ----------------------------------------------------------------------------
 
     public World_Data World { get => world; set => world = value; }
     public Vector2Int ChunkPosition { get => chunkPosition; set => chunkPosition = value; }
     public byte[,] BlockIDs { get => blockIDs; set => blockIDs = value; }
-    public Tilemap ChunkTileMap { get => chunkTileMap; set => chunkTileMap = value; }
-    public TilemapRenderer ChunkTileMapRenderer { get => chunkTileMapRenderer; set => chunkTileMapRenderer = value; }
-    public GameObject CollisionObject { get => collisionObject; set => collisionObject = value; }
-    public Tilemap CollisionTileMap { get => collisionTileMap; set => collisionTileMap = value; }
-    public TilemapCollider2D ChunkTileMapCollider { get => chunkTileMapCollider; set => chunkTileMapCollider = value; }
-    public List<Drop> Drops { get => drops; set => drops = value; }
     public GameObject ChunkObject { get => chunkObject; set => chunkObject = value; }
+    public GameObject CollisionObject { get => collisionObject; set => collisionObject = value; }
+    #endregion
+
+    #region BackgroundsAndTilemaps
+    [SerializeField]
+    private byte[,] blockIDsBG;
+    private Tilemap backgroundTilemap;
+    private GameObject backgroundObject;
+
     public Tilemap BackgroundTilemap { get => backgroundTilemap; set => backgroundTilemap = value; }
     public GameObject BackgroundObject { get => backgroundObject; set => backgroundObject = value; }
-    public GameObject DROPS1 { get => DROPS; set => DROPS = value; }
-    public byte[,] BlockIDsBG1 { get => blockIDsBG; set => blockIDsBG = value; }
+    public byte[,] BlockIDsBG { get => blockIDsBG; set => blockIDsBG = value; }
+    #endregion
+
+    #region Tilemaps
+
+    [SerializeField]
+    private Tilemap chunkTileMap;
+    [SerializeField]
+    private Tilemap collisionTileMap;
+    [SerializeField]
+    private TilemapRenderer chunkTileMapRenderer;
+    [SerializeField]
+    private TilemapCollider2D chunkTileMapCollider;
+
+    public Tilemap ChunkTileMap { get => chunkTileMap; set => chunkTileMap = value; }
+    public TilemapRenderer ChunkTileMapRenderer { get => chunkTileMapRenderer; set => chunkTileMapRenderer = value; }
+    public Tilemap CollisionTileMap { get => collisionTileMap; set => collisionTileMap = value; }
+    public TilemapCollider2D ChunkTileMapCollider { get => chunkTileMapCollider; set => chunkTileMapCollider = value; }
+    #endregion
+
+    #region Drops
+    [SerializeField]
+    private List<Drop> drops;
+    private GameObject dropObject;
+
+    public GameObject DropObject { get => dropObject; set => dropObject = value; }
+    public List<Drop> Drops { get => drops; set => drops = value; }
+    #endregion
 
     public TerrainChunk(Vector2Int chunkPosition, World_Data world, GameObject chunkParent, GameObject chunkObject)
     {
@@ -93,8 +100,8 @@ public class TerrainChunk
         CollisionTileMap.tileAnchor = new Vector3(0.5f, 0.5f, 0f);
 
 
-        DROPS = new GameObject($"Chunk {ChunkPosition.x} {ChunkPosition.y} drops");
-        DROPS.transform.SetParent(ChunkTileMap.transform);
+        DropObject = new GameObject($"Chunk {ChunkPosition.x} {ChunkPosition.y} drops");
+        DropObject.transform.SetParent(ChunkTileMap.transform);
         InsertDrops();
 
         return chunkObject;
@@ -138,8 +145,8 @@ public class TerrainChunk
                     {
                         if (regionBG.RegionRange <= positionHeight - (y + ChunkPosition.y * world.ChunkHeight))
                         {
-                            BlockIDsBG1[x, y] = regionBG.BlockID;
-                            PlaceTileInBG(x, y, World.Blocks[BlockIDsBG1[x, y]].Tile);
+                            BlockIDsBG[x, y] = regionBG.BlockID;
+                            PlaceTileInBG(x, y, World.Blocks[BlockIDsBG[x, y]].Tile);
                         }
                     }
                 }
@@ -171,7 +178,7 @@ public class TerrainChunk
                         heightvalue++;
                     PlaceTile(x, y, World.Blocks[BlockIDs[x, y]].Tile);
                     if (init)
-                        PlaceTileInBG(x, y, World.Blocks[BlockIDsBG1[x, y]].Tile);
+                        PlaceTileInBG(x, y, World.Blocks[BlockIDsBG[x, y]].Tile);
                 }
             }
         }
@@ -237,7 +244,7 @@ public class TerrainChunk
     public void InstantiateDrop(Vector3Int coordinate)
     {
         Drop d = new Drop();
-        d.DropID = BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).chunkPosition.x), coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).chunkPosition.y];
+        d.DropID =world.Blocks[BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).chunkPosition.x), coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).chunkPosition.y]].Item1;
         d.DropName = world.Blocks[BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).chunkPosition.x), coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).chunkPosition.y]].Name;
         d.DropObject = new GameObject($"Drops {d.DropID}");
         d.DropObject.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
@@ -251,7 +258,7 @@ public class TerrainChunk
         d.DropObject.GetComponent<Rigidbody2D>().gravityScale = 20;
         d.DropObject.AddComponent<BoxCollider2D>();
         d.DropObject.layer = LayerMask.NameToLayer("Drops");
-
+        d.Anzahl = 1;
         Drops.Add(d);
         InsertDrops();
     }
@@ -266,7 +273,7 @@ public class TerrainChunk
             {
                 if (drops.Count > 1 && x != y)
                     CheckDropCollision(x, y);
-                Drops[x].DropObject.transform.SetParent(DROPS.transform);
+                Drops[x].DropObject.transform.SetParent(DropObject.transform);
             }
         }
     }
@@ -284,9 +291,33 @@ public class TerrainChunk
         {
             Drops[x].Anzahl++;
             removeDropfromView(Drops[y]);
-            DROPS.SetActive(true);
+            DropObject.SetActive(true);
         }
     }
+
+    /// <summary>
+    /// returns the dropid of the drop it collides with
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
+    public Drop CollidewithDrop(int x,int y)
+    {
+        //Einsammeldistanz
+        float dropgrouprange = world.PickUpDistance;
+        for (int i = 0; i<Drops.Count;i++)
+        {
+            if( x+dropgrouprange > world.Grid.WorldToCell(Drops[i].DropObject.transform.position).x &&
+                x-dropgrouprange< world.Grid.WorldToCell(Drops[i].DropObject.transform.position).x &&
+                y+dropgrouprange> world.Grid.WorldToCell(Drops[i].DropObject.transform.position).y &&
+                y-dropgrouprange < world.Grid.WorldToCell(Drops[i].DropObject.transform.position).y)
+            {
+                return Drops[i];
+            }
+        }
+        return null;
+    }
+
     /// <summary>
     /// Removes the actual Drop from the scene
     /// </summary>
