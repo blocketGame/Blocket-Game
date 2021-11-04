@@ -7,8 +7,8 @@ using UnityEngine.Tilemaps;
 public class Block_Editing : MonoBehaviour
 {
     public GameObject player;
-    public KeyCode delete;
-    public KeyCode create;
+    public KeyCode leftClickKey;
+    public KeyCode rightClickKey;
     public Grid grid;
     public Camera mainCamera;
     public int selectedBlock;
@@ -22,12 +22,13 @@ public class Block_Editing : MonoBehaviour
     public void Update()
     {
         //FABIAN PROBLEM WITH INV MOVE TILES NOT VALUES.
-
         TerrainChunk chunk = world.GetChunkFromCoordinate(coordinate.x, coordinate.y);
         Inventory inv = GameObject.Find("Player").GetComponent<Inventory>();
         Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         ItemAssets itemAssets = GameObject.Find("Assets").gameObject.GetComponent<ItemAssets>();
 
+        if (GameObject.FindGameObjectWithTag("SlotOptions") != null)
+            return;
         if (chunk == null)
             return;
         if (chunk.CollidewithDrop(grid.WorldToCell(player.transform.position).x, grid.WorldToCell(player.transform.position).y) != null)
@@ -43,33 +44,41 @@ public class Block_Editing : MonoBehaviour
             SetBlockOnFocus(mouseWorldPos);
         else { deleteSprite.SetActive(false); }
 
-       // if (Input.mousePosition.x-959 < -200 || Input.mousePosition.x-959 > 200 ||Input.mousePosition.y - 429 < -150 || Input.mousePosition.y - 429 > 150 )
+         // if (Input.mousePosition.x-959 < -200 || Input.mousePosition.x-959 > 200 ||Input.mousePosition.y - 429 < -150 || Input.mousePosition.y - 429 > 150 )
          //   return;
 
-        if (Input.GetKey(delete))
+        if (Input.GetKey(leftClickKey))
         {
-            try
-            {
-                chunk = world.GetChunkFromCoordinate(coordinate.x, coordinate.y);
-                if ((coordinate.x.Equals(grid.WorldToCell(mouseWorldPos).x) && coordinate.y.Equals(grid.WorldToCell(mouseWorldPos).y)))
-                {
-                    StartCoroutine(Count(mouseWorldPos));
-                    if (!(count > 0))
-                        RemoveBlockAfterDuration();
-                }
 
-            }
-            catch (Exception e)
-            {
-                    Debug.Log(e.Message);
-            }
+            //if (GameObject.FindGameObjectWithTag("LeftClick")!=null)
+            //{
+                //CHECK IF IT IS A BLOCK OR NOT
+                try
+                {
+                    chunk = world.GetChunkFromCoordinate(coordinate.x, coordinate.y);
+                    if ((coordinate.x.Equals(grid.WorldToCell(mouseWorldPos).x) && coordinate.y.Equals(grid.WorldToCell(mouseWorldPos).y)))
+                    {
+                        StartCoroutine(Count(mouseWorldPos));
+                        if (!(count > 0))
+                            RemoveBlockAfterDuration();
+                    }
+
+                }
+                catch (Exception e)
+                {
+                        Debug.Log(e.Message);
+                }
+            //}
         }
 
-
-        if (Input.GetKey(create) && 
+        if (Input.GetKey(rightClickKey) && 
             world.GetChunkFromCoordinate(coordinate.x, coordinate.y).BlockIDs[coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x, coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.y] == 0 &&
             !(Input.mousePosition.y - 429 < 55 && Input.mousePosition.y - 429 > -5 && Input.mousePosition.x - 959 > -40 && Input.mousePosition.x - 959 < 40))
             {
+            ///[TODO]
+                ItemAssets assets = GameObject.FindGameObjectWithTag("Assets").GetComponent<ItemAssets>();
+            //for (int x = 0; x < assets.BlockItemsInGame.Count; x++)
+            //    selectedBlock = (byte)assets.BlockItemsInGame[x].blockId;
                 SetTile(chunk);
             }
     }
@@ -91,15 +100,17 @@ public class Block_Editing : MonoBehaviour
 
     private void TakeDrops(Inventory inv,BlockItem blockitem,int anzahl)
     {
-        //Here content when Player collides with Drop
+        //Player collides with Drop
         for(int x=0;x<anzahl;x++)
         inv.AddItem(blockitem);
-        
-        //inv.AddItem(assets.BlockItemsInGame.);
+        GameObject.FindGameObjectWithTag("Inventory").GetComponent<UIInventory>().SynchronizeToHotbar();
     }
 
     private void SetTile(TerrainChunk chunk)
     {
+        if (selectedBlock == -1)
+            return;
+        
         chunk.ChunkTileMap.SetTile(new Vector3Int(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x, coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.y, 0), world.Blocks[selectedBlock].Tile);
         chunk.BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x), coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.y] = world.Blocks[selectedBlock].BlockID;
         world.UpdateCollisionsAt(coordinate);

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 130492751787026265}
   - component: {fileID: 8950956458296952525}
   m_Layer: 0
-  m_Name: Default-Biom
+  m_Name: Default-biom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,7 +46,15 @@ MonoBehaviour:
   index: 0
   size: 1000
   biomName: Default - Biom
-  ores: []
+  ores:
+  - name: Stone
+    noiseValueFrom: 0.5
+    noiseValueTo: 0.65
+    blockID: 12
+  - name: Bernstein
+    noiseValueFrom: 0.6
+    noiseValueTo: 0.605
+    blockID: 10
   regions:
   - regionRange: 1
     blockID: 2

@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Assets
   - Minimap
+  - SlotOptions
+  - Hotbar
+  - Inventory
   layers:
   - Default
   - TransparentFX

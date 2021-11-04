@@ -6,69 +6,70 @@ using UnityEngine.UI;
 
 public class HealthScript : MonoBehaviour
 {
+    #region HealthSettings
     [SerializeField] [Range(10,200)]
     public float maxHealth;
-    [SerializeField] [Range(0, 200)]
-    public float currentHealth;
-    
+    [SerializeField]
+    [Range(0, 200)]
+    private float currentHealth;
+    [SerializeField]
+    private int hearthContainers;
+    #endregion
+
+    #region HealthSprites
     [SerializeField] 
     private Sprite Heart;
     [SerializeField]
     private Sprite half_Heart;
+    #endregion
 
-    [SerializeField]
-    private GameObject[] HeartSlots;
-    
+    private List<GameObject> HearthSlots= new List<GameObject>();
+
+    public float CurrentHealth { get => currentHealth; set => currentHealth = value; }
+
     void Start()
     {
         maxHealth = 100;
-        currentHealth = maxHealth;
-        
-        
+        CurrentHealth = maxHealth;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        
+        for(int i = 0; i < hearthContainers; i++)
+        {
+            GameObject hc = Instantiate(new GameObject(),this.transform);
+            hc.AddComponent<Image>();
+            hc.transform.position = new Vector3(60+this.transform.position.x+i * 60,-30+ this.transform.position.y, this.transform.position.z);
+            hc.transform.localScale = new Vector3(0.5f,0.5f,1);
+            hc.transform.parent = this.gameObject.transform;
+            HearthSlots.Add(hc);
+        }
     }
 
     private void FixedUpdate()
     {
-        if (currentHealth > 75)
+        float percent = 100;
+        float einzelrange = percent / HearthSlots.Count;
+        for (int x = HearthSlots.Count;x>0;x-- )
         {
-            HeartSlots[0].gameObject.GetComponent<Image>().sprite = Heart;
-            HeartSlots[0].gameObject.GetComponent<Image>().color = new Color(255, 255, 255, 255);
-            HeartSlots[1].gameObject.GetComponent<Image>().sprite = Heart;
-            HeartSlots[1].gameObject.GetComponent<Image>().color = new Color(255, 255, 255, 255);
+            ///[TODO]
+            float tatsRange = CurrentHealth - (einzelrange * (x-1));
+            if (tatsRange >= einzelrange)
+                Change(Heart, x);
+            else if (tatsRange >= einzelrange / 2)
+                Change(half_Heart, x);
+            else
+                Change(null, x); 
         }
-        else if (currentHealth > 50)
-        {
-            HeartSlots[0].gameObject.GetComponent<Image>().sprite = Heart;
-            HeartSlots[0].gameObject.GetComponent<Image>().color = new Color(255, 255, 255, 255);
-            HeartSlots[1].gameObject.GetComponent<Image>().sprite = half_Heart;
-            HeartSlots[1].gameObject.GetComponent<Image>().color = new Color(255, 255, 255, 255);
-        }
-        else if (currentHealth > 25)
-        {
-            HeartSlots[0].gameObject.GetComponent<Image>().sprite = Heart;
-            HeartSlots[0].gameObject.GetComponent<Image>().color = new Color(255, 255, 255, 255);
-            HeartSlots[1].gameObject.GetComponent<Image>().sprite = null;
-            HeartSlots[1].gameObject.GetComponent<Image>().color = new Color(255, 255, 255, 0);
-        }
-        else if (currentHealth > 0)
-        {
-            HeartSlots[0].gameObject.GetComponent<Image>().sprite = half_Heart;
-            HeartSlots[0].gameObject.GetComponent<Image>().color = new Color(255, 255, 255, 255);
-            HeartSlots[1].gameObject.GetComponent<Image>().sprite = null;
-            HeartSlots[1].gameObject.GetComponent<Image>().color = new Color(255, 255, 255, 0);
-        }
-        else if (currentHealth >= 0)
-        {
-            HeartSlots[0].gameObject.GetComponent<Image>().sprite = null;
-            HeartSlots[0].gameObject.GetComponent<Image>().color = new Color(255, 255, 255, 0);
-            HeartSlots[1].gameObject.GetComponent<Image>().sprite = null;
-            HeartSlots[1].gameObject.GetComponent<Image>().color = new Color(255, 255, 255, 0);
-        }
+    }
+
+    private void Change(Sprite sprite,int index)
+    {
+        GameObject hearthSlot = HearthSlots[index - 1];
+        hearthSlot.gameObject.GetComponent<Image>().sprite = sprite;
+        hearthSlot.gameObject.GetComponent<Image>().color = new Color(255, 255, 255, 255);
+        if(sprite==null)
+        hearthSlot.gameObject.GetComponent<Image>().color = new Color(255, 255, 255, 0);
+
     }
 }

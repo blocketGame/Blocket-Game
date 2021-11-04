@@ -25,6 +25,10 @@ public class UIInventorySlot : MonoBehaviour
 	public Image itemImage, backgroundImage;
 	/// <summary>Image Sprites which are swapable</summary>
 	public Sprite imgActive, imagInactive, defaultSprite;
+	/// <summary>Checks Whether or not this Slot is just a copy</summary>
+	public bool isHotBarSlot;
+	/// <summary>InventorySlots parent => this Slot will be the copy for Hotbar <summary>
+	public UIInventorySlot parent;
 	#endregion
 
 	/// <summary><see cref="Item"/></summary>
@@ -76,13 +80,12 @@ public class UIInventorySlot : MonoBehaviour
 		}
 	}
 
-	public void Awake() {
-		button.onClick.AddListener(() => {
-			//TODO ..
-			GameObject.FindWithTag("Player").GetComponent<Inventory>().PressedSlot(this);
-			if(GlobalVariables.itemSlotButtonPressedLog)
-				Debug.Log("Button Pressed");
-		});
+    public void Awake() {
+		button.gameObject.AddComponent<SlotOptionsScript>();
+		button.gameObject.GetComponent<SlotOptionsScript>().invSlot = this;
+		if(_uIInventory!=null)
+		button.gameObject.GetComponent<SlotOptionsScript>().SlotOptions = _uIInventory._slotOptions; 
+		
 	}
 
 	public void OnMouseOver() {

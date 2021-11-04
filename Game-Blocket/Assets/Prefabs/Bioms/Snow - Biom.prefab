@@ -46,7 +46,15 @@ MonoBehaviour:
   index: 2
   size: 700
   biomName: 'Snow '
-  ores: []
+  ores:
+  - name: Stone
+    noiseValueFrom: 0.5
+    noiseValueTo: 0.65
+    blockID: 12
+  - name: Opal
+    noiseValueFrom: 0.6
+    noiseValueTo: 0.605
+    blockID: 11
   regions:
   - regionRange: 1
     blockID: 6

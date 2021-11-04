@@ -57,7 +57,7 @@ public class UIInventory : MonoBehaviour
 	#region Static Resources !DO NOT TOUCH!
 	[Header("Static: General")]
 	///<summary>Gameobject from Inspector</summary>
-	public GameObject uiParent, slotField, uiHud;
+	public GameObject uiParent, slotField, uiHud , hudslotfield;
 	/// <summary>Image from Inspector</summary>
 	public Image inventoryBackgroundImage;
 	/// <summary>Prefab from Inspector</summary>
@@ -66,6 +66,7 @@ public class UIInventory : MonoBehaviour
 	public ItemAssets itemAssets;
 	/// <summary><see cref="Inventory"/></summary>
 	private Inventory _inventory;
+	public GameObject _slotOptions;
 	#endregion
 
 	#region Initzializement
@@ -75,6 +76,7 @@ public class UIInventory : MonoBehaviour
 	/// </summary>
 	private void InitUI() {
 		InitSlots();
+		InitHudSlots();
 		//InitPlayerInfo();
 		InitAtHand();
 		///Initzialize the Inventory class;............................................................................
@@ -132,6 +134,31 @@ public class UIInventory : MonoBehaviour
 			}
 		}
 	}
+
+	private void InitHudSlots()
+	{
+		//Get With and height from the Prefab
+		float prefW = prefabItemSlot.GetComponent<RectTransform>().rect.width,
+		prefH = prefabItemSlot.GetComponent<RectTransform>().rect.height;
+		//Go through every Slot
+		for (byte a = 0; a < coloums; a++)
+		{
+				//Calc the !absolute Pos
+				float itemSlotX = hudslotfield.transform.position.x + prefW * a + 50 + colspacingInvSlot*0.2f * a;
+				float itemSlotY = hudslotfield.transform.position.y - 15;
+				//Instantiate the Gameobject
+				GameObject itemSlot = Instantiate(prefabItemSlot, new Vector3Int((int)(itemSlotX), (int)(itemSlotY), 1), Quaternion.identity, hudslotfield.transform);
+				itemSlot.gameObject.transform.localScale = new Vector3(0.8f,0.8f,1);
+				//Name it
+				itemSlot.name = $"HudSlot {a}";
+				//Specify that it is a HotbarSlot
+				itemSlot.GetComponent<UIInventorySlot>().isHotBarSlot = true;
+				itemSlot.GetComponent<UIInventorySlot>().parent = _inventory.InvSlots[a];
+				//Add to Inventory Logic
+				_inventory.InvSlots.Add(itemSlot.GetComponent<UIInventorySlot>());
+			
+		}
+	}
 	#endregion
 
 	/// <summary>"Reload" at the beginning</summary>
@@ -144,11 +171,18 @@ public class UIInventory : MonoBehaviour
 		InventoryOpened = false;
 	}
 
+
 	public void Update() {
 		if(Input.anyKeyDown)
 			if(Input.GetKeyDown(GlobalVariables.openInventoryKey)) {
+				
 				InventoryOpened = !InventoryOpened;
+				if (!InventoryOpened)
+					SynchronizeToHotbar();
+				else
+					SynchronizeToInv();
 				uiHud.SetActive(!InventoryOpened);
+				
 			}
 	}
 
@@ -205,5 +239,49 @@ public class UIInventory : MonoBehaviour
 		set { titleText.text = value; }
 	}
 
+    #region Bidirectional Sync
+    /// <summary>
+    /// Synchronizes Hotbar State of Slots Row 1
+    /// </summary>
+    public void SynchronizeToInv()
+	{
+        foreach (UIInventorySlot sl in _inventory.InvSlots)
+        {
+			if (sl.isHotBarSlot)
+			{
+				///[TODO]
+				foreach (UIInventorySlot sl1 in _inventory.InvSlots)
+				{
+					if (!sl1.isHotBarSlot && sl.parent.name.Equals(sl1.name))
+					{
+						sl1.Item = sl.Item;
+						sl1.ItemCount = sl.ItemCount;
+					}
+				}
+			}
+		}
+	}
+	/// <summary>
+	/// Synchronizes Inventory State of Slots Row 1
+	/// </summary>
+	public void SynchronizeToHotbar()
+	{
+		foreach (UIInventorySlot sl in _inventory.InvSlots)
+		{
+			if (sl.isHotBarSlot)
+			{
+				///[TODO]
+				foreach (UIInventorySlot sl1 in _inventory.InvSlots)
+				{
+					if (!sl1.isHotBarSlot&&sl.parent.name.Equals(sl1.name))
+					{
+						sl.Item = sl1.Item;
+						sl.ItemCount = sl1.ItemCount;
+					}
+				}
+			}
+		}
+	}
+    #endregion
 
 }

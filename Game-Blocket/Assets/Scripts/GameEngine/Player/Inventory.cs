@@ -22,14 +22,21 @@ public class Inventory : MonoBehaviour{
 
 	public void PressedSlot(UIInventorySlot slotPressed) {
 		Item temp = atHand.Item;
+		ushort iCT = atHand.ItemCount;
+
 		atHand.Item = slotPressed.Item;
+		atHand.ItemCount = slotPressed.ItemCount;
+
+		slotPressed.ItemCount = iCT;
 		slotPressed.Item = temp;
+
 		atHand.gameObject.SetActive(atHand.Item != null);
 	}
 
 	public void Update() {
 		if(atHand.Item != null)
 			atHand.transform.position = atHandVector + new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+			
 	}
 
 	/// <summary>
@@ -63,8 +70,11 @@ public class Inventory : MonoBehaviour{
 			wannaAddThere = GetNextFreeSlot();
 		//Add the Item if a slot has been found
 		if(wannaAddThere) {
-			if(wannaAddThere.Item == null)
+			if (wannaAddThere.Item == null)
+			{
 				wannaAddThere.Item = itemToAdd;
+				wannaAddThere.ItemCount++;
+			}
 			else
 				wannaAddThere.ItemCount++;
 			return true;

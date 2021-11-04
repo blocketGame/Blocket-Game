@@ -23,6 +23,7 @@ public class MovementScript : MonoBehaviour
     }
     void Update()
     {
+        //GameObject player = GameObject.FindWithTag("Player").gameObject;
         if (Input.GetButton("Jump") && Mathf.Abs(Rigidbody.velocity.y) < 0.001f)
         {
             jump = true;
@@ -56,8 +57,10 @@ public class MovementScript : MonoBehaviour
         }
 
         //fall
-        if (Rigidbody.velocity.y < 0) {
-            if (Rigidbody.velocity.y > -15) {
+        if (Rigidbody.velocity.y < 0)
+        {
+            if (Rigidbody.velocity.y > -15)
+            {
                 transform.position += Time.deltaTime * new Vector3(movement, (Rigidbody.velocity.y) * fallMulti, 0);
             }
         }
