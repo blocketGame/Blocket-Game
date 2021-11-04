@@ -7,6 +7,7 @@ public class PlayerVariables : MonoBehaviour
 {
 	#region Static Resources
 	public UIInventory uIInventory;
+	public HealthScript healthScript;
 	#endregion
 
 	#region Dyniamic Variables
@@ -19,11 +20,21 @@ public class PlayerVariables : MonoBehaviour
 
 	#region Properties
 	public ushort Health { get => _health; 
-		set { _health = value;uIInventory.heartStat.text = $"{_health}/{_maxHealth}";} 
+		set 
+		{ 
+			_health = value;
+			uIInventory.heartStat.text = $"{_health}/{_maxHealth}";
+			healthScript.CurrentHealth = _health;
+		} 
 	}
 	public ushort MaxHealth {
 		get => _maxHealth;
-		set { _maxHealth = value; uIInventory.heartStat.text = $"{_health}/{_maxHealth}";}
+		set 
+		{ 
+			_maxHealth = value;
+			uIInventory.heartStat.text = $"{_health}/{_maxHealth}";
+			healthScript.maxHealth = _maxHealth;
+		}
 	}
 	public ushort MaxArmor {
 		get => _maxArmor;
@@ -61,12 +72,14 @@ public class PlayerVariables : MonoBehaviour
 		//TODO
 	}
 
-	public void Awake() {
+	public void Awake()
+	{
+		healthScript.InitiateSprites();
 		MaxHealth = 40;
 		MaxArmor = 40;
 		MaxStrength = 40;
 		Health = MaxHealth;
 		Armor = 1;
-		Strength = 1; 
+		Strength = 1;
 	}
 }

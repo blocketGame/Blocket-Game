@@ -5,13 +5,20 @@ using UnityEngine.EventSystems;
 
 public class SlotOptionsScript : MonoBehaviour, IPointerClickHandler {
 
+    #region StoredObjects
     public UIInventorySlot invSlot;
     public GameObject SlotOptions;
+    #endregion
+
+    /// <summary>
+    /// React on any Click Event from a UIInvSlot
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnPointerClick(PointerEventData eventData)
     {
+        ///React on LeftClick Event
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            //TODO ..
             GameObject.FindWithTag("Player").GetComponent<Inventory>().PressedSlot(invSlot);
             if (GlobalVariables.itemSlotButtonPressedLog)
                 Debug.Log("Button Pressed");
@@ -24,10 +31,13 @@ public class SlotOptionsScript : MonoBehaviour, IPointerClickHandler {
             SlotOptions.transform.position = vector3;
 
         }
+        ///React on MiddleClick Event
         else if (eventData.button == PointerEventData.InputButton.Middle)
         {
             Debug.Log("Middle click");
+            ///[TODO]
         }
+        ///React on RightClick Event
         else if (eventData.button == PointerEventData.InputButton.Right)
         {
             SlotOptions = GameObject.FindWithTag("SlotOptions");

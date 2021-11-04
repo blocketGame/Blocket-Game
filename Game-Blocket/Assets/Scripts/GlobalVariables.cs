@@ -22,5 +22,7 @@ public static class GlobalVariables
 
 	#region Setted Keys
 	public static KeyCode openInventoryKey = KeyCode.E;
+	public static KeyCode leftClick = KeyCode.Mouse0;
+	public static KeyCode rightClick = KeyCode.Mouse1;
 	#endregion
 }

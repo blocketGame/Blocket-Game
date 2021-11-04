@@ -246,7 +246,7 @@ public class TerrainChunk
         Drop d = new Drop();
         d.DropID =world.Blocks[BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).chunkPosition.x), coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).chunkPosition.y]].Item1;
         d.DropName = world.Blocks[BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).chunkPosition.x), coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).chunkPosition.y]].Name;
-        d.DropObject = new GameObject($"Drops {d.DropID}");
+        d.DropObject = new GameObject($"Drop {d.DropID}");
         d.DropObject.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
         d.DropObject.AddComponent<SpriteRenderer>();
         d.DropObject.GetComponent<SpriteRenderer>().sprite = world.Blocks[BlockIDs[(coordinate.x - world.ChunkWidth * chunkPosition.x), coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).chunkPosition.y]].Sprite;
@@ -261,6 +261,7 @@ public class TerrainChunk
         d.Anzahl = 1;
         Drops.Add(d);
         InsertDrops();
+        d.DropObject.transform.SetParent(DropObject.transform);
     }
     /// <summary>
     /// Creates the Gameobject out of the Drops list
@@ -273,7 +274,7 @@ public class TerrainChunk
             {
                 if (drops.Count > 1 && x != y)
                     CheckDropCollision(x, y);
-                Drops[x].DropObject.transform.SetParent(DropObject.transform);
+                //Drops[x].DropObject.transform.SetParent(DropObject.transform);
             }
         }
     }
@@ -290,7 +291,7 @@ public class TerrainChunk
             Drops[x].DropObject.GetComponent<SpriteRenderer>().sprite.Equals(Drops[y].DropObject.GetComponent<SpriteRenderer>().sprite))
         {
             Drops[x].Anzahl++;
-            removeDropfromView(Drops[y]);
+            RemoveDropfromView(Drops[y]);
             DropObject.SetActive(true);
         }
     }
@@ -322,12 +323,15 @@ public class TerrainChunk
     /// Removes the actual Drop from the scene
     /// </summary>
     /// <param name="removable"></param>
-    public void removeDropfromView(Drop removable)
+    public void RemoveDropfromView(Drop removable)
     {
+        /*
         removable.DropObject.GetComponent<SpriteRenderer>().sprite = null;
         removable.DropObject.GetComponent<BoxCollider2D>().enabled = false;
         removable.DropObject.transform.parent = null;
         removable.DropObject = null;
+        */
         Drops.Remove(removable);
+        GameObject.Destroy(removable.DropObject);
     }
 }

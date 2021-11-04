@@ -814,6 +814,17 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
+--- !u!114 &850802072 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7667816536096445546, guid: fe85b1cf90498434fbbaa8df3069f708, type: 3}
+  m_PrefabInstance: {fileID: 991306705}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed95fb61d3f227945a1a24fc9f02e119, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &991306705
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1038,8 +1049,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 110355387}
-  leftClickKey: 323
-  rightClickKey: 324
   grid: {fileID: 696983657}
   mainCamera: {fileID: 672288910}
   selectedBlock: 2
@@ -1291,15 +1300,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 0
-  currentHealth: 0
   hearthContainers: 20
   Heart: {fileID: 21300000, guid: f45e98547ba870b4994d52162c1f897c, type: 3}
-  half_Heart: {fileID: 21300000, guid: 9066f7479b7b2234492ed2cbface471d, type: 3}
+  half_Heart: {fileID: 21300000, guid: aec5c21ab7598bc47a06979e3fd3189d, type: 3}
+  null_Heart: {fileID: 21300000, guid: 50a64fe054448f84b90c892e4676f34f, type: 3}
+  null_middleHeart: {fileID: 21300000, guid: a0f20ef9f51b8b94bbb04523ef92d9b8, type: 3}
 --- !u!224 &1368262537 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7667816536096445541, guid: fe85b1cf90498434fbbaa8df3069f708, type: 3}
   m_PrefabInstance: {fileID: 991306705}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1559043290 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2794137725677328093, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
+  m_PrefabInstance: {fileID: 31102985}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1559043293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1559043290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c57db6ac357f5184996b8d00e32e4bb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uIInventory: {fileID: 850802072}
+  healthScript: {fileID: 1321237426}
+  healthGained: 0
+  healthLost: 0
 --- !u!1 &1650855672 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4526555770829500036, guid: a584143852343c24287ca984437a3e47, type: 3}

@@ -7,8 +7,6 @@ using UnityEngine.Tilemaps;
 public class Block_Editing : MonoBehaviour
 {
     public GameObject player;
-    public KeyCode leftClickKey;
-    public KeyCode rightClickKey;
     public Grid grid;
     public Camera mainCamera;
     public int selectedBlock;
@@ -35,7 +33,7 @@ public class Block_Editing : MonoBehaviour
         {
             Drop collissionDrop = chunk.CollidewithDrop(grid.WorldToCell(player.transform.position).x, grid.WorldToCell(player.transform.position).y);
             TakeDrops(inv,itemAssets.BlockItemsInGame[collissionDrop.DropID], collissionDrop.Anzahl);
-            chunk.removeDropfromView(collissionDrop);
+            chunk.RemoveDropfromView(collissionDrop);
         }
         ChangeCoordinate(mouseWorldPos);
 
@@ -47,7 +45,7 @@ public class Block_Editing : MonoBehaviour
          // if (Input.mousePosition.x-959 < -200 || Input.mousePosition.x-959 > 200 ||Input.mousePosition.y - 429 < -150 || Input.mousePosition.y - 429 > 150 )
          //   return;
 
-        if (Input.GetKey(leftClickKey))
+        if (Input.GetKey(GlobalVariables.leftClick))
         {
 
             //if (GameObject.FindGameObjectWithTag("LeftClick")!=null)
@@ -71,7 +69,7 @@ public class Block_Editing : MonoBehaviour
             //}
         }
 
-        if (Input.GetKey(rightClickKey) && 
+        if (Input.GetKey(GlobalVariables.rightClick) && 
             world.GetChunkFromCoordinate(coordinate.x, coordinate.y).BlockIDs[coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x, coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.y] == 0 &&
             !(Input.mousePosition.y - 429 < 55 && Input.mousePosition.y - 429 > -5 && Input.mousePosition.x - 959 > -40 && Input.mousePosition.x - 959 < 40))
             {
@@ -102,7 +100,7 @@ public class Block_Editing : MonoBehaviour
     {
         //Player collides with Drop
         for(int x=0;x<anzahl;x++)
-        inv.AddItem(blockitem);
+            inv.AddItem(blockitem);
         GameObject.FindGameObjectWithTag("Inventory").GetComponent<UIInventory>().SynchronizeToHotbar();
     }
 
