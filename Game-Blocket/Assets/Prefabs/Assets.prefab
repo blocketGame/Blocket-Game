@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8512227375263116681}
-  - component: {fileID: 7291855000701013668}
+  - component: {fileID: 6245959439507821}
   m_Layer: 0
   m_Name: Assets
   m_TagString: Untagged
@@ -31,7 +31,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7291855000701013668
+--- !u!114 &6245959439507821
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,34 +40,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2417270971905375398}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05a26351ac65b0645b35f90338984832, type: 3}
+  m_Script: {fileID: 11500000, guid: 2d984b8f0d51ece49a553e0de44df8f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BlockItemsInGame:
-  - name: Dirt
-    id: 1
-    description: A simple Dirt Block
-    itemType: 0
-    itemImage: {fileID: 21300000, guid: f01308597c751ff40bb35eecf55b550d, type: 3}
-    blockId: 3
-  - name: Grass Block
-    id: 2
-    description: Some grasss
-    itemType: 0
-    itemImage: {fileID: 21300000, guid: 6f4fbf8d0cb7b434093d695044c35a3c, type: 3}
-    blockId: 2
-  - name: Sand
-    id: 3
-    description: Make it to glas!
-    itemType: 0
-    itemImage: {fileID: 21300000, guid: 2df48377b487aa243b5a6e0e637890bc, type: 3}
-    blockId: 5
-  - name: Snow
-    id: 4
-    description: It is still frozen!
-    itemType: 0
-    itemImage: {fileID: 21300000, guid: ef8a05a4ebd504240914473cda9b6542, type: 3}
-    blockId: 6
+  BlockItemsInGame: []
   ToolItemsInGame: []
   EquipableItemsInGame: []
   UseableItemsInGame: []

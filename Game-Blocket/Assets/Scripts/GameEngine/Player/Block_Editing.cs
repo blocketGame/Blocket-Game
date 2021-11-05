@@ -10,7 +10,7 @@ public class Block_Editing : MonoBehaviour
     public Grid grid;
     public Camera mainCamera;
     public int selectedBlock;
-    public World_Data world;
+    public WorldData world;
     public Vector3Int coordinate;
     public float count;
     public GameObject deleteSprite;

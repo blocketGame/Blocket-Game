@@ -1,7 +1,7 @@
 # This File is considered as documentation tool for the Blocks and their Ids 
 
  ID : 0
- Name : air
+ Name : Air
 
  ID : 1
  Name : Collision

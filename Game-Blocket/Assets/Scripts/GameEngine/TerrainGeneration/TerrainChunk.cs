@@ -8,7 +8,7 @@ public class TerrainChunk
 {
     #region WorldSpecifications
     [SerializeField]
-    private World_Data world;
+    private WorldData world;
     [SerializeField]
     private Vector2Int chunkPosition;
     [SerializeField]
@@ -18,7 +18,7 @@ public class TerrainChunk
     [SerializeField]
     private GameObject collisionObject;
 
-    public World_Data World { get => world; set => world = value; }
+    public WorldData World { get => world; set => world = value; }
     public Vector2Int ChunkPosition { get => chunkPosition; set => chunkPosition = value; }
     public byte[,] BlockIDs { get => blockIDs; set => blockIDs = value; }
     public GameObject ChunkObject { get => chunkObject; set => chunkObject = value; }
@@ -62,7 +62,7 @@ public class TerrainChunk
     public List<Drop> Drops { get => drops; set => drops = value; }
     #endregion
 
-    public TerrainChunk(Vector2Int chunkPosition, World_Data world, GameObject chunkParent, GameObject chunkObject)
+    public TerrainChunk(Vector2Int chunkPosition, WorldData world, GameObject chunkParent, GameObject chunkObject)
     {
         this.ChunkPosition = chunkPosition;
         this.World = world;

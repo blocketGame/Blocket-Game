@@ -6,14 +6,14 @@ using UnityEngine.Tilemaps;
 /*
  * @Author : Cse19455 / Thomas Boigner
  */
-public class World_Data : MonoBehaviour
+public class WorldData : MonoBehaviour
 {
 
 
     [SerializeField]
     private GameObject player;
     [SerializeField]
-    private Terrain_Generation terraingeneration;
+    private TerrainGeneration terraingeneration;
     private Dictionary<Vector2Int, TerrainChunk> chunks = new Dictionary<Vector2Int, TerrainChunk>();
     [SerializeField]
     private Biom[] biom;
@@ -75,7 +75,7 @@ public class World_Data : MonoBehaviour
         get => biom; set => biom = value;
     }
     public Dictionary<Vector2Int, TerrainChunk> Chunks { get => chunks; set => chunks = value; }
-    public Terrain_Generation Terraingeneration { get => terraingeneration; set => terraingeneration = value; }
+    public TerrainGeneration Terraingeneration { get => terraingeneration; set => terraingeneration = value; }
     public GameObject Player { get => player; set => player = value; }
 
     public Grid Grid { get => grid; set => grid = value; }
@@ -183,7 +183,7 @@ public class World_Data : MonoBehaviour
     /// Creates Blocks.txt file as documentation for the blocks array
     /// </summary>
 
-    public void putBlocksIntoTxt()
+    public void PutBlocksIntoTxt()
     {
         string writeContent = "# This File is considered as documentation tool for the Blocks and their Ids \n";
         for (int x = 0; x < blocks.Length; x++)

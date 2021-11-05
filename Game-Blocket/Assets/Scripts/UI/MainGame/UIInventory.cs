@@ -57,7 +57,7 @@ public class UIInventory : MonoBehaviour
 	#region Static Resources !DO NOT TOUCH!
 	[Header("Static: General")]
 	///<summary>Gameobject from Inspector</summary>
-	public GameObject uiParent, slotField, uiHud , hudslotfield;
+	public GameObject uiParent, slotField, uiHud , hudslotfieldParent;
 	/// <summary>Image from Inspector</summary>
 	public Image inventoryBackgroundImage;
 	/// <summary>Prefab from Inspector</summary>
@@ -134,7 +134,7 @@ public class UIInventory : MonoBehaviour
 			}
 		}
 	}
-
+	
 	private void InitHudSlots()
 	{
 		//Get With and height from the Prefab
@@ -144,10 +144,10 @@ public class UIInventory : MonoBehaviour
 		for (byte a = 0; a < coloums; a++)
 		{
 				//Calc the !absolute Pos
-				float itemSlotX = hudslotfield.transform.position.x + prefW * a + 50 + colspacingInvSlot*0.2f * a;
-				float itemSlotY = hudslotfield.transform.position.y - 15;
+				float itemSlotX = hudslotfieldParent.transform.position.x + prefW * a + 50 + colspacingInvSlot*0.2f * a;
+				float itemSlotY = hudslotfieldParent.transform.position.y - 15;
 				//Instantiate the Gameobject
-				GameObject itemSlot = Instantiate(prefabItemSlot, new Vector3Int((int)(itemSlotX), (int)(itemSlotY), 1), Quaternion.identity, hudslotfield.transform);
+				GameObject itemSlot = Instantiate(prefabItemSlot, new Vector3Int((int)(itemSlotX), (int)(itemSlotY), 1), Quaternion.identity, hudslotfieldParent.transform);
 				itemSlot.gameObject.transform.localScale = new Vector3(0.8f,0.8f,1);
 				//Name it
 				itemSlot.name = $"HudSlot {a}";

@@ -7,10 +7,10 @@ using Unity.Mathematics;
 /*
  * @Author : Cse19455 / Thomas Boigner
  */
-public class Terrain_Generation : MonoBehaviour
+public class TerrainGeneration : MonoBehaviour
 {
     [SerializeField]
-    private World_Data world;
+    private WorldData world;
     [SerializeField]
     private List<TerrainChunk> chunksVisibleLastUpdate;
     [SerializeField]
@@ -21,7 +21,7 @@ public class Terrain_Generation : MonoBehaviour
 
     //------------------------------------------------------- Properties ------------------------------------------------------------------
 
-    public World_Data World { get => world; set => world = value; }
+    public WorldData World { get => world; set => world = value; }
     public List<TerrainChunk> ChunksVisibleLastUpdate { get => chunksVisibleLastUpdate; set => chunksVisibleLastUpdate = value; }
     public GameObject ChunkParent { get => chunkParent; set => chunkParent = value; }
     public Transform PlayerPosition { get => playerPosition; set => playerPosition = value; }
@@ -33,7 +33,7 @@ public class Terrain_Generation : MonoBehaviour
     {
         ChunksVisibleLastUpdate = new List<TerrainChunk>();
         PlayerPosition = World.Player.transform;
-        world.putBlocksIntoTxt();
+        world.PutBlocksIntoTxt();
         world.putBiomsIntoTxt();
         prng = new System.Random(world.Seed);
     }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class MovementScript : MonoBehaviour
 {
     [SerializeField]
-    private World_Data w;
+    private WorldData w;
     public float MovementSpeed = 6f;
     public float JumpForce = 6f;
     public float fallMulti = 1.06f;
@@ -14,7 +14,7 @@ public class MovementScript : MonoBehaviour
 
     private Rigidbody2D _rigidbody;
 
-    public World_Data W { get => w; set => w = value; }
+    public WorldData W { get => w; set => w = value; }
     public Rigidbody2D Rigidbody { get => _rigidbody; set => _rigidbody = value; }
 
     void Start() 
