@@ -17,9 +17,15 @@ public class Inventory : MonoBehaviour{
 	public List<UIInventorySlot> InvSlots { get; } = new List<UIInventorySlot>();
 
 	/// <summary>Last slot active pressed</summary>
+	[HideInInspector]
 	public UIInventorySlot atHand;
+	[HideInInspector]
 	public Vector2 atHandVector;
 
+	/// <summary>
+	/// Event if the User presses a slot
+	/// </summary>
+	/// <param name="slotPressed">Slot that was pressed by the local user</param>
 	public void PressedSlot(UIInventorySlot slotPressed) {
 		Item temp = atHand.Item;
 		ushort iCT = atHand.ItemCount;
@@ -40,12 +46,23 @@ public class Inventory : MonoBehaviour{
 	}
 
 	/// <summary>
-	/// TODO: Add num of count<br></br>
 	/// Adds an <see cref="Item"/> into the inventory
 	/// </summary>
-	/// <param name="itemToAdd">Item to Add</param>
-	/// <returns><see langword="true"/> if the <see cref="Item"/> has been added</returns>
+	/// <param name="itemToAdd">The Item Object</param>
+	/// <returns>True if the Item </returns>
 	public bool AddItem(Item itemToAdd) {
+		bool succeed = AddItem(itemToAdd, 1, out _);
+		return succeed;
+	}
+
+	/// <summary
+	/// Adds some <see cref="Item"/>s into the inventory
+	/// </summary>
+	/// <param name="itemToAdd">Item to Add</param>
+	/// <param name="itemCount">Number of Item`s</param>
+	/// <param name="itemCountNotAdded"></param>
+	/// <returns><see langword="true"/> if the <see cref="Item"/> has been added</returns>
+	public bool AddItem(Item itemToAdd, ushort itemCount, out ushort itemCountNotAdded) {
 		UIInventorySlot wannaAddThere = null;
 
 		///If item has ItemType: <see cref="Item.ItemType.SINGLE"/>
@@ -53,33 +70,48 @@ public class Inventory : MonoBehaviour{
 			wannaAddThere = GetNextFreeSlot();
 			if(wannaAddThere) {
 				wannaAddThere.Item = itemToAdd;
+				itemCountNotAdded = 0;
 				return true;
 			}
+			itemCountNotAdded = 1;
 			return false;
 		}
 
 		///If item has ItemType: <see cref="Item.ItemType.STACKABLE"/>
-		//Try to find a slot with the same Item
-		foreach(UIInventorySlot inventorySlotNow in FindItem(itemToAdd))
-			if(inventorySlotNow.ItemCount <= GlobalVariables.maxItemCountForMultiple) {
-				wannaAddThere = inventorySlotNow;
-				break;
+		ushort toAddNow = itemCount;
+		while(toAddNow > 0) {
+			//Try to find a slot with the same Item
+			foreach(UIInventorySlot inventorySlotNow in FindItem(itemToAdd))
+				if(inventorySlotNow.ItemCount <= GlobalVariables.maxItemCountForMultiple) {
+					wannaAddThere = inventorySlotNow;
+					break;
+				}
+			//If no slot with this item is found => get a new one
+			if(!wannaAddThere)
+				wannaAddThere = GetNextFreeSlot();
+
+			//Add the Item if a slot has been found
+			if(wannaAddThere) {
+				if(wannaAddThere.Item == null) {
+					wannaAddThere.Item = itemToAdd;
+					wannaAddThere.ItemCount = toAddNow;
+					toAddNow = 0;
+				} else {
+					ushort iCBefore = wannaAddThere.ItemCount;
+					if(iCBefore + toAddNow > GlobalVariables.maxItemCountForMultiple) { 
+						ushort iCAddable = (ushort)(GlobalVariables.maxItemCountForMultiple - iCBefore);
+						toAddNow -= iCAddable;
+						wannaAddThere.ItemCount = GlobalVariables.maxItemCountForMultiple;
+					} else {
+						wannaAddThere.ItemCount += toAddNow;
+						toAddNow = 0;
+					}
+				}
 			}
-		//If no slot with this item is found => get a new one
-		if(!wannaAddThere)
-			wannaAddThere = GetNextFreeSlot();
-		//Add the Item if a slot has been found
-		if(wannaAddThere) {
-			if (wannaAddThere.Item == null)
-			{
-				wannaAddThere.Item = itemToAdd;
-				wannaAddThere.ItemCount++;
-			}
-			else
-				wannaAddThere.ItemCount++;
-			return true;
 		}
-		return false;
+		itemCountNotAdded = toAddNow;
+		return toAddNow == 0;
+
 	}
 
 	/// <summary>

@@ -79,8 +79,8 @@ public class UIInventory : MonoBehaviour
 		InitHudSlots();
 		//InitPlayerInfo();
 		InitAtHand();
-		///Initzialize the Inventory class;............................................................................
-		itemAssets = GameObject.Find("Assets").gameObject.GetComponent<ItemAssets>();
+		///Initzialize the Inventory class
+		itemAssets = GameObject.Find("Assets").GetComponent<ItemAssets>();
 		if(!itemAssets)
 			Debug.LogException(new NullReferenceException("Item Assets not found!"));
 		/*if(GlobalVariables.itemTest)
@@ -89,7 +89,27 @@ public class UIInventory : MonoBehaviour
 	}
 
 	/// <summary>
+	/// Initzialize the AtHand<see cref="UIInventorySlot"/>
+	/// </summary>
+	private void InitAtHand() {
+		atHandSlot = Instantiate(prefabItemSlot, GameObject.Find("Inventory").transform);
+		atHandSlot.name = "SlotAtHand";
+		atHandSlot.SetActive(false);
+		Destroy(atHandSlot.GetComponentInChildren<Image>());
+		Destroy(atHandSlot.GetComponentInChildren<Button>());
+
+		UIInventorySlot atHandUISlot = atHandSlot.GetComponent<UIInventorySlot>();
+		_inventory.atHand = atHandUISlot;
+		atHandUISlot.itemImage.raycastTarget = false;
+
+		RectTransform atHandT = atHandSlot.GetComponent<RectTransform>();
+		atHandT.localScale = new Vector3(0.8f, 0.8f, 1);
+		_inventory.atHandVector = new Vector2(-atHandT.rect.width / 2, atHandT.rect.height / 2);
+	}
+
+	/// <summary>
 	/// Initzialize the PlayerInfoUI
+	/// <br></br>Not used!
 	/// </summary>
 	private void InitPlayerInfo() {
 		//TODO: Make dynamic
@@ -186,22 +206,6 @@ public class UIInventory : MonoBehaviour
 			}
 	}
 
-	private void InitAtHand() {
-		atHandSlot = Instantiate(prefabItemSlot, GameObject.Find("Inventory").transform);
-		atHandSlot.name = "SlotAtHand";
-		atHandSlot.SetActive(false);
-		Destroy(atHandSlot.GetComponentInChildren<Image>());
-		Destroy(atHandSlot.GetComponentInChildren<Button>());
-
-		UIInventorySlot atHandUISlot = atHandSlot.GetComponent<UIInventorySlot>();
-		_inventory.atHand = atHandUISlot;
-		atHandUISlot.itemImage.raycastTarget = false;
-		
-		RectTransform atHandT = atHandSlot.GetComponent<RectTransform>();
-		atHandT.localScale = new Vector3(0.8f, 0.8f, 1);
-		_inventory.atHandVector = new Vector2(-atHandT.rect.width/2, atHandT.rect.height/2);
-	}
-
 	/// <summary>Reloads all UI Settings</summary>
 	public void ReloadSettings() {
 		if(!uiParent)
@@ -240,6 +244,7 @@ public class UIInventory : MonoBehaviour
 	}
 
     #region Bidirectional Sync
+
     /// <summary>
     /// Synchronizes Hotbar State of Slots Row 1
     /// </summary>
