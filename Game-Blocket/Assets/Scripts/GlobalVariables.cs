@@ -15,7 +15,7 @@ public static class GlobalVariables
 {
 	public static readonly ushort maxItemCountForMultiple = 128;
 
-
+	public static GameObject localPlayer;
 	public static readonly List<GameObject> players = new List<GameObject>();
 	public static bool isMultiplayer;
 

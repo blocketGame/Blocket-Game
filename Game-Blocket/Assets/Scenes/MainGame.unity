@@ -134,10 +134,6 @@ PrefabInstance:
       propertyPath: w
       value: 
       objectReference: {fileID: 1818566158}
-    - target: {fileID: 923924914436478962, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
-      propertyPath: m_AllowDynamicResolution
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2794137725677328093, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
       propertyPath: m_Name
       value: Player
