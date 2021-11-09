@@ -8,13 +8,16 @@ public class PlayerVariables : MonoBehaviour
 	#region Static Resources
 	public UIInventory uIInventory;
 	public HealthScript healthScript;
+	public GameObject playerModel, playerLogic;
 	#endregion
 
 	#region Dyniamic Variables
 	private ushort _health, _maxHealth, _maxArmor, _maxStrength, _armor, _strength;
+	public Inventory inventory;
 	#endregion
 
 	#region Statistics Variables
+	[HideInInspector]
 	public uint healthGained, healthLost;
 	#endregion
 
@@ -72,9 +75,9 @@ public class PlayerVariables : MonoBehaviour
 		//TODO
 	}
 
-	public void Awake()
+	public void Awake1()
 	{
-		healthScript.InitiateSprites();
+		healthScript?.InitiateSprites();
 		MaxHealth = 40;
 		MaxArmor = 40;
 		MaxStrength = 40;

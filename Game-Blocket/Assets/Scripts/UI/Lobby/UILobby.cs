@@ -7,6 +7,7 @@ using MLAPI.Spawning;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 
 public class UILobby : NetworkBehaviour {
@@ -43,7 +44,7 @@ public class UILobby : NetworkBehaviour {
 		//NetworkManager.Singleton.OnClientConnectedCallback += ClientConnectCallback;
 		SceneManager.sceneLoaded += SceneSwitched;
 		StartSiteOpen = true;
-
+		
 		serverBtn.onClick.AddListener(() => {
 			NetworkManager.Singleton.StartServer();
 			StartSiteOpen = false;
@@ -77,44 +78,71 @@ public class UILobby : NetworkBehaviour {
 		});
 	}
 
+	public static GameObject GetLocalPlayer() {
+		foreach(GameObject iGo in GameObject.FindGameObjectsWithTag("Player")) {
+			if(iGo.GetComponent<NetworkObject>()?.IsLocalPlayer ?? false)
+				return iGo;
+		}
+		return null;
+	}
+
 	public void SceneSwitched(Scene s1, LoadSceneMode s2){
 		if(s1.name != "MainGame")
 			return;
-		Debug.LogWarning($"Switched");
+		//Only Host
+		if(NetworkManager.Singleton.IsHost)
+			foreach(ulong clientNow in NetworkManager.Singleton.ConnectedClients.Keys) {
+				GameObject go = Instantiate(playerNetPrefab.gameObject, new Vector3Int(0, 100, 0), Quaternion.identity);
+				go.name = $"Player: {clientNow}";
+				go.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientNow);
+			}
+		//Both
+		foreach(GameObject iGo in GameObject.FindGameObjectsWithTag("Player")) {
+			if(iGo.GetComponent<NetworkObject>()?.IsLocalPlayer ?? false) {
+				GlobalVariables.localPlayer = iGo;
+				iGo.name += "(this)";
+			} else
+				iGo.GetComponent<PlayerVariables>().playerLogic.SetActive(false);
+		}
+		//Inventory
+
+		/*Debug.LogWarning($"Switched");
 		//GameObject.FindGameObjectWithTag("Player")?.SetActive(false);
 		GameObject thisPlayer = null;
 
 
 		foreach(ulong clientNow in NetworkManager.Singleton.ConnectedClients.Keys) {
-			GameObject go = Instantiate(playerNetPrefab.gameObject, new Vector3Int(0,100,0), Quaternion.identity);
+			GameObject go = Instantiate(playerNetPrefab.gameObject, new Vector3Int(0, 100, 0), Quaternion.identity);
 			go.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientNow);
 			if(clientNow == NetworkManager.Singleton.LocalClientId)
 				thisPlayer = go;
-			/*
+
 			if(clientNow == NetworkManager.Singleton.LocalClientId) {
 				//if player is localplayer
 				thisPlayer = go;
-				
+
 				GameObject.Find("UI").GetComponent<UIInventory>().inventory = thisPlayer.GetComponent<Inventory>();
 				GameObject.Find("Block Editing").GetComponent<Block_Editing>().mainCamera = thisPlayer.GetComponentInChildren<Camera>();
 				GameObject.Find("Block Editing").GetComponent<Block_Editing>().player = thisPlayer;
 				GameObject.Find("World-Generation").GetComponent<World_Data>().player = thisPlayer;
 				GameObject.Find("UI").GetComponent<UIInventory>().Load();
 				GameObject.Find("World-Generation").GetComponent<Terrain_Generation>().PlayerPosition = thisPlayer.transform;
-				
+
 				thisPlayer.transform.position = new Vector3Int(0, 100, 0);
 				GlobalVariables.gameStarted = true;
 			} else {
 				go.GetComponentInChildren<Camera>().enabled = false;
-			}*/
+			}
 
 		}
-		GameObject.Find("World-Generation").GetComponent<Terrain_Generation>().PlayerPosition = thisPlayer.transform;
-		GameObject.Find("UI").GetComponent<UIInventory>().inventory = thisPlayer.GetComponent<Inventory>();
-		GameObject.Find("UI").GetComponent<UIInventory>().Load();
+		GameObject.Find("World-Generation").GetComponent<TerrainGeneration>().PlayerPosition = thisPlayer.transform;
+		GameObject.Find("UI").GetComponent<UIInventory>(). = thisPlayer.GetComponent<Inventory>();
+		GameObject.Find("UI").GetComponent<UIInventory>().Load();*/
 	}
-
+}
+	/*
 	private void ClientConnectCallback(ulong clientId) {
 		Debug.Log($"Client Connect: {clientId}");
 	}
-}
+	*/
+

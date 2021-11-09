@@ -1258,12 +1258,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 723270153}
-  - component: {fileID: 723270156}
   - component: {fileID: 723270152}
   - component: {fileID: 723270151}
   - component: {fileID: 723270150}
   - component: {fileID: 723270155}
   - component: {fileID: 723270154}
+  - component: {fileID: 723270157}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -1392,26 +1392,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 723270149}
   m_CullTransparentMesh: 1
---- !u!114 &723270156
+--- !u!114 &723270157
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 723270149}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98cb05757d9214e429f2d91f7e62a6c6, type: 3}
+  m_Script: {fileID: 11500000, guid: 1ab006c7735e5214d810151c2047d55b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNetPrefab: {fileID: 3409126840080751584, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
+  playerNetPrefab: {fileID: 1837902447072794163, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
   startSite: {fileID: 2089823948}
   lobbySite: {fileID: 745830042}
   serverBtn: {fileID: 1955867328}
   hostBtn: {fileID: 1925836633}
   clientBtn: {fileID: 2127037543}
-  ipInput: {fileID: 1839825615}
-  portInput: {fileID: 181186061}
+  ipInput: {fileID: 0}
+  portInput: {fileID: 0}
   startGame: {fileID: 2027255661}
   goBackBtn: {fileID: 1063804233}
   testBtn: {fileID: 137548646}

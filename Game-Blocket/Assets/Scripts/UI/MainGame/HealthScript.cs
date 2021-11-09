@@ -4,9 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthScript : MonoBehaviour
-{
+public class HealthScript : MonoBehaviour {
+
+    private readonly List<GameObject> hearthSlots = new List<GameObject>();
+
     #region HealthSettings
+    /// <summary>Full-Heart Sprite</summary>
+    public Sprite heart, halfHeart, nullHeart, nullMiddleHeart;
     /// <summary>maxHealth of the Player</summary>
     public float maxHealth;
     /// <summary>currentHealth of the Player</summary>
@@ -19,37 +23,22 @@ public class HealthScript : MonoBehaviour
         set
         {
             currentHealth = value;
-            float percent = maxHealth, einzelrange = percent / HearthSlots.Count;
-            for (int x = HearthSlots.Count; x > 0; x--)
+            float percent = maxHealth, einzelrange = percent / hearthSlots.Count;
+            for (int x = hearthSlots.Count; x > 0; x--)
             {
                 float tatsRange = CurrentHealth - (einzelrange * (x - 1));
                 if (tatsRange >= einzelrange)
-                    Change(Heart, x);
+                    Change(heart, x);
                 else if (tatsRange >= einzelrange / 2)
-                    Change(half_Heart, x);
-                else if (tatsRange < einzelrange / 2 && x == HearthSlots.Count)
-                    Change(null_Heart, x);
+                    Change(halfHeart, x);
+                else if (tatsRange < einzelrange / 2 && x == hearthSlots.Count)
+                    Change(nullHeart, x);
                 else
-                    Change(null_middleHeart, x);
+                    Change(nullMiddleHeart, x);
             }
         }
     }
     #endregion
-
-    #region HealthSprites
-    /// <summary>Full-Heart Sprite</summary>
-    public Sprite Heart;
-    /// <summary>Half-Heart Sprite</summary>
-    public Sprite half_Heart;
-
-    public Sprite null_Heart;
-
-
-    [SerializeField]
-    private Sprite null_middleHeart;
-    #endregion
-
-    private List<GameObject> HearthSlots= new List<GameObject>();
 
     /// <summary>
     /// Instantiate HeartContainer GameObject 
@@ -64,16 +53,8 @@ public class HealthScript : MonoBehaviour
             hc.transform.localScale = new Vector3(0.4f, 0.4f, 1);
             hc.transform.SetParent(gameObject.transform);
             hc.transform.name = $"HeartSlot{i}";
-            HearthSlots.Add(hc);
+            hearthSlots.Add(hc);
         }
-    }
-
-    /// <summary>
-    /// Updates Life in Realtime
-    /// </summary>
-    private void FixedUpdate()
-    {
-        
     }
 
     /// <summary>
@@ -83,11 +64,11 @@ public class HealthScript : MonoBehaviour
     /// <param name="index">index of the current Heartslot</param>
     private void Change(Sprite sprite,int index)
     {
-        GameObject hearthSlot = HearthSlots[index - 1];
-        hearthSlot.gameObject.GetComponent<Image>().sprite = sprite;
-        hearthSlot.gameObject.GetComponent<Image>().color = new Color(255, 255, 255, 255);
-        if(sprite==null)
-        hearthSlot.gameObject.GetComponent<Image>().color = new Color(255, 255, 255, 0);
+        GameObject hearthSlot = hearthSlots[index - 1];
+        hearthSlot.GetComponent<Image>().sprite = sprite;
+        hearthSlot.GetComponent<Image>().color = Color.white;
+        if(sprite == null)
+            hearthSlot.GetComponent<Image>().color = new Color(255, 255, 255, 0);
     }
 
 }

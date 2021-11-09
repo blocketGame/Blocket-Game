@@ -1,30 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
+
+using MLAPI;
+using MLAPI.Prototyping;
+
 using UnityEngine;
 
-public class MovementScript : MonoBehaviour
+public class MovementScript : NetworkBehaviour
 {
-    [SerializeField]
-    private WorldData w;
     public float MovementSpeed = 6f;
     public float JumpForce = 6f;
     public float fallMulti = 1.06f;
 
     private bool jump = false;
 
-    private Rigidbody2D _rigidbody;
+    public Rigidbody2D rigidbody;
 
-    public WorldData W { get => w; set => w = value; }
-    public Rigidbody2D Rigidbody { get => _rigidbody; set => _rigidbody = value; }
+    public NetworkTransform netTransform;
 
-    void Start() 
-    {
-        Rigidbody = GetComponent<Rigidbody2D>();
-    }
+    //Not highercase because others 
+    public new Transform transform { get => netTransform.transform; }
+
     void Update()
     {
         //GameObject player = GameObject.FindWithTag("Player").gameObject;
-        if (Input.GetButton("Jump") && Mathf.Abs(Rigidbody.velocity.y) < 0.001f)
+        if (Input.GetButton("Jump") && Mathf.Abs(rigidbody.velocity.y) < 0.001f)
         {
             jump = true;
         }
@@ -40,11 +40,11 @@ public class MovementScript : MonoBehaviour
 
         //jump
         if (jump) {
-            Rigidbody.AddForce(new Vector2(0, JumpForce), ForceMode2D.Impulse);
+            rigidbody.AddForce(new Vector2(0, JumpForce), ForceMode2D.Impulse);
             jump = false;
         }
 
-        //walk over block
+        /*walk over block
         if (W.Blocks[W.GetBlockFormCoordinate((int) ((transform.position.x) - 0.5), (int) ((transform.position.y)-0.1))].BlockID != 0) {
             if (Mathf.Abs(Rigidbody.velocity.y) < 0.001f && W.Blocks[W.GetBlockFormCoordinate((int)((transform.position.x) - 0.5), (int)((transform.position.y) + 1.1))].BlockID == 0) {
                 transform.position = new Vector3(transform.position.x, (transform.position.y) + 1, transform.position.z);
@@ -54,14 +54,14 @@ public class MovementScript : MonoBehaviour
             if (Mathf.Abs(Rigidbody.velocity.y) < 0.001f && W.Blocks[W.GetBlockFormCoordinate((int)((transform.position.x) + 0.5), (int)((transform.position.y) + 1.1))].BlockID == 0) {            
                 transform.position = new Vector3(transform.position.x, (transform.position.y) + 1, transform.position.z);
             }
-        }
+        }*/
 
         //fall
-        if (Rigidbody.velocity.y < 0)
+        if (rigidbody.velocity.y < 0)
         {
-            if (Rigidbody.velocity.y > -15)
+            if (rigidbody.velocity.y > -15)
             {
-                transform.position += Time.deltaTime * new Vector3(movement, (Rigidbody.velocity.y) * fallMulti, 0);
+                transform.position += Time.deltaTime * new Vector3(movement, (rigidbody.velocity.y) * fallMulti, 0);
             }
         }
     }
