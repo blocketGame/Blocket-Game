@@ -24,12 +24,31 @@ public class Inventory : MonoBehaviour{
 		Item temp = atHand.Item;
 		ushort iCT = atHand.ItemCount;
 
-		atHand.Item = slotPressed.Item;
-		atHand.ItemCount = slotPressed.ItemCount;
+		if (slotPressed?.ItemCount < GlobalVariables.maxItemCountForMultiple && (temp?.id == slotPressed?.Item?.id)&&(slotPressed?.Item?.itemType == Item.ItemType.STACKABLE &&atHand?.Item?.itemType == Item.ItemType.STACKABLE))
+        {
+			//TODO: Nicht fertig
+			if(slotPressed.ItemCount + atHand.ItemCount <= GlobalVariables.maxItemCountForMultiple)
+            {
+				slotPressed.ItemCount += atHand.ItemCount;
+				atHand.ItemCount = 0;
+            }
+            else
+            {
+				ushort slotCountBefore = slotPressed.ItemCount;
+				slotPressed.ItemCount = GlobalVariables.maxItemCountForMultiple;
+				atHand.ItemCount = (ushort)(GlobalVariables.maxItemCountForMultiple - slotCountBefore);
+			}
+			if(atHand.ItemCount <= 0)
+				atHand.Item = null;
+        }
+        else 
+		{ 
+			atHand.Item = slotPressed.Item;
+			atHand.ItemCount = slotPressed.ItemCount;
 
-		slotPressed.ItemCount = iCT;
-		slotPressed.Item = temp;
-
+			slotPressed.ItemCount = iCT;
+			slotPressed.Item = temp;
+		}
 		atHand.gameObject.SetActive(atHand.Item != null);
 	}
 

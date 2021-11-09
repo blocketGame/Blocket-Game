@@ -1,0 +1,302 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5501895229596959010
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5501895229596959013}
+  - component: {fileID: 5501895229596959012}
+  - component: {fileID: 5501895229596959015}
+  - component: {fileID: 5501895229596959014}
+  m_Layer: 3
+  m_Name: World-Generation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5501895229596959013
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5501895229596959010}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 5501895230584340289}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5501895229596959012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5501895229596959010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b62b494d2f78d5f48a5a9ef0d5ddf2b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  world: {fileID: 5501895229596959015}
+  chunkParent: {fileID: 5501895230584340302}
+--- !u!114 &5501895229596959015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5501895229596959010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e37cca21d59776b4592cdf22f7d5ad04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  terraingeneration: {fileID: 5501895229596959012}
+  biom:
+  - {fileID: 8950956458296952525, guid: 801a88b66aa81fa4a9ac48b421c4222b, type: 3}
+  - {fileID: 3399784574488859336, guid: 61cf1ca9dbb46b14e9d4a1dad1c4b736, type: 3}
+  - {fileID: -3600785353560310458, guid: d3e2ff527c183d14d9e65539a1065e0f, type: 3}
+  blocks:
+  - _name: air
+    _blockID: 0
+    _tile: {fileID: 0}
+    sprite: {fileID: 0}
+    removeDuration: 0
+    item: 0
+  - _name: Collision
+    _blockID: 1
+    _tile: {fileID: 11400000, guid: 0bcc34212cd215a4584d42c3c4ba8f29, type: 2}
+    sprite: {fileID: 0}
+    removeDuration: 0
+    item: 0
+  - _name: Grass
+    _blockID: 2
+    _tile: {fileID: 11400000, guid: 0018b9ed719372d4194e4bc207233f48, type: 2}
+    sprite: {fileID: 21300000, guid: 7e8c25b1aa5fb1b42a3de51adafd8a1f, type: 3}
+    removeDuration: 3
+    item: 0
+  - _name: Dirt
+    _blockID: 3
+    _tile: {fileID: 11400000, guid: 0bcc34212cd215a4584d42c3c4ba8f29, type: 2}
+    sprite: {fileID: 21300000, guid: f01308597c751ff40bb35eecf55b550d, type: 3}
+    removeDuration: 5
+    item: 0
+  - _name: Sand-Top
+    _blockID: 4
+    _tile: {fileID: 11400000, guid: 6db0c34d3b5fc7b49a67163528b99ce5, type: 2}
+    sprite: {fileID: 21300000, guid: 437b61b5542854c4ea56f52b0ba0be81, type: 3}
+    removeDuration: 2
+    item: 1
+  - _name: Sand
+    _blockID: 5
+    _tile: {fileID: 11400000, guid: 240b651a1bc670d4793c99d2d9d9748e, type: 2}
+    sprite: {fileID: 21300000, guid: 2df48377b487aa243b5a6e0e637890bc, type: 3}
+    removeDuration: 2
+    item: 1
+  - _name: Snow-Block
+    _blockID: 6
+    _tile: {fileID: 11400000, guid: cf38a69b1c9243a4a98ca4aca2367547, type: 2}
+    sprite: {fileID: 21300000, guid: ef8a05a4ebd504240914473cda9b6542, type: 3}
+    removeDuration: 0
+    item: 0
+  - _name: Snow
+    _blockID: 7
+    _tile: {fileID: 11400000, guid: 0230af7654f2e154f8a8cfe6ab61bdd1, type: 2}
+    sprite: {fileID: 21300000, guid: f3dcd218662f73e47a7c65d283539553, type: 3}
+    removeDuration: 0
+    item: 0
+  - _name: Dirt-Bg
+    _blockID: 8
+    _tile: {fileID: 11400000, guid: 5b65e6d2acd22754fa567bf7e3641843, type: 2}
+    sprite: {fileID: 21300000, guid: 5dc8ef344183da742997bb29906167eb, type: 3}
+    removeDuration: 0
+    item: 0
+  - _name: Dirt-Bg-Top
+    _blockID: 9
+    _tile: {fileID: 11400000, guid: fc57694823c009c4e84b01d380db4a6a, type: 2}
+    sprite: {fileID: 21300000, guid: 7e72734c7ac4df0438e0d88fd1cfb300, type: 3}
+    removeDuration: 0
+    item: 0
+  - _name: Bernstein
+    _blockID: 10
+    _tile: {fileID: 11400000, guid: 828bf6f20f96e5c4482ec3bd253710d3, type: 2}
+    sprite: {fileID: 21300000, guid: c6227dfc5fd0b2f4ab08693651ea8d63, type: 3}
+    removeDuration: 8
+    item: 3
+  - _name: Opal
+    _blockID: 11
+    _tile: {fileID: 11400000, guid: 37cb26db3783b3a4685ca2337734162f, type: 2}
+    sprite: {fileID: 21300000, guid: 2a31ed6a0c6c699469ff35baeac39405, type: 3}
+    removeDuration: 8
+    item: 2
+  - _name: Stone
+    _blockID: 12
+    _tile: {fileID: 11400000, guid: 279dc643cc7dc77498f249f6221434af, type: 2}
+    sprite: {fileID: 21300000, guid: c0e395068a372ce4393ae6a53167171f, type: 3}
+    removeDuration: 7
+    item: 4
+  - _name: Sand Background
+    _blockID: 13
+    _tile: {fileID: 11400000, guid: 89b2d657f8e52ad4b8d5a282b4a7c39a, type: 2}
+    sprite: {fileID: 21300000, guid: c55abbb6e6450ac428d829a3c8852838, type: 3}
+    removeDuration: 2
+    item: 0
+  - _name: Sand Background Top
+    _blockID: 14
+    _tile: {fileID: 11400000, guid: d81a17058e764af4ab6ad5cfe1148b60, type: 2}
+    sprite: {fileID: 21300000, guid: 671f2c9bc738eca4fb24d16e4ab2b852, type: 3}
+    removeDuration: 2
+    item: 0
+  - _name: Perl
+    _blockID: 15
+    _tile: {fileID: 11400000, guid: d4fd94a2cfef2d649a3b10ee48547dc2, type: 2}
+    sprite: {fileID: 21300000, guid: f4000b1a8fb9d274989d5ec66823e6f1, type: 3}
+    removeDuration: 4
+    item: 0
+  chunkWidth: 32
+  chunkHeight: 32
+  chunkDistance: 2
+  caveSize: 0.5
+  seed: 1337
+  scale: 50
+  octives: 5
+  persistance: 0.5
+  lacurinarity: 2
+  offsetX: 0
+  offsetY: 0
+  heightMultiplier: 20
+  heightcurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.5493201
+      outSlope: 0.5493201
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.43764392
+    - serializedVersion: 3
+      time: 0.21436474
+      value: 0.18364772
+      inSlope: 1.4330088
+      outSlope: 1.4330088
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.6353784
+      value: 0.8817877
+      inSlope: 1.5912246
+      outSlope: 1.5912246
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.21315224
+    - serializedVersion: 3
+      time: 1
+      value: 1.1122195
+      inSlope: 0.18434896
+      outSlope: 0.18434896
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.6513615
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  grid: {fileID: 5501895230584340288}
+  groupdistance: 1.5
+  pickUpDistance: 1.5
+--- !u!114 &5501895229596959014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5501895229596959010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a43b82a7ca681d946952c7e413c4f74f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lightRegions:
+  - options: 0
+    startY: -10
+    endY: -20
+    value: 0.3
+    lightSource: 0
+  - options: 1
+    startY: -10
+    endY: -20
+    value: 0.5
+    lightSource: 1
+  - options: 1
+    startY: -5
+    endY: -9
+    value: 0
+    lightSource: 0
+  - options: 0
+    startY: -5
+    endY: -9
+    value: 1
+    lightSource: 1
+  lights:
+  - {fileID: 0}
+  - {fileID: 0}
+  player: {fileID: 0}
+--- !u!1 &5501895230584340302
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5501895230584340289}
+  - component: {fileID: 5501895230584340288}
+  m_Layer: 3
+  m_Name: chunks
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5501895230584340289
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5501895230584340302}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5501895229596959013}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!156049354 &5501895230584340288
+Grid:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5501895230584340302}
+  m_Enabled: 1
+  m_CellSize: {x: 1, y: 1, z: 1}
+  m_CellGap: {x: 0, y: 0, z: 0}
+  m_CellLayout: 0
+  m_CellSwizzle: 0

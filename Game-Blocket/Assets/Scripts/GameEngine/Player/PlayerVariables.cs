@@ -78,7 +78,7 @@ public class PlayerVariables : MonoBehaviour
 		MaxHealth = 40;
 		MaxArmor = 40;
 		MaxStrength = 40;
-		Health = MaxHealth;
+		Health = 35;
 		Armor = 1;
 		Strength = 1;
 	}

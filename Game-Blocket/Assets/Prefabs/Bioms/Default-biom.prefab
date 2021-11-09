@@ -49,11 +49,11 @@ MonoBehaviour:
   ores:
   - name: Stone
     noiseValueFrom: 0.5
-    noiseValueTo: 0.65
+    noiseValueTo: 0.75
     blockID: 12
   - name: Bernstein
-    noiseValueFrom: 0.6
-    noiseValueTo: 0.605
+    noiseValueFrom: 0.7
+    noiseValueTo: 0.705
     blockID: 10
   regions:
   - regionRange: 1
@@ -89,4 +89,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  biomtype: 00000000
+  biomtype: 0000000001000000

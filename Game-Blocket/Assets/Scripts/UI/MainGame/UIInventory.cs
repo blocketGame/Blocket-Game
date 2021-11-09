@@ -123,8 +123,13 @@ public class UIInventory : MonoBehaviour
 		for(byte a = 0; a < rows; a++) {
 			for(byte b = 0; b < coloums; b++) {
 				//Calc the !absolute Pos
-				float itemSlotX = slotField.transform.position.x + prefW * b + spaceToBorderX + colspacingInvSlot * b;
-				float itemSlotY = slotField.transform.position.y - (prefH * a + spaceToBorderY + rowspacingInvSlot * a);
+				float itemSlotX, itemSlotY =0;
+				int rowdistance1 = 50;
+				if (a >= 1)
+					itemSlotY = slotField.transform.position.y - (prefH * a + spaceToBorderY + rowspacingInvSlot  * a + rowdistance1);
+				else
+					itemSlotY = slotField.transform.position.y - (prefH * a + spaceToBorderY + rowspacingInvSlot * a);
+				itemSlotX = slotField.transform.position.x + prefW * b + spaceToBorderX + colspacingInvSlot * b;
 				//Instantiate the Gameobject
 				GameObject itemSlot = Instantiate(prefabItemSlot, new Vector3Int((int)(itemSlotX), (int)(itemSlotY), 1), Quaternion.identity, slotField.transform);
 				//Name it
@@ -144,7 +149,7 @@ public class UIInventory : MonoBehaviour
 		for (byte a = 0; a < coloums; a++)
 		{
 				//Calc the !absolute Pos
-				float itemSlotX = hudslotfield.transform.position.x + prefW * a + 50 + colspacingInvSlot*0.2f * a;
+				float itemSlotX = hudslotfield.transform.position.x + prefW * a + colspacingInvSlot*0.2f * a;
 				float itemSlotY = hudslotfield.transform.position.y - 15;
 				//Instantiate the Gameobject
 				GameObject itemSlot = Instantiate(prefabItemSlot, new Vector3Int((int)(itemSlotX), (int)(itemSlotY), 1), Quaternion.identity, hudslotfield.transform);
