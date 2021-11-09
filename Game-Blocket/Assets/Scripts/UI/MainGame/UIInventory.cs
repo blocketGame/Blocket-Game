@@ -27,7 +27,7 @@ public class UIInventory : MonoBehaviour
 	/// <summary>Space between Rows and Colums</summary>
 	public int rowspacingInvSlot = 15, colspacingInvSlot = 15;
 
-	public GameObject atHandSlotParent;
+
 	#endregion
 
 	#region InventoryPlayerInfoSettings
@@ -56,16 +56,17 @@ public class UIInventory : MonoBehaviour
 
 	#region Static Resources !DO NOT TOUCH!
 	[Header("Static: General")]
-	/// <summary>Prefab from Inspector</summary>
-	public GameObject prefabItemSlot;
 	///<summary>Gameobject from Inspector</summary>
-	public GameObject uiParent, slotField, uiHud;
+	public GameObject uiParent, slotField, uiHud , hudslotfieldParent;
 	/// <summary>Image from Inspector</summary>
 	public Image inventoryBackgroundImage;
+	/// <summary>Prefab from Inspector</summary>
+	public GameObject prefabItemSlot;
 	/// <summary>ItemAssets - Prefab </summary>
 	public ItemAssets itemAssets;
 	/// <summary><see cref="Inventory"/></summary>
-	public Inventory inventory;
+	private Inventory _inventory;
+	public GameObject _slotOptions;
 	#endregion
 
 	#region Initzializement
@@ -75,22 +76,40 @@ public class UIInventory : MonoBehaviour
 	/// </summary>
 	private void InitUI() {
 		InitSlots();
+		InitHudSlots();
 		//InitPlayerInfo();
 		InitAtHand();
-		///Initzialize the Inventory class;
-		itemAssets = GameObject.Find("Assets").gameObject.GetComponent<ItemAssets>();
+		///Initzialize the Inventory class
+		itemAssets = GameObject.Find("Assets").GetComponent<ItemAssets>();
 		if(!itemAssets)
 			Debug.LogException(new NullReferenceException("Item Assets not found!"));
-		if(GlobalVariables.itemTest)
-			foreach(Item i in itemAssets.BlockItemsInGame) {
-				short ret = inventory.AddItem(i, 50);
-				if(GlobalVariables.itemTest)
-					Debug.Log(ret);
-			} 
+		/*if(GlobalVariables.itemTest)
+			foreach(Item i in itemAssets.BlockItemsInGame)
+				_inventory.AddItem(i);*/
+	}
+
+	/// <summary>
+	/// Initzialize the AtHand<see cref="UIInventorySlot"/>
+	/// </summary>
+	private void InitAtHand() {
+		atHandSlot = Instantiate(prefabItemSlot, GameObject.Find("Inventory").transform);
+		atHandSlot.name = "SlotAtHand";
+		atHandSlot.SetActive(false);
+		Destroy(atHandSlot.GetComponentInChildren<Image>());
+		Destroy(atHandSlot.GetComponentInChildren<Button>());
+
+		UIInventorySlot atHandUISlot = atHandSlot.GetComponent<UIInventorySlot>();
+		_inventory.atHand = atHandUISlot;
+		atHandUISlot.itemImage.raycastTarget = false;
+
+		RectTransform atHandT = atHandSlot.GetComponent<RectTransform>();
+		atHandT.localScale = new Vector3(0.8f, 0.8f, 1);
+		_inventory.atHandVector = new Vector2(-atHandT.rect.width / 2, atHandT.rect.height / 2);
 	}
 
 	/// <summary>
 	/// Initzialize the PlayerInfoUI
+	/// <br></br>Not used!
 	/// </summary>
 	private void InitPlayerInfo() {
 		//TODO: Make dynamic
@@ -131,43 +150,60 @@ public class UIInventory : MonoBehaviour
 				//Name it
 				itemSlot.name = $"Slot {a} - {b}";
 				//Add to Inventory Logic
-				inventory.InvSlots.Add(itemSlot.GetComponent<UIInventorySlot>());
+				_inventory.InvSlots.Add(itemSlot.GetComponent<UIInventorySlot>());
 			}
+		}
+	}
+	
+	private void InitHudSlots()
+	{
+		//Get With and height from the Prefab
+		float prefW = prefabItemSlot.GetComponent<RectTransform>().rect.width,
+		prefH = prefabItemSlot.GetComponent<RectTransform>().rect.height;
+		//Go through every Slot
+		for (byte a = 0; a < coloums; a++)
+		{
+				//Calc the !absolute Pos
+				float itemSlotX = hudslotfieldParent.transform.position.x + prefW * a + 50 + colspacingInvSlot*0.2f * a;
+				float itemSlotY = hudslotfieldParent.transform.position.y - 15;
+				//Instantiate the Gameobject
+				GameObject itemSlot = Instantiate(prefabItemSlot, new Vector3Int((int)(itemSlotX), (int)(itemSlotY), 1), Quaternion.identity, hudslotfieldParent.transform);
+				itemSlot.gameObject.transform.localScale = new Vector3(0.8f,0.8f,1);
+				//Name it
+				itemSlot.name = $"HudSlot {a}";
+				//Specify that it is a HotbarSlot
+				itemSlot.GetComponent<UIInventorySlot>().isHotBarSlot = true;
+				itemSlot.GetComponent<UIInventorySlot>().parent = _inventory.InvSlots[a];
+				//Add to Inventory Logic
+				_inventory.InvSlots.Add(itemSlot.GetComponent<UIInventorySlot>());
+			
 		}
 	}
 	#endregion
 
 	/// <summary>"Reload" at the beginning</summary>
-	public void Load() {
+	public void Awake() {
+		_inventory = GameObject.Find("Player").GetComponent<Inventory>();
 		ReloadSettings();
 		InitUI();
-		inventory.ArmorSlots = armorSlots;
-		inventory.AccessoiresSlots = accessoiresSlots;
+		_inventory.ArmorSlots = armorSlots;
+		_inventory.AccessoiresSlots = accessoiresSlots;
 		InventoryOpened = false;
 	}
+
 
 	public void Update() {
 		if(Input.anyKeyDown)
 			if(Input.GetKeyDown(GlobalVariables.openInventoryKey)) {
+				
 				InventoryOpened = !InventoryOpened;
+				if (!InventoryOpened)
+					SynchronizeToHotbar();
+				else
+					SynchronizeToInv();
 				uiHud.SetActive(!InventoryOpened);
+				
 			}
-	}
-
-	private void InitAtHand() {
-		atHandSlot = Instantiate(prefabItemSlot, atHandSlotParent.transform);
-		atHandSlot.name = "SlotAtHand";
-		atHandSlot.SetActive(false);
-		Destroy(atHandSlot.GetComponentInChildren<Image>());
-		Destroy(atHandSlot.GetComponentInChildren<Button>());
-
-		UIInventorySlot atHandUISlot = atHandSlot.GetComponent<UIInventorySlot>();
-		inventory.atHand = atHandUISlot;
-		atHandUISlot.itemImage.raycastTarget = false;
-		
-		RectTransform atHandT = atHandSlot.GetComponent<RectTransform>();
-		atHandT.localScale = new Vector3(0.8f, 0.8f, 1);
-		inventory.atHandVector = new Vector2(-atHandT.rect.width/2, atHandT.rect.height/2);
 	}
 
 	/// <summary>Reloads all UI Settings</summary>
@@ -207,5 +243,50 @@ public class UIInventory : MonoBehaviour
 		set { titleText.text = value; }
 	}
 
+    #region Bidirectional Sync
+
+    /// <summary>
+    /// Synchronizes Hotbar State of Slots Row 1
+    /// </summary>
+    public void SynchronizeToInv()
+	{
+        foreach (UIInventorySlot sl in _inventory.InvSlots)
+        {
+			if (sl.isHotBarSlot)
+			{
+				///[TODO]
+				foreach (UIInventorySlot sl1 in _inventory.InvSlots)
+				{
+					if (!sl1.isHotBarSlot && sl.parent.name.Equals(sl1.name))
+					{
+						sl1.Item = sl.Item;
+						sl1.ItemCount = sl.ItemCount;
+					}
+				}
+			}
+		}
+	}
+	/// <summary>
+	/// Synchronizes Inventory State of Slots Row 1
+	/// </summary>
+	public void SynchronizeToHotbar()
+	{
+		foreach (UIInventorySlot sl in _inventory.InvSlots)
+		{
+			if (sl.isHotBarSlot)
+			{
+				///[TODO]
+				foreach (UIInventorySlot sl1 in _inventory.InvSlots)
+				{
+					if (!sl1.isHotBarSlot&&sl.parent.name.Equals(sl1.name))
+					{
+						sl.Item = sl1.Item;
+						sl.ItemCount = sl1.ItemCount;
+					}
+				}
+			}
+		}
+	}
+    #endregion
 
 }

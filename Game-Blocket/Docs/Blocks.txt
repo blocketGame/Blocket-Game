@@ -1,7 +1,7 @@
 # This File is considered as documentation tool for the Blocks and their Ids 
 
  ID : 0
- Name : air
+ Name : Air
 
  ID : 1
  Name : Collision
@@ -31,10 +31,19 @@
  Name : Dirt-Bg-Top
 
  ID : 10
- Name : Sand-Top-BG
+ Name : Bernstein
 
  ID : 11
- Name : Sand-BG
+ Name : Opal
 
  ID : 12
- Name : Wurzel
+ Name : Stone
+
+ ID : 13
+ Name : Sand Background
+
+ ID : 14
+ Name : Sand Background Top
+
+ ID : 15
+ Name : Perl
