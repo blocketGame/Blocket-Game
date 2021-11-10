@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 7667816536096445543}
   - component: {fileID: 7667816536096445542}
   m_Layer: 5
-  m_Name: UI
+  m_Name: UIMainGame
   m_TagString: Untagged
   m_Icon: {fileID: 2800000, guid: 62ce01ddca719d34ea9648c586a7cc94, type: 3}
   m_NavMeshLayer: 0
@@ -136,7 +136,7 @@ MonoBehaviour:
   inventoryBackground: {r: 1, g: 1, b: 1, a: 0.7529412}
   spaceToBorderX: 100
   spaceToBorderY: 100
-  atHandSlot: {fileID: 0}
+  atHandSlot: {fileID: 3032319131892145362, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
   rows: 4
   coloums: 9
   rowspacingInvSlot: 15
@@ -165,7 +165,7 @@ MonoBehaviour:
   uiParent: {fileID: 7667816537842617127}
   slotField: {fileID: 7667816536951508792}
   uiHud: {fileID: 7667816537676564849}
-  hudslotfield: {fileID: 0}
+  hudslotfieldParent: {fileID: 7667816537649767022}
   inventoryBackgroundImage: {fileID: 7667816537842617125}
   prefabItemSlot: {fileID: 3032319131892145362, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
   itemAssets: {fileID: 0}
@@ -182,12 +182,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec80d8a6d1179244fabd6fb20fc037b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  heart: {fileID: 0}
+  halfHeart: {fileID: 0}
+  nullHeart: {fileID: 0}
+  nullMiddleHeart: {fileID: 0}
   maxHealth: 0
   hearthContainers: 0
-  Heart: {fileID: 21300000, guid: f45e98547ba870b4994d52162c1f897c, type: 3}
-  half_Heart: {fileID: 21300000, guid: edbfbdd21d53d31499698f056ab69fbe, type: 3}
-  null_Heart: {fileID: 21300000, guid: 84eab9969ed84934c91044cefab284ee, type: 3}
-  null_middleHeart: {fileID: 21300000, guid: 552789ae921b7494aa7ff45b12d2e267, type: 3}
 --- !u!223 &7667816536096445540
 Canvas:
   m_ObjectHideFlags: 0
@@ -1199,11 +1199,11 @@ RectTransform:
   m_Father: {fileID: 7667816537676564854}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 50, y: 100}
   m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 0}
 --- !u!1 &7667816537676564849
 GameObject:
   m_ObjectHideFlags: 0
@@ -1235,10 +1235,10 @@ RectTransform:
   m_Father: {fileID: 7667816536096445541}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7667816537702928519
 GameObject:

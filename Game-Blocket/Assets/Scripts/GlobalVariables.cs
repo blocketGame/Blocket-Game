@@ -12,15 +12,11 @@ using UnityEngine.SceneManagement;
 public static class GlobalVariables
 {
 	public static readonly ushort maxItemCountForMultiple = 128;
-	public static bool gameRunning;
-
-	public static GameObject localPlayer;
-	public static readonly List<GameObject> players = new List<GameObject>();
-	public static bool isMultiplayer;
+	public static GameVariables gameVariables = new GameVariables();
 
 	#region Debug Variables
-	public static readonly bool itemSlotButtonPressedLog = false;
-	public static readonly bool itemTest = false;
+	public static readonly bool itemSlotButtonPressedLog = true;
+	public static readonly bool itemTest = true;
 	#endregion
 
 	#region Setted Keys
@@ -28,6 +24,15 @@ public static class GlobalVariables
 	public static KeyCode leftClick = KeyCode.Mouse0;
 	public static KeyCode rightClick = KeyCode.Mouse1;
 	#endregion
-	public static int currentHealth { get; set; }
-	public static int maxHealth { get; set; }
+
+	/// <summary>
+	/// Stores all Game Variables that are importent while running
+	/// </summary>
+	public class GameVariables {
+		public bool gameRunning;
+
+		public GameObject localPlayer, globalAssets, localUI;
+		public readonly List<GameObject> players = new List<GameObject>();
+		public bool isMultiplayer;
+	}
 }

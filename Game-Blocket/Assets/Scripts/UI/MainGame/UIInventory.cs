@@ -79,8 +79,7 @@ public class UIInventory : MonoBehaviour
 		InitHudSlots();
 		//InitPlayerInfo();
 		InitAtHand();
-		///Initzialize the Inventory class
-		itemAssets = GameObject.Find("Assets").GetComponent<ItemAssets>();
+		itemAssets = GlobalVariables.gameVariables.globalAssets.GetComponent<ItemAssets>();
 		if(!itemAssets)
 			Debug.LogException(new NullReferenceException("Item Assets not found!"));
 		/*if(GlobalVariables.itemTest)
@@ -183,7 +182,9 @@ public class UIInventory : MonoBehaviour
 
 	/// <summary>"Reload" at the beginning</summary>
 	public void Awake() {
-		_inventory = GameObject.Find("Player").GetComponent<Inventory>();
+		_inventory = GlobalVariables.gameVariables.localPlayer.GetComponentInChildren<Inventory>();
+		if(_inventory == null)
+			Debug.LogError("Inventory not found!");
 		ReloadSettings();
 		InitUI();
 		_inventory.ArmorSlots = armorSlots;
@@ -243,15 +244,15 @@ public class UIInventory : MonoBehaviour
 		set { titleText.text = value; }
 	}
 
-    #region Bidirectional Sync
+	#region Bidirectional Sync
 
-    /// <summary>
-    /// Synchronizes Hotbar State of Slots Row 1
-    /// </summary>
-    public void SynchronizeToInv()
+	/// <summary>
+	/// Synchronizes Hotbar State of Slots Row 1
+	/// </summary>
+	public void SynchronizeToInv()
 	{
-        foreach (UIInventorySlot sl in _inventory.InvSlots)
-        {
+		foreach (UIInventorySlot sl in _inventory.InvSlots)
+		{
 			if (sl.isHotBarSlot)
 			{
 				///[TODO]
@@ -287,6 +288,6 @@ public class UIInventory : MonoBehaviour
 			}
 		}
 	}
-    #endregion
+	#endregion
 
 }

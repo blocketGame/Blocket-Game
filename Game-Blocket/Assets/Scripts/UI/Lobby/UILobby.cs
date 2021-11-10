@@ -99,13 +99,18 @@ public class UILobby : NetworkBehaviour {
 		//Both
 		foreach(GameObject iGo in GameObject.FindGameObjectsWithTag("Player")) {
 			if(iGo.GetComponent<NetworkObject>()?.IsLocalPlayer ?? false) {
-				GlobalVariables.localPlayer = iGo;
+				GlobalVariables.gameVariables.localPlayer = iGo;
 				iGo.name += "(this)";
 			} else
 				iGo.GetComponent<PlayerVariables>().playerLogic.SetActive(false);
 		}
+		GlobalVariables.gameVariables.globalAssets = GameObject.Find("Assets");
+		PlayerVariables lPV = GlobalVariables.gameVariables.localPlayer.GetComponentInChildren<PlayerVariables>();
 		//Inventory
-
+		GlobalVariables.gameVariables.localUI = Instantiate(GlobalVariables.gameVariables.globalAssets.GetComponent<PrefabAssets>().prefabUI);
+		GlobalVariables.gameVariables.localUI.name = "UI";
+		lPV.uIInventory = GlobalVariables.gameVariables.localUI.GetComponent<UIInventory>();
+		lPV.uIInventory.enabled = true;
 		/*Debug.LogWarning($"Switched");
 		//GameObject.FindGameObjectWithTag("Player")?.SetActive(false);
 		GameObject thisPlayer = null;

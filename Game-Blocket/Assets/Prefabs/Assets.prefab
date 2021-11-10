@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8512227375263116681}
   - component: {fileID: 6245959439507821}
+  - component: {fileID: 1909828132783296647}
   m_Layer: 0
   m_Name: Assets
   m_TagString: Untagged
@@ -47,3 +48,16 @@ MonoBehaviour:
   ToolItemsInGame: []
   EquipableItemsInGame: []
   UseableItemsInGame: []
+--- !u!114 &1909828132783296647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2417270971905375398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 099bed9885470a94786eebc896493957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabUI: {fileID: 7667816536096445537, guid: d75712829b2513f4d8d9ef17a0cfc772, type: 3}
