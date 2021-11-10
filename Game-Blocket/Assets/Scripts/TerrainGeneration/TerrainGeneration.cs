@@ -27,7 +27,7 @@ public class TerrainGeneration : MonoBehaviour {
 
 	public static System.Random prng;
 
-	public void Start() {
+	public void Awake() {
 		ChunksVisibleLastUpdate = new List<TerrainChunk>();
 		PlayerPosition = World.Player.transform;
 		//World.putBlocksIntoTxt();
@@ -35,17 +35,15 @@ public class TerrainGeneration : MonoBehaviour {
 		prng = new System.Random(World.Seed);
 	}
 
+	
 	public void FixedUpdate() {
 		UpdateChunks();
 		foreach(TerrainChunk tc in ChunkCollisionQueue) {
-			if(tc.ChunkTileMapCollider == null)
 				tc.BuildCollisions();
 		}
 		ChunkCollisionQueue.Clear();
-
 	}
 
-	[ServerRpc]
 	public void UpdateChunks() {
 		foreach(TerrainChunk t in ChunksVisibleLastUpdate) {
 			t.SetChunkState(false);
@@ -57,6 +55,7 @@ public class TerrainGeneration : MonoBehaviour {
 	/// <summary>
 	/// Activates and deactivates Chunks
 	/// </summary>
+	[ServerRpc]
 	public void CheckChunksAroundPlayer() {
 		Vector2Int currentChunkCoord = new Vector2Int(Mathf.RoundToInt(PlayerPosition.position.x / World.ChunkWidth), Mathf.RoundToInt(PlayerPosition.position.y / World.ChunkHeight));
 

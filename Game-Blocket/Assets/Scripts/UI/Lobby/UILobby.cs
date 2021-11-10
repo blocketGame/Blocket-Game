@@ -105,10 +105,8 @@ public class UILobby : NetworkBehaviour {
 
 		//Worldgeneration
 		if(NetworkManager.Singleton.IsHost) {
-			/*
 			GlobalVariables.localGameVariables.world = Instantiate(GlobalVariables.localGameVariables.globalAssets.GetComponent<PrefabAssets>().world);
 			GlobalVariables.WorldData.Grid = GlobalVariables.localGameVariables.world.GetComponentInChildren<Grid>();
-			*/
 		}
 
 		/*Debug.LogWarning($"Switched");
