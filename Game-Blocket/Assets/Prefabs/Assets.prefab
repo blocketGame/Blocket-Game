@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8512227375263116681}
   - component: {fileID: 6245959439507821}
   - component: {fileID: 1909828132783296647}
+  - component: {fileID: 7063197990799302964}
   m_Layer: 0
   m_Name: Assets
   m_TagString: Untagged
@@ -61,3 +62,60 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabUI: {fileID: 7667816536096445537, guid: d75712829b2513f4d8d9ef17a0cfc772, type: 3}
+  world: {fileID: 1085889088375208448, guid: 6f8afa7ba4b1ace43a1488e9989f22f5, type: 3}
+--- !u!114 &7063197990799302964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2417270971905375398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e37cca21d59776b4592cdf22f7d5ad04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  biom:
+  - {fileID: 8950956458296952525, guid: 801a88b66aa81fa4a9ac48b421c4222b, type: 3}
+  - {fileID: 3399784574488859336, guid: 61cf1ca9dbb46b14e9d4a1dad1c4b736, type: 3}
+  - {fileID: -3600785353560310458, guid: 8826f84e7c897b64db87dc7643748e5f, type: 3}
+  blocks: []
+  chunkWidth: 32
+  chunkHeight: 32
+  chunkDistance: 2
+  caveSize: 0.6
+  seed: 1337
+  scale: 80
+  octives: 5
+  persistance: 0.5
+  lacurinarity: 2
+  offsetX: 0
+  offsetY: 0
+  heightMultiplier: 20
+  heightcurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  grid: {fileID: 0}
+  groupdistance: 1.5
+  pickUpDistance: 1.5

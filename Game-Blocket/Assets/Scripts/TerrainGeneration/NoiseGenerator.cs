@@ -6,11 +6,11 @@ using UnityEngine;
 public class NoiseGenerator : MonoBehaviour
 {
 	public enum NoiseMode
-    {
+	{
 		Terrain,
 		Cave,
 		Biom
-    }
+	}
 
 	public static System.Random prng;
 
@@ -103,13 +103,13 @@ public class NoiseGenerator : MonoBehaviour
 					Unity.Mathematics.float2 perlinValue = new Unity.Mathematics.float2(0, 0);
 
 					if (noiseMode == NoiseMode.Terrain)
-                    {
+					{
 
 						perlinValue = Unity.Mathematics.noise.snoise(new Vector2(sampleX, sampleY));
 					}
 					else
 					if(noiseMode == NoiseMode.Cave|| noiseMode == NoiseMode.Biom)
-                    {
+					{
 						perlinValue = Unity.Mathematics.noise.cellular(new Unity.Mathematics.float2(sampleX, sampleY));
 					}
 					noiseHeight += perlinValue.x * amplitude;
@@ -124,7 +124,7 @@ public class NoiseGenerator : MonoBehaviour
 	}
 
 	public static float[,] generateBiom(int mapWidth, int mapHeight, int seed, int octaves, float persistance, float lacunarity, Vector2 offset, List<Biom> bioms)
-    {
+	{
 		float[,] biomnoisemaps = new float[mapWidth,mapHeight];
 
 		int offsets = 0;
@@ -156,5 +156,5 @@ public class NoiseGenerator : MonoBehaviour
 			
 		}
 		return biomnoisemaps;
-    }
+	}
 }

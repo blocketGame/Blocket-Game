@@ -79,7 +79,7 @@ public class UIInventory : MonoBehaviour
 		InitHudSlots();
 		//InitPlayerInfo();
 		InitAtHand();
-		itemAssets = GlobalVariables.gameVariables.globalAssets.GetComponent<ItemAssets>();
+		itemAssets = GlobalVariables.localGameVariables.globalAssets.GetComponent<ItemAssets>();
 		if(!itemAssets)
 			Debug.LogException(new NullReferenceException("Item Assets not found!"));
 		/*if(GlobalVariables.itemTest)
@@ -182,7 +182,9 @@ public class UIInventory : MonoBehaviour
 
 	/// <summary>"Reload" at the beginning</summary>
 	public void Awake() {
-		_inventory = GlobalVariables.gameVariables.localPlayer.GetComponentInChildren<Inventory>();
+		GlobalVariables.localGameVariables.localPlayer.GetComponent<PlayerVariables>().uIInventory = this;
+		name = "UI";
+		_inventory = GlobalVariables.localGameVariables.localPlayer.GetComponentInChildren<Inventory>();
 		if(_inventory == null)
 			Debug.LogError("Inventory not found!");
 		ReloadSettings();

@@ -6,5 +6,5 @@ using MLAPI;
 using UnityEngine;
 
 public class PrefabAssets : NetworkBehaviour{ 
-     public GameObject prefabUI;
+     public GameObject prefabUI, world;
 }

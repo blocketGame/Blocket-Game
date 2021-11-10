@@ -1,12 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Security.Cryptography;
+
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class Block_Editing : MonoBehaviour
-{
-	public GameObject player;
+public class BlockInteraction : MonoBehaviour{
 	public Grid grid;
 	public Camera mainCamera;
 	public int selectedBlock;
@@ -15,8 +16,10 @@ public class Block_Editing : MonoBehaviour
 	public float count;
 	public GameObject deleteSprite;
 	public Sprite crackTile;
-	
 
+	private Vector3 PlayerPos { get => GlobalVariables.localGameVariables.localPlayer.transform.position; }
+
+	#region UnityMethods
 	public void Update()
 	{
 		//FABIAN PROBLEM WITH INV MOVE TILES NOT VALUES.
@@ -32,16 +35,16 @@ public class Block_Editing : MonoBehaviour
 			return;
 		if (chunk == null)
 			return;
-		if (chunk.CollidewithDrop(grid.WorldToCell(player.transform.position).x, grid.WorldToCell(player.transform.position).y) != null)
+		if (chunk.CollidewithDrop(grid.WorldToCell(PlayerPos).x, grid.WorldToCell(PlayerPos).y) != null)
 		{
-			Drop collissionDrop = chunk.CollidewithDrop(grid.WorldToCell(player.transform.position).x, grid.WorldToCell(player.transform.position).y);
+			Drop collissionDrop = chunk.CollidewithDrop(grid.WorldToCell(PlayerPos).x, grid.WorldToCell(PlayerPos).y);
 			TakeDrops(inv,itemAssets.BlockItemsInGame[collissionDrop.DropID], collissionDrop.Anzahl);
 			chunk.RemoveDropfromView(collissionDrop);
 		}
 		ChangeCoordinate(mouseWorldPos);
 
 
-		if (world.getBlockbyId(world.GetBlockFormCoordinate(coordinate.x, coordinate.y)).BlockID != 0)
+		if (world.GetBlockbyId(world.GetBlockFormCoordinate(coordinate.x, coordinate.y)).BlockID != 0)
 			SetBlockOnFocus(mouseWorldPos);
 		else { deleteSprite.SetActive(false); }
 
@@ -84,21 +87,35 @@ public class Block_Editing : MonoBehaviour
 			}
 	}
 
-	IEnumerator Count(Vector3 mouseWorldPos)
+	public void FixedUpdate()
+	{
+		world.IgnoreDropCollision();
+		for (int x = 0; x < GlobalVariables.localGameVariables.terrainGeneration.ChunksVisibleLastUpdate.Count; x++)
+			GlobalVariables.localGameVariables.terrainGeneration.ChunksVisibleLastUpdate[x].InsertDrops();
+	}
+
+	#endregion
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="mouseWorldPos"></param>
+	/// <returns></returns>
+	public IEnumerator Count(Vector3 mouseWorldPos)
 	{
 		yield return null;
 		count -= Time.deltaTime * 5;
 		if (!(count > 0))
 			StopCoroutine(Count(mouseWorldPos));
 	}
-	void FixedUpdate()
-	{
-		world.IgnoreDropCollision();
-		for (int x = 0; x < world.Terraingeneration.ChunksVisibleLastUpdate.Count; x++)
-			world.Terraingeneration.ChunksVisibleLastUpdate[x].InsertDrops();
-	}
 
+	
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="inv"></param>
+	/// <param name="blockitem"></param>
+	/// <param name="anzahl"></param>
 	private void TakeDrops(Inventory inv,BlockItem blockitem,int anzahl)
 	{
 		//Player collides with Drop
@@ -107,6 +124,10 @@ public class Block_Editing : MonoBehaviour
 		GameObject.FindGameObjectWithTag("Inventory").GetComponent<UIInventory>().SynchronizeToHotbar();
 	}
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="chunk"></param>
 	private void SetTile(TerrainChunk chunk)
 	{
 		if (selectedBlock == -1)
@@ -121,6 +142,10 @@ public class Block_Editing : MonoBehaviour
 		world.UpdateCollisionsAt(new Vector3Int(coordinate.x, coordinate.y - 1, coordinate.z));
 	}
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="mouseWorldPos"></param>
 	private void SetBlockOnFocus(Vector3 mouseWorldPos)
 	{
 		deleteSprite.SetActive(true);
@@ -128,21 +153,28 @@ public class Block_Editing : MonoBehaviour
 		deleteSprite.GetComponent<SpriteRenderer>().sprite = crackTile;
 	}
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="mouseWorldPos"></param>
 	private void ChangeCoordinate(Vector3 mouseWorldPos)
 	{
 		if (!(coordinate.x.Equals(grid.WorldToCell(mouseWorldPos).x) && coordinate.y.Equals(grid.WorldToCell(mouseWorldPos).y)))
 		{
 			coordinate = grid.WorldToCell(mouseWorldPos);
 			coordinate.z = 0;
-			count = world.getBlockbyId(world.GetBlockFormCoordinate(coordinate.x, coordinate.y)).RemoveDuration;
+			count = world.GetBlockbyId(world.GetBlockFormCoordinate(coordinate.x, coordinate.y)).RemoveDuration;
 		}
 	}
 
+	/// <summary>
+	/// 
+	/// </summary>
 	private void RemoveBlockAfterDuration()
 	{
 		world.GetChunkFromCoordinate(coordinate.x, coordinate.y).DeleteBlock(coordinate);
 		world.GetChunkFromCoordinate(coordinate.x, coordinate.y).BuildCollisions();
-		count = world.getBlockbyId(world.GetBlockFormCoordinate(coordinate.x, coordinate.y)).RemoveDuration;
+		count = world.GetBlockbyId(world.GetBlockFormCoordinate(coordinate.x, coordinate.y)).RemoveDuration;
 	}
 }
  

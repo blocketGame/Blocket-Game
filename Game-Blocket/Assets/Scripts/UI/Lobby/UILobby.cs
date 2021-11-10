@@ -10,6 +10,9 @@ using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 
+/// <summary>
+/// TODO: Cleanup
+/// </summary>
 public class UILobby : NetworkBehaviour {
 	#region UIResources
 	[Header("Static: General")]
@@ -24,12 +27,6 @@ public class UILobby : NetworkBehaviour {
 	public Button startGame, goBackBtn, testBtn;
 	#endregion
 
-	/// <summary>
-	/// Temporary!!<br></br>
-	/// 1 = Host; 2 = Client, 3 = Server;
-	/// </summary>
-	private byte _instaceRole;
-
 	private bool _startSiteOpen;
 	public bool StartSiteOpen {
 		get { return _startSiteOpen; }
@@ -39,7 +36,7 @@ public class UILobby : NetworkBehaviour {
 			lobbySite.SetActive(!value);
 		}
 	}
-
+	
 	public void Awake() {
 		//NetworkManager.Singleton.OnClientConnectedCallback += ClientConnectCallback;
 		SceneManager.sceneLoaded += SceneSwitched;
@@ -48,17 +45,14 @@ public class UILobby : NetworkBehaviour {
 		serverBtn.onClick.AddListener(() => {
 			NetworkManager.Singleton.StartServer();
 			StartSiteOpen = false;
-			_instaceRole = 3;
 		});
 		hostBtn.onClick.AddListener(() => {
 			StartSiteOpen = false;
-			_instaceRole = 1;
 			NetworkManager.Singleton.StartHost(null, null, false, playerNetPrefab.PrefabHash);
 		});
 		clientBtn.onClick.AddListener(() => {
 			StartSiteOpen = false;
 			startGame.gameObject.SetActive(false);
-			_instaceRole = 3;
 			NetworkManager.Singleton.StartClient();
 		});
 
@@ -99,18 +93,21 @@ public class UILobby : NetworkBehaviour {
 		//Both
 		foreach(GameObject iGo in GameObject.FindGameObjectsWithTag("Player")) {
 			if(iGo.GetComponent<NetworkObject>()?.IsLocalPlayer ?? false) {
-				GlobalVariables.gameVariables.localPlayer = iGo;
+				GlobalVariables.localGameVariables.localPlayer = iGo;
 				iGo.name += "(this)";
 			} else
 				iGo.GetComponent<PlayerVariables>().playerLogic.SetActive(false);
 		}
-		GlobalVariables.gameVariables.globalAssets = GameObject.Find("Assets");
-		PlayerVariables lPV = GlobalVariables.gameVariables.localPlayer.GetComponentInChildren<PlayerVariables>();
+		GlobalVariables.localGameVariables.globalAssets = GameObject.Find("Assets");
 		//Inventory
-		GlobalVariables.gameVariables.localUI = Instantiate(GlobalVariables.gameVariables.globalAssets.GetComponent<PrefabAssets>().prefabUI);
-		GlobalVariables.gameVariables.localUI.name = "UI";
-		lPV.uIInventory = GlobalVariables.gameVariables.localUI.GetComponent<UIInventory>();
-		lPV.uIInventory.enabled = true;
+		GlobalVariables.localGameVariables.localUI = Instantiate(GlobalVariables.localGameVariables.globalAssets.GetComponent<PrefabAssets>().prefabUI);
+
+		//Worldgeneration
+		if(NetworkManager.Singleton.IsHost) {
+			GlobalVariables.localGameVariables.world = Instantiate(GlobalVariables.localGameVariables.globalAssets.GetComponent<PrefabAssets>().world);
+			GlobalVariables.WorldData.Grid = GlobalVariables.localGameVariables.world.GetComponentInChildren<Grid>();
+		}
+
 		/*Debug.LogWarning($"Switched");
 		//GameObject.FindGameObjectWithTag("Player")?.SetActive(false);
 		GameObject thisPlayer = null;
