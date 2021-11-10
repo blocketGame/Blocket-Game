@@ -79,7 +79,7 @@ public class UIInventory : MonoBehaviour
 		InitHudSlots();
 		//InitPlayerInfo();
 		InitAtHand();
-		itemAssets = GlobalVariables.localGameVariables.globalAssets.GetComponent<ItemAssets>();
+		itemAssets = GlobalVariables.GlobalAssets.GetComponent<ItemAssets>();
 		if(!itemAssets)
 			Debug.LogException(new NullReferenceException("Item Assets not found!"));
 		/*if(GlobalVariables.itemTest)
@@ -180,11 +180,12 @@ public class UIInventory : MonoBehaviour
 	}
 	#endregion
 
+	#region UnityMethods
 	/// <summary>"Reload" at the beginning</summary>
 	public void Awake() {
-		GlobalVariables.localGameVariables.localPlayer.GetComponent<PlayerVariables>().uIInventory = this;
+		GlobalVariables.PlayerVariables.uIInventory = this;
 		name = "UI";
-		_inventory = GlobalVariables.localGameVariables.localPlayer.GetComponentInChildren<Inventory>();
+		_inventory = GlobalVariables.Inventory;
 		if(_inventory == null)
 			Debug.LogError("Inventory not found!");
 		ReloadSettings();
@@ -208,6 +209,7 @@ public class UIInventory : MonoBehaviour
 				
 			}
 	}
+	#endregion
 
 	/// <summary>Reloads all UI Settings</summary>
 	public void ReloadSettings() {

@@ -22,24 +22,22 @@ public class TerrainGeneration : MonoBehaviour {
 	public WorldData World { get => GlobalVariables.WorldData; }
 	public List<TerrainChunk> ChunksVisibleLastUpdate { get => chunksVisibleLastUpdate; set => chunksVisibleLastUpdate = value; }
 	public GameObject ChunkParent { get => chunkParent; set => chunkParent = value; }
-	public Transform PlayerPosition { get => playerPosition; set => playerPosition = value; }
 	public Queue<TerrainChunk> ChunkCollisionQueue { get => chunkCollisionQueue; set => chunkCollisionQueue = value; }
 
 	public static System.Random prng;
 
 	public void Awake() {
 		ChunksVisibleLastUpdate = new List<TerrainChunk>();
-		PlayerPosition = World.Player.transform;
 		//World.putBlocksIntoTxt();
 		//World.putBiomsIntoTxt();
 		prng = new System.Random(World.Seed);
 	}
 
-	
+
 	public void FixedUpdate() {
 		UpdateChunks();
 		foreach(TerrainChunk tc in ChunkCollisionQueue) {
-				tc.BuildCollisions();
+			tc.BuildCollisions();
 		}
 		ChunkCollisionQueue.Clear();
 	}
@@ -49,15 +47,15 @@ public class TerrainGeneration : MonoBehaviour {
 			t.SetChunkState(false);
 		}
 		ChunksVisibleLastUpdate.Clear();
-		CheckChunksAroundPlayer();
+		CheckChunksAroundPlayer(GlobalVariables.PlayerPos);
 	}
 
 	/// <summary>
 	/// Activates and deactivates Chunks
 	/// </summary>
 	[ServerRpc]
-	public void CheckChunksAroundPlayer() {
-		Vector2Int currentChunkCoord = new Vector2Int(Mathf.RoundToInt(PlayerPosition.position.x / World.ChunkWidth), Mathf.RoundToInt(PlayerPosition.position.y / World.ChunkHeight));
+	public void CheckChunksAroundPlayer(Vector3 playerPos) {
+		Vector2Int currentChunkCoord = new Vector2Int(Mathf.RoundToInt(playerPos.x / World.ChunkWidth), Mathf.RoundToInt(playerPos.y / World.ChunkHeight));
 
 		for(int xOffset = -World.ChunkDistance; xOffset < World.ChunkDistance; xOffset++) {
 			for(int yOffset = -World.ChunkDistance; yOffset < World.ChunkDistance; yOffset++) {
@@ -80,6 +78,7 @@ public class TerrainGeneration : MonoBehaviour {
 	/// <summary>
 	///     Generates Chunk From Noisemap without any extra consideration
 	/// </summary>
+	[ServerRpc]
 	private void BuildChunk(Vector2Int position) {
 		TerrainChunk chunk = new TerrainChunk(position, World, ChunkParent, null);
 		List<Biom> bioms;

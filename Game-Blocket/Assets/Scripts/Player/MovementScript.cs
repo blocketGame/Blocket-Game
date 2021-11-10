@@ -6,6 +6,9 @@ using MLAPI.Prototyping;
 
 using UnityEngine;
 
+/// <summary>
+/// Trash
+/// </summary>
 public class MovementScript : NetworkBehaviour
 {
 	public float MovementSpeed = 6f;
@@ -14,7 +17,7 @@ public class MovementScript : NetworkBehaviour
 
 	private bool jump = false;
 
-	public Rigidbody2D rigidbody;
+	public new Rigidbody2D rigidbody;
 
 	public NetworkTransform netTransform;
 

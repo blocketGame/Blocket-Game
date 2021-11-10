@@ -72,7 +72,6 @@ public class WorldData : MonoBehaviour
 		get => biom; set => biom = value;
 	}
 	public NetworkDictionary<Vector2Int, TerrainChunk> Chunks { get => chunks; set => chunks = value; }
-	public GameObject Player { get => GlobalVariables.localGameVariables.localPlayer;}
 
 	public Grid Grid { get => grid; set => grid = value; }
 	public float Groupdistance { get => groupdistance; set => groupdistance = value; }
@@ -84,7 +83,7 @@ public class WorldData : MonoBehaviour
 	/// Stores this class to <see cref="GlobalVariables"/>
 	/// </summary>
 	public void Awake() {
-		GlobalVariables.localGameVariables.worldData = this;
+		GlobalVariables.WorldData = this;
 	}
 
 	/// <summary>

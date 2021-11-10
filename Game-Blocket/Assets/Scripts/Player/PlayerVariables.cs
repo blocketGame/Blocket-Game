@@ -7,7 +7,7 @@ public class PlayerVariables : MonoBehaviour
 {
 	#region Static Resources
 	public UIInventory uIInventory;
-	public HealthScript healthScript;
+	public UIHealthScript healthScript;
 	public GameObject playerModel, playerLogic;
 	#endregion
 
