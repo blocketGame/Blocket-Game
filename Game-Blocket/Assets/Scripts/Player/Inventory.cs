@@ -40,7 +40,7 @@ public class Inventory : MonoBehaviour{
 	}
 
 	public void Update() {
-		if(atHand.Item != null)
+		if(atHand?.Item != null)
 			atHand.transform.position = atHandVector + new Vector2(Input.mousePosition.x, Input.mousePosition.y);
 	}
 

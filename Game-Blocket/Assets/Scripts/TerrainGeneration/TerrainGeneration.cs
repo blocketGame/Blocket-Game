@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Unity.Mathematics;
+using MLAPI.Messaging;
 
 /*
  * @Author : Cse19455 / Thomas Boigner
  */
-public class Terrain_Generation : MonoBehaviour {
+public class TerrainGeneration : MonoBehaviour {
 	[SerializeField]
 	private List<TerrainChunk> chunksVisibleLastUpdate;
 	[SerializeField]
@@ -44,6 +45,7 @@ public class Terrain_Generation : MonoBehaviour {
 
 	}
 
+	[ServerRpc]
 	public void UpdateChunks() {
 		foreach(TerrainChunk t in ChunksVisibleLastUpdate) {
 			t.SetChunkState(false);

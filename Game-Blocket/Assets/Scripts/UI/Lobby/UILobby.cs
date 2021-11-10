@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 
 using MLAPI;
@@ -86,7 +87,7 @@ public class UILobby : NetworkBehaviour {
 		//Only Host
 		if(NetworkManager.Singleton.IsHost)
 			foreach(ulong clientNow in NetworkManager.Singleton.ConnectedClients.Keys) {
-				GameObject go = Instantiate(playerNetPrefab.gameObject, new Vector3Int(0, 100, 0), Quaternion.identity);
+				GameObject go = Instantiate(playerNetPrefab.gameObject, new Vector3Int(new System.Random().Next(-20, 20), 100, 0), Quaternion.identity);
 				go.name = $"Player: {clientNow}";
 				go.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientNow);
 			}
@@ -104,8 +105,10 @@ public class UILobby : NetworkBehaviour {
 
 		//Worldgeneration
 		if(NetworkManager.Singleton.IsHost) {
+			/*
 			GlobalVariables.localGameVariables.world = Instantiate(GlobalVariables.localGameVariables.globalAssets.GetComponent<PrefabAssets>().world);
 			GlobalVariables.WorldData.Grid = GlobalVariables.localGameVariables.world.GetComponentInChildren<Grid>();
+			*/
 		}
 
 		/*Debug.LogWarning($"Switched");
