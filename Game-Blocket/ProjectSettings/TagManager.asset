@@ -3,17 +3,22 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Assets
+  - Minimap
+  - SlotOptions
+  - Hotbar
+  - Inventory
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Player
+  - Terrain
   - Water
   - UI
-  - Terrain
-  - Drops
   - Collision
+  - Player
+  - Drops
   - 
   - 
   - 
