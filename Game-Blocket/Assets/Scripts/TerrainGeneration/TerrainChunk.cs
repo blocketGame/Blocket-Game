@@ -12,6 +12,8 @@ public class TerrainChunk
     [SerializeField]
     private Vector2Int chunkPosition;
     [SerializeField]
+    private Vector3 chunkPositionWorldSpace;
+    [SerializeField]
     private byte[,] blockIDs;
     [SerializeField]
     private GameObject chunkObject;
@@ -20,6 +22,7 @@ public class TerrainChunk
 
     public WorldData World { get => world; set => world = value; }
     public Vector2Int ChunkPosition { get => chunkPosition; set => chunkPosition = value; }
+    public Vector3 ChunkPositionWorldSpace { get => chunkPositionWorldSpace; set => chunkPositionWorldSpace = value; }
     public byte[,] BlockIDs { get => blockIDs; set => blockIDs = value; }
     public GameObject ChunkObject { get => chunkObject; set => chunkObject = value; }
     public GameObject CollisionObject { get => collisionObject; set => collisionObject = value; }
@@ -66,6 +69,7 @@ public class TerrainChunk
     {
         this.ChunkPosition = chunkPosition;
         this.World = world;
+        this.chunkPositionWorldSpace = new Vector3(chunkPosition.x * world.ChunkWidth, chunkPosition.y * world.ChunkHeight);
         this.BlockIDs = new byte[world.ChunkWidth, world.ChunkHeight];
         this.blockIDsBG = new byte[world.ChunkWidth, world.ChunkHeight];
         this.drops = new List<Drop>();

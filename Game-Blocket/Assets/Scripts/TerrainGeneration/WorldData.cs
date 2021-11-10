@@ -178,14 +178,6 @@ public class WorldData : MonoBehaviour
     }
     **/
 
-    //Method at wrong PLACE
-    public void IgnoreDropCollision()
-    {
-        foreach (TerrainChunk t in terraingeneration.ChunksVisibleLastUpdate)
-            foreach (Drop d in t.Drops)
-                Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Drops"), LayerMask.NameToLayer("Player"));
-    }
-
     /// <summary>
     /// Creates Blocks.txt file as documentation for the blocks array
     /// </summary>
