@@ -111,8 +111,20 @@ public class TerrainGeneration : MonoBehaviour
             bioms = world.getBiomsByType(Biomtype.OVERWORLD);
         else
             bioms = world.getBiomsByType(Biomtype.UNDERGROUND);
+        
+        float[] noisemap;
+        if (world.Noisemaps.ContainsKey(position.x))
+        {
+            noisemap = world.Noisemaps[position.x];
+        }
+        else
+        {
+            noisemap = NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position.x * World.ChunkWidth);
+            world.Noisemaps.Add(position.x, noisemap);
+        }
+
         chunk.GenerateChunk(
-              NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position.x * World.ChunkWidth),
+              noisemap,
               NoiseGenerator.GenerateNoiseMap2D(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.y * World.ChunkHeight), NoiseGenerator.NoiseMode.Cave),
               NoiseGenerator.GenerateBiom(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.y * World.ChunkHeight), bioms));
         World.Chunks[position] = chunk;

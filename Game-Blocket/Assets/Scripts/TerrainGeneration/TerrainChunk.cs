@@ -156,36 +156,6 @@ public class TerrainChunk
                 }
             }
         }
-        //PlaceTiles(biomindex,true);
-    }
-
-    /// <summary>
-    /// places the tiles in the Tilemap according to the blockIDs array
-    /// </summary>
-    /// <param name="biomindex">Index of the biom of the chunk</param>b
-    public void PlaceTiles(float[,] biomNoiseMap, bool init)
-    {
-        for (int x = 0; x < World.ChunkWidth; x++)
-        {
-            int heightvalue = 0;
-            int blockIDpos = World.Biom[(int)biomNoiseMap[x, 0]].Regions.Length - 1;
-            for (int y = World.ChunkHeight - 1; y >= 0; y--)
-            {
-                if (BlockIDs[x, y] != 0)
-                {
-                    if (heightvalue == World.Biom[(int)biomNoiseMap[x, y]].Regions[blockIDpos].RegionRange)
-                    {
-                        blockIDpos--;
-                        heightvalue = 0;
-                    }
-                    else
-                        heightvalue++;
-                    PlaceTile(x, y, World.Blocks[BlockIDs[x, y]].Tile);
-                    if (init)
-                        PlaceTileInBG(x, y, World.Blocks[BlockIDsBG[x, y]].Tile);
-                }
-            }
-        }
     }
 
     /// <summary>
