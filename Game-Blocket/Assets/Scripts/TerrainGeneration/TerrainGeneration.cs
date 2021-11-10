@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Unity.Mathematics;
+using MLAPI.Messaging;
 
 /*
  * @Author : Cse19455 / Thomas Boigner
  */
-public class Terrain_Generation : MonoBehaviour {
+public class TerrainGeneration : MonoBehaviour {
 	[SerializeField]
 	private List<TerrainChunk> chunksVisibleLastUpdate;
 	[SerializeField]
@@ -26,7 +27,7 @@ public class Terrain_Generation : MonoBehaviour {
 
 	public static System.Random prng;
 
-	public void Start() {
+	public void Awake() {
 		ChunksVisibleLastUpdate = new List<TerrainChunk>();
 		PlayerPosition = World.Player.transform;
 		//World.putBlocksIntoTxt();
@@ -34,14 +35,13 @@ public class Terrain_Generation : MonoBehaviour {
 		prng = new System.Random(World.Seed);
 	}
 
+	
 	public void FixedUpdate() {
 		UpdateChunks();
 		foreach(TerrainChunk tc in ChunkCollisionQueue) {
-			if(tc.ChunkTileMapCollider == null)
 				tc.BuildCollisions();
 		}
 		ChunkCollisionQueue.Clear();
-
 	}
 
 	public void UpdateChunks() {
@@ -55,6 +55,7 @@ public class Terrain_Generation : MonoBehaviour {
 	/// <summary>
 	/// Activates and deactivates Chunks
 	/// </summary>
+	[ServerRpc]
 	public void CheckChunksAroundPlayer() {
 		Vector2Int currentChunkCoord = new Vector2Int(Mathf.RoundToInt(PlayerPosition.position.x / World.ChunkWidth), Mathf.RoundToInt(PlayerPosition.position.y / World.ChunkHeight));
 
