@@ -61,9 +61,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 099bed9885470a94786eebc896493957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNetPrefab: {fileID: 1837902447072794163, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
   prefabUI: {fileID: 7667816536096445537, guid: d75712829b2513f4d8d9ef17a0cfc772, type: 3}
   world: {fileID: 1085889088375208448, guid: 6f8afa7ba4b1ace43a1488e9989f22f5, type: 3}
+  playerNetPrefab: {fileID: 0}
 --- !u!114 &7063197990799302964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,7 +77,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   biom:
-  - {fileID: 11400000, guid: f0b53bfc85437704dbdc5cae80db52b8, type: 2}
+  - {fileID: 11400000, guid: 29b0f6e63e160294face5a7539aa68dc, type: 2}
   blocks:
   - _name: air
     _blockID: 0
@@ -129,32 +129,32 @@ MonoBehaviour:
     item: 0
   - _name: Dirt-Bg
     _blockID: 8
-    _tile: {fileID: 0}
-    sprite: {fileID: 0}
+    _tile: {fileID: 11400000, guid: 30439b9c5e3b02142848ef927c278843, type: 2}
+    sprite: {fileID: 21300000, guid: 5dc8ef344183da742997bb29906167eb, type: 3}
     removeDuration: 0
     item: 0
   - _name: Dirt-Bg-Top
     _blockID: 9
-    _tile: {fileID: 0}
-    sprite: {fileID: 0}
+    _tile: {fileID: 11400000, guid: 7aa42f6081c4f8a498d228fa119ea557, type: 2}
+    sprite: {fileID: 21300000, guid: 7e72734c7ac4df0438e0d88fd1cfb300, type: 3}
     removeDuration: 0
     item: 0
   - _name: Bernstein
     _blockID: 10
-    _tile: {fileID: 0}
-    sprite: {fileID: 0}
+    _tile: {fileID: 11400000, guid: 368f8ab243ec2b24bb4dd5751cbf20f6, type: 2}
+    sprite: {fileID: 21300000, guid: c6227dfc5fd0b2f4ab08693651ea8d63, type: 3}
     removeDuration: 8
     item: 3
   - _name: Opal
     _blockID: 11
-    _tile: {fileID: 0}
-    sprite: {fileID: 0}
+    _tile: {fileID: 11400000, guid: 69dd537b464e3f142b42eca477a96bc2, type: 2}
+    sprite: {fileID: 21300000, guid: 2a31ed6a0c6c699469ff35baeac39405, type: 3}
     removeDuration: 8
     item: 2
   - _name: Stone
     _blockID: 12
-    _tile: {fileID: 0}
-    sprite: {fileID: 0}
+    _tile: {fileID: 11400000, guid: 4cd28115759dee2499f06013f9211b55, type: 2}
+    sprite: {fileID: 21300000, guid: 74bbea64cb1802a43967b7af1eb4dd03, type: 3}
     removeDuration: 7
     item: 4
   - _name: Sand Background

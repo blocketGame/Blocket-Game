@@ -53,7 +53,6 @@ public class TerrainGeneration : MonoBehaviour {
 	/// <summary>
 	/// Activates and deactivates Chunks
 	/// </summary>
-	[ServerRpc]
 	public void CheckChunksAroundPlayer(Vector3 playerPos) {
 		Vector2Int currentChunkCoord = new Vector2Int(Mathf.RoundToInt(playerPos.x / World.ChunkWidth), Mathf.RoundToInt(playerPos.y / World.ChunkHeight));
 
