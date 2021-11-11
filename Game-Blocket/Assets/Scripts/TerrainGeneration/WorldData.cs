@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
 
+using MLAPI;
+using MLAPI.NetworkVariable;
 using MLAPI.NetworkVariable.Collections;
 
 using UnityEngine;
@@ -9,10 +11,11 @@ using UnityEngine.Tilemaps;
 /// <summary>
 /// <b>Author : Cse19455 / Thomas Boigner</b>
 /// </summary>
-public class WorldData : MonoBehaviour
+public class WorldData : NetworkBehaviour
 {
 	#region Fields
-	private NetworkDictionary<Vector2Int, TerrainChunk> chunks = new NetworkDictionary<Vector2Int, TerrainChunk>();
+	private NetworkDictionary<Vector2Int, TerrainChunk> chunks = new NetworkDictionary<Vector2Int, TerrainChunk>(new NetworkVariableSettings
+	{ WritePermission = NetworkVariablePermission.OwnerOnly, ReadPermission = NetworkVariablePermission.Everyone });
 	[SerializeField]
 	private Biom[] biom;
 	[SerializeField]
@@ -77,12 +80,17 @@ public class WorldData : MonoBehaviour
 	public float Groupdistance { get => groupdistance; set => groupdistance = value; }
 	public float PickUpDistance { get => pickUpDistance; set => pickUpDistance = value; }
 
-	#endregion
+    #endregion
 
-	/// <summary>
-	/// Stores this class to <see cref="GlobalVariables"/>
-	/// </summary>
-	public void Awake() {
+    public void Update()
+    {
+		Debug.Log(chunks.Count);
+    }
+
+    /// <summary>
+    /// Stores this class to <see cref="GlobalVariables"/>
+    /// </summary>
+    public void Awake() {
 		GlobalVariables.WorldData = this;
 	}
 

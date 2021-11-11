@@ -13,8 +13,13 @@ public static class GlobalVariables {
 
 	public static readonly ushort maxItemCountForMultiple = 128;
 
-	#region Debug Variables
-	public static readonly bool itemSlotButtonPressedLog = true;
+	#region Multiplayer
+	public static string ipAddress = UILobby.GetLocalIPAddress();
+	public static int portAddress = 7777;
+    #endregion
+
+    #region Debug Variables
+    public static readonly bool itemSlotButtonPressedLog = true;
 	public static readonly bool itemTest = true;
 	#endregion
 

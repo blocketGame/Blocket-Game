@@ -4,6 +4,7 @@ using UnityEngine;
 
 using MLAPI;
 using UnityEngine.SceneManagement;
+using MLAPI.Transports.UNET;
 
 /// <summary>
 /// Used for importend Gameengineparts<br></br>
@@ -13,10 +14,12 @@ public class GameManager : MonoBehaviour
 {
 	public GameObject playerPrefab;
 	/// <summary>Is true if the MainGame is online</summary>
-	public static bool gameRunning = false;
+	public static bool gameRunning;
 	/// <summary>Not used!</summary>
-	public static bool isMultiplayer = false;
+	public static bool isMultiplayer = true;
 
+
+	public UNetTransport uNetTransport;
 	//TODO: Coroutines, Ticks....
 
 	/// <summary>Sets this class into the <see cref="GlobalVariables"/></summary>
@@ -83,7 +86,7 @@ public class GameManager : MonoBehaviour
 			SpawnPlayers();
 		//Both
 		InitPlayerComponents();
-		
+		gameRunning = true;
 		/** Old Code
 			Debug.LogWarning($"Switched");
 			//GameObject.FindGameObjectWithTag("Player")?.SetActive(false);

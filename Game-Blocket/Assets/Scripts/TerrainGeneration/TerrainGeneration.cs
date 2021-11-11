@@ -60,6 +60,7 @@ public class TerrainGeneration : MonoBehaviour {
 			for(int yOffset = -World.ChunkDistance; yOffset < World.ChunkDistance; yOffset++) {
 				Vector2Int viewedChunkCoord = new Vector2Int(currentChunkCoord.x + xOffset, currentChunkCoord.y + yOffset);
 				if(!World.Chunks.ContainsKey(viewedChunkCoord)) {
+					//Request Chunk
 					BuildChunk(viewedChunkCoord);
 				} else if(World.Chunks.ContainsKey(viewedChunkCoord)) {
 					World.Chunks[viewedChunkCoord].SetChunkState(true);

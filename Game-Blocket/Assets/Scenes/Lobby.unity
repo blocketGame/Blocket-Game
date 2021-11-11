@@ -808,7 +808,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 0.0.0.0
+  m_Text: 127.0.0.1
 --- !u!222 &408872123
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1148,6 +1148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 2794137725677328093, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
+  uNetTransport: {fileID: 676633705}
 --- !u!1 &710441508
 GameObject:
   m_ObjectHideFlags: 0
@@ -1422,11 +1423,12 @@ MonoBehaviour:
   playPrefab: {fileID: 1837902447072794163, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
   startSite: {fileID: 2089823948}
   lobbySite: {fileID: 745830042}
+  uNetTransport: {fileID: 0}
   serverBtn: {fileID: 1955867328}
   hostBtn: {fileID: 1925836633}
   clientBtn: {fileID: 2127037543}
-  ipInput: {fileID: 0}
-  portInput: {fileID: 0}
+  ipInput: {fileID: 1839825615}
+  portInput: {fileID: 181186061}
   startGame: {fileID: 2027255661}
   goBackBtn: {fileID: 1063804233}
   testBtn: {fileID: 137548646}
@@ -1975,7 +1977,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '10000-64000
+  m_Text: '7777
 
 '
 --- !u!222 &826601518
@@ -2761,7 +2763,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 190, y: 0}
+  m_AnchoredPosition: {x: 0, y: -50}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1762473608
