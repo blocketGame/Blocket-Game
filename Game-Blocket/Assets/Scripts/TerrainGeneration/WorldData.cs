@@ -15,7 +15,6 @@ public class WorldData : MonoBehaviour
     [SerializeField]
     private TerrainGeneration terraingeneration;
     private Dictionary<Vector2Int, TerrainChunk> chunks = new Dictionary<Vector2Int, TerrainChunk>();
-    private Dictionary<int, float[]> noisemaps = new Dictionary<int, float[]>();
     [SerializeField]
     private Biom[] biom;
     [SerializeField]
@@ -76,7 +75,6 @@ public class WorldData : MonoBehaviour
         get => biom; set => biom = value;
     }
     public Dictionary<Vector2Int, TerrainChunk> Chunks { get => chunks; set => chunks = value; }
-    public Dictionary<int, float[]> Noisemaps { get => noisemaps; set => noisemaps = value; }
     public TerrainGeneration Terraingeneration { get => terraingeneration; set => terraingeneration = value; }
     public GameObject Player { get => player; set => player = value; }
 
@@ -159,13 +157,6 @@ public class WorldData : MonoBehaviour
         return Blocks[0];
     }
 
-    //Method at wrong PLACE
-    public void IgnoreDropCollision()
-    {
-        foreach (TerrainChunk t in terraingeneration.ChunksVisibleLastUpdate)
-            foreach (Drop d in t.Drops)
-                    Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Drops"),LayerMask.NameToLayer("Player"));
-    } 
     /**
     public bool getBlocksFromTxt()
     {
@@ -179,6 +170,14 @@ public class WorldData : MonoBehaviour
         return false;
     }
     **/
+
+    //Method at wrong PLACE
+    public void IgnoreDropCollision()
+    {
+        foreach (TerrainChunk t in terraingeneration.ChunksVisibleLastUpdate)
+            foreach (Drop d in t.Drops)
+                Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Drops"), LayerMask.NameToLayer("Player"));
+    }
 
     /// <summary>
     /// Creates Blocks.txt file as documentation for the blocks array

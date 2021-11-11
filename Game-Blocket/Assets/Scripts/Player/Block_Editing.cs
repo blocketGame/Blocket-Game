@@ -77,7 +77,7 @@ public class Block_Editing : MonoBehaviour
 			!(Input.mousePosition.y - 429 < 55 && Input.mousePosition.y - 429 > -5 && Input.mousePosition.x - 959 > -40 && Input.mousePosition.x - 959 < 40))
 			{
 			///[TODO]
-				// ItemAssets assets = GameObject.FindGameObjectWithTag("Assets").GetComponent<ItemAssets>(); throws an nullReferenceException (Thomas)
+				ItemAssets assets = GameObject.FindGameObjectWithTag("Assets").GetComponent<ItemAssets>();
 			//for (int x = 0; x < assets.BlockItemsInGame.Count; x++)
 			//    selectedBlock = (byte)assets.BlockItemsInGame[x].blockId;
 				SetTile(chunk);

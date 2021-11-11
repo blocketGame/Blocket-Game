@@ -123,27 +123,37 @@ public class NoiseGenerator : MonoBehaviour
 		return noiseMap;
 	}
 
-	public static float[,] GenerateBiom(int mapWidth, int mapHeight, int seed, int octaves, float persistance, float lacunarity, Vector2 offset, List<Biom> bioms)
+	public static float[,] generateBiom(int mapWidth, int mapHeight, int seed, int octaves, float persistance, float lacunarity, Vector2 offset, List<Biom> bioms)
     {
 		float[,] biomnoisemaps = new float[mapWidth,mapHeight];
 
 		int offsets = 0;
+		for (int y = 0; y < mapHeight; y++)
+		{
+			for (int x = 0; x < mapWidth; x++)
+			{
+				biomnoisemaps[x, y] = 0;
+			}
+		}
+
 		foreach (Biom b in bioms)
 		{
-			float[,] biomn = GenerateNoiseMap2D(mapWidth, mapHeight, (seed+offsets), b.Size, octaves, persistance , lacunarity , offset, NoiseMode.Biom);
 
-			//if (b.Index == 0)
-			offsets += 10000;
-			for (int y = 0; y < mapHeight; y++)
-			{
-				for (int x = 0; x < mapWidth; x++)
+			float[,] biomn = GenerateNoiseMap2D(mapWidth, mapHeight, (seed+offsets), b.Size, octaves, persistance , lacunarity , offset, NoiseMode.Biom) ;
+
+				//if (b.Index == 0)
+				offsets += 10000;
+				for (int y = 0; y < mapHeight; y++)
 				{
-					if (biomn[x, y] >= (0.9f) && (b.Index != 0))
+					for (int x = 0; x < mapWidth; x++)
 					{
-						biomnoisemaps[x, y] = b.Index;
+						if (biomn[x, y] >= (0.9f) && (b.Index != 0))
+						{
+							biomnoisemaps[x, y] = b.Index;
+						}
 					}
 				}
-			}
+			
 		}
 		return biomnoisemaps;
     }
