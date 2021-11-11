@@ -51,19 +51,19 @@ public static class GlobalVariables {
 
 	#region LocalPlayer
 	public static Inventory Inventory { get => _inventory; }
-	private static Inventory _inventory;
-	public static PlayerVariables PlayerVariables { get => _playerVariables; }
+	private static Inventory _inventory; public static PlayerVariables PlayerVariables { get => _playerVariables; }
 	private static PlayerVariables _playerVariables;
-	public static Vector3 PlayerPos { get => _playerPos; }
-	private static Vector3 _playerPos;
+	public static Vector3 PlayerPos { get => LocalPlayer.transform.position; }
 
-	public static GameObject LocalPlayer { get => _localPlayer; set {
+	public static GameObject LocalPlayer
+	{
+		get => _localPlayer; set
+		{
 			_localPlayer = value;
 			_playerVariables = value.GetComponent<PlayerVariables>();
 			_inventory = value.GetComponentInChildren<Inventory>();
-			_playerPos = value.transform.position;
 		}
-	}	
+	}
 	private static GameObject _localPlayer;
 	#endregion
 	#endregion

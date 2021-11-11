@@ -9,19 +9,20 @@ using MLAPI.Messaging;
  * @Author : Cse19455 / Thomas Boigner
  */
 public class TerrainGeneration : MonoBehaviour {
-	[SerializeField]
+
+    #region Serialization
+    [SerializeField]
 	private List<TerrainChunk> chunksVisibleLastUpdate;
 	[SerializeField]
 	private GameObject chunkParent;
 
-	private Transform playerPosition;
-	private Queue<TerrainChunk> chunkCollisionQueue = new Queue<TerrainChunk>();
-
-	//------------------------------------------------------- Properties ------------------------------------------------------------------
-
-	public WorldData World { get => GlobalVariables.WorldData; }
 	public List<TerrainChunk> ChunksVisibleLastUpdate { get => chunksVisibleLastUpdate; set => chunksVisibleLastUpdate = value; }
 	public GameObject ChunkParent { get => chunkParent; set => chunkParent = value; }
+	#endregion
+
+	private Queue<TerrainChunk> chunkCollisionQueue = new Queue<TerrainChunk>();
+
+	public WorldData World { get => GlobalVariables.WorldData; }
 	public Queue<TerrainChunk> ChunkCollisionQueue { get => chunkCollisionQueue; set => chunkCollisionQueue = value; }
 
 	public static System.Random prng;
@@ -32,7 +33,6 @@ public class TerrainGeneration : MonoBehaviour {
 		//World.putBiomsIntoTxt();
 		prng = new System.Random(World.Seed);
 	}
-
 
 	public void FixedUpdate() {
 		UpdateChunks();
