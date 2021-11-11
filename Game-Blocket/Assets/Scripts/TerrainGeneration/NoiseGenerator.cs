@@ -7,8 +7,9 @@ public class NoiseGenerator : MonoBehaviour
 {
 	public enum NoiseMode
     {
-		snoise,
-		cellular
+		Terrain,
+		Cave,
+		Biom
     }
 
 	public static System.Random prng;
@@ -101,12 +102,13 @@ public class NoiseGenerator : MonoBehaviour
 					float sampleY = (y - halfHeight + octaveOffsets[i].y) / scale * frequency;
 					Unity.Mathematics.float2 perlinValue = new Unity.Mathematics.float2(0, 0);
 
-					if (noiseMode == NoiseMode.snoise)
+					if (noiseMode == NoiseMode.Terrain)
                     {
+
 						perlinValue = Unity.Mathematics.noise.snoise(new Vector2(sampleX, sampleY));
 					}
 					else
-					if(noiseMode == NoiseMode.cellular)
+					if(noiseMode == NoiseMode.Cave|| noiseMode == NoiseMode.Biom)
                     {
 						perlinValue = Unity.Mathematics.noise.cellular(new Unity.Mathematics.float2(sampleX, sampleY));
 					}
@@ -121,58 +123,38 @@ public class NoiseGenerator : MonoBehaviour
 		return noiseMap;
 	}
 
-	public static int[,] GenerateBiom(int mapWidth, int mapHeight, int seed, int octaves, float persistance, float lacunarity, Vector2 offset, List<Biom> bioms)
+	public static float[,] generateBiom(int mapWidth, int mapHeight, int seed, int octaves, float persistance, float lacunarity, Vector2 offset, List<Biom> bioms)
     {
-		int[,] biomnoisemaps = new int[mapWidth,mapHeight];
+		float[,] biomnoisemaps = new float[mapWidth,mapHeight];
 
 		int offsets = 0;
-		foreach (Biom biom in bioms)
+		for (int y = 0; y < mapHeight; y++)
 		{
-			float[,] biomn = GenerateNoiseMap2D(mapWidth, mapHeight, (seed+offsets), biom.Size, octaves, persistance , lacunarity , offset, NoiseMode.cellular);
-
-			offsets += 10000;
-			for (int y = 0; y < mapHeight; y++)
+			for (int x = 0; x < mapWidth; x++)
 			{
-				for (int x = 0; x < mapWidth; x++)
-				{
-					if (biomn[x, y] >= (0.9f) && (biom.Index != 0))
-					{
-						biomnoisemaps[x, y] = biom.Index;
-					}
-				}
+				biomnoisemaps[x, y] = 0;
 			}
 		}
-		return biomnoisemaps;
-    }
 
-	public static byte[,] GenerateOreNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset, NoiseMode noiseMode, List<Biom> bioms)
-	{
-		byte[,] oreNoiseMap = new byte[mapWidth, mapHeight];
-
-		int offsets = 0;
-		foreach (Biom biom in bioms)
+		foreach (Biom b in bioms)
 		{
-            foreach (OreData ore in biom.Ores)
-            {
-				float[,] orenoise = GenerateNoiseMap2D(mapWidth, mapHeight, (seed + offsets), scale, octaves, persistance, lacunarity, offset, noiseMode);
 
+			float[,] biomn = GenerateNoiseMap2D(mapWidth, mapHeight, (seed+offsets), b.Size, octaves, persistance , lacunarity , offset, NoiseMode.Biom) ;
+
+				//if (b.Index == 0)
 				offsets += 10000;
 				for (int y = 0; y < mapHeight; y++)
 				{
 					for (int x = 0; x < mapWidth; x++)
 					{
-						if (orenoise[x, y] >= (0.9f) 
-							&& orenoise[x, y] <= 0.905f 
-							|| orenoise[x, y] >= (0.1f) 
-							&& orenoise[x, y] <= 0.105f
-							&& (ore.BlockID != 0))
+						if (biomn[x, y] >= (0.9f) && (b.Index != 0))
 						{
-							oreNoiseMap[x, y] = ore.BlockID;
+							biomnoisemaps[x, y] = b.Index;
 						}
 					}
 				}
-            }
+			
 		}
-		return oreNoiseMap;
-	}
+		return biomnoisemaps;
+    }
 }
