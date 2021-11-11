@@ -184,6 +184,9 @@ public class UIInventory : MonoBehaviour
 	/// <summary>"Reload" at the beginning</summary>
 	public void Awake() {
 		GlobalVariables.PlayerVariables.uIInventory = this;
+		GlobalVariables.PlayerVariables.healthScript = GetComponentInChildren<HealthScript>();
+		GlobalVariables.PlayerVariables.MaxHealth = GlobalVariables.PlayerVariables.MaxHealth;
+		GlobalVariables.PlayerVariables.Health = GlobalVariables.PlayerVariables.Health;
 		name = "UI";
 		_inventory = GlobalVariables.Inventory;
 		if(_inventory == null)

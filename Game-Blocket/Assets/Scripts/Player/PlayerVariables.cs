@@ -7,7 +7,7 @@ public class PlayerVariables : MonoBehaviour
 {
 	#region Static Resources
 	public UIInventory uIInventory;
-	public UIHealthScript healthScript;
+	public HealthScript healthScript;
 	public GameObject playerModel, playerLogic;
 	#endregion
 
@@ -37,6 +37,7 @@ public class PlayerVariables : MonoBehaviour
 			_maxHealth = value;
 			uIInventory.heartStat.text = $"{_health}/{_maxHealth}";
 			healthScript.maxHealth = _maxHealth;
+			healthScript.InitiateSprites();
 		}
 	}
 	public ushort MaxArmor {
