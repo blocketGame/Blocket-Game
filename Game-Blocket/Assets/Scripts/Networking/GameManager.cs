@@ -5,13 +5,16 @@ using UnityEngine;
 using MLAPI;
 using UnityEngine.SceneManagement;
 using MLAPI.Transports.UNET;
+using MLAPI.NetworkVariable.Collections;
+using MLAPI.NetworkVariable;
 
 /// <summary>
 /// Used for importend Gameengineparts<br></br>
 /// Coroutines, Threads, Multiplayerstuff...
 /// </summary>
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
+
 	public GameObject playerPrefab;
 	/// <summary>Is true if the MainGame is online</summary>
 	public static bool gameRunning;
@@ -73,6 +76,7 @@ public class GameManager : MonoBehaviour
 		//if(NetworkManager.Singleton.IsHost) {
 		GlobalVariables.World = Instantiate(GlobalVariables.PrefabAssets.world);
 		GlobalVariables.WorldData.Grid = GlobalVariables.World.GetComponentInChildren<Grid>();
+		GlobalVariables.World.GetComponent<NetworkObject>().Spawn();
 	}
 
 	/// <summary>
@@ -122,4 +126,5 @@ public class GameManager : MonoBehaviour
 			GameObject.Find("UI").GetComponent<UIInventory>().Load();
 		*/
 	}
+
 }

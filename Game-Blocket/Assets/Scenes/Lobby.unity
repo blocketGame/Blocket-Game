@@ -1070,7 +1070,7 @@ MonoBehaviour:
   MessageBufferSize: 5120
   MaxConnections: 100
   MaxSentMessageQueueSize: 128
-  ConnectAddress: 10.91.52.167
+  ConnectAddress: 127.0.0.1
   ConnectPort: 7777
   ServerListenPort: 7777
   ServerWebsocketListenPort: 8887
@@ -1423,7 +1423,6 @@ MonoBehaviour:
   playPrefab: {fileID: 1837902447072794163, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
   startSite: {fileID: 2089823948}
   lobbySite: {fileID: 745830042}
-  uNetTransport: {fileID: 0}
   serverBtn: {fileID: 1955867328}
   hostBtn: {fileID: 1925836633}
   clientBtn: {fileID: 2127037543}

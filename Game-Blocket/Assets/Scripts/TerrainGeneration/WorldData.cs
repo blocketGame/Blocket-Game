@@ -13,9 +13,13 @@ using UnityEngine.Tilemaps;
 /// </summary>
 public class WorldData : NetworkBehaviour
 {
+	private NetworkDictionary<Vector2Int, TerrainChunk> chunks = new NetworkDictionary<Vector2Int, TerrainChunk>(
+		  new NetworkVariableSettings{ 
+			  WritePermission = NetworkVariablePermission.OwnerOnly, 
+			  ReadPermission = NetworkVariablePermission.Everyone 
+		  });
+
 	#region Fields
-	private NetworkDictionary<Vector2Int, TerrainChunk> chunks = new NetworkDictionary<Vector2Int, TerrainChunk>(new NetworkVariableSettings
-	{ WritePermission = NetworkVariablePermission.OwnerOnly, ReadPermission = NetworkVariablePermission.Everyone });
 	[SerializeField]
 	private Biom[] biom;
 	[SerializeField]
