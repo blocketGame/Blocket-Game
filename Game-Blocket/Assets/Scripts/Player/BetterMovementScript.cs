@@ -11,7 +11,7 @@ public class BetterMovementScript : MonoBehaviour
     public float fallMulti = 1.06f;
     private bool _jump;
 
-    public bool belowTriggered;
+    public bool groundCheck;
 
     private Rigidbody2D rigidbody;
 
@@ -23,10 +23,11 @@ public class BetterMovementScript : MonoBehaviour
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && groundCheck)
         {
             _jump = true;
         }
+        
     }
 
         void FixedUpdate()
@@ -39,10 +40,10 @@ public class BetterMovementScript : MonoBehaviour
             //jump
             if (_jump)
             {
-                if (belowTriggered)
+                if (groundCheck)
                 {
                     rigidbody.AddForce(new Vector2(0, JumpForce), ForceMode2D.Impulse);
-
+                _jump = false;
                 }
             }
 
