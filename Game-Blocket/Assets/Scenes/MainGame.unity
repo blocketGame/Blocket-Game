@@ -719,6 +719,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec80d8a6d1179244fabd6fb20fc037b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1563177533 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2794137725677328093, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
+  m_PrefabInstance: {fileID: 31102985}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1818566155
 GameObject:
   m_ObjectHideFlags: 0
@@ -778,7 +783,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37cca21d59776b4592cdf22f7d5ad04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 110355387}
+  player: {fileID: 1563177533}
   terraingeneration: {fileID: 1818566157}
   biom:
   - {fileID: 8950956458296952525, guid: 801a88b66aa81fa4a9ac48b421c4222b, type: 3}
@@ -883,7 +888,7 @@ MonoBehaviour:
     item: 0
   chunkWidth: 32
   chunkHeight: 32
-  chunkDistance: 2
+  chunkDistance: 3
   caveSize: 0.5
   seed: 1337
   scale: 50
