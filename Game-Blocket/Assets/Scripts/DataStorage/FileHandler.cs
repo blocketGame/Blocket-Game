@@ -33,6 +33,10 @@ public class FileHandler
 		File.WriteAllText(profileParent + @"\" + profileToSave.name + ".json", strToWrite);
 	}
 
+	/// <summary>
+	/// Recognises all Profiles in the Parent dir
+	/// </summary>
+	/// <returns></returns>
 	public List<string> FindAllProfiles()
     {
 		List<string> temp = new List<string>();
