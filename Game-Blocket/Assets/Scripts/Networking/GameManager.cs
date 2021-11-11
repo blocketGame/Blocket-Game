@@ -5,22 +5,19 @@ using UnityEngine;
 using MLAPI;
 using UnityEngine.SceneManagement;
 using MLAPI.Transports.UNET;
-using MLAPI.NetworkVariable.Collections;
-using MLAPI.NetworkVariable;
 
 /// <summary>
 /// Used for importend Gameengineparts<br></br>
 /// Coroutines, Threads, Multiplayerstuff...
 /// </summary>
-public class GameManager : NetworkBehaviour
+public class GameManager : MonoBehaviour
 {
-
-	public GameObject playerPrefab, worldPrefab;
+	public GameObject playerPrefab;
 	/// <summary>Is true if the MainGame is online</summary>
 	public static bool gameRunning;
 	/// <summary>Not used!</summary>
 	public static bool isMultiplayer = true;
-	public static List<NetworkObject> Players { get; } = new List<NetworkObject>();
+
 
 	public UNetTransport uNetTransport;
 	//TODO: Coroutines, Ticks....
@@ -28,15 +25,6 @@ public class GameManager : NetworkBehaviour
 	/// <summary>Sets this class into the <see cref="GlobalVariables"/></summary>
 	public void Awake() {
 		GlobalVariables.GameManager = this;
-	}
-
-	public void FixedUpdate()
-	{
-		if (GlobalVariables.LocalPlayer == null && gameRunning){
-			FindAndSetPlayer();
-			InitPlayerComponents();
-		}
-			
 	}
 
 	/// <summary>
@@ -58,24 +46,9 @@ public class GameManager : NetworkBehaviour
 	/// </summary>
 	public void SpawnPlayers() {
 		foreach(ulong clientNow in NetworkManager.Singleton.ConnectedClients.Keys) {
-			GameObject go = Instantiate(playerPrefab, new Vector3Int(new System.Random().Next(-20, 20), 25, 0), Quaternion.identity);
+			GameObject go = Instantiate(playerPrefab, new Vector3Int(new System.Random().Next(-20, 20), 100, 0), Quaternion.identity);
 			go.name = $"Player: {clientNow}";
-			NetworkObject playerNO = go.GetComponent<NetworkObject>();
-			playerNO.SpawnAsPlayerObject(clientNow);
-			Players.Add(playerNO);
-		}
-	}
-
-	public void FindAndSetPlayer(){
-		foreach (GameObject iGo in GameObject.FindGameObjectsWithTag("Player"))
-		{
-			if (iGo.GetComponent<NetworkObject>()?.IsLocalPlayer ?? false)
-			{
-				GlobalVariables.LocalPlayer = iGo;
-				iGo.name += "(this)";
-			}
-			else
-				iGo.GetComponent<PlayerVariables>().playerLogic.SetActive(false);
+			go.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientNow);
 		}
 	}
 
@@ -84,17 +57,22 @@ public class GameManager : NetworkBehaviour
 	/// <see cref="TerrainGeneration"/>, <see cref="UIInventory"/>...
 	/// </summary>
 	public void InitPlayerComponents() {
+		//Both
+		foreach(GameObject iGo in GameObject.FindGameObjectsWithTag("Player")) {
+			if(iGo.GetComponent<NetworkObject>()?.IsLocalPlayer ?? false) {
+				GlobalVariables.LocalPlayer = iGo;
+				iGo.name += "(this)";
+			} else
+				iGo.GetComponent<PlayerVariables>().playerLogic.SetActive(false);
+		}
 		GlobalVariables.GlobalAssets = GameObject.Find("Assets");
 		//Inventory
 		GlobalVariables.localUI = Instantiate(GlobalVariables.PrefabAssets.prefabUI);
 
 		//Worldgeneration
-		if (NetworkManager.Singleton.IsHost)
-		{
-			GlobalVariables.World = Instantiate(GlobalVariables.PrefabAssets.world);
-			GlobalVariables.WorldData.Grid = GlobalVariables.World.GetComponentInChildren<Grid>();
-			GlobalVariables.World.GetComponent<NetworkObject>().Spawn();
-		}
+		//if(NetworkManager.Singleton.IsHost) {
+		GlobalVariables.World = Instantiate(GlobalVariables.PrefabAssets.world);
+		GlobalVariables.WorldData.Grid = GlobalVariables.World.GetComponentInChildren<Grid>();
 	}
 
 	/// <summary>
@@ -107,6 +85,7 @@ public class GameManager : NetworkBehaviour
 		if(NetworkManager.Singleton.IsHost)
 			SpawnPlayers();
 		//Both
+		InitPlayerComponents();
 		gameRunning = true;
 		/** Old Code
 			Debug.LogWarning($"Switched");
@@ -143,5 +122,4 @@ public class GameManager : NetworkBehaviour
 			GameObject.Find("UI").GetComponent<UIInventory>().Load();
 		*/
 	}
-
 }
