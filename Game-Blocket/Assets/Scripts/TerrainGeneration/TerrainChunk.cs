@@ -193,7 +193,6 @@ public class TerrainChunk
 
 	public void BuildCollisions()
 	{
-		Debug.Log("HEREEE");
 		collisionTileMap.ClearAllTiles();
 		for (int x = 0; x < World.ChunkWidth; x++)
 		{

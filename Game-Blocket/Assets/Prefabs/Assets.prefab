@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7063197990799302964}
   m_Layer: 0
   m_Name: Assets
-  m_TagString: Untagged
+  m_TagString: Assets
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -61,6 +61,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 099bed9885470a94786eebc896493957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerNetPrefab: {fileID: 1837902447072794163, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
   prefabUI: {fileID: 7667816536096445537, guid: d75712829b2513f4d8d9ef17a0cfc772, type: 3}
   world: {fileID: 1085889088375208448, guid: 6f8afa7ba4b1ace43a1488e9989f22f5, type: 3}
 --- !u!114 &7063197990799302964

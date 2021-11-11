@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthScript : MonoBehaviour {
+public class UIHealthScript : MonoBehaviour {
 
     private readonly List<GameObject> hearthSlots = new List<GameObject>();
 

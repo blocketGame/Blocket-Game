@@ -1033,6 +1033,7 @@ GameObject:
   - component: {fileID: 676633704}
   - component: {fileID: 676633706}
   - component: {fileID: 676633705}
+  - component: {fileID: 676633707}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -1134,6 +1135,19 @@ MonoBehaviour:
       type: {class: NullableBoolSerializable, ns: MLAPI.Configuration, asm: Unity.Multiplayer.MLAPI.Runtime}
       data:
         Value: 1897319656204293034
+--- !u!114 &676633707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 676633703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5ae53601c7f77e44878b89d0beed49e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerPrefab: {fileID: 2794137725677328093, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
 --- !u!1 &710441508
 GameObject:
   m_ObjectHideFlags: 0
@@ -1258,12 +1272,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 723270153}
+  - component: {fileID: 723270157}
   - component: {fileID: 723270152}
   - component: {fileID: 723270151}
   - component: {fileID: 723270150}
   - component: {fileID: 723270155}
   - component: {fileID: 723270154}
-  - component: {fileID: 723270157}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -1404,7 +1418,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ab006c7735e5214d810151c2047d55b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNetPrefab: {fileID: 1837902447072794163, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
+  playPrefab: {fileID: 1837902447072794163, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
   startSite: {fileID: 2089823948}
   lobbySite: {fileID: 745830042}
   serverBtn: {fileID: 1955867328}

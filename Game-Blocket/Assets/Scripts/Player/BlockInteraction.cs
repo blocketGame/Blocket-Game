@@ -7,6 +7,10 @@ using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+/// <summary>
+/// Used for Interacten per Mouse with Tilemap<br></br>
+/// <b>TODO: Cleanup!!</b>
+/// </summary>
 public class BlockInteraction : MonoBehaviour{
 	public Grid grid;
 	public Camera mainCamera;
@@ -17,7 +21,7 @@ public class BlockInteraction : MonoBehaviour{
 	public GameObject deleteSprite;
 	public Sprite crackTile;
 
-	private Vector3 PlayerPos { get => GlobalVariables.localGameVariables.localPlayer.transform.position; }
+	private Vector3 PlayerPos { get => GlobalVariables.PlayerPos; }
 
 	#region UnityMethods
 	public void Update()
@@ -90,8 +94,8 @@ public class BlockInteraction : MonoBehaviour{
 	public void FixedUpdate()
 	{
 		world.IgnoreDropCollision();
-		for (int x = 0; x < GlobalVariables.localGameVariables.terrainGeneration.ChunksVisibleLastUpdate.Count; x++)
-			GlobalVariables.localGameVariables.terrainGeneration.ChunksVisibleLastUpdate[x].InsertDrops();
+		for (int x = 0; x < GlobalVariables.TerrainGeneration.ChunksVisibleLastUpdate.Count; x++)
+			GlobalVariables.TerrainGeneration.ChunksVisibleLastUpdate[x].InsertDrops();
 	}
 
 	#endregion
@@ -130,7 +134,7 @@ public class BlockInteraction : MonoBehaviour{
 	/// <param name="chunk"></param>
 	private void SetTile(TerrainChunk chunk)
 	{
-		if (selectedBlock == -1)
+		if (selectedBlock <= -1)
 			return;
 		
 		chunk.ChunkTileMap.SetTile(new Vector3Int(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x, coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.y, 0), world.Blocks[selectedBlock].Tile);

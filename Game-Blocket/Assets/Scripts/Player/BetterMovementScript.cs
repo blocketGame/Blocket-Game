@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+/// <summary>
+/// Trash
+/// </summary>
 public class BetterMovementScript : MonoBehaviour
 {
    
@@ -17,8 +20,7 @@ public class BetterMovementScript : MonoBehaviour
 
     private bool jump = false;
 
-    private Rigidbody2D rigidbody;
-    
+    private new Rigidbody2D rigidbody;
 
     void Start()
     {
@@ -28,13 +30,14 @@ public class BetterMovementScript : MonoBehaviour
         
         rigidbody = GetComponent<Rigidbody2D>();
     }
+    /**
     void Update()
     {
         if (false) //jump conditions
         {
             jump = true;
         }
-    }
+    }*/
 
     void FixedUpdate()
     {
@@ -50,7 +53,7 @@ public class BetterMovementScript : MonoBehaviour
             jump = false;
         }
 
-        //walk over block
+        /**walk over block
 
         if (false)
         {
@@ -61,7 +64,7 @@ public class BetterMovementScript : MonoBehaviour
             {
                 transform.position = new Vector3(transform.position.x, (transform.position.y) + 1, transform.position.z);
             }
-        }
+        }*/
 
         //fall
         if (rigidbody.velocity.y < 0)
