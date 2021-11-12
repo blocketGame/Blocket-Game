@@ -80,7 +80,7 @@ public class TerrainGeneration : MonoBehaviour {
 	/// </summary>
 	[ServerRpc]
 	private void BuildChunk(Vector2Int position) {
-		TerrainChunk chunk = new TerrainChunk(position, World, ChunkParent, null);
+		TerrainChunk chunk = new TerrainChunk(position, World, ChunkParent);
 		List<Biom> bioms;
 		if(position.y > -20)
 			bioms = World.GetBiomsByType(Biomtype.OVERWORLD);

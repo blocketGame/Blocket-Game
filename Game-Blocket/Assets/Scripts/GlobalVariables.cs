@@ -13,6 +13,14 @@ public static class GlobalVariables {
 
 	public static readonly ushort maxItemCountForMultiple = 128;
 
+	public static GameObject networkVariablesGO;
+	private static NetworkVariables _networkVariables;
+	public static NetworkVariables NetworkVariables { get => _networkVariables; set {
+			_networkVariables = value;
+			networkVariablesGO = value.gameObject;
+		} 
+	}
+
 	#region Multiplayer
 	public static string ipAddress = UILobby.GetLocalIPAddress();
 	public static int portAddress = 7777;

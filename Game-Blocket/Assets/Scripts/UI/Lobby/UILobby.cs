@@ -89,7 +89,7 @@ public class UILobby : NetworkBehaviour {
 			GlobalVariables.ipAddress = ipInput.text;
         else
         {
-			Debug.LogError("IP not right");
+			Debug.LogWarning("IP not right");
 			success = false;
 			return false;
 		}
@@ -98,7 +98,7 @@ public class UILobby : NetworkBehaviour {
 			GlobalVariables.portAddress = int.Parse(portInput.text);
         else
         {
-			Debug.LogError("Port not right");
+			Debug.LogWarning("Port not right");
 			success = false;
 			return false;
 		}

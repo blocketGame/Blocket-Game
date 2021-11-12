@@ -4,6 +4,7 @@ using System.IO;
 
 using UnityEngine;
 
+using static PlayerProfile;
 using static Profile;
 
 /// <summary>
@@ -15,12 +16,15 @@ public class FileHandler
 	/// <summary>
 	/// The Parent Directory for all profiles
 	/// </summary>
-	public static string profileParent = @"..\..\Profile";
+	public static string profileParent = @"..\..\Profiles";
+	public static string playerProfileParent = profileParent + @"\Player";
 
 	#region ProfileHandling
 	public void CheckParent(){
 		if (!Directory.Exists(profileParent))
 			Directory.CreateDirectory(profileParent);
+		if (!Directory.Exists(playerProfileParent))
+			Directory.CreateDirectory(playerProfileParent);
 	}
 
 	/// <summary>
@@ -30,7 +34,7 @@ public class FileHandler
 		CheckParent();
 		Profile profileToSave = SaveProfile();
 		string strToWrite = JsonUtility.ToJson(profileToSave, true);
-		File.WriteAllText(profileParent + @"\" + profileToSave.name + ".json", strToWrite);
+		File.WriteAllText(playerProfileParent + @"\" + profileToSave.name + ".json", strToWrite);
 	}
 
 	/// <summary>
@@ -56,20 +60,20 @@ public class FileHandler
 		foreach(string iString in FindAllProfiles())
             if (iString.StartsWith(profileName))
             {
-				data = File.ReadAllText(profileParent + @"\" + iString);
+				data = File.ReadAllText(playerProfileParent + @"\" + iString);
 				break;
             }
 		if (data.Trim() == string.Empty)
 			return;
-		LoadProfile(JsonUtility.FromJson<Profile>(data));
+		LoadProfile(JsonUtility.FromJson<PlayerProfile>(data));
 	}
 
 	/// <summary>
 	/// Overrides the profile for saving
 	/// </summary>
 	/// <returns></returns>
-	private Profile SaveProfile(){
-		Profile pfN = GlobalVariables.PlayerVariables.ProfileNow;
+	private PlayerProfile SaveProfile(){
+		PlayerProfile pfN = GlobalVariables.PlayerVariables.ProfileNow;
 		//Inventory
 		foreach (UIInventorySlot iS in GlobalVariables.Inventory.InvSlots)
 			pfN.InventoryItems.Add(new SavableItem(iS.Item.id, iS.ItemCount));
@@ -92,7 +96,7 @@ public class FileHandler
 	/// Overrides game components => matching profile
 	/// </summary>
 	/// <param name="profile"></param>
-	private void LoadProfile(Profile profile){
+	private void LoadProfile(PlayerProfile profile){
 		GlobalVariables.PlayerVariables.ProfileNow = profile;
 		/**
 		foreach (SavableItem sI in profile.)

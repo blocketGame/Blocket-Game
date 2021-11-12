@@ -7,11 +7,33 @@ using UnityEngine;
 /// Used for Saving and Storing Data
 /// </summary>
 [Serializable]
-public class Profile{
+public abstract class Profile{
 	public int profileHash;
-
 	public readonly string name;
 
+	public Profile(string name)
+    {
+		this.name = name;
+		profileHash = new System.Random().Next();
+	}
+}
+
+/// <summary>
+/// TODO:
+/// </summary>
+public class WorldProfile : Profile
+{
+	public WorldProfile(string name) : base(name)
+	{
+
+	}
+}
+
+/// <summary>
+/// Storing player data
+/// </summary>
+public class PlayerProfile : Profile
+{
 	#region Inventory
 	public List<SavableItem> InventoryItems { get; set; } = new List<SavableItem>();
 	public List<SavableItem> AccessoiresItems { get; set; } = new List<SavableItem>();
@@ -22,17 +44,19 @@ public class Profile{
 	public uint healthGained, healthLost;
 	#endregion
 
-	public Profile(string name){
-		profileHash = new System.Random().Next();
-		this.name = name;
-	}
+	public PlayerProfile(string name): base(name)
+    {
+
+    }
 
 	[Serializable]
-	public struct SavableItem{
+	public struct SavableItem
+	{
 		public uint itemId;
 		public ushort count;
 
-		public SavableItem(uint itemId, ushort count){
+		public SavableItem(uint itemId, ushort count)
+		{
 			this.itemId = itemId;
 			this.count = count;
 		}

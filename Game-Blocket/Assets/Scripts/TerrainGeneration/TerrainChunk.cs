@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 /*
 * @Author : Thomas Boigner / Cse19455
 */
+[Serializable]
 public class TerrainChunk
 {
 	#region WorldSpecifications
@@ -19,7 +21,7 @@ public class TerrainChunk
 	private GameObject collisionObject;
 
 	public WorldData World { get => world; set => world = value; }
-	public Vector2Int ChunkPosition { get => chunkPosition; set => chunkPosition = value; }
+	public Vector2Int ChunkPositionWorldSpace { get => chunkPosition; set => chunkPosition = value; }
 	public byte[,] BlockIDs { get => blockIDs; set => blockIDs = value; }
 	public GameObject ChunkObject { get => chunkObject; set => chunkObject = value; }
 	public GameObject CollisionObject { get => collisionObject; set => collisionObject = value; }
@@ -62,45 +64,45 @@ public class TerrainChunk
 	public List<Drop> Drops { get => drops; set => drops = value; }
 	#endregion
 
-	public TerrainChunk(Vector2Int chunkPosition, WorldData world, GameObject chunkParent, GameObject chunkObject)
+	public TerrainChunk(Vector2Int chunkPosition, WorldData world, GameObject chunkParent)
 	{
-		this.ChunkPosition = chunkPosition;
+		this.ChunkPositionWorldSpace = chunkPosition;
 		this.World = world;
 		this.BlockIDs = new byte[world.ChunkWidth, world.ChunkHeight];
 		this.blockIDsBG = new byte[world.ChunkWidth, world.ChunkHeight];
 		this.drops = new List<Drop>();
-		this.ChunkObject = BuildAllChunkLayers(chunkParent, chunkObject);
+		this.ChunkObject = BuildAllChunkLayers(chunkParent);
 	}
 
 	/// <summary>
 	/// Creates Chunk - Bg / Collision / - tilemaps
 	/// </summary>
 	/// <returns></returns>
-	private GameObject BuildAllChunkLayers(GameObject chunkParent, GameObject chunkObject)
+	private GameObject BuildAllChunkLayers(GameObject chunkParent)
 	{
-		chunkObject = new GameObject($"Chunk {ChunkPosition.x} {ChunkPosition.y}");
+		GameObject chunkObject = new GameObject($"Chunk {ChunkPositionWorldSpace.x} {ChunkPositionWorldSpace.y}");
 		chunkObject.transform.SetParent(chunkParent.transform);
-		chunkObject.transform.position = new Vector3(ChunkPosition.x * World.ChunkWidth, ChunkPosition.y * World.ChunkHeight, 0f);
+		chunkObject.transform.position = new Vector3(ChunkPositionWorldSpace.x * World.ChunkWidth, ChunkPositionWorldSpace.y * World.ChunkHeight, 0f);
 
 		ChunkTileMap = chunkObject.AddComponent<Tilemap>();
 		ChunkTileMapRenderer = chunkObject.AddComponent<TilemapRenderer>();
 		ChunkTileMap.tileAnchor = new Vector3(0.5f, 0.5f, 0f);
 
-		BackgroundObject = new GameObject($"Chunk {ChunkPosition.x} {ChunkPosition.y} background");
+		BackgroundObject = new GameObject($"Chunk {ChunkPositionWorldSpace.x} {ChunkPositionWorldSpace.y} background");
 		BackgroundObject.transform.SetParent(ChunkTileMap.transform);
-		BackgroundObject.transform.position = new Vector3(ChunkPosition.x * World.ChunkWidth, ChunkPosition.y * World.ChunkHeight, 0f);
+		BackgroundObject.transform.position = new Vector3(ChunkPositionWorldSpace.x * World.ChunkWidth, ChunkPositionWorldSpace.y * World.ChunkHeight, 0f);
 		BackgroundTilemap = BackgroundObject.AddComponent<Tilemap>();
 		BackgroundObject.AddComponent<TilemapRenderer>();
 
-		CollisionObject = new GameObject($"Chunk {ChunkPosition.x} {ChunkPosition.y} collision");
+		CollisionObject = new GameObject($"Chunk {ChunkPositionWorldSpace.x} {ChunkPositionWorldSpace.y} collision");
 		CollisionObject.transform.SetParent(ChunkTileMap.transform);
-		CollisionObject.transform.position = new Vector3(ChunkPosition.x * World.ChunkWidth, ChunkPosition.y * World.ChunkHeight, 0f);
+		CollisionObject.transform.position = new Vector3(ChunkPositionWorldSpace.x * World.ChunkWidth, ChunkPositionWorldSpace.y * World.ChunkHeight, 0f);
 		CollisionTileMap = CollisionObject.AddComponent<Tilemap>();
 		ChunkTileMapCollider = CollisionObject.AddComponent<TilemapCollider2D>();
 		CollisionTileMap.tileAnchor = new Vector3(0.5f, 0.5f, 0f);
 
 
-		DropObject = new GameObject($"Chunk {ChunkPosition.x} {ChunkPosition.y} drops");
+		DropObject = new GameObject($"Chunk {ChunkPositionWorldSpace.x} {ChunkPositionWorldSpace.y} drops");
 		DropObject.transform.SetParent(ChunkTileMap.transform);
 		InsertDrops();
 
@@ -126,7 +128,7 @@ public class TerrainChunk
 					{
 						foreach (RegionData region in world.Biom[(int)biomNoiseMap[x, y]].Regions)
 						{
-							if (region.RegionRange <= positionHeight - (y + ChunkPosition.y * world.ChunkHeight))
+							if (region.RegionRange <= positionHeight - (y + ChunkPositionWorldSpace.y * world.ChunkHeight))
 							{
 								BlockIDs[x, y] = region.BlockID;
 							}
@@ -143,7 +145,7 @@ public class TerrainChunk
 					}
 					foreach (RegionData regionBG in world.Biom[(int)biomNoiseMap[x, y]].BgRegions)
 					{
-						if (regionBG.RegionRange <= positionHeight - (y + ChunkPosition.y * world.ChunkHeight))
+						if (regionBG.RegionRange <= positionHeight - (y + ChunkPositionWorldSpace.y * world.ChunkHeight))
 						{
 							BlockIDsBG[x, y] = regionBG.BlockID;
 							PlaceTileInBG(x, y, World.Blocks[BlockIDsBG[x, y]].Tile);
@@ -198,8 +200,8 @@ public class TerrainChunk
 		{
 			for (int y = 0; y < World.ChunkHeight; y++)
 			{
-				int worldX = x + ChunkPosition.x * World.ChunkWidth;
-				int worldY = y + ChunkPosition.y * World.ChunkHeight;
+				int worldX = x + ChunkPositionWorldSpace.x * World.ChunkWidth;
+				int worldY = y + ChunkPositionWorldSpace.y * World.ChunkHeight;
 				if (BlockIDs[x, y] != 0 &&
 					(World.GetBlockFormCoordinate(worldX + 1, worldY) == 0 ||
 					World.GetBlockFormCoordinate(worldX, worldY + 1) == 0 ||
@@ -244,7 +246,7 @@ public class TerrainChunk
 	public void InstantiateDrop(Vector3Int coordinate)
 	{
 		Drop d = new Drop();
-		d.DropID =world.Blocks[BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).chunkPosition.x), coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).chunkPosition.y]].Item1;
+		d.DropID = world.Blocks[BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).chunkPosition.x), coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).chunkPosition.y]].Item1;
 		d.DropName = world.Blocks[BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).chunkPosition.x), coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).chunkPosition.y]].Name;
 		d.DropObject = new GameObject($"Drop {d.DropID}");
 		d.DropObject.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
@@ -302,16 +304,16 @@ public class TerrainChunk
 	/// <param name="x"></param>
 	/// <param name="y"></param>
 	/// <returns></returns>
-	public Drop CollidewithDrop(int x,int y)
+	public Drop CollidewithDrop(int x, int y)
 	{
 		//Einsammeldistanz
 		float dropgrouprange = world.PickUpDistance;
-		for (int i = 0; i<Drops.Count;i++)
+		for (int i = 0; i < Drops.Count; i++)
 		{
-			if( x+dropgrouprange > world.Grid.WorldToCell(Drops[i].DropObject.transform.position).x &&
-				x-dropgrouprange< world.Grid.WorldToCell(Drops[i].DropObject.transform.position).x &&
-				y+dropgrouprange> world.Grid.WorldToCell(Drops[i].DropObject.transform.position).y &&
-				y-dropgrouprange < world.Grid.WorldToCell(Drops[i].DropObject.transform.position).y)
+			if (x + dropgrouprange > world.Grid.WorldToCell(Drops[i].DropObject.transform.position).x &&
+				x - dropgrouprange < world.Grid.WorldToCell(Drops[i].DropObject.transform.position).x &&
+				y + dropgrouprange > world.Grid.WorldToCell(Drops[i].DropObject.transform.position).y &&
+				y - dropgrouprange < world.Grid.WorldToCell(Drops[i].DropObject.transform.position).y)
 			{
 				return Drops[i];
 			}
@@ -333,5 +335,41 @@ public class TerrainChunk
 		*/
 		Drops.Remove(removable);
 		GameObject.Destroy(removable.DropObject);
+	}
+	public struct Chunk
+	{
+		public byte[,] blocks;
+		public byte[,] bgBlocks;
+		public List<Drop> drops;
+		public Vector2Int chunkPositionWorldSpace;
+
+
+		/// <summary>
+		/// Transfers TerrainChunk to Chunk struct for Multiplayer worldsharing
+		/// </summary>
+		/// <param name="chunk"></param>
+		/// <returns></returns>
+		public static Chunk TransferBlocksToChunk(TerrainChunk chunk)
+		{
+			return new Chunk()
+			{
+				blocks = chunk.BlockIDs,
+				bgBlocks = chunk.BlockIDsBG,
+				drops = chunk.Drops,
+				chunkPositionWorldSpace = new Vector2Int((int)chunk.ChunkPositionWorldSpace.x, (int)chunk.ChunkPositionWorldSpace.y)
+			};
+		}
+		/// <summary>
+		/// Transfers Chunk struct to TerrainChunk Object for Multiplayer Worldsharing
+		/// </summary>
+		/// <param name="chunk"></param>
+		/// <param name="world"></param>
+		/// <param name="chunkParent"></param>
+		/// <returns></returns>
+		public static TerrainChunk TransferChunkToBlocks(Chunk chunk, WorldData world, GameObject chunkParent)
+		{
+			return new TerrainChunk(new Vector2Int(chunk.chunkPositionWorldSpace.x, chunk.chunkPositionWorldSpace.y), world, chunkParent);
+
+		}
 	}
 }

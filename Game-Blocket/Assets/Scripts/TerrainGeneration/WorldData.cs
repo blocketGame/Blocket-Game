@@ -13,11 +13,7 @@ using UnityEngine.Tilemaps;
 /// </summary>
 public class WorldData : NetworkBehaviour
 {
-	private NetworkDictionary<Vector2Int, TerrainChunk> chunks = new NetworkDictionary<Vector2Int, TerrainChunk>(
-		  new NetworkVariableSettings{ 
-			  WritePermission = NetworkVariablePermission.OwnerOnly, 
-			  ReadPermission = NetworkVariablePermission.Everyone 
-		  });
+	
 
 	#region Fields
 	[SerializeField]
@@ -78,23 +74,18 @@ public class WorldData : NetworkBehaviour
 	{
 		get => biom; set => biom = value;
 	}
-	public NetworkDictionary<Vector2Int, TerrainChunk> Chunks { get => chunks; set => chunks = value; }
+	public Dictionary<Vector2Int, TerrainChunk> Chunks { get; set; }
 
 	public Grid Grid { get => grid; set => grid = value; }
 	public float Groupdistance { get => groupdistance; set => groupdistance = value; }
 	public float PickUpDistance { get => pickUpDistance; set => pickUpDistance = value; }
 
-    #endregion
+	#endregion
 
-    public void Update()
-    {
-		Debug.Log(chunks.Count);
-    }
-
-    /// <summary>
-    /// Stores this class to <see cref="GlobalVariables"/>
-    /// </summary>
-    public void Awake() {
+	/// <summary>
+	/// Stores this class to <see cref="GlobalVariables"/>
+	/// </summary>
+	public void Awake() {
 		GlobalVariables.WorldData = this;
 	}
 
@@ -124,8 +115,8 @@ public class WorldData : NetworkBehaviour
 		TerrainChunk chunk = GetChunkFromCoordinate(x, y);
 		if (chunk != null)
 		{
-			int chunkX = x - ChunkWidth * chunk.ChunkPosition.x;
-			int chunkY = y - ChunkHeight * chunk.ChunkPosition.y;
+			int chunkX = x - ChunkWidth * chunk.ChunkPositionWorldSpace.x;
+			int chunkY = y - ChunkHeight * chunk.ChunkPositionWorldSpace.y;
 			if (chunkX < ChunkWidth && chunkY < ChunkHeight)
 			{
 				return chunk.BlockIDs[chunkX, chunkY];
@@ -142,8 +133,8 @@ public class WorldData : NetworkBehaviour
 	{
 		TerrainChunk chunk = GetChunkFromCoordinate(coordinate.x, coordinate.y);
 
-		int chunkX = coordinate.x - chunk.ChunkPosition.x * ChunkWidth;
-		int chunkY = coordinate.y - chunk.ChunkPosition.y * ChunkHeight;
+		int chunkX = coordinate.x - chunk.ChunkPositionWorldSpace.x * ChunkWidth;
+		int chunkY = coordinate.y - chunk.ChunkPositionWorldSpace.y * ChunkHeight;
 
 		chunk.CollisionTileMap.SetTile(new Vector3Int(chunkX, chunkY, 0), null);
 
