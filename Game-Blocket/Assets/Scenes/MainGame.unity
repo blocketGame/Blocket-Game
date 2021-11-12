@@ -830,13 +830,13 @@ MonoBehaviour:
     _blockID: 6
     _tile: {fileID: 11400000, guid: cf38a69b1c9243a4a98ca4aca2367547, type: 2}
     sprite: {fileID: 21300000, guid: ef8a05a4ebd504240914473cda9b6542, type: 3}
-    removeDuration: 0
+    removeDuration: 3
     item: 0
   - _name: Snow
     _blockID: 7
     _tile: {fileID: 11400000, guid: 0230af7654f2e154f8a8cfe6ab61bdd1, type: 2}
     sprite: {fileID: 21300000, guid: f3dcd218662f73e47a7c65d283539553, type: 3}
-    removeDuration: 0
+    removeDuration: 3
     item: 0
   - _name: Dirt-Bg
     _blockID: 8
@@ -852,7 +852,7 @@ MonoBehaviour:
     item: 0
   - _name: Bernstein
     _blockID: 10
-    _tile: {fileID: 11400000, guid: 368f8ab243ec2b24bb4dd5751cbf20f6, type: 2}
+    _tile: {fileID: 0}
     sprite: {fileID: 21300000, guid: 085702e85517bb94eb0a7444514a2e6c, type: 3}
     removeDuration: 8
     item: 3
@@ -870,7 +870,7 @@ MonoBehaviour:
     item: 4
   - _name: Sand Background
     _blockID: 13
-    _tile: {fileID: 11400000, guid: 6a63c0c826cab3f4ea878397525659ce, type: 2}
+    _tile: {fileID: 11400000, guid: 240b651a1bc670d4793c99d2d9d9748e, type: 2}
     sprite: {fileID: 21300000, guid: 4a9adc6476bef7c4496e8552c094e939, type: 3}
     removeDuration: 2
     item: 0

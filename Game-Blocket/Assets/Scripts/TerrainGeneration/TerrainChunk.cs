@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 /*
 * @Author : Thomas Boigner / Cse19455
 */
-public class TerrainChunk
+public struct TerrainChunk
 {
     #region WorldSpecifications
     [SerializeField]
@@ -92,7 +92,7 @@ public class TerrainChunk
 
         BackgroundObject = new GameObject($"Chunk {ChunkPosition.x} {ChunkPosition.y} background");
         BackgroundObject.transform.SetParent(ChunkTileMap.transform);
-        BackgroundObject.transform.position = new Vector3(ChunkPosition.x * World.ChunkWidth, ChunkPosition.y * World.ChunkHeight, 0f);
+        BackgroundObject.transform.position = new Vector3(ChunkPosition.x * World.ChunkWidth, ChunkPosition.y * World.ChunkHeight, 1f);
         BackgroundTilemap = BackgroundObject.AddComponent<Tilemap>();
         BackgroundObject.AddComponent<TilemapRenderer>();
 
@@ -119,6 +119,7 @@ public class TerrainChunk
 
     public void GenerateChunk(float[] noisemap, float[,] caveNoisepmap, float[,] biomNoiseMap)
     {
+        
         for (int x = 0; x < World.ChunkWidth; x++)
         {
             AnimationCurve heightCurve = new AnimationCurve(world.Heightcurve.keys);
@@ -153,6 +154,13 @@ public class TerrainChunk
                         }
                     }
                 }
+            }
+
+            //Place Trees.
+            if(x%5 == 0&&chunkPositionWorldSpace.y==0)
+            {
+                //try to spawn a Tree
+                GenerateTrees(x,positionHeight);
             }
         }
     }
@@ -318,5 +326,14 @@ public class TerrainChunk
         */
         Drops.Remove(removable);
         GameObject.Destroy(removable.DropObject);
+    }
+
+
+    public void GenerateTrees(int x,int y)
+    {
+        //Chunk = 32 in der width.
+        //Trees benötigen 5 Blöcke in der width bis der nächste BAum spawnen kann
+        if (new System.Random(chunkPosition.x*world.ChunkWidth +x).Next(1,5)==4)
+            BlockIDsBG[x, y] = 13;
     }
 }
