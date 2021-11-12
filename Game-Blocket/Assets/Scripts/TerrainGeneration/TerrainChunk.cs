@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 /*
 * @Author : Thomas Boigner / Cse19455
 */
-public struct TerrainChunk
+public class TerrainChunk
 {
     #region WorldSpecifications
     [SerializeField]
@@ -333,7 +333,25 @@ public struct TerrainChunk
     {
         //Chunk = 32 in der width.
         //Trees benötigen 5 Blöcke in der width bis der nächste BAum spawnen kann
-        if (new System.Random(chunkPosition.x*world.ChunkWidth +x).Next(1,5)==4)
-            BlockIDsBG[x, y] = 13;
+        //[Funktioniert , aber ned schön]
+        /*
+        if (new System.Random(chunkPosition.x*world.ChunkWidth + x).Next(1, 5) == 4)
+        {
+            int rando = new System.Random(chunkPosition.x * world.ChunkWidth + x).Next(5, 10);
+            for (int i = 0;i<rando;i++)
+            BlockIDsBG[x, y+i] = 16;
+
+            int breite=0;
+            for(int b= rando+2; b > 4; b--)
+            {
+                for(int o = -breite; o <= breite; o++)
+                {
+                    if(BlockIDsBG[x + o, y + rando]==0)
+                    BlockIDsBG[x+o, y+b] = 17;
+                }
+                breite++;
+            }
+        
+        }*/
     }
 }
