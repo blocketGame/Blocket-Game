@@ -122,29 +122,42 @@ public class TerrainChunk
         for (int x = 0; x < World.ChunkWidth; x++)
         {
             AnimationCurve heightCurve = new AnimationCurve(world.Heightcurve.keys);
-            int positionHeight = Mathf.FloorToInt(heightCurve.Evaluate(noisemap[x]) * World.HeightMultiplier) + 1;
+            int positionHeight;
+            lock (noisemap)
+            {
+                positionHeight = Mathf.FloorToInt(heightCurve.Evaluate(noisemap[x]) * World.HeightMultiplier) + 1;
+            }
+            
             for (int y = world.ChunkHeight - 1; y >= 0; y--)
             {
                 if (y + chunkPosition.y * world.ChunkHeight < positionHeight)
                 {
-                    if (caveNoisepmap[x, y] > world.CaveSize)
+                    lock (caveNoisepmap)
                     {
-                        foreach (RegionData region in world.Biom[(int)biomNoiseMap[x, y]].Regions)
+                        if (caveNoisepmap[x, y] > world.CaveSize)
                         {
-                            if (region.RegionRange <= positionHeight - (y + ChunkPosition.y * world.ChunkHeight))
+                            lock (biomNoiseMap)
                             {
-                                BlockIDs[x, y] = region.BlockID;
-                            }
-                        }
+                                foreach (RegionData region in world.Biom[(int)biomNoiseMap[x, y]].Regions)
+                                {
+                                    if (region.RegionRange <= positionHeight - (y + ChunkPosition.y * world.ChunkHeight))
+                                    {
+                                        BlockIDs[x, y] = region.BlockID;
+                                    }
+                                }
 
-                        foreach (OreData oreData in world.Biom[(int)biomNoiseMap[x, y]].Ores)
-                        {
-                            if (caveNoisepmap[x, y] > oreData.NoiseValueFrom && caveNoisepmap[x, y] < oreData.NoiseValueTo)
-                            {
-                                BlockIDs[x, y] = oreData.BlockID;
+                                foreach (OreData oreData in world.Biom[(int)biomNoiseMap[x, y]].Ores)
+                                {
+                                    if (caveNoisepmap[x, y] > oreData.NoiseValueFrom && caveNoisepmap[x, y] < oreData.NoiseValueTo)
+                                    {
+                                        BlockIDs[x, y] = oreData.BlockID;
+                                    }
+                                }
                             }
+ 
                         }
                     }
+                    
                     foreach (RegionData regionBG in world.Biom[(int)biomNoiseMap[x, y]].BgRegions)
                     {
                         if (regionBG.RegionRange <= positionHeight - (y + ChunkPosition.y * world.ChunkHeight))

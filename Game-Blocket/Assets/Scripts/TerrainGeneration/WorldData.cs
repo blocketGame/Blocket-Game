@@ -112,12 +112,9 @@ public class WorldData : MonoBehaviour
         TerrainChunk chunk = GetChunkFromCoordinate(x, y);
         if (chunk != null)
         {
-            int chunkX = x - ChunkWidth * chunk.ChunkPosition.x;
-            int chunkY = y - ChunkHeight * chunk.ChunkPosition.y;
-            if (chunkX < ChunkWidth && chunkY < ChunkHeight)
-            {
-                return chunk.BlockIDs[chunkX, chunkY];
-            }
+            int chunkX = x - (int)chunk.ChunkPositionWorldSpace.x;
+            int chunkY = y - (int)chunk.ChunkPositionWorldSpace.y;
+            return chunk.BlockIDs[chunkX, chunkY];
         }
         return 1;
     }

@@ -81,11 +81,14 @@ public class TerrainGeneration : MonoBehaviour
         {
             playerChunk = currentChunk.ChunkPositionWorldSpace;
         }
-
-        foreach (TerrainChunk t in ChunksVisibleLastUpdate)
+        lock (chunksVisibleLastUpdate)
         {
-            t?.SetChunkState(false);
+            foreach (TerrainChunk t in ChunksVisibleLastUpdate)
+            {
+                t?.SetChunkState(false);
+            }
         }
+        
         ChunksVisibleLastUpdate.Clear();
         CheckChunksAroundPlayer();
     }
@@ -116,38 +119,40 @@ public class TerrainGeneration : MonoBehaviour
     }
 
     /// <summary>
-    /// Checks whether or not a Biom is complete 
-    /// (Biomnr/Biomsize)
-    /// </summary>
-
-    /// <summary>
     ///     Generates Chunk From Noisemap without any extra consideration
     /// </summary>
     private void BuildChunk(Vector2Int position)
     {
         TerrainChunk chunk = new TerrainChunk(position, World, ChunkParent, null);
-        List<Biom> bioms;
-        if (position.y > -20)
-            bioms = world.getBiomsByType(Biomtype.OVERWORLD);
-        else
-            bioms = world.getBiomsByType(Biomtype.UNDERGROUND);
-
-        float[] noisemap;
-        if (world.Noisemaps.ContainsKey(position.x))
-        {
-            noisemap = world.Noisemaps[position.x];
-        }
-        else
-        {
-            noisemap = NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position.x * World.ChunkWidth);
-            world.Noisemaps.Add(position.x, noisemap);
-        }
         ThreadStart threadStart = delegate
         {
+            List<Biom> bioms;
+            if (position.y > -20)
+                bioms = world.getBiomsByType(Biomtype.OVERWORLD);
+            else
+                bioms = world.getBiomsByType(Biomtype.UNDERGROUND);
+            
+            float[] noisemap;
+            lock (world.Noisemaps)
+            {
+                if (world.Noisemaps.ContainsKey(position.x))
+                {
+                    noisemap = world.Noisemaps[position.x];
+                }
+                else
+                {
+                    noisemap = NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position.x * World.ChunkWidth);
+                    world.Noisemaps.Add(position.x, noisemap);
+                }
+            }
+
+            float[,] caveNoiseMap = NoiseGenerator.GenerateNoiseMap2D(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.y * World.ChunkHeight), NoiseGenerator.NoiseMode.Cave);
+            float[,] biomNoiseMap = NoiseGenerator.GenerateBiom(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.y * World.ChunkHeight), bioms);
+
             chunk.GenerateChunk(
                   noisemap,
-                  NoiseGenerator.GenerateNoiseMap2D(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.y * World.ChunkHeight), NoiseGenerator.NoiseMode.Cave),
-                  NoiseGenerator.GenerateBiom(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.y * World.ChunkHeight), bioms));
+                  caveNoiseMap,
+                  biomNoiseMap);
             World.Chunks[position] = chunk;
             lock (chunksVisibleLastUpdate)
             {
@@ -161,55 +166,7 @@ public class TerrainGeneration : MonoBehaviour
             { 
                 chunkTileInitializationQueue.Enqueue(chunk);
             }
-           
         };
         new Thread(threadStart).Start();
     }
-    /*
-    public void RequestBiomNoisemapData(Vector3 position, List<Biom> bioms, Action<float[,]> callback)
-    {
-        ThreadStart threadStart = delegate
-        {
-            float[,] biomNoiseMap = NoiseGenerator.GenerateBiom(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.y * World.ChunkHeight), bioms);
-            lock (biomNoiseMapThreadInfoQueue)
-            {
-                biomNoiseMapThreadInfoQueue.Enqueue(new MapThreadInfo<float[,]>(callback, biomNoiseMap));
-            }
-        };
-        new Thread(threadStart).Start();
-    }
-
-    public void OnBiomNoiseMapReceived(float[,] biomNoiseMap)
-    {
-        float[] noisemap;
-        if (world.Noisemaps.ContainsKey(position.x))
-        {
-            noisemap = world.Noisemaps[position.x];
-        }
-        else
-        {
-            noisemap = NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position.x * World.ChunkWidth);
-            world.Noisemaps.Add(position.x, noisemap);
-        }
-
-        chunk.GenerateChunk(
-              noisemap,
-              NoiseGenerator.GenerateNoiseMap2D(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.y * World.ChunkHeight), NoiseGenerator.NoiseMode.Cave),
-              NoiseGenerator.GenerateBiom(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.y * World.ChunkHeight), bioms));
-        World.Chunks[position] = chunk;
-        ChunksVisibleLastUpdate.Add(chunk);
-        ChunkCollisionQueue.Enqueue(chunk);
-    }
-
-    struct MapThreadInfo<T>
-    {
-        public readonly Action<T> callback;
-        public readonly T parameter;
-
-        public MapThreadInfo(Action<T> callback, T parameter)
-        {
-            this.callback = callback;
-            this.parameter = parameter;
-        }
-    }*/
 }
