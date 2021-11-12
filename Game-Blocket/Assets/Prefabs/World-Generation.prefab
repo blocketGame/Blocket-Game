@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5501895229596959013}
   - component: {fileID: 5501895229596959012}
   - component: {fileID: 5501895229596959015}
-  - component: {fileID: 5501895229596959014}
   m_Layer: 3
   m_Name: World-Generation
   m_TagString: Untagged
@@ -81,7 +80,7 @@ MonoBehaviour:
     item: 0
   - _name: Grass
     _blockID: 2
-    _tile: {fileID: 11400000, guid: 0018b9ed719372d4194e4bc207233f48, type: 2}
+    _tile: {fileID: 0}
     sprite: {fileID: 21300000, guid: 7e8c25b1aa5fb1b42a3de51adafd8a1f, type: 3}
     removeDuration: 3
     item: 0
@@ -117,49 +116,49 @@ MonoBehaviour:
     item: 0
   - _name: Dirt-Bg
     _blockID: 8
-    _tile: {fileID: 11400000, guid: 5b65e6d2acd22754fa567bf7e3641843, type: 2}
+    _tile: {fileID: 0}
     sprite: {fileID: 21300000, guid: 5dc8ef344183da742997bb29906167eb, type: 3}
     removeDuration: 0
     item: 0
   - _name: Dirt-Bg-Top
     _blockID: 9
-    _tile: {fileID: 11400000, guid: fc57694823c009c4e84b01d380db4a6a, type: 2}
+    _tile: {fileID: 0}
     sprite: {fileID: 21300000, guid: 7e72734c7ac4df0438e0d88fd1cfb300, type: 3}
     removeDuration: 0
     item: 0
   - _name: Bernstein
     _blockID: 10
-    _tile: {fileID: 11400000, guid: 828bf6f20f96e5c4482ec3bd253710d3, type: 2}
+    _tile: {fileID: 0}
     sprite: {fileID: 21300000, guid: c6227dfc5fd0b2f4ab08693651ea8d63, type: 3}
     removeDuration: 8
     item: 3
   - _name: Opal
     _blockID: 11
-    _tile: {fileID: 11400000, guid: 37cb26db3783b3a4685ca2337734162f, type: 2}
+    _tile: {fileID: 0}
     sprite: {fileID: 21300000, guid: 2a31ed6a0c6c699469ff35baeac39405, type: 3}
     removeDuration: 8
     item: 2
   - _name: Stone
     _blockID: 12
-    _tile: {fileID: 11400000, guid: 279dc643cc7dc77498f249f6221434af, type: 2}
+    _tile: {fileID: 0}
     sprite: {fileID: 21300000, guid: c0e395068a372ce4393ae6a53167171f, type: 3}
     removeDuration: 7
     item: 4
   - _name: Sand Background
     _blockID: 13
-    _tile: {fileID: 11400000, guid: 89b2d657f8e52ad4b8d5a282b4a7c39a, type: 2}
+    _tile: {fileID: 0}
     sprite: {fileID: 21300000, guid: c55abbb6e6450ac428d829a3c8852838, type: 3}
     removeDuration: 2
     item: 0
   - _name: Sand Background Top
     _blockID: 14
-    _tile: {fileID: 11400000, guid: d81a17058e764af4ab6ad5cfe1148b60, type: 2}
+    _tile: {fileID: 0}
     sprite: {fileID: 21300000, guid: 671f2c9bc738eca4fb24d16e4ab2b852, type: 3}
     removeDuration: 2
     item: 0
   - _name: Perl
     _blockID: 15
-    _tile: {fileID: 11400000, guid: d4fd94a2cfef2d649a3b10ee48547dc2, type: 2}
+    _tile: {fileID: 0}
     sprite: {fileID: 21300000, guid: f4000b1a8fb9d274989d5ec66823e6f1, type: 3}
     removeDuration: 4
     item: 0
@@ -220,43 +219,6 @@ MonoBehaviour:
   grid: {fileID: 5501895230584340288}
   groupdistance: 1.5
   pickUpDistance: 1.5
---- !u!114 &5501895229596959014
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5501895229596959010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a43b82a7ca681d946952c7e413c4f74f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lightRegions:
-  - options: 0
-    startY: -10
-    endY: -20
-    value: 0.3
-    lightSource: 0
-  - options: 1
-    startY: -10
-    endY: -20
-    value: 0.5
-    lightSource: 1
-  - options: 1
-    startY: -5
-    endY: -9
-    value: 0
-    lightSource: 0
-  - options: 0
-    startY: -5
-    endY: -9
-    value: 1
-    lightSource: 1
-  lights:
-  - {fileID: 0}
-  - {fileID: 0}
-  player: {fileID: 0}
 --- !u!1 &5501895230584340302
 GameObject:
   m_ObjectHideFlags: 0
