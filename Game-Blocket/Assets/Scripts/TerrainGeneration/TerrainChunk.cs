@@ -121,7 +121,8 @@ public class TerrainChunk
     {
         for (int x = 0; x < World.ChunkWidth; x++)
         {
-            int positionHeight = Mathf.FloorToInt(World.Heightcurve.Evaluate(noisemap[x]) * World.HeightMultiplier) + 1;
+            AnimationCurve heightCurve = new AnimationCurve(world.Heightcurve.keys);
+            int positionHeight = Mathf.FloorToInt(heightCurve.Evaluate(noisemap[x]) * World.HeightMultiplier) + 1;
             for (int y = world.ChunkHeight - 1; y >= 0; y--)
             {
                 if (y + chunkPosition.y * world.ChunkHeight < positionHeight)
@@ -143,17 +144,27 @@ public class TerrainChunk
                                 BlockIDs[x, y] = oreData.BlockID;
                             }
                         }
-                        PlaceTile(x, y, World.Blocks[BlockIDs[x, y]].Tile);
                     }
                     foreach (RegionData regionBG in world.Biom[(int)biomNoiseMap[x, y]].BgRegions)
                     {
                         if (regionBG.RegionRange <= positionHeight - (y + ChunkPosition.y * world.ChunkHeight))
                         {
                             BlockIDsBG[x, y] = regionBG.BlockID;
-                            PlaceTileInBG(x, y, World.Blocks[BlockIDsBG[x, y]].Tile);
                         }
                     }
                 }
+            }
+        }
+    }
+
+    public void PlaceAllTiles()
+    {
+        for (int x = 0; x < world.ChunkWidth; x++)
+        {
+            for (int y = 0; y < world.ChunkHeight; y++)
+            {
+                PlaceTile(x, y, World.Blocks[BlockIDs[x, y]].Tile);
+                PlaceTileInBG(x, y, World.Blocks[BlockIDsBG[x, y]].Tile);
             }
         }
     }

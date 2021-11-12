@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Unity.Mathematics;
+using System;
+using System.Threading;
 
 /*
  * @Author : Cse19455 / Thomas Boigner
@@ -18,6 +20,7 @@ public class TerrainGeneration : MonoBehaviour
 
     private Transform playerPosition;
     private Queue<TerrainChunk> chunkCollisionQueue = new Queue<TerrainChunk>();
+    private Queue<TerrainChunk> chunkTileInitializationQueue = new Queue<TerrainChunk>();
     private Vector3 playerChunk;
 
     //------------------------------------------------------- Properties ------------------------------------------------------------------
@@ -33,7 +36,7 @@ public class TerrainGeneration : MonoBehaviour
     public void Start()
     {
         ChunksVisibleLastUpdate = new List<TerrainChunk>();
-        PlayerPosition = World.Player.transform;
+        PlayerPosition = world.Player.transform;
         world.PutBlocksIntoTxt();
         world.putBiomsIntoTxt();
         prng = new System.Random(world.Seed);
@@ -43,14 +46,31 @@ public class TerrainGeneration : MonoBehaviour
     public void Update()
     {
         Vector3 distance = playerPosition.position - playerChunk;
-        if(distance.x <= 0 || distance.x >= world.ChunkWidth || distance.y <= 0 || distance.y >= world.ChunkHeight)
+        if (distance.x <= 0 || distance.x >= world.ChunkWidth || distance.y <= 0 || distance.y >= world.ChunkHeight)
             UpdateChunks();
-
-        foreach (TerrainChunk tc in ChunkCollisionQueue)
+        if (ChunkCollisionQueue.Count > 0)
         {
-            tc.BuildCollisions();
+            lock (ChunkCollisionQueue)
+            {
+                foreach (TerrainChunk tc in ChunkCollisionQueue)
+                {
+                    tc.BuildCollisions();
+                }
+                ChunkCollisionQueue.Clear();
+            }
         }
-        ChunkCollisionQueue.Clear();
+
+        if (chunkTileInitializationQueue.Count > 0)
+        {
+            lock (chunkTileInitializationQueue)
+            {
+                foreach(TerrainChunk terrainChunk in chunkTileInitializationQueue)
+                {
+                    terrainChunk.PlaceAllTiles();
+                }
+                chunkTileInitializationQueue.Clear();
+            }
+        }
 
     }
 
@@ -64,7 +84,7 @@ public class TerrainGeneration : MonoBehaviour
 
         foreach (TerrainChunk t in ChunksVisibleLastUpdate)
         {
-            t.SetChunkState(false);
+            t?.SetChunkState(false);
         }
         ChunksVisibleLastUpdate.Clear();
         CheckChunksAroundPlayer();
@@ -111,7 +131,56 @@ public class TerrainGeneration : MonoBehaviour
             bioms = world.getBiomsByType(Biomtype.OVERWORLD);
         else
             bioms = world.getBiomsByType(Biomtype.UNDERGROUND);
-        
+
+        float[] noisemap;
+        if (world.Noisemaps.ContainsKey(position.x))
+        {
+            noisemap = world.Noisemaps[position.x];
+        }
+        else
+        {
+            noisemap = NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position.x * World.ChunkWidth);
+            world.Noisemaps.Add(position.x, noisemap);
+        }
+        ThreadStart threadStart = delegate
+        {
+            chunk.GenerateChunk(
+                  noisemap,
+                  NoiseGenerator.GenerateNoiseMap2D(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.y * World.ChunkHeight), NoiseGenerator.NoiseMode.Cave),
+                  NoiseGenerator.GenerateBiom(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.y * World.ChunkHeight), bioms));
+            World.Chunks[position] = chunk;
+            lock (chunksVisibleLastUpdate)
+            {
+                chunksVisibleLastUpdate.Add(chunk);
+            }
+            lock (chunkCollisionQueue)
+            {
+                chunkCollisionQueue.Enqueue(chunk);
+            }
+            lock (chunkTileInitializationQueue)
+            { 
+                chunkTileInitializationQueue.Enqueue(chunk);
+            }
+           
+        };
+        new Thread(threadStart).Start();
+    }
+    /*
+    public void RequestBiomNoisemapData(Vector3 position, List<Biom> bioms, Action<float[,]> callback)
+    {
+        ThreadStart threadStart = delegate
+        {
+            float[,] biomNoiseMap = NoiseGenerator.GenerateBiom(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.y * World.ChunkHeight), bioms);
+            lock (biomNoiseMapThreadInfoQueue)
+            {
+                biomNoiseMapThreadInfoQueue.Enqueue(new MapThreadInfo<float[,]>(callback, biomNoiseMap));
+            }
+        };
+        new Thread(threadStart).Start();
+    }
+
+    public void OnBiomNoiseMapReceived(float[,] biomNoiseMap)
+    {
         float[] noisemap;
         if (world.Noisemaps.ContainsKey(position.x))
         {
@@ -131,4 +200,16 @@ public class TerrainGeneration : MonoBehaviour
         ChunksVisibleLastUpdate.Add(chunk);
         ChunkCollisionQueue.Enqueue(chunk);
     }
+
+    struct MapThreadInfo<T>
+    {
+        public readonly Action<T> callback;
+        public readonly T parameter;
+
+        public MapThreadInfo(Action<T> callback, T parameter)
+        {
+            this.callback = callback;
+            this.parameter = parameter;
+        }
+    }*/
 }
