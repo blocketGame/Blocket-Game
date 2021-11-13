@@ -7,9 +7,8 @@ public class NoiseGenerator : MonoBehaviour
 {
 	public enum NoiseMode
     {
-		Terrain,
-		Cave,
-		Biom
+		snoise,
+		cellular
     }
 
 	public static System.Random prng;
@@ -102,13 +101,12 @@ public class NoiseGenerator : MonoBehaviour
 					float sampleY = (y - halfHeight + octaveOffsets[i].y) / scale * frequency;
 					Unity.Mathematics.float2 perlinValue = new Unity.Mathematics.float2(0, 0);
 
-					if (noiseMode == NoiseMode.Terrain)
+					if (noiseMode == NoiseMode.snoise)
                     {
-
 						perlinValue = Unity.Mathematics.noise.snoise(new Vector2(sampleX, sampleY));
 					}
 					else
-					if(noiseMode == NoiseMode.Cave|| noiseMode == NoiseMode.Biom)
+					if(noiseMode == NoiseMode.cellular)
                     {
 						perlinValue = Unity.Mathematics.noise.cellular(new Unity.Mathematics.float2(sampleX, sampleY));
 					}
@@ -130,7 +128,7 @@ public class NoiseGenerator : MonoBehaviour
 		int offsets = 0;
 		foreach (Biom b in bioms)
 		{
-			float[,] biomn = GenerateNoiseMap2D(mapWidth, mapHeight, (seed+offsets), b.Size, octaves, persistance , lacunarity , offset, NoiseMode.Biom);
+			float[,] biomn = GenerateNoiseMap2D(mapWidth, mapHeight, (seed+offsets), b.Size, octaves, persistance , lacunarity , offset, NoiseMode.cellular);
 
 			//if (b.Index == 0)
 			offsets += 10000;

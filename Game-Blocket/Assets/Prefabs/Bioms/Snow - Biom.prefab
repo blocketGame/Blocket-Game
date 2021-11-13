@@ -48,8 +48,8 @@ MonoBehaviour:
   biomName: 'Snow '
   ores:
   - name: Stone
-    noiseValueFrom: 0.5
-    noiseValueTo: 0.65
+    noiseValueFrom: -0.5
+    noiseValueTo: -0.65
     blockID: 12
   - name: Opal
     noiseValueFrom: 0.6

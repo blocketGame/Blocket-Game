@@ -146,7 +146,7 @@ public class TerrainGeneration : MonoBehaviour
                 }
             }
 
-            float[,] caveNoiseMap = NoiseGenerator.GenerateNoiseMap2D(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.y * World.ChunkHeight), NoiseGenerator.NoiseMode.Cave);
+            float[,] caveNoiseMap = NoiseGenerator.GenerateNoiseMap2D(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.y * World.ChunkHeight), NoiseGenerator.NoiseMode.snoise);
             float[,] biomNoiseMap = NoiseGenerator.GenerateBiom(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, world.OffsetY + position.y * World.ChunkHeight), bioms);
 
             chunk.GenerateChunk(

@@ -48,8 +48,8 @@ MonoBehaviour:
   biomName: Default - Biom
   ores:
   - name: Stone
-    noiseValueFrom: 0.5
-    noiseValueTo: 0.65
+    noiseValueFrom: -2
+    noiseValueTo: -2
     blockID: 12
   - name: Bernstein
     noiseValueFrom: 0.6
