@@ -228,6 +228,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Assets
       objectReference: {fileID: 0}
+    - target: {fileID: 4246535772335069090, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.23
+      objectReference: {fileID: 0}
+    - target: {fileID: 4558435364228387793, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
+      propertyPath: world
+      value: 
+      objectReference: {fileID: 1818566158}
+    - target: {fileID: 5919403196222415372, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
+      propertyPath: m_TileAnchor.x
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8512227375263116681, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -270,6 +282,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8512227375263116681, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8559640920385328428, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
+      propertyPath: m_SortOrder
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -884,6 +900,18 @@ MonoBehaviour:
     _blockID: 15
     _tile: {fileID: 11400000, guid: bc76d9a08eedba04888f09f100db4f02, type: 2}
     sprite: {fileID: 21300000, guid: da5efdfd1427ac74e8a650e5a691846e, type: 3}
+    removeDuration: 4
+    item: 0
+  - _name: Stamm
+    _blockID: 16
+    _tile: {fileID: 11400000, guid: a2b039ad21dbea343a3af1d7a3f3e9c2, type: 2}
+    sprite: {fileID: 21300000, guid: 4318a7de18532f2409f3a2dd127ba0b8, type: 3}
+    removeDuration: 4
+    item: 0
+  - _name: Blatt
+    _blockID: 17
+    _tile: {fileID: 11400000, guid: 0d94620a8cdce1e4694bd8d615d2101c, type: 2}
+    sprite: {fileID: 21300000, guid: fbe6e8a4ae870e3478c904052e30f1d8, type: 3}
     removeDuration: 4
     item: 0
   chunkWidth: 32

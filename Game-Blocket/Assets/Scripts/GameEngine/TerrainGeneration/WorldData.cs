@@ -229,6 +229,17 @@ public class WorldData : MonoBehaviour
         }
         return biomlist;
     }
+
+    public byte getBlockFromTile(TileBase tile)
+    {
+        foreach(BlockData b in blocks)
+        {
+            if(b.Tile!=null)
+            if (b.Tile.Equals(tile))
+                return b.BlockID;
+        }
+        return 0;
+    }
 }
 
 [System.Serializable]
