@@ -25,7 +25,7 @@ public class UILobby : NetworkBehaviour {
 
 	[Header("Static: Start Site")]
 	public Button serverBtn, hostBtn, clientBtn;
-	public Text ipInput, portInput;
+	public Text ipInput, portInput, ipPlaceHolder;
 
 	[Header("Static: Lobby Site")]
 	public Button startGame, goBackBtn, testBtn;
@@ -45,24 +45,26 @@ public class UILobby : NetworkBehaviour {
 		//NetworkManager.Singleton.OnClientConnectedCallback += ClientConnectCallback;
 		SceneManager.sceneLoaded += GlobalVariables.GameManager.SceneSwitched;
 		StartSiteOpen = true;
-
+		ipPlaceHolder.text = GlobalVariables.ipAddress;
 		serverBtn.onClick.AddListener(() => {
-			if (!SetInputs(out bool _))
-				return;
+			CheckAndSetInputs();
+			SetNetworkAddress();
 			NetworkManager.Singleton.StartServer();
 			StartSiteOpen = false;
 		});
 		hostBtn.onClick.AddListener(() => {
-			SetInputs(out bool _);
+			CheckAndSetInputs();
+			if(GlobalVariables.ipAddress != "127.0.0.1")
 			GlobalVariables.ipAddress = GetLocalIPAddress();
-			StartSiteOpen = false;
+			StartSiteOpen = false; 
+			SetNetworkAddress();
 			NetworkManager.Singleton.StartHost(null, null, false, playPrefab.PrefabHash);
 		});
 		clientBtn.onClick.AddListener(() => {
-			if (!SetInputs(out bool _))
-				return;
+			CheckAndSetInputs();
 			StartSiteOpen = false;
 			startGame.gameObject.SetActive(false);
+			SetNetworkAddress();
 			NetworkManager.Singleton.StartClient();
 		});
 
@@ -80,41 +82,35 @@ public class UILobby : NetworkBehaviour {
 			Debug.Log("Connected: " + NetworkManager.Singleton.ConnectedClientsList.Count);
 		});
 	}
+
+	private void SetNetworkAddress()
+    {
+		GlobalVariables.GameManager.uNetTransport.ConnectAddress = GlobalVariables.ipAddress;
+		GlobalVariables.GameManager.uNetTransport.ConnectPort = GlobalVariables.portAddress;
+	}
+
     /// <summary>
     /// TODO: More check
     /// </summary>
     /// <returns></returns>
-    private bool SetInputs(out bool success){
+    private void CheckAndSetInputs(){
 		if (ipInput.text.Length > 8 && ipInput.text.Trim() != string.Empty && ipInput.text.IndexOf(".") != ipInput.text.LastIndexOf("."))
 			GlobalVariables.ipAddress = ipInput.text;
         else
-        {
-			Debug.LogWarning("IP not right");
-			success = false;
-			return false;
-		}
+			Debug.LogWarning($"IP-Input empty! Using: {GlobalVariables.ipAddress}");
 			
-		if (portInput.text.ToUpper() == portInput.text.ToLower())
+		if (portInput.text.Trim() != "" && portInput.text.ToUpper() == portInput.text.ToLower())
 			GlobalVariables.portAddress = int.Parse(portInput.text);
         else
-        {
-			Debug.LogWarning("Port not right");
-			success = false;
-			return false;
-		}
-		GlobalVariables.GameManager.uNetTransport.ConnectAddress = ipInput.text.Trim();
-		GlobalVariables.GameManager.uNetTransport.ConnectPort = int.Parse(portInput.text);
-		success = true;
-		return true;
+			Debug.LogWarning($"Port-Input empty! Using: {GlobalVariables.portAddress}");
+		
     }
 
 	public static string GetLocalIPAddress(){
-		using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
-		{
+        using Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0);
 			socket.Connect("8.8.8.8", 65530);
-			IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
-			return endPoint.Address.ToString();
-		}
-	}
+        IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
+        return endPoint.Address.ToString();
+    }
 
 }

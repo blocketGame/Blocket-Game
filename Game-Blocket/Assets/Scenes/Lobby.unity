@@ -808,7 +808,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 127.0.0.1
+  m_Text: '-'
 --- !u!222 &408872123
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1431,6 +1431,7 @@ MonoBehaviour:
   clientBtn: {fileID: 2127037543}
   ipInput: {fileID: 1839825615}
   portInput: {fileID: 181186061}
+  ipPlaceHolder: {fileID: 408872122}
   startGame: {fileID: 2027255661}
   goBackBtn: {fileID: 1063804233}
   testBtn: {fileID: 137548646}
@@ -2715,7 +2716,7 @@ RectTransform:
   m_GameObject: {fileID: 1485255244}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
+  m_LocalScale: {x: 3.5, y: 3.5, z: 1}
   m_Children:
   - {fileID: 353843149}
   - {fileID: 1762473607}
@@ -2724,7 +2725,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -535, y: -62}
+  m_AnchoredPosition: {x: -535, y: 37}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1762473606
