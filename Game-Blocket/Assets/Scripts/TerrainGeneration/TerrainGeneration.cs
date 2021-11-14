@@ -69,20 +69,6 @@ public class TerrainGeneration : NetworkBehaviour {
 		chunksUpdatedLastCheck = GlobalVariables.PlayerPos;
 		CheckChunksAroundPlayer(GlobalVariables.PlayerPos);
 
-		////Check if chunks should be visible
-		//foreach(TerrainChunk chunk in ChunksVisibleLastUpdate)
-		//	if (!ChunksVisibleNow.Contains(chunk)) { 
-		//		chunk.ChunkVisible = false;
-		//		Debug.Log("a");
-		//	}
-		//	else if (!chunk.ChunkVisible) { 
-		//		chunk.ChunkVisible = true;
-		//		Debug.Log("b");
-		//	}
-		//ChunksVisibleLastUpdate.Clear();
-		//ChunksVisibleLastUpdate.AddRange(ChunksVisibleNow);
-		//ChunksVisibleNow.Clear();
-
 		//Domas collision thing
 		foreach (TerrainChunk tc in ChunkCollisionQueue)
 			tc.BuildCollisions();
@@ -111,6 +97,7 @@ public class TerrainGeneration : NetworkBehaviour {
 				if(chunk.ChunkVisible)
                     chunk.ChunkVisible = false;
 		}
+		ChunksVisibleLastUpdate.Clear();
 	}
 
 	public static Vector2Int CastVector2ToInt(Vector2 vectorToCast) => new Vector2Int((int)vectorToCast.x, (int)vectorToCast.y);
@@ -127,6 +114,8 @@ public class TerrainGeneration : NetworkBehaviour {
 			ChunksVisibleLastUpdate.Add(chunk);
 			ChunkCollisionQueue.Enqueue(chunk);
 		}else if (World.Chunks.ContainsKey(viewedChunkCoord)){
+			if(!World.Chunks[viewedChunkCoord].ChunkVisible)
+				World.Chunks[viewedChunkCoord].ChunkVisible = true;
 			ChunksVisibleLastUpdate.Add(World.Chunks[viewedChunkCoord]);
 		}
 	}
@@ -140,7 +129,7 @@ public class TerrainGeneration : NetworkBehaviour {
 	///     Generates Chunk From Noisemap without any extra consideration
 	/// </summary>
 	private TerrainChunk BuildChunk(Vector2Int position) {
-		TerrainChunk chunk = new TerrainChunk(position, World, ChunkParent);
+		TerrainChunk chunk = new TerrainChunk(position, ChunkParent);
 		List<Biom> bioms;
 		if (position.y > -20)
 			bioms = World.GetBiomsByType(Biomtype.OVERWORLD);

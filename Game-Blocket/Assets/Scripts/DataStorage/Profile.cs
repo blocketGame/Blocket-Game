@@ -29,6 +29,14 @@ public class WorldProfile : Profile
 	}
 }
 
+public class SettingsProfile : Profile{
+
+	public SettingsProfile(string name) : base(name)
+	{
+
+	}
+}
+
 /// <summary>
 /// Storing player data
 /// </summary>
