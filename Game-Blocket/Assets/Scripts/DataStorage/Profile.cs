@@ -19,7 +19,7 @@ public abstract class Profile{
 }
 
 /// <summary>
-/// TODO:
+/// UNDONE
 /// </summary>
 public class WorldProfile : Profile
 {

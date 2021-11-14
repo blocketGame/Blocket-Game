@@ -4,14 +4,18 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Unity.Mathematics;
 using MLAPI.Messaging;
+using static TerrainChunk;
+using System;
+using MLAPI;
+using UnityEngine.UIElements;
 
 /*
  * @Author : Cse19455 / Thomas Boigner
  */
-public class TerrainGeneration : MonoBehaviour {
+public class TerrainGeneration : NetworkBehaviour {
 
-    #region Serialization
-    [SerializeField]
+	#region Serialization
+	[SerializeField]
 	private List<TerrainChunk> chunksVisibleLastUpdate;
 	[SerializeField]
 	private GameObject chunkParent;
@@ -27,7 +31,10 @@ public class TerrainGeneration : MonoBehaviour {
 
 	public static System.Random prng;
 
+	public Vector3 chunksUpdatedLastCheck;
+
 	public void Awake() {
+		GlobalVariables.TerrainGeneration = this;
 		ChunksVisibleLastUpdate = new List<TerrainChunk>();
 		//World.putBlocksIntoTxt();
 		//World.putBiomsIntoTxt();
@@ -35,19 +42,53 @@ public class TerrainGeneration : MonoBehaviour {
 	}
 
 	public void FixedUpdate() {
-		UpdateChunks();
-		foreach(TerrainChunk tc in ChunkCollisionQueue) {
-			tc.BuildCollisions();
-		}
-		ChunkCollisionQueue.Clear();
+		if(chunksUpdatedLastCheck == null || 
+			Vector3.Distance(GlobalVariables.PlayerPos, chunksUpdatedLastCheck) >= (GlobalVariables.WorldData.ChunkDistance* GlobalVariables.WorldData.ChunkWidth)/4)
+			UpdateChunks();
 	}
 
-	public void UpdateChunks() {
-		foreach(TerrainChunk t in ChunksVisibleLastUpdate) {
-			t.SetChunkState(false);
-		}
-		ChunksVisibleLastUpdate.Clear();
+	/// <summary>
+	/// TODO: 
+	/// </summary>
+	//public void UpdateChunks() {
+	//	chunksUpdatedLastCheck = GlobalVariables.PlayerPos;
+	//	foreach (TerrainChunk t in ChunksVisibleLastUpdate) {
+	//		t.SetChunkState(false);
+	//	}
+	//	ChunksVisibleLastUpdate.Clear();
+	//	CheckChunksAroundPlayer(GlobalVariables.PlayerPos);
+	//	foreach (TerrainChunk tc in ChunkCollisionQueue)
+	//	{
+	//		tc.BuildCollisions();
+	//	}
+	//	ChunkCollisionQueue.Clear();
+	//}
+
+	public void UpdateChunks()
+	{
+		chunksUpdatedLastCheck = GlobalVariables.PlayerPos;
 		CheckChunksAroundPlayer(GlobalVariables.PlayerPos);
+
+		////Check if chunks should be visible
+		//foreach(TerrainChunk chunk in ChunksVisibleLastUpdate)
+		//	if (!ChunksVisibleNow.Contains(chunk)) { 
+		//		chunk.ChunkVisible = false;
+		//		Debug.Log("a");
+		//	}
+		//	else if (!chunk.ChunkVisible) { 
+		//		chunk.ChunkVisible = true;
+		//		Debug.Log("b");
+		//	}
+		//ChunksVisibleLastUpdate.Clear();
+		//ChunksVisibleLastUpdate.AddRange(ChunksVisibleNow);
+		//ChunksVisibleNow.Clear();
+
+		//Domas collision thing
+		foreach (TerrainChunk tc in ChunkCollisionQueue)
+			tc.BuildCollisions();
+		ChunkCollisionQueue.Clear();
+		
+		
 	}
 
 	/// <summary>
@@ -59,14 +100,34 @@ public class TerrainGeneration : MonoBehaviour {
 		for(int xOffset = -World.ChunkDistance; xOffset < World.ChunkDistance; xOffset++) {
 			for(int yOffset = -World.ChunkDistance; yOffset < World.ChunkDistance; yOffset++) {
 				Vector2Int viewedChunkCoord = new Vector2Int(currentChunkCoord.x + xOffset, currentChunkCoord.y + yOffset);
-				if(!World.Chunks.ContainsKey(viewedChunkCoord)) {
-					//Request Chunk
-					BuildChunk(viewedChunkCoord);
-				} else if(World.Chunks.ContainsKey(viewedChunkCoord)) {
-					World.Chunks[viewedChunkCoord].SetChunkState(true);
-					ChunksVisibleLastUpdate.Add(World.Chunks[viewedChunkCoord]);
-				}
+				RequestChunkServerRpc(viewedChunkCoord);
 			}
+		}
+
+
+		foreach(TerrainChunk chunk in ChunksVisibleLastUpdate)
+        {
+			if (Vector2Int.Distance(chunk.ChunkPositionWorldSpace, currentChunkCoord) >= GlobalVariables.WorldData.ChunkDistance * GlobalVariables.WorldData.ChunkWidth)
+				if(chunk.ChunkVisible)
+                    chunk.ChunkVisible = false;
+		}
+	}
+
+	public static Vector2Int CastVector2ToInt(Vector2 vectorToCast) => new Vector2Int((int)vectorToCast.x, (int)vectorToCast.y);
+
+	[ServerRpc]
+	public void RequestChunkServerRpc(Vector2 position)
+	{
+		Vector2Int viewedChunkCoord = CastVector2ToInt(position);
+		if (!World.Chunks.ContainsKey(viewedChunkCoord))
+		{
+			//Request Chunk
+			TerrainChunk chunk = BuildChunk(viewedChunkCoord);
+			World.Chunks[viewedChunkCoord] = chunk;
+			ChunksVisibleLastUpdate.Add(chunk);
+			ChunkCollisionQueue.Enqueue(chunk);
+		}else if (World.Chunks.ContainsKey(viewedChunkCoord)){
+			ChunksVisibleLastUpdate.Add(World.Chunks[viewedChunkCoord]);
 		}
 	}
 
@@ -78,11 +139,10 @@ public class TerrainGeneration : MonoBehaviour {
 	/// <summary>
 	///     Generates Chunk From Noisemap without any extra consideration
 	/// </summary>
-	[ServerRpc]
-	private void BuildChunk(Vector2Int position) {
+	private TerrainChunk BuildChunk(Vector2Int position) {
 		TerrainChunk chunk = new TerrainChunk(position, World, ChunkParent);
 		List<Biom> bioms;
-		if(position.y > -20)
+		if (position.y > -20)
 			bioms = World.GetBiomsByType(Biomtype.OVERWORLD);
 		else
 			bioms = World.GetBiomsByType(Biomtype.UNDERGROUND);
@@ -90,8 +150,6 @@ public class TerrainGeneration : MonoBehaviour {
 			  NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position.x * World.ChunkWidth),
 			  NoiseGenerator.GenerateNoiseMap2D(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, World.OffsetY + position.y * World.ChunkHeight), NoiseGenerator.NoiseMode.Cave),
 			  NoiseGenerator.generateBiom(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, World.OffsetY + position.y * World.ChunkHeight), bioms));
-		World.Chunks[position] = chunk;
-		ChunksVisibleLastUpdate.Add(chunk);
-		ChunkCollisionQueue.Enqueue(chunk);
+		return chunk;
 	}
 }

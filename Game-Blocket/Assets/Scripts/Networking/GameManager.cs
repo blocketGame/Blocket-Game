@@ -15,7 +15,7 @@ using MLAPI.NetworkVariable;
 public class GameManager : NetworkBehaviour
 {
 
-	public GameObject playerPrefab;
+	public GameObject playerPrefab, worldPrefab;
 	/// <summary>Is true if the MainGame is online</summary>
 	public static bool gameRunning;
 	/// <summary>Not used!</summary>
@@ -28,6 +28,15 @@ public class GameManager : NetworkBehaviour
 	/// <summary>Sets this class into the <see cref="GlobalVariables"/></summary>
 	public void Awake() {
 		GlobalVariables.GameManager = this;
+	}
+
+	public void FixedUpdate()
+	{
+		if (GlobalVariables.LocalPlayer == null && gameRunning){
+			FindAndSetPlayer();
+			InitPlayerComponents();
+		}
+			
 	}
 
 	/// <summary>
@@ -55,28 +64,35 @@ public class GameManager : NetworkBehaviour
 		}
 	}
 
+	public void FindAndSetPlayer(){
+		foreach (GameObject iGo in GameObject.FindGameObjectsWithTag("Player"))
+		{
+			if (iGo.GetComponent<NetworkObject>()?.IsLocalPlayer ?? false)
+			{
+				GlobalVariables.LocalPlayer = iGo;
+				iGo.name += "(this)";
+			}
+			else
+				iGo.GetComponent<PlayerVariables>().playerLogic.SetActive(false);
+		}
+	}
+
 	/// <summary>
 	/// Init the player Components<br></br>
 	/// <see cref="TerrainGeneration"/>, <see cref="UIInventory"/>...
 	/// </summary>
 	public void InitPlayerComponents() {
-		//Both
-		foreach(GameObject iGo in GameObject.FindGameObjectsWithTag("Player")) {
-			if(iGo.GetComponent<NetworkObject>()?.IsLocalPlayer ?? false) {
-				GlobalVariables.LocalPlayer = iGo;
-				iGo.name += "(this)";
-			} else
-				iGo.GetComponent<PlayerVariables>().playerLogic.SetActive(false);
-		}
 		GlobalVariables.GlobalAssets = GameObject.Find("Assets");
 		//Inventory
 		GlobalVariables.localUI = Instantiate(GlobalVariables.PrefabAssets.prefabUI);
 
 		//Worldgeneration
-		//if(NetworkManager.Singleton.IsHost) {
-		GlobalVariables.World = Instantiate(GlobalVariables.PrefabAssets.world);
-		GlobalVariables.WorldData.Grid = GlobalVariables.World.GetComponentInChildren<Grid>();
-		GlobalVariables.World.GetComponent<NetworkObject>().Spawn();
+		if (NetworkManager.Singleton.IsHost)
+		{
+			GlobalVariables.World = Instantiate(GlobalVariables.PrefabAssets.world);
+			GlobalVariables.WorldData.Grid = GlobalVariables.World.GetComponentInChildren<Grid>();
+			GlobalVariables.World.GetComponent<NetworkObject>().Spawn();
+		}
 	}
 
 	/// <summary>
@@ -89,7 +105,6 @@ public class GameManager : NetworkBehaviour
 		if(NetworkManager.Singleton.IsHost)
 			SpawnPlayers();
 		//Both
-		InitPlayerComponents();
 		gameRunning = true;
 		/** Old Code
 			Debug.LogWarning($"Switched");

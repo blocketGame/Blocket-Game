@@ -8,13 +8,13 @@ using MLAPI.NetworkVariable.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+using static TerrainChunk;
+
 /// <summary>
 /// <b>Author : Cse19455 / Thomas Boigner</b>
 /// </summary>
 public class WorldData : NetworkBehaviour
 {
-	
-
 	#region Fields
 	[SerializeField]
 	private Biom[] biom;
@@ -70,12 +70,8 @@ public class WorldData : NetworkBehaviour
 	public int ChunkHeight { get => chunkHeight; set => chunkHeight = value; }
 	public int ChunkWidth { get => chunkWidth; set => chunkWidth = value; }
 	public BlockData[] Blocks { get => blocks; set => blocks = value; }
-	public Biom[] Biom
-	{
-		get => biom; set => biom = value;
-	}
-	public Dictionary<Vector2Int, TerrainChunk> Chunks { get; set; }
-
+	public Biom[] Biom{	get => biom; set => biom = value;}
+	public Dictionary<Vector2Int, TerrainChunk> Chunks { get; set; } = new Dictionary<Vector2Int, TerrainChunk>();
 	public Grid Grid { get => grid; set => grid = value; }
 	public float Groupdistance { get => groupdistance; set => groupdistance = value; }
 	public float PickUpDistance { get => pickUpDistance; set => pickUpDistance = value; }

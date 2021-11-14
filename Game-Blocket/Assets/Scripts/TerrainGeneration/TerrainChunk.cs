@@ -20,6 +20,15 @@ public class TerrainChunk
 	[SerializeField]
 	private GameObject collisionObject;
 
+	public bool ChunkVisible { get => _chunkVisible; set
+		{
+			_chunkVisible = value;
+			BackgroundObject.SetActive(value);
+			ChunkObject.SetActive(value);
+		}
+	}
+	private bool _chunkVisible = false;
+
 	public WorldData World { get => world; set => world = value; }
 	public Vector2Int ChunkPositionWorldSpace { get => chunkPosition; set => chunkPosition = value; }
 	public byte[,] BlockIDs { get => blockIDs; set => blockIDs = value; }
@@ -215,16 +224,6 @@ public class TerrainChunk
 	}
 
 	/// <summary>
-	/// Is used to load Chunks in and out
-	/// </summary>
-	/// <param name="value">represents the state the chunk switches to</param>
-	public void SetChunkState(bool value)
-	{
-		BackgroundObject.SetActive(value);
-		ChunkObject.SetActive(value);
-	}
-
-	/// <summary>
 	/// Removes the block out of the tilemap
 	/// </summary>
 	public void DeleteBlock(Vector3Int coordinate)
@@ -336,7 +335,18 @@ public class TerrainChunk
 		Drops.Remove(removable);
 		GameObject.Destroy(removable.DropObject);
 	}
-	public struct Chunk
+
+	/// <summary>
+	/// Chunks are euqal if they have the same <see cref="chunkPosition"/> Vector
+	/// </summary>
+	/// <param name="obj">The other Object</param>
+	/// <returns>True if the otherChunk is the same</returns>
+	public override bool Equals(object obj)
+    {
+        return obj is TerrainChunk other && chunkPosition.Equals(other.chunkPosition);
+    }
+
+    public struct Chunk
 	{
 		public byte[,] blocks;
 		public byte[,] bgBlocks;
@@ -369,7 +379,6 @@ public class TerrainChunk
 		public static TerrainChunk TransferChunkToBlocks(Chunk chunk, WorldData world, GameObject chunkParent)
 		{
 			return new TerrainChunk(new Vector2Int(chunk.chunkPositionWorldSpace.x, chunk.chunkPositionWorldSpace.y), world, chunkParent);
-
 		}
 	}
 }
