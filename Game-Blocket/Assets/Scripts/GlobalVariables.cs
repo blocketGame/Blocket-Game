@@ -21,6 +21,11 @@ public static class GlobalVariables {
 		} 
 	}
 
+    #region UIScripts
+	public static UILobby UILobby { get; set; }
+	public static UIProfileSite UIProfileSite { get; set; }
+	#endregion
+
 	#region Multiplayer
 	public static string ipAddress = UILobby.GetLocalIPAddress();
 	public static int portAddress = 7777;
