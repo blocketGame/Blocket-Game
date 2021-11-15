@@ -58,7 +58,7 @@ public class GameManager : NetworkBehaviour
 	/// </summary>
 	public void SpawnPlayers() {
 		foreach(ulong clientNow in NetworkManager.Singleton.ConnectedClients.Keys) {
-			GameObject go = Instantiate(playerPrefab, new Vector3Int(new System.Random().Next(-20, 20), 100, 0), Quaternion.identity);
+			GameObject go = Instantiate(playerPrefab, new Vector3Int(new System.Random().Next(-20, 20), 25, 0), Quaternion.identity);
 			go.name = $"Player: {clientNow}";
 			go.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientNow);
 		}

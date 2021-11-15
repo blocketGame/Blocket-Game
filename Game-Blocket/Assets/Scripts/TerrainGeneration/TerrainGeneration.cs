@@ -86,7 +86,23 @@ public class TerrainGeneration : NetworkBehaviour {
 		for(int xOffset = -World.ChunkDistance; xOffset < World.ChunkDistance; xOffset++) {
 			for(int yOffset = -World.ChunkDistance; yOffset < World.ChunkDistance; yOffset++) {
 				Vector2Int viewedChunkCoord = new Vector2Int(currentChunkCoord.x + xOffset, currentChunkCoord.y + yOffset);
-				RequestChunkServerRpc(viewedChunkCoord);
+				///Chunks
+				if(NetworkManager.Singleton.IsClient)
+					RequestChunkServerRpc(viewedChunkCoord);
+                else {
+					TerrainChunk chunk = null;
+					if (!World.Chunks.ContainsKey(viewedChunkCoord))
+					{
+						//Request Chunk
+						chunk = BuildChunk(viewedChunkCoord);
+						chunk.BuildCollisions();
+					}
+					else if (World.Chunks.ContainsKey(viewedChunkCoord))
+						chunk = World.Chunks[viewedChunkCoord];
+					chunk.ChunkVisible = true;
+					ChunkCollisionQueue.Enqueue(chunk);
+					ChunksVisibleLastUpdate.Add(chunk);
+				}
 			}
 		}
 
@@ -106,18 +122,29 @@ public class TerrainGeneration : NetworkBehaviour {
 	public void RequestChunkServerRpc(Vector2 position)
 	{
 		Vector2Int viewedChunkCoord = CastVector2ToInt(position);
+		TerrainChunk chunk = null;
 		if (!World.Chunks.ContainsKey(viewedChunkCoord))
 		{
 			//Request Chunk
-			TerrainChunk chunk = BuildChunk(viewedChunkCoord);
-			World.Chunks[viewedChunkCoord] = chunk;
-			ChunksVisibleLastUpdate.Add(chunk);
-			ChunkCollisionQueue.Enqueue(chunk);
+			chunk = BuildChunk(viewedChunkCoord);
+			chunk.BuildCollisions();
 		}else if (World.Chunks.ContainsKey(viewedChunkCoord)){
-			if(!World.Chunks[viewedChunkCoord].ChunkVisible)
-				World.Chunks[viewedChunkCoord].ChunkVisible = true;
-			ChunksVisibleLastUpdate.Add(World.Chunks[viewedChunkCoord]);
+			chunk = World.Chunks[viewedChunkCoord];
 		}
+		if (chunk != null)
+			ReturnChunkClientRpc(Chunk.TransferBlocksToChunk(chunk), position);
+		else
+			Debug.LogWarning("Chunk is null!");
+	}
+
+	[ClientRpc]
+	public void ReturnChunkClientRpc(Chunk chunkObj, Vector2 position){
+		Vector2Int viewedChunkCoord = CastVector2ToInt(position);
+		TerrainChunk terrainChunkToReturn = Chunk.TransferChunkToBlocks(chunkObj, ChunkParent);
+		World.Chunks[viewedChunkCoord] = terrainChunkToReturn;
+		terrainChunkToReturn.ChunkVisible = true;
+		terrainChunkToReturn.BuildCollisions();
+		ChunksVisibleLastUpdate.Add(terrainChunkToReturn);
 	}
 
 	/// <summary>
