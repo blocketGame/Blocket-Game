@@ -30,15 +30,22 @@ public class Structure : MonoBehaviour
 
         ///PROBLEM : Tilemap starts to count in the middle
 
-        for(int x = 0; x < t.editorPreviewSize.x; x++)
+
+        for(int x = -1; x < t.editorPreviewSize.x; x++)
         {
-            for (int y = 0; y < t.editorPreviewSize.y; y++)
+            for (int y = -1; y < t.editorPreviewSize.y; y++)
             {
                 if (t.GetTile(new Vector3Int(x, y, 0)) != null)
                 {
-                    blocks[x, y] = world.getBlockFromTile(t.GetTile(new Vector3Int(x, y, 0)));
+                    blocks[0, 0] = world.getBlockFromTile(t.GetTile(new Vector3Int(x, y, 0)));
                 }
             }
         }
+
+        //Debug.Log(blocks[t.editorPreviewSize.x - 1, t.editorPreviewSize.y - 1]);
+
+        Vector3 v = t.GetCellCenterLocal(new Vector3Int(0, 0, 0));
+        t.SetTile(new Vector3Int((int)v.x,(int)v.y,(int)v.z), world.Blocks[4].Tile);
+        
     }
 }
