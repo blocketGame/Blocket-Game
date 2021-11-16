@@ -65,6 +65,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   biom:
   - {fileID: 11400000, guid: 29b0f6e63e160294face5a7539aa68dc, type: 2}
+  - {fileID: 11400000, guid: 6679dc32c099c0d40967d40357bebee9, type: 2}
   blocks:
   - _name: air
     _blockID: 0
@@ -162,6 +163,30 @@ MonoBehaviour:
     sprite: {fileID: 0}
     removeDuration: 4
     item: 0
+  - _name: Tree_Stamm
+    _blockID: 16
+    _tile: {fileID: 11400000, guid: a2b039ad21dbea343a3af1d7a3f3e9c2, type: 2}
+    sprite: {fileID: 21300000, guid: 4318a7de18532f2409f3a2dd127ba0b8, type: 3}
+    removeDuration: 4
+    item: 0
+  - _name: Tree_Leaf
+    _blockID: 17
+    _tile: {fileID: 11400000, guid: 0d94620a8cdce1e4694bd8d615d2101c, type: 2}
+    sprite: {fileID: 21300000, guid: fbe6e8a4ae870e3478c904052e30f1d8, type: 3}
+    removeDuration: 4
+    item: 0
+  - _name: Cactus_Leaf
+    _blockID: 18
+    _tile: {fileID: 11400000, guid: d6ff0195f0b383e408cde8a71dca16e7, type: 2}
+    sprite: {fileID: 21300000, guid: 2cf6f5175a8ad754aa03719bf9f22e74, type: 3}
+    removeDuration: 4
+    item: 0
+  - _name: Cactus
+    _blockID: 19
+    _tile: {fileID: 11400000, guid: 6ce94ed2ae6b5c7448c1717aac7342ec, type: 2}
+    sprite: {fileID: 21300000, guid: 01c6b008d66f42d46b162c2546a9a8fa, type: 3}
+    removeDuration: 4
+    item: 0
   chunkWidth: 32
   chunkHeight: 32
   chunkDistance: 2
@@ -244,7 +269,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b62b494d2f78d5f48a5a9ef0d5ddf2b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chunksVisibleLastUpdate: []
   chunkParent: {fileID: 2868377673276327341}
+  chunksUpdatedLastCheck: {x: 0, y: 0, z: 0}
 --- !u!1 &2868377673276327341
 GameObject:
   m_ObjectHideFlags: 0

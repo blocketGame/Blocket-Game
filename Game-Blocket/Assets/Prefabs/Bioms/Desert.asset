@@ -10,31 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e47b045bfe515ff45afe88645f743998, type: 3}
-  m_Name: Default - biom
+  m_Name: Desert
   m_EditorClassIdentifier: 
-  index: 0
-  biomName: Default Biom
-  ores:
-  - name: Stone
-    noiseValueFrom: 0.5
-    noiseValueTo: 0.75
-    blockID: 12
-  - name: Bernstein
-    noiseValueFrom: 0.7
-    noiseValueTo: 0.701
-    blockID: 10
+  index: 1
+  biomName: Desert
+  ores: []
   regions:
   - regionRange: 1
-    blockID: 2
+    blockID: 4
   - regionRange: 2
-    blockID: 3
+    blockID: 5
   bgRegions:
   - regionRange: 1
     blockID: 9
   - regionRange: 2
     blockID: 8
-  structures: 00
-  treeSpawnChance: 5
+  structures: 01
+  treeSpawnChance: 10
   treeSpawnDistance: 5
   size: 1000
   heightCurve:
@@ -61,4 +53,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  biomtype: 0100000000000000
+  biomtype: 00000000

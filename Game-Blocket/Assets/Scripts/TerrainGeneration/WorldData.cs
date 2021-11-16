@@ -83,8 +83,20 @@ public class WorldData : NetworkBehaviour
 	/// </summary>
 	public void Awake() {
 		GlobalVariables.WorldData = this;
+		GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[0].ReadStructureFromTilemap();
 	}
 
+
+	public byte getBlockFromTile(TileBase tile)
+	{
+		foreach (BlockData b in blocks)
+		{
+			if (b.Tile != null)
+				if (b.Tile.Equals(tile))
+					return b.BlockID;
+		}
+		return 0;
+	}
 	/// <summary>
 	/// Returns the chunk the given coordinate is in
 	/// </summary>

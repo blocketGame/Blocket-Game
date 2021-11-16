@@ -66,6 +66,7 @@ public static class GlobalVariables {
 		} 
 	}
 	private static GameObject _world;
+	
 
 	#region LocalPlayer
 	public static Inventory Inventory { get => _inventory; }

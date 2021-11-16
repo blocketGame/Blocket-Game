@@ -170,9 +170,16 @@ public class TerrainChunk
 						}
 					}
 				}
+
+				int spawnDistance = GlobalVariables.WorldData.Biom[(int)biomNoiseMap[x, y]].TreeSpawnDistance;
+				//Place Trees.
+				if (x % spawnDistance == 0 && ChunkPositionWorldSpace.y == 0)
+				{
+					//try to spawn a Tree
+					GenerateTrees(x, positionHeight, GlobalVariables.WorldData.Biom[(int)biomNoiseMap[x, y]]);
+				}
 			}
 		}
-		//PlaceTiles(biomindex,true);
 	}
 
 	/// <summary>
@@ -355,6 +362,26 @@ public class TerrainChunk
 	public new bool Equals(object obj)
 	{
 		return obj is TerrainChunk other && chunkPosition.Equals(other.chunkPosition);
+	}
+
+	public void GenerateTrees(int x, int y, Biom biom)
+	{
+		int spawnchance = biom.TreeSpawnChance;
+
+		if (new System.Random(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth + x).Next(1, spawnchance) == 1 && x > GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[biom.Structures[0]].blocks.GetLength(0) && x < (32 - GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[biom.Structures[0]].blocks.GetLength(0)))
+		{
+			for (int z = 0; z < GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[biom.Structures[0]].blocks.GetLength(0); z++)
+			{
+				for (int q = 0; q < GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[biom.Structures[0]].blocks.GetLength(1); q++)
+				{
+					if (BlockIDsBG[x + z - GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[biom.Structures[0]].blocks.GetLength(0) / 2, y + q] == 0)
+					{
+						BlockIDsBG[x + z - GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[biom.Structures[0]].blocks.GetLength(0) / 2, y + q] = GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[biom.Structures[0]].blocks[z, q];
+						PlaceTileInBG(x + z - GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[biom.Structures[0]].blocks.GetLength(0) / 2, y + q, GlobalVariables.WorldData.Blocks[GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[biom.Structures[0]].blocks[z, q]].Tile);
+					}
+				}
+			}
+		}
 	}
 
 	public struct Chunk : INetworkSerializable

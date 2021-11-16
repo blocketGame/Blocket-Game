@@ -22,6 +22,12 @@ public class Biom : ScriptableObject, ISerializationCallbackReceiver {
 	private RegionData[] bgRegions;
 	[SerializeField]
 	private Decoration[] decorations;
+	[SerializeField]
+	private byte[] structures;
+	[SerializeField]
+	private int treeSpawnChance ;
+	[SerializeField]
+	private int treeSpawnDistance;
 	#endregion
 
 	#region TerrainAndSpawn
@@ -43,10 +49,14 @@ public class Biom : ScriptableObject, ISerializationCallbackReceiver {
 	public OreData[] Ores { get => ores; set => ores = value; }
 	public RegionData[] BgRegions { get => bgRegions; set => bgRegions = value; }
 	public List<Biomtype> Biomtype { get => biomtype; set => biomtype = value; }
-	#endregion
+    public byte[] Structures { get => structures; set => structures = value; }
+    public int TreeSpawnChance { get => treeSpawnChance; set => treeSpawnChance = value; }
+    public int TreeSpawnDistance { get => treeSpawnDistance; set => treeSpawnDistance = value; }
+    #endregion
 
-	public void OnAfterDeserialize() {
+    public void OnAfterDeserialize() {
 		//[TODO]
+		
 	}
 
 	public void OnBeforeSerialize() {
