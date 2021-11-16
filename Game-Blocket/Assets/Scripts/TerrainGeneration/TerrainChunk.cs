@@ -21,14 +21,17 @@ public class TerrainChunk
 	[SerializeField]
 	private GameObject collisionObject;
 
-	public bool ChunkVisible { get => _chunkVisible; set
-		{
-			_chunkVisible = value;
+	public bool ChunkVisible { 
+		get {
+			if (ChunkObject.activeSelf != BackgroundObject.activeSelf)
+				Debug.LogWarning("ChunkObject and BG not same!");
+			return ChunkObject.activeSelf;
+		}
+		set{
 			BackgroundObject.SetActive(value);
 			ChunkObject.SetActive(value);
 		}
 	}
-	private bool _chunkVisible = false;
 
 	public Vector2Int ChunkPositionWorldSpace { get => chunkPosition; set => chunkPosition = value; }
 	public byte[,] BlockIDs { get => blockIDs; set => blockIDs = value; }
@@ -100,6 +103,7 @@ public class TerrainChunk
 	private GameObject BuildAllChunkLayers(GameObject chunkParent)
 	{
 		GameObject chunkObject = new GameObject($"Chunk {ChunkPositionWorldSpace.x} {ChunkPositionWorldSpace.y}");
+		chunkObject.tag = "Chunk";
 		chunkObject.transform.SetParent(chunkParent.transform);
 		chunkObject.transform.position = new Vector3(ChunkPositionWorldSpace.x * GlobalVariables.WorldData.ChunkWidth, ChunkPositionWorldSpace.y * GlobalVariables.WorldData.ChunkHeight, 0f);
 

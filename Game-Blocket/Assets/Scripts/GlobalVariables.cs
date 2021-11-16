@@ -21,7 +21,7 @@ public static class GlobalVariables {
 		} 
 	}
 
-    #region UIScripts
+	#region UIScripts
 	public static UILobby UILobby { get; set; }
 	public static UIProfileSite UIProfileSite { get; set; }
 	#endregion
@@ -29,10 +29,10 @@ public static class GlobalVariables {
 	#region Multiplayer
 	public static string ipAddress = UILobby.GetLocalIPAddress();
 	public static int portAddress = 7777;
-    #endregion
+	#endregion
 
-    #region Debug Variables
-    public static readonly bool itemSlotButtonPressedLog = true;
+	#region Debug Variables
+	public static readonly bool itemSlotButtonPressedLog = true;
 	public static readonly bool itemTest = true;
 	#endregion
 

@@ -4,14 +4,10 @@ using System.Net.Sockets;
 using System.Net;
 
 using MLAPI;
-using MLAPI.Configuration;
 using MLAPI.SceneManagement;
-using MLAPI.Spawning;
-using MLAPI.Transports.UNET;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 
 /// <summary>
@@ -92,6 +88,7 @@ public class UILobby : NetworkBehaviour {
 		});
 
 		goBackBtn.onClick.AddListener(() => {
+
 			SiteIndexOpen = 0;
 			startGame.gameObject.SetActive(true);
 			NetworkManager.Singleton.Shutdown();
