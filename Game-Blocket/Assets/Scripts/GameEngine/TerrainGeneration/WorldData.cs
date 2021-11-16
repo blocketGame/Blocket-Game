@@ -53,7 +53,8 @@ public class WorldData : MonoBehaviour
     private float groupdistance;
     [SerializeField]
     private float pickUpDistance;
-
+    [SerializeField]
+    private List<Structure> strukturen;
 
     //----------------------------------------------- Properties ----------------------------------------------------------------------------
 
@@ -83,6 +84,7 @@ public class WorldData : MonoBehaviour
     public Grid Grid { get => grid; set => grid = value; }
     public float Groupdistance { get => groupdistance; set => groupdistance = value; }
     public float PickUpDistance { get => pickUpDistance; set => pickUpDistance = value; }
+    public List<Structure> Strukturen { get => strukturen; set => strukturen = value; }
 
 
 

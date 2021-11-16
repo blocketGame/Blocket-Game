@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+[SerializeField]
 public class Structure : MonoBehaviour
 {
     public byte[,] blocks;
@@ -20,32 +21,34 @@ public class Structure : MonoBehaviour
     {
         ReadStructureFromTilemap();
         this.gameObject.SetActive(false);
-    }
+
+        
+        }
 
     public void ReadStructureFromTilemap()
     {
-        Tilemap t =this.GetComponent<Tilemap>();
-        blocks = new byte[t.editorPreviewSize.x, t.editorPreviewSize.y];
-        Debug.Log(t.editorPreviewSize);
+        Tilemap tilemap = GetComponent<Tilemap>();
+        blocks = new byte[tilemap.editorPreviewSize.x, tilemap.editorPreviewSize.y];
 
-        ///PROBLEM : Tilemap starts to count in the middle
+        BoundsInt bounds = tilemap.cellBounds;
+        TileBase[] allTiles = tilemap.GetTilesBlock(bounds);
 
-
-        for(int x = -1; x < t.editorPreviewSize.x; x++)
+        for (int x = 0; x < bounds.size.x; x++)
         {
-            for (int y = -1; y < t.editorPreviewSize.y; y++)
+            for (int y = 0; y < bounds.size.y; y++)
             {
-                if (t.GetTile(new Vector3Int(x, y, 0)) != null)
+                TileBase tile = allTiles[x + y * bounds.size.x];
+                if (tile != null)
                 {
-                    blocks[0, 0] = world.getBlockFromTile(t.GetTile(new Vector3Int(x, y, 0)));
+                    blocks[x, y] = world.getBlockFromTile(tile);
+                    Debug.Log(blocks[x, y]);
+                    //Debug.Log("x:" + x + " y:" + y + " tile:" + tile.name);
+                }
+                else
+                {
+                    Debug.Log("x:" + x + " y:" + y + " tile: (null)");
                 }
             }
         }
-
-        //Debug.Log(blocks[t.editorPreviewSize.x - 1, t.editorPreviewSize.y - 1]);
-
-        Vector3 v = t.GetCellCenterLocal(new Vector3Int(0, 0, 0));
-        t.SetTile(new Vector3Int((int)v.x,(int)v.y,(int)v.z), world.Blocks[4].Tile);
-        
     }
 }

@@ -334,13 +334,26 @@ public class TerrainChunk
         //Chunk = 32 in der width.
         //Trees benötigen 5 Blöcke in der width bis der nächste BAum spawnen kann
         //[Funktioniert , aber ned schön]
-        /*
-        if (new System.Random(chunkPosition.x*world.ChunkWidth + x).Next(1, 5) == 4)
+        
+        if (new System.Random(chunkPosition.x*world.ChunkWidth + x).Next(1, 5) == 4&&x>world.Strukturen[0].blocks.GetLength(0)&& x<(32-world.Strukturen[0].blocks.GetLength(0)))
         {
             int rando = new System.Random(chunkPosition.x * world.ChunkWidth + x).Next(5, 10);
-            for (int i = 0;i<rando;i++)
-            BlockIDsBG[x, y+i] = 16;
+            //for (int i = 0;i<rando;i++)
+            //BlockIDsBG[x, y+i] = world.Strukturen[0].blocks[2,5];
 
+            Debug.Log(world.Strukturen[0].blocks.GetLength(1));
+            Debug.Log(world.Strukturen[0].blocks.GetLength(0));
+
+            for (int z =0; z< world.Strukturen[0].blocks.GetLength(0);z++)
+            {
+                for (int q = 0; q < world.Strukturen[0].blocks.GetLength(1); q++)
+                {
+                    if(BlockIDsBG[x + z - world.Strukturen[0].blocks.GetLength(0) / 2, y + q]==0)
+                    BlockIDsBG[x+z- world.Strukturen[0].blocks.GetLength(0)/2, y+q] = world.Strukturen[0].blocks[z, q];
+                }
+            }
+            /*
+            Debug.Log(world.Strukturen[0]);
             int breite=0;
             for(int b= rando+2; b > 4; b--)
             {
@@ -351,7 +364,7 @@ public class TerrainChunk
                 }
                 breite++;
             }
-        
-        }*/
+        */
+        }
     }
 }
