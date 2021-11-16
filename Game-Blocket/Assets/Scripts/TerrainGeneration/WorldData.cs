@@ -27,7 +27,9 @@ public class WorldData : MonoBehaviour
     [SerializeField]
     private int chunkDistance;
     [SerializeField]
-    private float caveSize;
+    private float initCaveSize;
+    [SerializeField]
+    private float stoneSize;
     [SerializeField]
     private int seed;
     [SerializeField]
@@ -65,7 +67,8 @@ public class WorldData : MonoBehaviour
     public AnimationCurve Heightcurve { get => heightcurve; set => heightcurve = value; }
     public int Octives { get => octives; set => octives = value; }
     public float Scale { get => scale; set => scale = value; }
-    public float CaveSize { get => caveSize; set => caveSize = value; }
+    public float InitCaveSize { get => initCaveSize; set => initCaveSize = value; }
+    public float StoneSize{ get => stoneSize; set => stoneSize = value; }
     public int Seed { get => seed; set => seed = value; }
     public int ChunkDistance { get => chunkDistance; set => chunkDistance = value; }
     public int ChunkHeight { get => chunkHeight; set => chunkHeight = value; }

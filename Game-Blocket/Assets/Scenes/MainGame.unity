@@ -893,7 +893,8 @@ MonoBehaviour:
   chunkWidth: 32
   chunkHeight: 32
   chunkDistance: 3
-  caveSize: -0.5
+  initCaveSize: -0.8
+  stoneSize: 0.3
   seed: 1337
   scale: 50
   octives: 5
