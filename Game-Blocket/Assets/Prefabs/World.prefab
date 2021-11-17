@@ -189,7 +189,7 @@ MonoBehaviour:
     item: 0
   chunkWidth: 32
   chunkHeight: 32
-  chunkDistance: 2
+  chunkDistance: 4
   caveSize: 0.6
   seed: 1337
   scale: 80

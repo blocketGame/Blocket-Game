@@ -14,7 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 1
   biomName: Desert
-  ores: []
+  ores:
+  - name: 
+    noiseValueFrom: 0
+    noiseValueTo: 0
+    blockID: 0
   regions:
   - regionRange: 1
     blockID: 4
