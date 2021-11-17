@@ -29,6 +29,7 @@ public static class GlobalVariables {
 	#region Multiplayer
 	public static string ipAddress = UILobby.GetLocalIPAddress();
 	public static int portAddress = 7777;
+	public static bool muliplayer = false;
 	#endregion
 
 	#region Debug Variables

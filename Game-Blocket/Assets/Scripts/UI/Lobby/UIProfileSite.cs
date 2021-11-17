@@ -1,3 +1,5 @@
+using MLAPI;
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,9 +8,10 @@ using UnityEngine.UI;
 public class UIProfileSite : MonoBehaviour
 {
 	[Header("Static Resources")]
-	public GameObject worldSelectionSite;
-	public GameObject characterSelectionSite;
-	public Button backBtn, selectBtn, characterSlectBtn, worldSelectBtn;
+	public Text createInput;
+	public GameObject worldSelectionSite, characterSelectionSite, listContentPrefab;
+	public Button backBtn, selectBtn, characterSlectBtn, worldSelectBtn, createBtn;
+	public ScrollRect playerScrollRect, worldScrollRect;
 
 	private bool _characterSelectonOpen = false;
 	public bool CharacterSelectonOpen { get { return _characterSelectonOpen; } set { 
@@ -19,8 +22,11 @@ public class UIProfileSite : MonoBehaviour
 	}
 
 	private void InitButtons(){
-		backBtn.onClick.AddListener(() => { 
-		
+		if(GlobalVariables.muliplayer)
+			if(NetworkManager.Singleton.IsClient)
+				worldSelectBtn.interactable = false;
+		backBtn.onClick.AddListener(() => {
+			GlobalVariables.UILobby.SiteIndexOpen = 0;
 		});
 		selectBtn.onClick.AddListener(() => {
 
@@ -30,6 +36,9 @@ public class UIProfileSite : MonoBehaviour
 		});
 		worldSelectBtn.onClick.AddListener(() => {
 
+		});
+		createBtn.onClick.AddListener(() => { 
+			
 		});
     }
 

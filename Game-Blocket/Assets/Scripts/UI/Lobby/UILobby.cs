@@ -37,7 +37,7 @@ public class UILobby : NetworkBehaviour {
 	}
 
 	/// <summary>
-	/// Managses the sides
+	/// Manages the sides
 	/// </summary>
 	/// <param name="site"></param>
 	public void ManageSites(byte site)
@@ -71,13 +71,13 @@ public class UILobby : NetworkBehaviour {
 			CheckAndSetInputs();
 			if (GlobalVariables.ipAddress != "127.0.0.1")
 				GlobalVariables.ipAddress = GetLocalIPAddress();
-			SiteIndexOpen = 1;
+			SiteIndexOpen = 2;
 			SetNetworkAddress();
 			NetworkManager.Singleton.StartHost(null, null, false, playPrefab.PrefabHash);
 		});
 		clientBtn.onClick.AddListener(() => {
 			CheckAndSetInputs();
-			SiteIndexOpen = 1;
+			SiteIndexOpen = 2;
 			startGame.gameObject.SetActive(false);
 			SetNetworkAddress();
 			NetworkManager.Singleton.StartClient();

@@ -27,12 +27,14 @@ public class UIMainMenu : MonoBehaviour
 		///<see cref="Buttons.offlineBtn"/>
 		offlineBtn.onClick.AddListener(() => {
 			SceneManager.LoadScene("MainGame");
+			GlobalVariables.muliplayer = false;
 		});
 
 		///<see cref="Buttons.onlineBtn"/>
 		onlineBtn.onClick.AddListener(() => {
 			SceneManager.LoadScene("Lobby");
 			SceneManager.UnloadSceneAsync("MainMenu");
+			GlobalVariables.muliplayer = true;
 		});
 
 		///<see cref="Buttons.settingsBtn"/>
