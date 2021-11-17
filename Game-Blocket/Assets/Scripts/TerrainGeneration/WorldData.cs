@@ -83,7 +83,7 @@ public class WorldData : NetworkBehaviour
 	/// </summary>
 	public void Awake() {
 		GlobalVariables.WorldData = this;
-		GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[0].ReadStructureFromTilemap();
+		//GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[0].ReadStructureFromTilemap();
 	}
 
 

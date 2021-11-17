@@ -34,6 +34,7 @@ public static class GlobalVariables {
 	#region Debug Variables
 	public static readonly bool itemSlotButtonPressedLog = true;
 	public static readonly bool itemTest = true;
+	public static readonly bool generateChunksOnClient = true;
 	#endregion
 
 	#region Setted Keys
@@ -72,7 +73,7 @@ public static class GlobalVariables {
 	public static Inventory Inventory { get => _inventory; }
 	private static Inventory _inventory; public static PlayerVariables PlayerVariables { get => _playerVariables; }
 	private static PlayerVariables _playerVariables;
-	public static Vector3 PlayerPos { get => LocalPlayer.transform.position; }
+	public static Vector3 LocalPlayerPos { get => LocalPlayer.transform.position; }
 
 	public static GameObject LocalPlayer
 	{

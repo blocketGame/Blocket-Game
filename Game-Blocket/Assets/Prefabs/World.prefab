@@ -49,7 +49,7 @@ MonoBehaviour:
   NetworkInstanceId: 0
   PrefabHash: 13667806967881829359
   PrefabHashGenerator: World
-  AlwaysReplicateAsRoot: 0
+  AlwaysReplicateAsRoot: 1
   DontDestroyWithOwner: 0
 --- !u!114 &879160506220467931
 MonoBehaviour:
@@ -271,7 +271,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chunksVisibleLastUpdate: []
   chunkParent: {fileID: 2868377673276327341}
-  chunksUpdatedLastCheck: {x: 0, y: 0, z: 0}
 --- !u!1 &2868377673276327341
 GameObject:
   m_ObjectHideFlags: 0

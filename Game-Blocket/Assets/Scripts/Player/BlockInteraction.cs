@@ -21,7 +21,7 @@ public class BlockInteraction : MonoBehaviour{
 	public GameObject deleteSprite;
 	public Sprite crackTile;
 
-	private Vector3 PlayerPos { get => GlobalVariables.PlayerPos; }
+	private Vector3 PlayerPos { get => GlobalVariables.LocalPlayerPos; }
 
 	#region UnityMethods
 	public void Update()

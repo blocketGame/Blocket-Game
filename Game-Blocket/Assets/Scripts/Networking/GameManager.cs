@@ -20,7 +20,7 @@ public class GameManager : NetworkBehaviour
 	public static bool gameRunning;
 	/// <summary>Not used!</summary>
 	public static bool isMultiplayer = true;
-
+	public static List<NetworkObject> Players { get; } = new List<NetworkObject>();
 
 	public UNetTransport uNetTransport;
 	//TODO: Coroutines, Ticks....
@@ -60,7 +60,9 @@ public class GameManager : NetworkBehaviour
 		foreach(ulong clientNow in NetworkManager.Singleton.ConnectedClients.Keys) {
 			GameObject go = Instantiate(playerPrefab, new Vector3Int(new System.Random().Next(-20, 20), 25, 0), Quaternion.identity);
 			go.name = $"Player: {clientNow}";
-			go.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientNow);
+			NetworkObject playerNO = go.GetComponent<NetworkObject>();
+			playerNO.SpawnAsPlayerObject(clientNow);
+			Players.Add(playerNO);
 		}
 	}
 

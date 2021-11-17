@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
+
+using static TerrainChunk.ChunkList;
 /*
 * @Author : Thomas Boigner / Cse19455
 */
@@ -180,7 +182,7 @@ public class TerrainChunk
 				if (x % spawnDistance == 0 && ChunkPositionWorldSpace.y == 0)
 				{
 					//try to spawn a Tree
-					GenerateTrees(x, positionHeight, GlobalVariables.WorldData.Biom[(int)biomNoiseMap[x, y]]);
+					//GenerateTrees(x, positionHeight, GlobalVariables.WorldData.Biom[(int)biomNoiseMap[x, y]]);
 				}
 			}
 		}
@@ -388,80 +390,85 @@ public class TerrainChunk
 		}
 	}
 
-	public struct Chunk : INetworkSerializable
+	
+
+	public class ChunkList : List<Chunk>, INetworkSerializable
 	{
-		public byte[,] blocks;
-		public byte[,] bgBlocks;
-		public Drop[] drops;
-		public Vector2 chunkPositionWorldSpace;
-
-		/// <summary>
-		/// Transfers TerrainChunk to Chunk struct for Multiplayer worldsharing
-		/// </summary>
-		/// <param name="chunk"></param>
-		/// <returns></returns>
-		public static Chunk TransferBlocksToChunk(TerrainChunk chunk)
-		{
-			return new Chunk()
-			{
-				blocks = chunk.BlockIDs,
-				bgBlocks = chunk.BlockIDsBG,
-				drops = chunk.Drops.ToArray(),
-				chunkPositionWorldSpace = new Vector2(chunk.ChunkPositionWorldSpace.x, chunk.ChunkPositionWorldSpace.y)
-			};
-		}
-		/// <summary>
-		/// Transfers Chunk struct to TerrainChunk Object for Multiplayer Worldsharing<br></br>
-		/// TODO: Drops
-		/// </summary>
-		/// <param name="chunk"></param>
-		/// <param name="GlobalVariables.WorldData"></param>
-		/// <param name="chunkParent"></param>
-		/// <returns></returns>
-		public static TerrainChunk TransferChunkToBlocks(Chunk chunk, GameObject chunkParent)
-		{
-			return new TerrainChunk(new Vector2(chunk.chunkPositionWorldSpace.x, chunk.chunkPositionWorldSpace.y), chunkParent);
-		}
-
-		/// <summary>
-		/// Serializes the Object
-		/// </summary>
-		/// <param name="serializer"></param>
 		public void NetworkSerialize(NetworkSerializer serializer)
 		{
-			serializer.Serialize(ref chunkPositionWorldSpace);
-			#region Blocks
-			// Length
-			if (serializer.IsReading)
-				blocks = new byte[GlobalVariables.WorldData.ChunkWidth, GlobalVariables.WorldData.ChunkHeight];
-			for (int x = 0; x < GlobalVariables.WorldData.ChunkWidth; x++)
-				for (int y = 0; y < GlobalVariables.WorldData.ChunkHeight; y++)
-					serializer.Serialize(ref blocks[x,y]);
-			#endregion
-			#region BGBlocks
-			// Length
-			if (serializer.IsReading)
-				bgBlocks = new byte[GlobalVariables.WorldData.ChunkWidth, GlobalVariables.WorldData.ChunkHeight];
-			for (int x = 0; x < GlobalVariables.WorldData.ChunkWidth; x++)
-				for (int y = 0; y < GlobalVariables.WorldData.ChunkHeight; y++)
-					serializer.Serialize(ref bgBlocks[x, y]);
-			#endregion
-			#region Drops
-			/**
-			int dropArraylength = 0;
-			if (!serializer.IsReading)
-				dropArraylength = drops.Length;
-			serializer.Serialize(ref dropArraylength);
+			for (int i = 0; i < this.Count; i++)
+			{
+				Chunk chunk = this[i];
+				serializer.Serialize(ref chunk.chunkPositionWorldSpace);
+				#region Blocks
+				// Length
+				if (serializer.IsReading)
+					chunk.blocks = new byte[GlobalVariables.WorldData.ChunkWidth, GlobalVariables.WorldData.ChunkHeight];
+				for (int x = 0; x < GlobalVariables.WorldData.ChunkWidth; x++)
+					for (int y = 0; y < GlobalVariables.WorldData.ChunkHeight; y++)
+						serializer.Serialize(ref chunk.blocks[x, y]);
+				#endregion
+				#region BGBlocks
+				// Length
+				if (serializer.IsReading)
+					chunk.bgBlocks = new byte[GlobalVariables.WorldData.ChunkWidth, GlobalVariables.WorldData.ChunkHeight];
+				for (int x = 0; x < GlobalVariables.WorldData.ChunkWidth; x++)
+					for (int y = 0; y < GlobalVariables.WorldData.ChunkHeight; y++)
+						serializer.Serialize(ref chunk.bgBlocks[x, y]);
+				#endregion
+				#region Drops
+				/**
+				int dropArraylength = 0;
+				if (!serializer.IsReading)
+					dropArraylength = drops.Length;
+				serializer.Serialize(ref dropArraylength);
 
-			if (serializer.IsReading)
-				bgBlocks = new byte[GlobalVariables.WorldData.ChunkWidth, GlobalVariables.WorldData.ChunkHeight];
+				if (serializer.IsReading)
+					bgBlocks = new byte[GlobalVariables.WorldData.ChunkWidth, GlobalVariables.WorldData.ChunkHeight];
 
-			for (int i = 0; i < GlobalVariables.WorldData.ChunkWidth; i++)
-					serializer.Serialize(ref drops[i]);
-			*/
-			#endregion
+				for (int i = 0; i < GlobalVariables.WorldData.ChunkWidth; i++)
+						serializer.Serialize(ref drops[i]);
+				*/
+				#endregion
+			}
 		}
 
+		public struct Chunk
+		{
+			public byte[,] blocks;
+			public byte[,] bgBlocks;
+			public Drop[] drops;
+			public Vector2 chunkPositionWorldSpace;
 
+			/// <summary>
+			/// Transfers TerrainChunk to Chunk struct for Multiplayer worldsharing
+			/// </summary>
+			/// <param name="chunk"></param>
+			/// <returns></returns>
+			public static Chunk TransferBlocksToChunk(TerrainChunk chunk)
+			{
+				return new Chunk()
+				{
+					blocks = chunk.BlockIDs,
+					bgBlocks = chunk.BlockIDsBG,
+					drops = chunk.Drops.ToArray(),
+					chunkPositionWorldSpace = new Vector2(chunk.ChunkPositionWorldSpace.x, chunk.ChunkPositionWorldSpace.y)
+				};
+			}
+			/// <summary>
+			/// Transfers Chunk struct to TerrainChunk Object for Multiplayer Worldsharing<br></br>
+			/// TODO: Drops
+			/// </summary>
+			/// <param name="chunk"></param>
+			/// <param name="GlobalVariables.WorldData"></param>
+			/// <param name="chunkParent"></param>
+			/// <returns></returns>
+			public static TerrainChunk TransferChunkToBlocks(Chunk chunk, GameObject chunkParent)
+			{
+				return new TerrainChunk(new Vector2(chunk.chunkPositionWorldSpace.x, chunk.chunkPositionWorldSpace.y), chunkParent);
+			}
+
+			
+		}
 	}
 }

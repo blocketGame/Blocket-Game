@@ -7,7 +7,7 @@ using UnityEngine.Tilemaps;
 public class Structure : MonoBehaviour
 {
     public byte[,] blocks;
-    public string name;
+    public new string name;
 
 
 
@@ -23,23 +23,23 @@ public class Structure : MonoBehaviour
 
     public void ReadStructureFromTilemap()
     {
-        Tilemap tilemap = GetComponent<Tilemap>();
-        blocks = new byte[tilemap.editorPreviewSize.x, tilemap.editorPreviewSize.y];
+        //Tilemap tilemap = GetComponent<Tilemap>();
+        //blocks = new byte[tilemap.editorPreviewSize.x, tilemap.editorPreviewSize.y];
 
-        BoundsInt bounds = tilemap.cellBounds;
-        TileBase[] allTiles = tilemap.GetTilesBlock(bounds);
+        //BoundsInt bounds = tilemap.cellBounds;
+        //TileBase[] allTiles = tilemap.GetTilesBlock(bounds);
 
-        for (int x = 0; x < bounds.size.x; x++)
-        {
-            for (int y = 0; y < bounds.size.y; y++)
-            {
-                TileBase tile = allTiles[x + y * bounds.size.x];
-                if (tile != null)
-                {
-                    blocks[x, y] = GlobalVariables.WorldData.getBlockFromTile(tile);
-                    Debug.Log(blocks[x, y]);
-                }
-            }
-        }
+        //for (int x = 0; x < bounds.size.x; x++)
+        //{
+        //    for (int y = 0; y < bounds.size.y; y++)
+        //    {
+        //        TileBase tile = allTiles[x + y * bounds.size.x];
+        //        if (tile != null)
+        //        {
+        //            blocks[x, y] = GlobalVariables.WorldData.getBlockFromTile(tile);
+        //            Debug.Log(blocks[x, y]);
+        //        }
+        //    }
+        //}
     }
 }
