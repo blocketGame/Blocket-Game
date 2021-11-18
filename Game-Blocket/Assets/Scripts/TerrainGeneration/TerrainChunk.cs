@@ -117,7 +117,7 @@ public class TerrainChunk
     /// <param name="noisemap">Noisemap that determines the hight of hills and mountains</param>
     /// <param name="biomindex">Index of the biom of the chunk</param>
 
-    public void GenerateChunk(float[] noisemap, float[,] caveNoisepmap, float[,] biomNoiseMap)
+    public void GenerateChunk(float[] noisemap, float[,] caveNoisepmap, byte[,] oreNoiseMap, int[,] biomNoiseMap)
     {
         float caveSize = world.InitCaveSize;
         if (chunkPosition.y < 0)
@@ -138,49 +138,40 @@ public class TerrainChunk
         for (int x = 0; x < World.ChunkWidth; x++)
         {
             AnimationCurve heightCurve = new AnimationCurve(world.Heightcurve.keys);
-            int positionHeight;
-            lock (noisemap)
-            {
-                positionHeight = Mathf.FloorToInt(heightCurve.Evaluate(noisemap[x]) * World.HeightMultiplier) + 1;
-            }
+            int positionHeight= Mathf.FloorToInt(heightCurve.Evaluate(noisemap[x]) * World.HeightMultiplier) + 1;
             
             for (int y = world.ChunkHeight - 1; y >= 0; y--)
             {
+                Biom biom = world.Biom[biomNoiseMap[x, y]];
                 if (y + chunkPosition.y * world.ChunkHeight < positionHeight)
                 {
-                    lock (caveNoisepmap)
+                    if (caveNoisepmap[x, y] > caveSize)
                     {
-                        if (caveNoisepmap[x, y] > caveSize)
+                        if (caveNoisepmap[x, y] < caveSize + world.StoneSize)
                         {
-                            lock (biomNoiseMap)
+                            blockIDs[x, y] = biom.StoneBlockId;
+                        }
+                        else
+                        {
+                            foreach (RegionData region in biom.Regions)
                             {
-                                if (caveNoisepmap[x, y] < caveSize + world.StoneSize)
+                                if (region.RegionRange <= positionHeight - (y + ChunkPosition.y * world.ChunkHeight))
                                 {
-                                    blockIDs[x, y] = world.getBlockbyId(12).BlockID;
+                                    BlockIDs[x, y] = region.BlockID;
                                 }
-                                else
-                                {
-                                    foreach (RegionData region in world.Biom[(int)biomNoiseMap[x, y]].Regions)
-                                    {
-                                        if (region.RegionRange <= positionHeight - (y + ChunkPosition.y * world.ChunkHeight))
-                                        {
-                                            BlockIDs[x, y] = region.BlockID;
-                                        }
-                                    }
+                            }
 
-                                    foreach (OreData oreData in world.Biom[(int)biomNoiseMap[x, y]].Ores)
-                                    {
-                                        if (caveNoisepmap[x, y] > oreData.NoiseValueFrom && caveNoisepmap[x, y] < oreData.NoiseValueTo)
-                                        {
-                                            BlockIDs[x, y] = oreData.BlockID;
-                                        }
-                                    }
+                            foreach (OreData oreData in biom.Ores)
+                            {
+                                if (oreData.BlockID == oreNoiseMap[x, y])
+                                {
+                                    BlockIDs[x, y] = oreNoiseMap[x, y];
                                 }
                             }
                         }
                     }
                     
-                    foreach (RegionData regionBG in world.Biom[(int)biomNoiseMap[x, y]].BgRegions)
+                    foreach (RegionData regionBG in biom.BgRegions)
                     {
                         if (regionBG.RegionRange <= positionHeight - (y + ChunkPosition.y * world.ChunkHeight))
                         {
@@ -188,7 +179,6 @@ public class TerrainChunk
                         }
                     }
                 }
-                //caveSize = caveSize + 0.001f;
             }
         }
     }
