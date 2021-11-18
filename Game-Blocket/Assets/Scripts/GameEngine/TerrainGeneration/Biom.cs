@@ -23,6 +23,8 @@ public class Biom : MonoBehaviour
     private AnimationCurve heightCurve;
     [SerializeField]
     private List<Biomtype> biomtype;
+    [SerializeField]
+    private byte stoneBlockId;
 
     //----------------------------------------------- Properties ----------------------------------------------------------------------------
 
@@ -35,6 +37,7 @@ public class Biom : MonoBehaviour
     public OreData[] Ores { get => ores; set => ores = value; }
     public RegionData[] BgRegions { get => bgRegions; set => bgRegions = value; }
     public List<Biomtype> Biomtype { get => biomtype; set => biomtype = value; }
+    public byte StoneBlockId { get => stoneBlockId; set => stoneBlockId = value; }
 }
 
 public enum Biomtype {

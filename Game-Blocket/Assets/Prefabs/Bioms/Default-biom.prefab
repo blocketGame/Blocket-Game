@@ -47,14 +47,14 @@ MonoBehaviour:
   size: 1000
   biomName: Default - Biom
   ores:
-  - name: Stone
-    noiseValueFrom: 0.5
-    noiseValueTo: 0.65
-    blockID: 12
   - name: Bernstein
     noiseValueFrom: 0.6
     noiseValueTo: 0.605
     blockID: 10
+  - name: Test
+    noiseValueFrom: 0.5
+    noiseValueTo: 0.505
+    blockID: 5
   regions:
   - regionRange: 1
     blockID: 2
@@ -90,3 +90,4 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   biomtype: 00000000
+  stoneBlockId: 12

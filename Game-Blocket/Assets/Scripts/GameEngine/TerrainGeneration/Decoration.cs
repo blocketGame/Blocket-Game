@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+/// <summary>
+/// 
+/// </summary>
 public class Decoration
 {
+    #region Properites + Regions
     [SerializeField]
     private byte _decorationID;
     [SerializeField]
@@ -14,12 +18,11 @@ public class Decoration
     [SerializeField]
     private Drop[] _drops;
 
-    //----------------------------------------------- Properties ----------------------------------------------------------------------------
-
+    
     public byte DecorationID { get; set; }
     public TileBase Tile { get; set; }
     public string Name { get; set; }
     public Drop[] Drops { get; set; }
-
+    #endregion
 }
 

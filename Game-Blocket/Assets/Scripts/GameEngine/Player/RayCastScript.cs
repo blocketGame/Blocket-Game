@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// TODO
+/// </summary>
 public class RayCastScript : MonoBehaviour
 {
     // Start is called before the first frame update

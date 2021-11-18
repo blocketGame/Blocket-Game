@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+/// <summary>
+/// 
+/// </summary>
 [SerializeField]
 public class Structure : MonoBehaviour
 {
@@ -21,10 +24,11 @@ public class Structure : MonoBehaviour
     {
         ReadStructureFromTilemap();
         this.gameObject.SetActive(false);
+    }
 
-        
-        }
-
+    /// <summary>
+    /// 
+    /// </summary>
     public void ReadStructureFromTilemap()
     {
         Tilemap tilemap = GetComponent<Tilemap>();
@@ -40,7 +44,7 @@ public class Structure : MonoBehaviour
                 TileBase tile = allTiles[x + y * bounds.size.x];
                 if (tile != null)
                 {
-                    blocks[x, y] = world.getBlockFromTile(tile);
+                    blocks[x, y] = world.GetBlockFromTile(tile);
                     Debug.Log(blocks[x, y]);
                     //Debug.Log("x:" + x + " y:" + y + " tile:" + tile.name);
                 }

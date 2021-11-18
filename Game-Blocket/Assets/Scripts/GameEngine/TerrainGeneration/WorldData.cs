@@ -3,13 +3,11 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-/*
- * @Author : Cse19455 / Thomas Boigner
- */
+/// <summary>
+/// @Author : Cse19455 / Thomas Boigner
+/// </summary>
 public class WorldData : MonoBehaviour
 {
-
-
     [SerializeField]
     private GameObject player;
     [SerializeField]
@@ -27,7 +25,9 @@ public class WorldData : MonoBehaviour
     [SerializeField]
     private int chunkDistance;
     [SerializeField]
-    private float caveSize;
+    private float initCaveSize;
+    [SerializeField]
+    private float stoneSize;
     [SerializeField]
     private int seed;
     [SerializeField]
@@ -56,8 +56,7 @@ public class WorldData : MonoBehaviour
     [SerializeField]
     private List<Structure> strukturen;
 
-    //----------------------------------------------- Properties ----------------------------------------------------------------------------
-
+    #region Properties
     public float Persistance { get => persistance; set => persistance = value; }
     public float Lacurinarity { get => lacurinarity; set => lacurinarity = value; }
     public float OffsetX { get => offsetX; set => offsetX = value; }
@@ -66,7 +65,8 @@ public class WorldData : MonoBehaviour
     public AnimationCurve Heightcurve { get => heightcurve; set => heightcurve = value; }
     public int Octives { get => octives; set => octives = value; }
     public float Scale { get => scale; set => scale = value; }
-    public float CaveSize { get => caveSize; set => caveSize = value; }
+    public float InitCaveSize { get => initCaveSize; set => initCaveSize = value; }
+    public float StoneSize{ get => stoneSize; set => stoneSize = value; }
     public int Seed { get => seed; set => seed = value; }
     public int ChunkDistance { get => chunkDistance; set => chunkDistance = value; }
     public int ChunkHeight { get => chunkHeight; set => chunkHeight = value; }
@@ -85,8 +85,7 @@ public class WorldData : MonoBehaviour
     public float Groupdistance { get => groupdistance; set => groupdistance = value; }
     public float PickUpDistance { get => pickUpDistance; set => pickUpDistance = value; }
     public List<Structure> Strukturen { get => strukturen; set => strukturen = value; }
-
-
+    #endregion
 
     /// <summary>
     /// Returns the chunk the given coordinate is in
@@ -114,17 +113,17 @@ public class WorldData : MonoBehaviour
         TerrainChunk chunk = GetChunkFromCoordinate(x, y);
         if (chunk != null)
         {
-            int chunkX = x - ChunkWidth * chunk.ChunkPosition.x;
-            int chunkY = y - ChunkHeight * chunk.ChunkPosition.y;
-            if (chunkX < ChunkWidth && chunkY < ChunkHeight)
-            {
-                return chunk.BlockIDs[chunkX, chunkY];
-            }
+            int chunkX = x - (int)chunk.ChunkPositionWorldSpace.x;
+            int chunkY = y - (int)chunk.ChunkPositionWorldSpace.y;
+            return chunk.BlockIDs[chunkX, chunkY];
         }
         return 1;
     }
 
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="coordinate"></param>
     public void UpdateCollisionsAt(Vector3Int coordinate)
     {
         TerrainChunk chunk = GetChunkFromCoordinate(coordinate.x, coordinate.y);
@@ -161,12 +160,15 @@ public class WorldData : MonoBehaviour
         return Blocks[0];
     }
 
-    //Method at wrong PLACE
+
+    /// <summary>
+    /// TODO Method at wrong PLACE
+    /// </summary>
     public void IgnoreDropCollision()
     {
-        foreach (TerrainChunk t in terraingeneration.ChunksVisibleLastUpdate)
-            foreach (Drop d in t.Drops)
-                    Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Drops"),LayerMask.NameToLayer("Player"));
+    foreach (TerrainChunk t in terraingeneration.ChunksVisibleLastUpdate)
+        foreach (Drop d in t.Drops)
+                Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Drops"),LayerMask.NameToLayer("Player"));
     } 
     /**
     public bool getBlocksFromTxt()
@@ -185,7 +187,6 @@ public class WorldData : MonoBehaviour
     /// <summary>
     /// Creates Blocks.txt file as documentation for the blocks array
     /// </summary>
-
     public void PutBlocksIntoTxt()
     {
         string writeContent = "# This File is considered as documentation tool for the Blocks and their Ids \n";
@@ -199,6 +200,9 @@ public class WorldData : MonoBehaviour
         File.WriteAllText("Docs/Blocks.txt", writeContent);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void putBiomsIntoTxt()
     {
         string writeContent = "# This File is considered as documentation tool for the Bioms and their Indizes \n";
@@ -221,7 +225,12 @@ public class WorldData : MonoBehaviour
         File.WriteAllText("Docs/Bioms.txt", writeContent);
     }
 
-    public List<Biom> getBiomsByType(Biomtype type)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    public List<Biom> GetBiomsByType(Biomtype type)
     {
         List<Biom> biomlist = new List<Biom>();
         foreach (Biom b in biom)
@@ -232,7 +241,12 @@ public class WorldData : MonoBehaviour
         return biomlist;
     }
 
-    public byte getBlockFromTile(TileBase tile)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tile"></param>
+    /// <returns></returns>
+    public byte GetBlockFromTile(TileBase tile)
     {
         foreach(BlockData b in blocks)
         {
@@ -244,6 +258,9 @@ public class WorldData : MonoBehaviour
     }
 }
 
+/// <summary>
+/// 
+/// </summary>
 [System.Serializable]
 public struct OreData
 {
