@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
+/// <summary>
+/// 
+/// </summary>
 public class LightScript : MonoBehaviour
 {
     //THIS DOESNT WORK

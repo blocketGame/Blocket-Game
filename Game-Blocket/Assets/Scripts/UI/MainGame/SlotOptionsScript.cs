@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// Unkown class
+/// </summary>
 public class SlotOptionsScript : MonoBehaviour, IPointerClickHandler {
 
     #region StoredObjects
