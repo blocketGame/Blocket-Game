@@ -862,6 +862,7 @@ GameObject:
   m_Component:
   - component: {fileID: 222074096756097637}
   - component: {fileID: 4126958736040315794}
+  - component: {fileID: 552804439049964413}
   m_Layer: 7
   m_Name: PlayerLogic
   m_TagString: Untagged
@@ -900,6 +901,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   atHand: {fileID: 0}
   atHandVector: {x: 0, y: 0}
+--- !u!114 &552804439049964413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4913946665464429532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad4799d8469bd5d4fab3ad9fe12d47c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MovementSpeed: 6
+  JumpForce: 6
+  fallMulti: 1.06
+  Top: {fileID: 0}
+  Bot: {fileID: 0}
+  Above: {fileID: 0}
+  playerRigidbody: {fileID: 2886164251458701588}
 --- !u!1 &5229216371347317386
 GameObject:
   m_ObjectHideFlags: 0
