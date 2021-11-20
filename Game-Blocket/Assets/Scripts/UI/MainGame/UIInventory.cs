@@ -79,8 +79,7 @@ public class UIInventory : MonoBehaviour
 		InitHudSlots();
 		//InitPlayerInfo();
 		InitAtHand();
-		///Initzialize the Inventory class
-		itemAssets = GameObject.Find("Assets").GetComponent<ItemAssets>();
+		itemAssets = GlobalVariables.GlobalAssets.GetComponent<ItemAssets>();
 		if(!itemAssets)
 			Debug.LogException(new NullReferenceException("Item Assets not found!"));
 		/*if(GlobalVariables.itemTest)
@@ -181,9 +180,17 @@ public class UIInventory : MonoBehaviour
 	}
 	#endregion
 
+	#region UnityMethods
 	/// <summary>"Reload" at the beginning</summary>
 	public void Awake() {
-		_inventory = GameObject.Find("Player").GetComponent<Inventory>();
+		GlobalVariables.PlayerVariables.uIInventory = this;
+		GlobalVariables.PlayerVariables.healthScript = GetComponentInChildren<HealthScript>();
+		GlobalVariables.PlayerVariables.MaxHealth = GlobalVariables.PlayerVariables.MaxHealth;
+		GlobalVariables.PlayerVariables.Health = GlobalVariables.PlayerVariables.Health;
+		name = "UI";
+		_inventory = GlobalVariables.Inventory;
+		if(_inventory == null)
+			Debug.LogError("Inventory not found!");
 		ReloadSettings();
 		InitUI();
 		_inventory.ArmorSlots = armorSlots;
@@ -205,6 +212,7 @@ public class UIInventory : MonoBehaviour
 				
 			}
 	}
+	#endregion
 
 	/// <summary>Reloads all UI Settings</summary>
 	public void ReloadSettings() {
@@ -243,15 +251,15 @@ public class UIInventory : MonoBehaviour
 		set { titleText.text = value; }
 	}
 
-    #region Bidirectional Sync
+	#region Bidirectional Sync
 
-    /// <summary>
-    /// Synchronizes Hotbar State of Slots Row 1
-    /// </summary>
-    public void SynchronizeToInv()
+	/// <summary>
+	/// Synchronizes Hotbar State of Slots Row 1
+	/// </summary>
+	public void SynchronizeToInv()
 	{
-        foreach (UIInventorySlot sl in _inventory.InvSlots)
-        {
+		foreach (UIInventorySlot sl in _inventory.InvSlots)
+		{
 			if (sl.isHotBarSlot)
 			{
 				///[TODO]
@@ -287,6 +295,6 @@ public class UIInventory : MonoBehaviour
 			}
 		}
 	}
-    #endregion
+	#endregion
 
 }

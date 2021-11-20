@@ -3,7 +3,22 @@ guid: ed95fb61d3f227945a1a24fc9f02e119
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - atHandSlot: {instanceID: 0}
+  - accessoiresParent: {instanceID: 0}
+  - heartStat: {instanceID: 0}
+  - shieldStat: {instanceID: 0}
+  - swordStat: {instanceID: 0}
+  - titleText: {instanceID: 0}
+  - descriptonText: {instanceID: 0}
+  - uiParent: {instanceID: 0}
+  - slotField: {instanceID: 0}
+  - uiHud: {instanceID: 0}
+  - hudslotfieldParent: {instanceID: 0}
+  - inventoryBackgroundImage: {instanceID: 0}
+  - prefabItemSlot: {instanceID: 0}
+  - itemAssets: {instanceID: 0}
+  - _slotOptions: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
