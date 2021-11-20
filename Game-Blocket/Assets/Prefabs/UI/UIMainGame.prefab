@@ -1463,7 +1463,7 @@ GameObject:
   - component: {fileID: 8737365439792758476}
   - component: {fileID: 8548312282349072707}
   - component: {fileID: 3019721016803264236}
-  - component: {fileID: 6371064582051011085}
+  - component: {fileID: 375730605628877023}
   m_Layer: 5
   m_Name: Healthbar
   m_TagString: Untagged
@@ -1528,7 +1528,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6371064582051011085
+--- !u!114 &375730605628877023
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1537,18 +1537,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 9035487962041165933}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: febf6508d449e1f478f45a7c0339181a, type: 3}
+  m_Script: {fileID: 11500000, guid: ec80d8a6d1179244fabd6fb20fc037b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 20
-  hearthContainers: 20
-  hearts:
-  - Heart: {fileID: 21300000, guid: e7da1764bd6ac9d479e1daaaebfb5772, type: 3}
-    half_Heart: {fileID: 21300000, guid: 889f0cdca4d846d4a93fa40745fffb2a, type: 3}
-  - Heart: {fileID: 21300000, guid: 99e829bd7fc67da44ab73d4763facbd8, type: 3}
-    half_Heart: {fileID: 21300000, guid: 9066f7479b7b2234492ed2cbface471d, type: 3}
-  null_Heart: {fileID: 21300000, guid: 50a64fe054448f84b90c892e4676f34f, type: 3}
-  null_middleHeart: {fileID: 21300000, guid: a0f20ef9f51b8b94bbb04523ef92d9b8, type: 3}
+  maxHealth: 0
+  hearthContainers: 0
+  hearts: []
+  null_Heart: {fileID: 0}
+  null_middleHeart: {fileID: 0}
 --- !u!1001 &7667816536161253026
 PrefabInstance:
   m_ObjectHideFlags: 0

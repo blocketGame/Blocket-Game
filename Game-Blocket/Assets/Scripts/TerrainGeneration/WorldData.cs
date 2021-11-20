@@ -53,6 +53,12 @@ public class WorldData : NetworkBehaviour
 	private float groupdistance;
 	[SerializeField]
 	private float pickUpDistance;
+	[SerializeField]
+	private float initCaveSize;
+	[SerializeField]
+	private List<Structure> strukturen;
+	[SerializeField]
+	private float stoneSize;
 	#endregion
 
 	#region Properties
@@ -75,7 +81,10 @@ public class WorldData : NetworkBehaviour
 	public Grid Grid { get => grid; set => grid = value; }
 	public float Groupdistance { get => groupdistance; set => groupdistance = value; }
 	public float PickUpDistance { get => pickUpDistance; set => pickUpDistance = value; }
-
+	public Dictionary<int, float[]> Noisemaps { get; set; } = new Dictionary<int, float[]>();
+	public float InitCaveSize { get => initCaveSize; set => initCaveSize = value; }
+	public List<Structure> Strukturen { get => strukturen; set => strukturen = value; }
+	public float StoneSize { get => stoneSize; set => stoneSize = value; }
 	#endregion
 
 	/// <summary>

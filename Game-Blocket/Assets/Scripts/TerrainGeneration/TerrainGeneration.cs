@@ -10,6 +10,7 @@ using MLAPI;
 using UnityEngine.UIElements;
 using MLAPI.Serialization;
 using static TerrainChunk.ChunkList;
+using System.Threading;
 
 /*
  * @Author : Cse19455 / Thomas Boigner
@@ -28,13 +29,12 @@ public class TerrainGeneration : NetworkBehaviour {
 	public GameObject ChunkParent { get => chunkParent; set => chunkParent = value; }
 	#endregion
 
-	private Queue<TerrainChunk> chunkCollisionQueue = new Queue<TerrainChunk>();
-
 	public WorldData World { get => GlobalVariables.WorldData; }
-	public Queue<TerrainChunk> ChunkCollisionQueue { get => chunkCollisionQueue; set => chunkCollisionQueue = value; }
+	public Queue<TerrainChunk> ChunkCollisionQueue { get; set; } = new Queue<TerrainChunk>();
 
 	public static System.Random prng;
 
+	private Queue<TerrainChunk> chunkTileInitializationQueue = new Queue<TerrainChunk>();
 	public Dictionary<ulong, Vector3> PlayerLastUpdate { get; } = new Dictionary<ulong, Vector3>();
 
 	public void Awake() {
@@ -65,6 +65,22 @@ public class TerrainGeneration : NetworkBehaviour {
 					ActivateLocalChunks();
 				DisableChunksOutOfRange();
 			}
+		if (chunkTileInitializationQueue.Count > 0) {
+			lock (chunkTileInitializationQueue) {
+				foreach (TerrainChunk terrainChunk in chunkTileInitializationQueue) {
+					terrainChunk.PlaceAllTiles();
+				}
+				chunkTileInitializationQueue.Clear();
+			}
+		}
+		if (ChunkCollisionQueue.Count > 0) {
+			lock (ChunkCollisionQueue) {
+				foreach (TerrainChunk terrainChunk in ChunkCollisionQueue) {
+					terrainChunk.BuildCollisions();
+				}
+				ChunkCollisionQueue.Clear();
+			}
+		}
 	}
 
 	/// <summary>
@@ -93,7 +109,7 @@ public class TerrainGeneration : NetworkBehaviour {
 			return;
 		}
 		PlayerLastUpdate[playerNO.NetworkInstanceId] = playerNO.gameObject.transform.position;
-		CheckChunksAroundPlayerNetworked(playerNO);
+		//CheckChunksAroundPlayerNetworked(playerNO);
 	}
 
 	private void DisableChunksOutOfRange(){
@@ -136,57 +152,54 @@ public class TerrainGeneration : NetworkBehaviour {
 			{
 				Vector2Int viewedChunkCoord = new Vector2Int(currentChunkCoord.x + xOffset, currentChunkCoord.y + yOffset);
 				///Chunks
-				TerrainChunk chunk = null;
-				if (!World.Chunks.ContainsKey(viewedChunkCoord))
-				{
+				if (!World.Chunks.ContainsKey(viewedChunkCoord)) {
 					//Request Chunk
-					chunk = BuildChunk(viewedChunkCoord);
-					World.Chunks[viewedChunkCoord] = chunk;
-					chunk.BuildCollisions();
-				}
-				else if (World.Chunks.ContainsKey(viewedChunkCoord))
-					chunk = World.Chunks[viewedChunkCoord];
-				chunk.ChunkVisible = true;
+					/*chunk =*/
+					BuildChunk(viewedChunkCoord);
+					//World.Chunks[viewedChunkCoord] = chunk;
+					//chunk.BuildCollisions();
+				} else if (World.Chunks.ContainsKey(viewedChunkCoord))
+					World.Chunks[viewedChunkCoord].ChunkVisible = true;
 			}
 		}
 	}
 		/// <summary>
 		/// Activates and deactivates Chunks
 		/// </summary>
-		public void CheckChunksAroundPlayerNetworked(NetworkObject playerNO) {
-		Vector3 playerPos = playerNO.transform.position;
-		Vector2Int currentChunkCoord = new Vector2Int(Mathf.RoundToInt(playerPos.x / World.ChunkWidth), Mathf.RoundToInt(playerPos.y / World.ChunkHeight));
+	//	public void CheckChunksAroundPlayerNetworked(NetworkObject playerNO) {
+	//	Vector3 playerPos = playerNO.transform.position;
+	//	Vector2Int currentChunkCoord = new Vector2Int(Mathf.RoundToInt(playerPos.x / World.ChunkWidth), Mathf.RoundToInt(playerPos.y / World.ChunkHeight));
 
 
-		ChunkList chunksToSend = new ChunkList();
-		for(int xOffset = -World.ChunkDistance; xOffset < World.ChunkDistance; xOffset++) {
-			for(int yOffset = -World.ChunkDistance; yOffset < World.ChunkDistance; yOffset++) {
-				Vector2Int viewedChunkCoord = new Vector2Int(currentChunkCoord.x + xOffset, currentChunkCoord.y + yOffset);
-				///Chunks
-				TerrainChunk chunk;
-				if (!World.Chunks.ContainsKey(viewedChunkCoord))
-				{
-					//Request Chunk
-					chunk = BuildChunk(viewedChunkCoord);
-					chunk.BuildCollisions();
-				}else{
-					chunk = World.Chunks[viewedChunkCoord];
-				}
-				if (chunk == null)
-					Debug.LogWarning("Chunk is null!");
-				if (GlobalVariables.generateChunksOnClient)
-				{
-					World.Chunks[viewedChunkCoord] = chunk;
-					chunk.ChunkVisible = true;
-					World.Chunks[viewedChunkCoord].BuildCollisions();
-				}
-				else
-					chunksToSend.Add(Chunk.TransferBlocksToChunk(chunk));
-			}
-		}
-		if(!GlobalVariables.generateChunksOnClient)
-			SendChunkClientRpc(chunksToSend, playerNO.OwnerClientId);
-	}
+	//	ChunkList chunksToSend = new ChunkList();
+	//	for(int xOffset = -World.ChunkDistance; xOffset < World.ChunkDistance; xOffset++) {
+	//		for(int yOffset = -World.ChunkDistance; yOffset < World.ChunkDistance; yOffset++) {
+	//			Vector2Int viewedChunkCoord = new Vector2Int(currentChunkCoord.x + xOffset, currentChunkCoord.y + yOffset);
+	//			///Chunks
+	//			TerrainChunk chunk;
+	//			if (!World.Chunks.ContainsKey(viewedChunkCoord))
+	//			{
+	//				//Request Chunk
+	//				chunk = BuildChunk(viewedChunkCoord);
+	//				chunk.BuildCollisions();
+	//			}else{
+	//				chunk = World.Chunks[viewedChunkCoord];
+	//			}
+	//			if (chunk == null)
+	//				Debug.LogWarning("Chunk is null!");
+	//			if (GlobalVariables.generateChunksOnClient)
+	//			{
+	//				World.Chunks[viewedChunkCoord] = chunk;
+	//				chunk.ChunkVisible = true;
+	//				World.Chunks[viewedChunkCoord].BuildCollisions();
+	//			}
+	//			else
+	//				chunksToSend.Add(Chunk.TransferBlocksToChunk(chunk));
+	//		}
+	//	}
+	//	if(!GlobalVariables.generateChunksOnClient)
+	//		SendChunkClientRpc(chunksToSend, playerNO.OwnerClientId);
+	//}
 
 	[ClientRpc]
 	public void SendChunkClientRpc(ChunkList chunkList, ulong clientID)
@@ -240,18 +253,47 @@ public class TerrainGeneration : NetworkBehaviour {
 	/// <summary>
 	///     Generates Chunk From Noisemap without any extra consideration
 	/// </summary>
-	private TerrainChunk BuildChunk(Vector2Int position) {
+	private void BuildChunk(Vector2Int position) {
 		TerrainChunk chunk = new TerrainChunk(position, ChunkParent);
-		List<Biom> bioms;
-		if (position.y > -20)
-			bioms = World.GetBiomsByType(Biomtype.OVERWORLD);
-		else
-			bioms = World.GetBiomsByType(Biomtype.UNDERGROUND);
-		chunk.GenerateChunk(
-			  NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position.x * World.ChunkWidth),
-			  NoiseGenerator.GenerateNoiseMap2D(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, World.OffsetY + position.y * World.ChunkHeight), NoiseGenerator.NoiseMode.Cave),
-			  NoiseGenerator.generateBiom(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, World.OffsetY + position.y * World.ChunkHeight), bioms));
-		return chunk;
-	}
+		ThreadStart threadStart = delegate {
+			List<Biom> bioms;
+			if (position.y > -20)
+				bioms = GlobalVariables.WorldData.GetBiomsByType(Biomtype.OVERWORLD);
+			else
+				bioms = GlobalVariables.WorldData.GetBiomsByType(Biomtype.UNDERGROUND);
 
+			float[] noisemap;
+			lock (GlobalVariables.WorldData.Noisemaps) {
+				if (GlobalVariables.WorldData.Noisemaps.ContainsKey(position.x)) {
+					noisemap = GlobalVariables.WorldData.Noisemaps[position.x];
+				} else {
+					noisemap = NoiseGenerator.GenerateNoiseMap1D(World.ChunkWidth, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, World.OffsetX + position.x * World.ChunkWidth);
+					GlobalVariables.WorldData.Noisemaps.Add(position.x, noisemap);
+				}
+			}
+
+			float[,] caveNoiseMap = NoiseGenerator.GenerateNoiseMap2D(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, GlobalVariables.WorldData.OffsetY + position.y * World.ChunkHeight), NoiseGenerator.NoiseMode.snoise);
+			byte[,] oreNoiseMap = NoiseGenerator.GenerateOreNoiseMap(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Scale, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, GlobalVariables.WorldData.OffsetY + position.y * World.ChunkHeight), NoiseGenerator.NoiseMode.snoise, bioms);
+			int[,] biomNoiseMap = NoiseGenerator.GenerateBiom(World.ChunkWidth, World.ChunkHeight, World.Seed, World.Octives, World.Persistance, World.Lacurinarity, new Vector2(World.OffsetX + position.x * World.ChunkWidth, GlobalVariables.WorldData.OffsetY + position.y * World.ChunkHeight), bioms);
+
+			chunk.GenerateChunk(
+				  noisemap,
+				  caveNoiseMap,
+				  oreNoiseMap,
+				  biomNoiseMap);
+			lock (GlobalVariables.WorldData.Chunks) {
+				World.Chunks[position] = chunk;
+			}
+			//lock (chunksVisibleLastUpdate) {
+			//	chunksVisibleLastUpdate.Add(chunk);
+			//}
+			lock (ChunkCollisionQueue) {
+				ChunkCollisionQueue.Enqueue(chunk);
+			}
+			lock (chunkTileInitializationQueue) {
+				chunkTileInitializationQueue.Enqueue(chunk);
+			}
+		};
+		new Thread(threadStart).Start();
+	}
 }

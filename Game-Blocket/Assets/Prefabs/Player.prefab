@@ -849,7 +849,7 @@ MonoBehaviour:
   healthScript: {fileID: 0}
   playerModel: {fileID: 2087673791013750826}
   playerLogic: {fileID: 4913946665464429532}
-  inventory: {fileID: 0}
+  inventory: {fileID: 4126958736040315794}
   healthGained: 0
   healthLost: 0
 --- !u!1 &4913946665464429532
@@ -861,7 +861,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 222074096756097637}
-  - component: {fileID: 4845571287573249252}
   - component: {fileID: 4126958736040315794}
   m_Layer: 7
   m_Name: PlayerLogic
@@ -887,23 +886,6 @@ Transform:
   m_Father: {fileID: 5781843397233719131}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4845571287573249252
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4913946665464429532}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22c26caee2275724e93ebc8923094f9d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MovementSpeed: 20
-  JumpForce: 15
-  fallMulti: 1.06
-  rigidbody: {fileID: 2886164251458701588}
-  netTransform: {fileID: 1630326704453506117}
 --- !u!114 &4126958736040315794
 MonoBehaviour:
   m_ObjectHideFlags: 0

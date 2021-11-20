@@ -139,51 +139,68 @@ public class TerrainChunk
 	/// </summary>
 	/// <param name="noisemap">Noisemap that determines the hight of hills and mountains</param>
 	/// <param name="biomindex">Index of the biom of the chunk</param>
-	public void GenerateChunk(float[] noisemap, float[,] caveNoisepmap, float[,] biomNoiseMap)
-	{
-		for (int x = 0; x < GlobalVariables.WorldData.ChunkWidth; x++)
-		{
-			int positionHeight = Mathf.FloorToInt(GlobalVariables.WorldData.Heightcurve.Evaluate(noisemap[x]) * GlobalVariables.WorldData.HeightMultiplier) + 1;
-			for (int y = GlobalVariables.WorldData.ChunkHeight - 1; y >= 0; y--)
-			{
-				if (y + chunkPosition.y * GlobalVariables.WorldData.ChunkHeight < positionHeight)
-				{
-					if (caveNoisepmap[x, y] > GlobalVariables.WorldData.CaveSize)
-					{
-						foreach (RegionData region in GlobalVariables.WorldData.Biom[(int)biomNoiseMap[x, y]].Regions)
-						{
-							if (region.RegionRange <= positionHeight - (y + ChunkPositionWorldSpace.y * GlobalVariables.WorldData.ChunkHeight))
-							{
-								BlockIDs[x, y] = region.BlockID;
-							}
-						}
+	public void GenerateChunk(float[] noisemap, float[,] caveNoisepmap, byte[,] oreNoiseMap, int[,] biomNoiseMap) {
+		float caveSize = GlobalVariables.WorldData.InitCaveSize;
+		if (chunkPosition.y < 0) {
+			caveSize = GlobalVariables.WorldData.InitCaveSize - chunkPosition.y * GlobalVariables.WorldData.ChunkHeight * 0.001f;
+		} else
+		if (chunkPosition.y > 0) {
+			caveSize = GlobalVariables.WorldData.InitCaveSize + chunkPosition.y * GlobalVariables.WorldData.ChunkHeight * 0.001f;
+		}
 
-						foreach (OreData oreData in GlobalVariables.WorldData.Biom[(int)biomNoiseMap[x, y]].Ores)
-						{
-							if (caveNoisepmap[x, y] > oreData.NoiseValueFrom && caveNoisepmap[x, y] < oreData.NoiseValueTo)
-							{
-								BlockIDs[x, y] = oreData.BlockID;
+		if (caveSize > 0) {
+			caveSize = 0;
+		}
+
+		for (int x = 0; x < GlobalVariables.WorldData.ChunkWidth; x++) {
+			AnimationCurve heightCurve = new AnimationCurve(GlobalVariables.WorldData.Heightcurve.keys);
+			int positionHeight = Mathf.FloorToInt(heightCurve.Evaluate(noisemap[x]) * GlobalVariables.WorldData.HeightMultiplier) + 1;
+
+			for (int y = GlobalVariables.WorldData.ChunkHeight - 1; y >= 0; y--) {
+				Biom biom = GlobalVariables.WorldData.Biom[biomNoiseMap[x, y]];
+				if (y + chunkPosition.y * GlobalVariables.WorldData.ChunkHeight < positionHeight) {
+					if (caveNoisepmap[x, y] > caveSize) {
+						if (caveNoisepmap[x, y] < caveSize + GlobalVariables.WorldData.StoneSize) {
+							blockIDs[x, y] = biom.StoneBlockId;
+						} else {
+							foreach (RegionData region in biom.Regions) {
+								if (region.RegionRange <= positionHeight - (y + chunkPosition.y * GlobalVariables.WorldData.ChunkHeight)) {
+									BlockIDs[x, y] = region.BlockID;
+								}
+							}
+
+							foreach (OreData oreData in biom.Ores) {
+								if (oreData.BlockID == oreNoiseMap[x, y]) {
+									BlockIDs[x, y] = oreNoiseMap[x, y];
+								}
 							}
 						}
-						PlaceTile(x, y, GlobalVariables.WorldData.Blocks[BlockIDs[x, y]].Tile);
 					}
-					foreach (RegionData regionBG in GlobalVariables.WorldData.Biom[(int)biomNoiseMap[x, y]].BgRegions)
-					{
-						if (regionBG.RegionRange <= positionHeight - (y + ChunkPositionWorldSpace.y * GlobalVariables.WorldData.ChunkHeight))
-						{
+
+					foreach (RegionData regionBG in biom.BgRegions) {
+						if (regionBG.RegionRange <= positionHeight - (y + chunkPosition.y * GlobalVariables.WorldData.ChunkHeight)) {
 							BlockIDsBG[x, y] = regionBG.BlockID;
-							PlaceTileInBG(x, y, GlobalVariables.WorldData.Blocks[BlockIDsBG[x, y]].Tile);
 						}
 					}
 				}
+			}
 
-				int spawnDistance = GlobalVariables.WorldData.Biom[(int)biomNoiseMap[x, y]].TreeSpawnDistance;
-				//Place Trees.
-				if (x % spawnDistance == 0 && ChunkPositionWorldSpace.y == 0)
-				{
-					//try to spawn a Tree
-					//GenerateTrees(x, positionHeight, GlobalVariables.WorldData.Biom[(int)biomNoiseMap[x, y]]);
-				}
+			//Place Trees.
+			//if (x % 5 == 0 && chunkPosition.y == 0) {
+			//	//try to spawn a Tree
+			//	GenerateTrees(x, positionHeight);
+			//}
+		}
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public void PlaceAllTiles() {
+		for (int x = 0; x < GlobalVariables.WorldData.ChunkWidth; x++) {
+			for (int y = 0; y < GlobalVariables.WorldData.ChunkHeight; y++) {
+				PlaceTile(x, y, GlobalVariables.WorldData.Blocks[BlockIDs[x, y]].Tile);
+				PlaceTileInBG(x, y, GlobalVariables.WorldData.Blocks[BlockIDsBG[x, y]].Tile);
 			}
 		}
 	}
@@ -370,27 +387,37 @@ public class TerrainChunk
 		return obj is TerrainChunk other && chunkPosition.Equals(other.chunkPosition);
 	}
 
-	public void GenerateTrees(int x, int y, Biom biom)
-	{
-		int spawnchance = biom.TreeSpawnChance;
+	public void GenerateTrees(int x, int y) {
+		//Chunk = 32 in der width.
+		//Trees benötigen 5 Blöcke in der width bis der nächste BAum spawnen kann
+		//[Funktioniert, aber ned schön]
 
-		if (new System.Random(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth + x).Next(1, spawnchance) == 1 && x > GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[biom.Structures[0]].blocks.GetLength(0) && x < (32 - GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[biom.Structures[0]].blocks.GetLength(0)))
-		{
-			for (int z = 0; z < GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[biom.Structures[0]].blocks.GetLength(0); z++)
-			{
-				for (int q = 0; q < GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[biom.Structures[0]].blocks.GetLength(1); q++)
-				{
-					if (BlockIDsBG[x + z - GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[biom.Structures[0]].blocks.GetLength(0) / 2, y + q] == 0)
-					{
-						BlockIDsBG[x + z - GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[biom.Structures[0]].blocks.GetLength(0) / 2, y + q] = GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[biom.Structures[0]].blocks[z, q];
-						PlaceTileInBG(x + z - GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[biom.Structures[0]].blocks.GetLength(0) / 2, y + q, GlobalVariables.WorldData.Blocks[GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[biom.Structures[0]].blocks[z, q]].Tile);
-					}
+		if (new System.Random(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth + x).Next(1, 5) == 4 && x > GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0) && x < (32 - GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0))) {
+			int rando = new System.Random(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth + x).Next(5, 10);
+			//for (int i = 0;i<rando;i++)
+			//BlockIDsBG[x, y+i] = world.Strukturen[0].blocks[2,5];
+
+
+			for (int z = 0; z < GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0); z++) {
+				for (int q = 0; q < GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(1); q++) {
+					if (BlockIDsBG[x + z - GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0) / 2, y + q] == 0)
+						BlockIDsBG[x + z - GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0) / 2, y + q] = GlobalVariables.WorldData.Strukturen[0].blocks[z, q];
 				}
 			}
+			//int breite=0;
+			//for(int b= rando+2; b > 4; b--)
+			//{
+			//    for(int o = -breite; o <= breite; o++)
+			//    {
+			//        if(BlockIDsBG[x + o, y + rando]==0)
+			//        BlockIDsBG[x+o, y+b] = 17;
+			//    }
+			//    breite++;
+			//}
 		}
 	}
 
-	
+
 
 	public class ChunkList : List<Chunk>, INetworkSerializable
 	{
