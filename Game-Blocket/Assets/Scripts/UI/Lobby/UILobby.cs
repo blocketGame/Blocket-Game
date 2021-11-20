@@ -28,7 +28,7 @@ public class UILobby : NetworkBehaviour {
 	public Button startGame;
 	public Button goBackBtn, testBtn;
 
-	public static readonly bool useProfiles = false;
+	public static readonly bool useProfiles = true;
 	#endregion
 
 	private byte _siteIndexOpen;

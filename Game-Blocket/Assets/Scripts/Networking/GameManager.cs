@@ -22,6 +22,9 @@ public class GameManager : NetworkBehaviour
 	public static bool isMultiplayer = true;
 	public static List<NetworkObject> Players { get; } = new List<NetworkObject>();
 
+	public static PlayerProfile playerProfileNow;
+	public static WorldProfile worldProfileNow;
+
 	public UNetTransport uNetTransport;
 	//TODO: Coroutines, Ticks....
 

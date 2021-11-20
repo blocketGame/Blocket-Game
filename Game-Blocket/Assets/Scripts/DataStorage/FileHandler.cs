@@ -11,16 +11,16 @@ using static Profile;
 /// UNDONE
 /// Will be used for Saving and Loading data
 /// </summary>
-public class FileHandler
+public static class FileHandler
 {
 	/// <summary>
 	/// The Parent Directory for all profiles
 	/// </summary>
-	public static string profileParent = @"..\..\Profiles";
-	public static string playerProfileParent = profileParent + @"\Player";
+	public static string profileParent = @"Profiles";
+	public static string playerProfileParent = profileParent + @"\Players", worldProfileParent = profileParent + @"\Worlds";
 
 	#region ProfileHandling
-	public void CheckParent(){
+	public static void CheckParent(){
 		if (!Directory.Exists(profileParent))
 			Directory.CreateDirectory(profileParent);
 		if (!Directory.Exists(playerProfileParent))
@@ -30,21 +30,27 @@ public class FileHandler
 	/// <summary>
 	/// Exports the profile played now
 	/// </summary>
-	public void ExportProfile(){
+	public static void ExportProfile(Profile p, bool player) {
+		string prePath = player ? playerProfileParent : worldProfileParent;
+
 		CheckParent();
-		Profile profileToSave = SaveProfile();
-		string strToWrite = JsonUtility.ToJson(profileToSave, true);
-		File.WriteAllText(playerProfileParent + @"\" + profileToSave.name + ".json", strToWrite);
+		string strToWrite = JsonUtility.ToJson(p, true);
+		File.WriteAllText(prePath + @$"\{p.name}.json", strToWrite);
+	}
+
+	public static void ExportProfile(bool player) {
+		ExportProfile(SavePlayerProfile(), player);
 	}
 
 	/// <summary>
 	/// Recognises all Profiles in the Parent dir
 	/// </summary>
 	/// <returns></returns>
-	public List<string> FindAllProfiles()
+	public static List<string> FindAllPlayerProfiles()
     {
+		CheckParent();
 		List<string> temp = new List<string>();
-		foreach (string iString in Directory.GetFiles(profileParent))
+		foreach (string iString in Directory.GetFiles(playerProfileParent))
 			if (iString.EndsWith(".json"))
 				temp.Add(iString);
 		return temp;
@@ -53,11 +59,11 @@ public class FileHandler
 	/// <summary>
 	/// Imports the Profile played now
 	/// </summary>
-	public void ImportProfile(string profileName)
+	public static void ImportProfile(string profileName)
 	{
 		CheckParent();
 		string data = string.Empty;
-		foreach(string iString in FindAllProfiles())
+		foreach(string iString in FindAllPlayerProfiles())
             if (iString.StartsWith(profileName))
             {
 				data = File.ReadAllText(playerProfileParent + @"\" + iString);
@@ -68,12 +74,15 @@ public class FileHandler
 		LoadProfile(JsonUtility.FromJson<PlayerProfile>(data));
 	}
 
-	/// <summary>
-	/// Overrides the profile for saving
-	/// </summary>
-	/// <returns></returns>
-	private PlayerProfile SaveProfile(){
-		PlayerProfile pfN = GlobalVariables.PlayerVariables.ProfileNow;
+	public static PlayerProfile SavePlayerProfile() {
+		return SavePlayerProfile(GameManager.playerProfileNow);
+	}
+
+		/// <summary>
+		/// Overrides the profile for saving
+		/// </summary>
+		/// <returns></returns>
+	public static PlayerProfile SavePlayerProfile(PlayerProfile pfN) {
 		//Inventory
 		foreach (UIInventorySlot iS in GlobalVariables.Inventory.InvSlots)
 			pfN.InventoryItems.Add(new SavableItem(iS.Item.id, iS.ItemCount));
@@ -96,8 +105,8 @@ public class FileHandler
 	/// Overrides game components => matching profile
 	/// </summary>
 	/// <param name="profile"></param>
-	private void LoadProfile(PlayerProfile profile){
-		GlobalVariables.PlayerVariables.ProfileNow = profile;
+	public static void LoadProfile(PlayerProfile profile){
+		GameManager.playerProfileNow = profile;
 		/**
 		foreach (SavableItem sI in profile.)
 			GlobalVariables.Inventory.AddItem()
