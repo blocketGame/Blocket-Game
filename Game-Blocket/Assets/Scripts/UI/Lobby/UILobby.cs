@@ -27,6 +27,8 @@ public class UILobby : NetworkBehaviour {
 	[Header("Static: Lobby Site")]
 	public Button startGame;
 	public Button goBackBtn, testBtn;
+
+	public static readonly bool useProfiles = false;
 	#endregion
 
 	private byte _siteIndexOpen;
@@ -71,13 +73,13 @@ public class UILobby : NetworkBehaviour {
 			CheckAndSetInputs();
 			if (GlobalVariables.ipAddress != "127.0.0.1")
 				GlobalVariables.ipAddress = GetLocalIPAddress();
-			SiteIndexOpen = 2;
+			SiteIndexOpen = useProfiles ? (byte)2 : (byte)1;
 			SetNetworkAddress();
 			NetworkManager.Singleton.StartHost(null, null, false, playPrefab.PrefabHash);
 		});
 		clientBtn.onClick.AddListener(() => {
 			CheckAndSetInputs();
-			SiteIndexOpen = 2;
+			SiteIndexOpen = useProfiles ? (byte)2 : (byte)1;
 			startGame.gameObject.SetActive(false);
 			SetNetworkAddress();
 			NetworkManager.Singleton.StartClient();

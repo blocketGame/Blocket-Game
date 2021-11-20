@@ -13,13 +13,14 @@ public class ItemAssets : MonoBehaviour
     public List<UseAbleItem> UseableItemsInGame = new List<UseAbleItem>();
     public List<Structure> Structures = new List<Structure>();
 
-    /*
+    
     private void Awake()
     {
-        foreach (Structure s in Structures) {
-            s.ReadStructureFromTilemap();
-        }
-    }*/
+        GlobalVariables.Assets = this;
+        //foreach (Structure s in Structures) {
+        //    s.ReadStructureFromTilemap();
+        //}
+    }
 
     /// <summary>
     /// Returns a Sprite from Item-ID

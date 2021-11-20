@@ -9,6 +9,8 @@ TagManager:
   - SlotOptions
   - Hotbar
   - Inventory
+  - Chunk
+  - Terrain
   layers:
   - Default
   - TransparentFX
@@ -19,7 +21,7 @@ TagManager:
   - Collision
   - Player
   - Drops
-  - 
+  - PostProcessing
   - 
   - 
   - 

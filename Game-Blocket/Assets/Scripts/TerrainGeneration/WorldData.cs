@@ -8,6 +8,7 @@ using MLAPI.NetworkVariable.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+
 using static TerrainChunk;
 
 /// <summary>
@@ -53,6 +54,10 @@ public class WorldData : NetworkBehaviour
 	private float groupdistance;
 	[SerializeField]
 	private float pickUpDistance;
+	[SerializeField]
+	private float initCaveSize;
+	[SerializeField]
+	private float stoneSize;
 	#endregion
 
 	#region Properties
@@ -75,15 +80,19 @@ public class WorldData : NetworkBehaviour
 	public Grid Grid { get => grid; set => grid = value; }
 	public float Groupdistance { get => groupdistance; set => groupdistance = value; }
 	public float PickUpDistance { get => pickUpDistance; set => pickUpDistance = value; }
-
+	public Dictionary<int, float[]> Noisemaps { get; set; } = new Dictionary<int, float[]>();
+	public float InitCaveSize { get => initCaveSize; set => initCaveSize = value; }
+	public float StoneSize { get => stoneSize; set => stoneSize = value; }
 	#endregion
 
 	/// <summary>
 	/// Stores this class to <see cref="GlobalVariables"/>
 	/// </summary>
-	public void Awake() {
+	public void Awake()
+	{
 		GlobalVariables.WorldData = this;
-		//GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[0].ReadStructureFromTilemap();
+		//for (int i = 0;i< GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures.Count;i++)
+		GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[0].Instantiate();
 	}
 
 
