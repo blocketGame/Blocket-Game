@@ -9,6 +9,7 @@ TagManager:
   - SlotOptions
   - Hotbar
   - Inventory
+  - Chunk
   layers:
   - Default
   - TransparentFX
