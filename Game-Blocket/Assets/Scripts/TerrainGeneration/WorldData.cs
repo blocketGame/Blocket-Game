@@ -96,7 +96,7 @@ public class WorldData : NetworkBehaviour
 	}
 
 
-	public byte getBlockFromTile(TileBase tile)
+	public byte GetBlockFromTile(TileBase tile)
 	{
 		foreach (BlockData b in blocks)
 		{

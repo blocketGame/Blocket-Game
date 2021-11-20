@@ -22,7 +22,6 @@ public class PlayerVariables : MonoBehaviour
 	#endregion
 
 	#region Properties
-	public PlayerProfile ProfileNow { get; set; }
 
 	public ushort Health { get => _health; 
 		set 
