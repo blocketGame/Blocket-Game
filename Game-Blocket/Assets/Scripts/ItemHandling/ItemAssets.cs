@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Handles all items in Game
+/// </summary>
 public class ItemAssets : MonoBehaviour
 {
     public List<BlockItem> BlockItemsInGame = new List<BlockItem>();
@@ -18,6 +21,11 @@ public class ItemAssets : MonoBehaviour
         }
     }*/
 
+    /// <summary>
+    /// Returns a Sprite from Item-ID
+    /// </summary>
+    /// <param name="itemId"></param>
+    /// <returns></returns>
     public Sprite GetSpriteFromItemID(int itemId) {
         foreach(Item item in BlockItemsInGame)
             if(item.id == itemId)
