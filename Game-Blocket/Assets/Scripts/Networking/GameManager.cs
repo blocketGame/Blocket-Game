@@ -111,40 +111,6 @@ public class GameManager : NetworkBehaviour
 			SpawnPlayers();
 		//Both
 		gameRunning = true;
-		/** Old Code
-			Debug.LogWarning($"Switched");
-			//GameObject.FindGameObjectWithTag("Player")?.SetActive(false);
-			GameObject thisPlayer = null;
-
-
-			foreach(ulong clientNow in NetworkManager.Singleton.ConnectedClients.Keys) {
-				GameObject go = Instantiate(playerNetPrefab.gameObject, new Vector3Int(0, 100, 0), Quaternion.identity);
-				go.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientNow);
-				if(clientNow == NetworkManager.Singleton.LocalClientId)
-					thisPlayer = go;
-
-				if(clientNow == NetworkManager.Singleton.LocalClientId) {
-					//if player is localplayer
-					thisPlayer = go;
-
-					GameObject.Find("UI").GetComponent<UIInventory>().inventory = thisPlayer.GetComponent<Inventory>();
-					GameObject.Find("Block Editing").GetComponent<Block_Editing>().mainCamera = thisPlayer.GetComponentInChildren<Camera>();
-					GameObject.Find("Block Editing").GetComponent<Block_Editing>().player = thisPlayer;
-					GameObject.Find("World-Generation").GetComponent<World_Data>().player = thisPlayer;
-					GameObject.Find("UI").GetComponent<UIInventory>().Load();
-					GameObject.Find("World-Generation").GetComponent<Terrain_Generation>().PlayerPosition = thisPlayer.transform;
-
-					thisPlayer.transform.position = new Vector3Int(0, 100, 0);
-					GlobalVariables.gameStarted = true;
-				} else {
-					go.GetComponentInChildren<Camera>().enabled = false;
-				}
-
-			}
-			GameObject.Find("World-Generation").GetComponent<TerrainGeneration>().PlayerPosition = thisPlayer.transform;
-			GameObject.Find("UI").GetComponent<UIInventory>(). = thisPlayer.GetComponent<Inventory>();
-			GameObject.Find("UI").GetComponent<UIInventory>().Load();
-		*/
 	}
 
 }

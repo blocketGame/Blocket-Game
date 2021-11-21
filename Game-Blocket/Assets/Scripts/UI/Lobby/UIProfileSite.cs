@@ -77,11 +77,11 @@ public class UIProfileSite : MonoBehaviour {
 			if (!ValidateInput())
 				return;
 			if (CharacterSelectionOpen) { 
-				PlayerProfile p = new PlayerProfile(createInput.text);
+				PlayerProfile p = new PlayerProfile(createInput.text, null);
 				FileHandler.ExportProfile(p, true);
 				GameManager.playerProfileNow = p;
 			} else {
-				WorldProfile p = new WorldProfile(createInput.text);
+				WorldProfile p = new WorldProfile(createInput.text, null);
 				FileHandler.ExportProfile(p, false);
 				GameManager.worldProfileNow = p;
 			}

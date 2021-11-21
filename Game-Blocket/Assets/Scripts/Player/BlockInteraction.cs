@@ -42,7 +42,7 @@ public class BlockInteraction : MonoBehaviour{
 		if (chunk.CollidewithDrop(grid.WorldToCell(PlayerPos).x, grid.WorldToCell(PlayerPos).y) != null)
 		{
 			Drop collissionDrop = chunk.CollidewithDrop(grid.WorldToCell(PlayerPos).x, grid.WorldToCell(PlayerPos).y);
-			TakeDrops(inv,itemAssets.BlockItemsInGame[collissionDrop.DropID], collissionDrop.Anzahl);
+			TakeDrops(inv,itemAssets.BlockItemsInGame[collissionDrop.DropID], collissionDrop.Count);
 			chunk.RemoveDropfromView(collissionDrop);
 		}
 		ChangeCoordinate(mouseWorldPos);

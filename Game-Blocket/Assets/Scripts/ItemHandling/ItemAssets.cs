@@ -26,19 +26,23 @@ public class ItemAssets : MonoBehaviour
     /// </summary>
     /// <param name="itemId"></param>
     /// <returns></returns>
-    public Sprite GetSpriteFromItemID(int itemId) {
-        foreach(Item item in BlockItemsInGame)
-            if(item.id == itemId)
-                return item.itemImage;
-        foreach(Item item in ToolItemsInGame)
-            if(item.id == itemId)
-                return item.itemImage;
-        foreach(Item item in EquipableItemsInGame)
-            if(item.id == itemId)
-                return item.itemImage;
-        foreach(Item item in UseableItemsInGame)
-            if(item.id == itemId)
-                return item.itemImage;
+    public Sprite GetSpriteFromItemID(uint itemId) {
+        return GetItemFromItemID(itemId)?.itemImage;
+    }
+
+    public Item GetItemFromItemID(uint itemId) {
+        foreach (Item item in BlockItemsInGame)
+            if (item.id == itemId)
+                return item;
+        foreach (Item item in ToolItemsInGame)
+            if (item.id == itemId)
+                return item;
+        foreach (Item item in EquipableItemsInGame)
+            if (item.id == itemId)
+                return item;
+        foreach (Item item in UseableItemsInGame)
+            if (item.id == itemId)
+                return item;
         return null;
-	}
+    }
 }

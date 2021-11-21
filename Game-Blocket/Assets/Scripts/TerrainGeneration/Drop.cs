@@ -2,21 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Drop
-{
+/// <summary>
+/// TODO Move to <see cref="Item"/>
+/// </summary>
+public class Drop{
+	#region Fields + Properties
 	[SerializeField]
-	private GameObject _dropObject;
+	private GameObject _gameObject;
 	[SerializeField]
-	private string _dropName;
+	private string _name;
 	[SerializeField]
-	private byte _dropID;
-	[SerializeField]
-	private byte anzahl;
+	private byte _dropID, _count;
 
-	#region Properties
 	public byte DropID { get => _dropID; set => _dropID = value; }
-	public string DropName { get => _dropName; set => _dropName = value; }
-	public GameObject DropObject { get => _dropObject; set => _dropObject = value; }
-	public byte Anzahl { get => anzahl; set => anzahl = value; }
+	public string Name { get => _name; set => _name = value; }
+	public GameObject GameObject { get => _gameObject; set => _gameObject = value; }
+	public byte Count { get => _count; set => _count = value; }
 	#endregion
 }
