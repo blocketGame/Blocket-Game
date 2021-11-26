@@ -42,6 +42,8 @@ public static class GlobalVariables {
 	public static KeyCode openInventoryKey = KeyCode.E;
 	public static KeyCode leftClick = KeyCode.Mouse0;
 	public static KeyCode rightClick = KeyCode.Mouse1;
+	public static KeyCode jump = KeyCode.Space;
+	public static KeyCode roll = KeyCode.LeftControl;
 	#endregion
 
 	#region Properties + Fields

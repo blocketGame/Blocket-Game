@@ -9,63 +9,30 @@ using UnityEngine.Tilemaps;
 public class BetterMovementScript : MonoBehaviour
 {
    
-   public float MovementSpeed = 300f;
+    public float MovementSpeed = 300f;
     public float JumpForce = 6f;
     public float fallMulti = 1.06f;
-
-
-    public BoxCollider2D Top;
-    public BoxCollider2D Bot;
-    public BoxCollider2D Above;
-
-    //private bool jump = false;
+    public float side;
+    private bool lockvar;
 
     public Rigidbody2D playerRigidbody;
 
 
-    //void Start()
-    //{
-    //    //Physics2D.IgnoreCollision(GetComponent<Collider2D>(), Bot.GetComponent<Collider2D>());
-    //    //Physics2D.IgnoreCollision(GetComponent<Collider2D>(), Top.GetComponent<Collider2D>());
-    //    //Physics2D.IgnoreCollision(GetComponent<Collider2D>(), Above.GetComponent<Collider2D>());
-        
-    //    rigidbody = GetComponentInParent<Rigidbody2D>();
-    //}
-    /**
-    void Update()
-    {
-        if (false) //jump conditions
-        {
-            jump = true;
-        }
-    }*/
-
     void FixedUpdate()
     {
         //right,left movement
+        Clipping();
 
         var movement = Input.GetAxis("Horizontal");
+        //if(!lockvar)
+        if(!lockvar)
         playerRigidbody.gameObject.transform.position += Time.deltaTime * MovementSpeed * new Vector3(movement, 0, 0);
 
         //jump
-        if (playerRigidbody.velocity.y < 3 && Input.GetKey(KeyCode.Space))
+        if (playerRigidbody.velocity.y == 0 && Input.GetKey(GlobalVariables.jump))
         {
             playerRigidbody.AddForce(new Vector2(0, JumpForce), ForceMode2D.Impulse);
         }
-
-        /**walk over block
-
-        if (false)
-        {
-
-
-            Debug.Log("ccoliides");
-            if (Top.isTrigger == false && Above.isTrigger == false)
-            {
-                transform.position = new Vector3(transform.position.x, (transform.position.y) + 1, transform.position.z);
-            }
-        }*/
-
         //fall
         if (playerRigidbody.velocity.y < 0)
         {
@@ -74,6 +41,31 @@ public class BetterMovementScript : MonoBehaviour
                 playerRigidbody.gameObject.transform.position += Time.deltaTime * new Vector3(movement, (playerRigidbody.velocity.y) * fallMulti, 0);
             }
         }
+        if (movement > 0)
+        {
+            side = 1f;
+        }else if(movement<0)
+        {
+            side = -1f;
+        }
 
+        if(playerRigidbody.velocity.y ==0 && Input.GetKeyDown(GlobalVariables.roll))
+        {
+            playerRigidbody.AddForce(new Vector2(MovementSpeed*0.8f*side, JumpForce/1.5f), ForceMode2D.Impulse);
+        }
+    }
+
+    /// <summary>
+    /// Creates an invisible Wall for the player (Collider)
+    /// </summary>
+    private void Clipping()
+    {
+        if (GlobalVariables.WorldData.GetBlockFormCoordinate(
+            GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + (side*0.5f), playerRigidbody.position.y, 0)).x,
+            GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + side, playerRigidbody.position.y - 1, 0)).y)
+            != 0)
+            lockvar = true;
+        else
+            lockvar = false;
     }
 }
