@@ -10,6 +10,7 @@ TagManager:
   - Hotbar
   - Inventory
   - Chunk
+  - Terrain
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Collision
   - Player
   - Drops
-  - 
+  - PostProcessing
   - 
   - 
   - 
@@ -46,4 +47,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Particles
+    uniqueID: 478643419
+    locked: 0
+  - name: Player
+    uniqueID: 599914731
     locked: 0

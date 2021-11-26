@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,14 +13,16 @@ public class ItemAssets : MonoBehaviour
     public List<EquipableItem> EquipableItemsInGame = new List<EquipableItem>();
     public List<UseAbleItem> UseableItemsInGame = new List<UseAbleItem>();
     public List<Structure> Structures = new List<Structure>();
+    public List<Enemy> Enemies = new List<Enemy>();
 
-    /*
+    
     private void Awake()
     {
-        foreach (Structure s in Structures) {
-            s.ReadStructureFromTilemap();
-        }
-    }*/
+        GlobalVariables.Assets = this;
+        //foreach (Structure s in Structures) {
+        //    s.ReadStructureFromTilemap();
+        //}
+    }
 
     /// <summary>
     /// Returns a Sprite from Item-ID

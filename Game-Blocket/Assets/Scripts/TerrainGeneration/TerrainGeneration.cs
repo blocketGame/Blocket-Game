@@ -17,8 +17,6 @@ using System.Threading;
  */
 public class TerrainGeneration : NetworkBehaviour {
 
-
-
 	#region Serialization
 	[SerializeField]
 	private List<TerrainChunk> chunksVisibleLastUpdate;
@@ -40,6 +38,7 @@ public class TerrainGeneration : NetworkBehaviour {
 	public void Awake() {
 		GlobalVariables.TerrainGeneration = this;
 		ChunksVisibleLastUpdate = new List<TerrainChunk>();
+
 		//World.putBlocksIntoTxt();
 		//World.putBiomsIntoTxt();
 		prng = new System.Random(World.Seed);
@@ -284,9 +283,9 @@ public class TerrainGeneration : NetworkBehaviour {
 			lock (GlobalVariables.WorldData.Chunks) {
 				World.Chunks[position] = chunk;
 			}
-			//lock (chunksVisibleLastUpdate) {
-			//	chunksVisibleLastUpdate.Add(chunk);
-			//}
+			lock (chunksVisibleLastUpdate) {
+				chunksVisibleLastUpdate.Add(chunk);
+			}
 			lock (ChunkCollisionQueue) {
 				ChunkCollisionQueue.Enqueue(chunk);
 			}

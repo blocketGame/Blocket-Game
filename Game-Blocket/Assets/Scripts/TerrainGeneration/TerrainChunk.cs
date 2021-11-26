@@ -22,6 +22,9 @@ public class TerrainChunk
 	private GameObject chunkObject;
 	[SerializeField]
 	private GameObject collisionObject;
+	/// <summary> Blocks that belong to other chunks</summary>
+	[SerializeField]
+	private Dictionary<Vector2, byte> borrowedBlocks = new Dictionary<Vector2, byte>();
 
 	public bool ChunkVisible { 
 		get {
@@ -120,6 +123,7 @@ public class TerrainChunk
 		BackgroundObject.AddComponent<TilemapRenderer>();
 
 		CollisionObject = new GameObject($"Chunk {ChunkPositionWorldSpace.x} {ChunkPositionWorldSpace.y} collision");
+		CollisionObject.tag = "Terrain";
 		CollisionObject.transform.SetParent(ChunkTileMap.transform);
 		CollisionObject.transform.position = new Vector3(ChunkPositionWorldSpace.x * GlobalVariables.WorldData.ChunkWidth, ChunkPositionWorldSpace.y * GlobalVariables.WorldData.ChunkHeight, 0f);
 		CollisionTileMap = CollisionObject.AddComponent<Tilemap>();
@@ -140,6 +144,9 @@ public class TerrainChunk
 	/// <param name="noisemap">Noisemap that determines the hight of hills and mountains</param>
 	/// <param name="biomindex">Index of the biom of the chunk</param>
 	public void GenerateChunk(float[] noisemap, float[,] caveNoisepmap, byte[,] oreNoiseMap, int[,] biomNoiseMap) {
+		
+		InsertStructuresFromNeighbourChunks();
+
 		float caveSize = GlobalVariables.WorldData.InitCaveSize;
 		if (chunkPosition.y < 0) {
 			caveSize = GlobalVariables.WorldData.InitCaveSize - chunkPosition.y * GlobalVariables.WorldData.ChunkHeight * 0.001f;
@@ -183,13 +190,15 @@ public class TerrainChunk
 						}
 					}
 				}
+				//Place Trees.
+				if (x % 5 == 0 && chunkPosition.y == 0)
+				{
+					//	//try to spawn a Tree
+					GenerateTrees(x, positionHeight, biom.Index);
+				}
 			}
 
-			//Place Trees.
-			//if (x % 5 == 0 && chunkPosition.y == 0) {
-			//	//try to spawn a Tree
-			//	GenerateTrees(x, positionHeight);
-			//}
+			
 		}
 	}
 
@@ -387,35 +396,82 @@ public class TerrainChunk
 		return obj is TerrainChunk other && chunkPosition.Equals(other.chunkPosition);
 	}
 
-	public void GenerateTrees(int x, int y) {
+	public void GenerateTrees(int x, int y, int biom) {
 		//Chunk = 32 in der width.
 		//Trees benötigen 5 Blöcke in der width bis der nächste BAum spawnen kann
 		//[Funktioniert, aber ned schön]
 
-		if (new System.Random(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth + x).Next(1, 5) == 4 && x > GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0) && x < (32 - GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0))) {
-			int rando = new System.Random(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth + x).Next(5, 10);
-			//for (int i = 0;i<rando;i++)
-			//BlockIDsBG[x, y+i] = world.Strukturen[0].blocks[2,5];
-
-
-			for (int z = 0; z < GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0); z++) {
-				for (int q = 0; q < GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(1); q++) {
-					if (BlockIDsBG[x + z - GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0) / 2, y + q] == 0)
-						BlockIDsBG[x + z - GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0) / 2, y + q] = GlobalVariables.WorldData.Strukturen[0].blocks[z, q];
+		if (new System.Random(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth + x).Next(1, 5) == 4 && x > GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0) && x < (32 - GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0))) {
+			for (int z = 0; z < GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0); z++) {
+				for (int q = 0; q < GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(1); q++) {
+					if ((x + z - GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0) / 2) < GlobalVariables.WorldData.ChunkWidth && (y + q) < GlobalVariables.WorldData.ChunkHeight)
+					{
+						if (BlockIDsBG[x + z - GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0) / 2, y + q] == 0)
+							BlockIDsBG[x + z - GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0) / 2, y + q] = GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks[z, q];
+                    }
+                    else
+                    {
+						if(!borrowedBlocks.ContainsKey(new Vector2(x + z, y + q))){
+							borrowedBlocks.Add(new Vector2(x + z, y + q), GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks[z, q]);
+						}
+						
+                    }
 				}
 			}
-			//int breite=0;
-			//for(int b= rando+2; b > 4; b--)
-			//{
-			//    for(int o = -breite; o <= breite; o++)
-			//    {
-			//        if(BlockIDsBG[x + o, y + rando]==0)
-			//        BlockIDsBG[x+o, y+b] = 17;
-			//    }
-			//    breite++;
-			//}
 		}
 	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public void InsertStructuresFromNeighbourChunks()
+    {
+			try
+			{
+				for (int x = -1; x <= 1; x++)
+					for (int y = -1; y <= 1; y++)
+					{
+					if (GlobalVariables.WorldData.Chunks.ContainsKey(new Vector2Int(chunkPosition.x + x, chunkPosition.y + y)))
+					{
+						TerrainChunk c = GlobalVariables.WorldData.Chunks[new Vector2Int(chunkPosition.x + x, chunkPosition.y + y)];
+						if (c.borrowedBlocks.Count != 0)
+							foreach (KeyValuePair<Vector2, byte> block in c.borrowedBlocks)
+							{
+								int xb = 0;
+								int yb = 0;
+								if (block.Key.x>1)
+                                {
+									xb = (int)(block.Key.x - (x * GlobalVariables.WorldData.ChunkWidth));
+								}
+								else
+                                {
+									xb = (int)(block.Key.x + (x * GlobalVariables.WorldData.ChunkWidth));
+								}
+								if (block.Key.y > 1)
+                                {
+									yb = (int)(block.Key.y - (y * GlobalVariables.WorldData.ChunkHeight));
+								}
+                                else
+                                {
+									yb = (int)(block.Key.y + (y * GlobalVariables.WorldData.ChunkHeight));
+								}
+								if(!(xb>GlobalVariables.WorldData.ChunkWidth||yb>GlobalVariables.WorldData.ChunkHeight) &&xb>=0&&yb>=0)
+								{
+									Debug.Log("This Chunk " + chunkPosition);
+									Debug.Log("x "+xb+" yb "+yb);
+									BlockIDsBG[xb, yb] = block.Value;
+									c.borrowedBlocks.Remove(block.Key);
+								}
+							}
+					}
+					}
+			}
+			catch (Exception ex)
+            {
+				Debug.LogException(ex);
+            }
+				
+    }
 
 
 
@@ -498,4 +554,6 @@ public class TerrainChunk
 			
 		}
 	}
+
+
 }

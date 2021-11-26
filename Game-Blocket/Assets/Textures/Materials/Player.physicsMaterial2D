@@ -7,5 +7,5 @@ PhysicsMaterial2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Player
-  friction: 0.4
+  friction: 2
   bounciness: 0
