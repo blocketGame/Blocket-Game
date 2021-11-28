@@ -183,13 +183,15 @@ public class TerrainChunk
 						}
 					}
 				}
+				//Place Trees.
+				if (x % 5 == 0 && chunkPosition.y == 0)
+				{
+					//	//try to spawn a Tree
+					GenerateTrees(x, positionHeight, biom.Index);
+				}
 			}
 
-			//Place Trees.
-			//if (x % 5 == 0 && chunkPosition.y == 0) {
-			//	//try to spawn a Tree
-			//	GenerateTrees(x, positionHeight);
-			//}
+			
 		}
 	}
 
@@ -387,21 +389,21 @@ public class TerrainChunk
 		return obj is TerrainChunk other && chunkPosition.Equals(other.chunkPosition);
 	}
 
-	public void GenerateTrees(int x, int y) {
+	public void GenerateTrees(int x, int y, int biom) {
 		//Chunk = 32 in der width.
 		//Trees benötigen 5 Blöcke in der width bis der nächste BAum spawnen kann
 		//[Funktioniert, aber ned schön]
 
-		if (new System.Random(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth + x).Next(1, 5) == 4 && x > GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0) && x < (32 - GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0))) {
+		if (new System.Random(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth + x).Next(1, 5) == 4 && x > GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0) && x < (32 - GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0))) {
 			int rando = new System.Random(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth + x).Next(5, 10);
 			//for (int i = 0;i<rando;i++)
 			//BlockIDsBG[x, y+i] = world.Strukturen[0].blocks[2,5];
 
 
-			for (int z = 0; z < GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0); z++) {
-				for (int q = 0; q < GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(1); q++) {
-					if (BlockIDsBG[x + z - GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0) / 2, y + q] == 0)
-						BlockIDsBG[x + z - GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0) / 2, y + q] = GlobalVariables.WorldData.Strukturen[0].blocks[z, q];
+			for (int z = 0; z < GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0); z++) {
+				for (int q = 0; q < GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(1); q++) {
+					if (BlockIDsBG[x + z - GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0) / 2, y + q] == 0)
+						BlockIDsBG[x + z - GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0) / 2, y + q] = GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks[z,q];
 				}
 			}
 			//int breite=0;

@@ -63,6 +63,7 @@ public static class GlobalVariables {
 	#endregion
 
 	public static WorldData WorldData { get; set; }
+	public static ItemAssets Assets { get; set; }
 	public static TerrainGeneration TerrainGeneration { get; set; }
 
 	public static GameObject World { get => _world; set { 

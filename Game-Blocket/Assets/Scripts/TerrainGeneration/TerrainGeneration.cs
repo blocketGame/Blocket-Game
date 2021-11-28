@@ -284,9 +284,9 @@ public class TerrainGeneration : NetworkBehaviour {
 			lock (GlobalVariables.WorldData.Chunks) {
 				World.Chunks[position] = chunk;
 			}
-			//lock (chunksVisibleLastUpdate) {
-			//	chunksVisibleLastUpdate.Add(chunk);
-			//}
+			lock (chunksVisibleLastUpdate) {
+				chunksVisibleLastUpdate.Add(chunk);
+			}
 			lock (ChunkCollisionQueue) {
 				ChunkCollisionQueue.Enqueue(chunk);
 			}

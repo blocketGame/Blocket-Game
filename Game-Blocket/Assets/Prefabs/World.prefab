@@ -226,6 +226,9 @@ MonoBehaviour:
   grid: {fileID: 0}
   groupdistance: 1.5
   pickUpDistance: 1.5
+  initCaveSize: 0
+  strukturen: []
+  stoneSize: 0
 --- !u!1 &1651735029580647344
 GameObject:
   m_ObjectHideFlags: 0
