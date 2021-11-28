@@ -120,6 +120,7 @@ public class TerrainChunk
 		BackgroundObject.AddComponent<TilemapRenderer>();
 
 		CollisionObject = new GameObject($"Chunk {ChunkPositionWorldSpace.x} {ChunkPositionWorldSpace.y} collision");
+		CollisionObject.tag = "Terrain";
 		CollisionObject.transform.SetParent(ChunkTileMap.transform);
 		CollisionObject.transform.position = new Vector3(ChunkPositionWorldSpace.x * GlobalVariables.WorldData.ChunkWidth, ChunkPositionWorldSpace.y * GlobalVariables.WorldData.ChunkHeight, 0f);
 		CollisionTileMap = CollisionObject.AddComponent<Tilemap>();
