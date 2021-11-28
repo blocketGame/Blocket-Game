@@ -913,8 +913,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad4799d8469bd5d4fab3ad9fe12d47c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementSpeed: 6
-  JumpForce: 10
+  MovementSpeed: 5
+  JumpForce: 7
   fallMulti: 1.06
   side: 0
   playerRigidbody: {fileID: 2886164251458701588}

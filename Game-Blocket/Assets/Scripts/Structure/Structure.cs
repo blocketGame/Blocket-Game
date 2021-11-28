@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -17,7 +19,14 @@ public class Structure : MonoBehaviour
     
     private void Start()
     {
-        ReadStructureFromTilemap();
+        try
+        {
+           ReadFromFile();
+        }
+        catch
+        {
+           ReadStructureFromTilemap();
+        }
         //this.gameObject.SetActive(false);
     }
 
@@ -41,5 +50,43 @@ public class Structure : MonoBehaviour
                 }
             }
         }
+        WriteInFile();
+
+    }
+
+    private void WriteInFile()
+    {
+        string s = "";
+        for(int x=0;x<blocks.GetLength(1);x++)
+            for(int y = 0; y < blocks.GetLength(0); y++)
+            {
+                s += blocks[y, x] + "\n";
+                if (y == blocks.GetLength(0) - 1) 
+                    s += ".\n";
+            }
+                
+        File.WriteAllText($"Docs/Structure{name}.txt", s);
+        Debug.Log("WRITE");
+    }
+
+    private void ReadFromFile()
+    {
+        Debug.Log("READ");
+        
+        string[] lines = System.IO.File.ReadAllLines($"Docs/Structure{name}.txt");
+        int x = 0;
+        int y = 0;
+        for(int i=0;i < lines.Length; i++)
+        {
+            if (lines[i].Equals("."))
+            {
+                y++;
+                x = 0;
+            }else
+                blocks[x, y] = Encoding.ASCII.GetBytes(lines[i])[0];
+            x++;
+        }
+
+
     }
 }
