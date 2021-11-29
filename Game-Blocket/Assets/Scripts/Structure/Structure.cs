@@ -6,19 +6,20 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+/// <summary>
+/// @Cse19455 
+/// Class for Structure System for trees and houses
+/// </summary>
 [SerializeField]
 public class Structure : MonoBehaviour
 {
     public byte[,] blocks;
     public new string name;
-
-
-
-    //Idea 1 give it the byte of used Tiles 
-
-    //Idea 2 search for right Tile
     
 
+    /// <summary>
+    /// Instantiates the Structure Block array
+    /// </summary>
     public void Instantiate()
     {
         try
@@ -32,12 +33,13 @@ public class Structure : MonoBehaviour
         }
     }
 
+
+
+    #if (UNITY_EDITOR)
     /// <summary>
     /// DON'T DELETE (USE IF NEW STRUCTURE IS NOT SAVED YET)
     /// Build won't work if activated
     /// </summary>
-    
-    /*
     private void ReadStructureFromTilemap()
     {
         Tilemap tilemap = GetComponent<Tilemap>();
@@ -61,6 +63,9 @@ public class Structure : MonoBehaviour
         WriteInFile();
     }
 
+    /// <summary>
+    /// Writes the Block array in a txt File
+    /// </summary>
     private void WriteInFile()
     {
         string s = $"{ GetComponent<Tilemap>().editorPreviewSize.x},{ GetComponent<Tilemap>().editorPreviewSize.y}\n";
@@ -74,14 +79,17 @@ public class Structure : MonoBehaviour
             }
                 
         File.WriteAllText($"Docs/Structure{name}.txt", s);
-    }*/
+    }
+    #endif
 
+    /// <summary>
+    /// Reads the block array from a TXT File
+    /// </summary>
     private void ReadFromFile()
     {
         string[] lines = System.IO.File.ReadAllLines($"Docs/Structure{name}.txt");
         char c = ',';
         blocks = new byte[int.Parse(lines[0].Split(c)[0]), int.Parse(lines[0].Split(c)[1])];
-        Debug.Log(blocks.GetLength(1));
         int x = 0;
         int y = 0;
         for(int i=1;i < lines.Length; i++)
@@ -94,7 +102,7 @@ public class Structure : MonoBehaviour
             else
             {
                 blocks[x, y] = byte.Parse(lines[i]);
-                Debug.Log(blocks[x, y]);
+                //Debug.Log(blocks[x, y]);
                 x++;
             }
                 
