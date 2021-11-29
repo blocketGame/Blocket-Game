@@ -17,9 +17,9 @@ public class ItemAssets : MonoBehaviour
     private void Awake()
     {
         GlobalVariables.Assets = this;
-        foreach (Structure s in Structures) {
-            s.ReadStructureFromTilemap();
-        }
+        //foreach (Structure s in Structures) {
+        //    s.ReadStructureFromTilemap();
+        //}
     }
 
     /// <summary>

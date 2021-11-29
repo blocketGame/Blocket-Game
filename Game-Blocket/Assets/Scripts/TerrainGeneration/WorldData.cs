@@ -92,7 +92,7 @@ public class WorldData : NetworkBehaviour
 	{
 		GlobalVariables.WorldData = this;
 		//for (int i = 0;i< GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures.Count;i++)
-		GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[0].ReadStructureFromTilemap();
+		GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[0].Instantiate();
 	}
 
 

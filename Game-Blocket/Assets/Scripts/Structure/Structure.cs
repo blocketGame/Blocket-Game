@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -17,20 +18,27 @@ public class Structure : MonoBehaviour
 
     //Idea 2 search for right Tile
     
-    private void Start()
+
+    public void Instantiate()
     {
         try
         {
-           ReadFromFile();
+            ReadFromFile();
         }
-        catch
+        catch(Exception e)
         {
-           ReadStructureFromTilemap();
+            Debug.LogException(e);
+            //ReadStructureFromTilemap();
         }
-        //this.gameObject.SetActive(false);
     }
 
-    public void ReadStructureFromTilemap()
+    /// <summary>
+    /// DON'T DELETE (USE IF NEW STRUCTURE IS NOT SAVED YET)
+    /// Build won't work if activated
+    /// </summary>
+    
+    /*
+    private void ReadStructureFromTilemap()
     {
         Tilemap tilemap = GetComponent<Tilemap>();
         blocks = new byte[tilemap.editorPreviewSize.x, tilemap.editorPreviewSize.y];
@@ -46,17 +54,16 @@ public class Structure : MonoBehaviour
                 if (tile != null)
                 {
                     blocks[x, y] = GlobalVariables.WorldData.getBlockFromTile(tile);
-                    Debug.Log(blocks[x, y]);
+                    //Debug.Log(blocks[x, y]);
                 }
             }
         }
         WriteInFile();
-
     }
 
     private void WriteInFile()
     {
-        string s = "";
+        string s = $"{ GetComponent<Tilemap>().editorPreviewSize.x},{ GetComponent<Tilemap>().editorPreviewSize.y}\n";
         for(int x=0;x<blocks.GetLength(1);x++)
             for(int y = 0; y < blocks.GetLength(0); y++)
             {
@@ -66,26 +73,32 @@ public class Structure : MonoBehaviour
             }
                 
         File.WriteAllText($"Docs/Structure{name}.txt", s);
-        Debug.Log("WRITE");
-    }
+    }*/
 
     private void ReadFromFile()
     {
-        Debug.Log("READ");
-        
         string[] lines = System.IO.File.ReadAllLines($"Docs/Structure{name}.txt");
+        char c = ',';
+        blocks = new byte[int.Parse(lines[0].Split(c)[0]), int.Parse(lines[0].Split(c)[1])];
+        Debug.Log(blocks.GetLength(1));
         int x = 0;
         int y = 0;
-        for(int i=0;i < lines.Length; i++)
+        for(int i=1;i < lines.Length; i++)
         {
             if (lines[i].Equals("."))
             {
                 y++;
                 x = 0;
-            }else
-                blocks[x, y] = Encoding.ASCII.GetBytes(lines[i])[0];
-            x++;
+            }
+            else
+            {
+                blocks[x, y] = byte.Parse(lines[i]);
+                Debug.Log(blocks[x, y]);
+                x++;
+            }
+                
         }
+
 
 
     }
