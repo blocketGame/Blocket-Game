@@ -396,15 +396,17 @@ public class TerrainChunk
 		//[Funktioniert, aber ned schön]
 
 		if (new System.Random(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth + x).Next(1, 5) == 4 && x > GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0) && x < (32 - GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0))) {
-			int rando = new System.Random(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth + x).Next(5, 10);
+			//int rando = new System.Random(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth + x).Next(5, 10);
 			//for (int i = 0;i<rando;i++)
 			//BlockIDsBG[x, y+i] = world.Strukturen[0].blocks[2,5];
 
 
 			for (int z = 0; z < GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0); z++) {
 				for (int q = 0; q < GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(1); q++) {
-					if (BlockIDsBG[x + z - GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0) / 2, y + q] == 0)
-						BlockIDsBG[x + z - GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0) / 2, y + q] = GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks[z,q];
+                    try { 
+						if (BlockIDsBG[x + z - GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0) / 2, y + q] == 0)
+							BlockIDsBG[x + z - GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0) / 2, y + q] = GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks[z, q];
+					}catch { }
 				}
 			}
 			//int breite=0;
