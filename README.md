@@ -1,10 +1,28 @@
-# ReriTara-PRE
-PRE Terraria Clone
+# Blocket Game
 
-This is a small school project!
+2D Sandbox Adventure
+Heavily inspired by Terraria
+
+### _This Game will feature :_
+* a procedurally generated World 
+* buildings
+* dungeons
+* many Interesting Items & Weapons
+* and much more.
+
+**Visit our 🗺️ Wiki for further information on the project.**
+
+
+***
+
+## Developement Team 🇦🇹
+```
+Philipp Cserich 
+Thomas Boigner
+Fabian Maurutschek
+Timon Reiter
+Bernhard Siegl
+``` 
+***
 
 Made in Unity 2021.1.19f1
-
-Feel free to commit issues!
-
-Do not judge our none existing programming skills! :)
