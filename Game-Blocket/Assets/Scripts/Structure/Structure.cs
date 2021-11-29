@@ -64,6 +64,7 @@ public class Structure : MonoBehaviour
     private void WriteInFile()
     {
         string s = $"{ GetComponent<Tilemap>().editorPreviewSize.x},{ GetComponent<Tilemap>().editorPreviewSize.y}\n";
+
         for(int x=0;x<blocks.GetLength(1);x++)
             for(int y = 0; y < blocks.GetLength(0); y++)
             {
@@ -98,8 +99,5 @@ public class Structure : MonoBehaviour
             }
                 
         }
-
-
-
     }
 }
