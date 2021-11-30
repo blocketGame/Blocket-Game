@@ -187,9 +187,9 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 01c6b008d66f42d46b162c2546a9a8fa, type: 3}
     removeDuration: 4
     item: 0
-  chunkWidth: 32
-  chunkHeight: 32
-  chunkDistance: 4
+  chunkWidth: 24
+  chunkHeight: 24
+  chunkDistance: 3
   caveSize: 0.6
   seed: 1337
   scale: 80
@@ -227,7 +227,6 @@ MonoBehaviour:
   groupdistance: 1.5
   pickUpDistance: 1.5
   initCaveSize: 0
-  strukturen: []
   stoneSize: 0
 --- !u!1 &1651735029580647344
 GameObject:

@@ -40,6 +40,7 @@ public class TerrainGeneration : NetworkBehaviour {
 	public void Awake() {
 		GlobalVariables.TerrainGeneration = this;
 		ChunksVisibleLastUpdate = new List<TerrainChunk>();
+
 		//World.putBlocksIntoTxt();
 		//World.putBiomsIntoTxt();
 		prng = new System.Random(World.Seed);

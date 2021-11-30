@@ -22,15 +22,7 @@ public class Structure : MonoBehaviour
     /// </summary>
     public void Instantiate()
     {
-        try
-        {
-            ReadFromFile();
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-            //ReadStructureFromTilemap();
-        }
+        ReadFromFile();
     }
 
 
