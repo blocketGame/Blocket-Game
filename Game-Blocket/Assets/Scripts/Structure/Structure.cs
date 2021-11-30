@@ -15,7 +15,6 @@ public class Structure : MonoBehaviour
 {
     public byte[,] blocks;
     public new string name;
-    
 
     /// <summary>
     /// Instantiates the Structure Block array

@@ -23,11 +23,13 @@ public class BetterMovementScript : MonoBehaviour
     #endregion
 
     public Rigidbody2D playerRigidbody;
-
-
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         Clipping();
+    }
+
+    void Update()
+    {
 
         /// Input Freeze Countdown
         if (countdown > 0)
@@ -126,7 +128,7 @@ public class BetterMovementScript : MonoBehaviour
     private void Walljump()
     {
         playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, 0);
-        playerRigidbody.AddRelativeForce(new Vector2(side * -1 * 4, fallMulti * 3.7f), ForceMode2D.Impulse);
+        playerRigidbody.AddRelativeForce(new Vector2(side * -1 * 4, fallMulti * 4f), ForceMode2D.Impulse);
         countdown = 0.4f;
     }
 
