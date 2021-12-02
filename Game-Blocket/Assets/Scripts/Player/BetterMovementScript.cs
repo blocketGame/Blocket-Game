@@ -28,21 +28,44 @@ public class BetterMovementScript : MonoBehaviour
         Clipping();
     }
 
+    private void TurnAnim()
+    {
+        if(GlobalVariables.LocalPlayer.GetComponentInChildren<SpriteRenderer>().gameObject.transform.localScale.x!=side && side!=0 
+            && GlobalVariables.LocalPlayer.GetComponentInChildren<SpriteRenderer>().gameObject.transform.localScale.x <1
+            && GlobalVariables.LocalPlayer.GetComponentInChildren<SpriteRenderer>().gameObject.transform.localScale.x >-1)
+            GlobalVariables.LocalPlayer.GetComponentInChildren<SpriteRenderer>().gameObject.transform.localScale = new Vector3(GlobalVariables.LocalPlayer.GetComponentInChildren<SpriteRenderer>().gameObject.transform.localScale.x+side*0.05f, 1, 0);
+        
+    }
+
     void Update()
     {
+        TurnAnim();
 
+        VelocityUpdate();
         /// Input Freeze Countdown
         if (countdown > 0)
         {
-            countdown -=Time.deltaTime;
+            countdown -= Time.deltaTime;
             return;
         }
 
         ///turn
         if (movement > 0)
-            side = 1f;
-        else if (movement < 0)
-            side = -1f;
+        {
+            if (side != 1)
+            {
+                side = 1f;
+                GlobalVariables.LocalPlayer.GetComponentInChildren<SpriteRenderer>().gameObject.transform.localScale = new Vector3(GlobalVariables.LocalPlayer.GetComponentInChildren<SpriteRenderer>().gameObject.transform.localScale.x + side * 0.05f, 1, 0);
+            }
+        }
+        else if (movement < 0) 
+        {
+            if (side != -1)
+            {
+                side = -1f;
+                GlobalVariables.LocalPlayer.GetComponentInChildren<SpriteRenderer>().gameObject.transform.localScale = new Vector3(GlobalVariables.LocalPlayer.GetComponentInChildren<SpriteRenderer>().gameObject.transform.localScale.x + side * 0.05f, 1, 0);
+            }
+        }
 
         ///Horizontal Movement
         if (!lockvar)
@@ -53,10 +76,41 @@ public class BetterMovementScript : MonoBehaviour
         }
 
         ///Player is in the AIR
+        //Falling Acceleration
+        if (playerRigidbody.velocity.y < 0)
+            if (playerRigidbody.velocity.y > -15)
+                playerRigidbody.gameObject.transform.position += Time.deltaTime * new Vector3(movement, (playerRigidbody.velocity.y) * fallMulti, 0);
+
+        
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void VelocityUpdate() {
+
         if (playerRigidbody.velocity.y != 0)
             //Walljump 
-            if (lockvar && Input.GetKeyDown(GlobalVariables.jump))
-                Walljump();
+            if (Input.GetKeyDown(GlobalVariables.jump))
+            {
+                if (GlobalVariables.WorldData.GetBlockFormCoordinate(
+                GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + (-0.5f), playerRigidbody.position.y, 0)).x,
+                GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + side, playerRigidbody.position.y - 1, 0)).y)
+                != 0)
+                {
+                    side = -1f;
+                    Walljump();
+                }
+                else if (GlobalVariables.WorldData.GetBlockFormCoordinate(
+                GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + (0.5f), playerRigidbody.position.y, 0)).x,
+                GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + side, playerRigidbody.position.y - 1, 0)).y)
+                != 0)
+                {
+                    side = 1f;
+                    Walljump();
+                }
+            }
             //Wall kick
             else if (lockvar && Input.GetKeyDown(GlobalVariables.roll))
                 Wallkick();
@@ -65,21 +119,15 @@ public class BetterMovementScript : MonoBehaviour
         ///Player is Grounded
         else
             //Jump
-            if (!lockvar && Input.GetKey(GlobalVariables.jump))
-                Jump();
-            //Roll
-            else if (!lockvar && Input.GetKeyDown(GlobalVariables.roll))
-                Roll();
-            //Move  
-            else
-                movement = Input.GetAxis("Horizontal");
+            if ( Input.GetKey(GlobalVariables.jump))
+            Jump();
+        //Roll
+        else if (!lockvar && Input.GetKeyDown(GlobalVariables.roll))
+            Roll();
+        //Move  
+        else
+            movement = Input.GetAxis("Horizontal");
 
-        //Falling Acceleration
-        if (playerRigidbody.velocity.y < 0)
-            if (playerRigidbody.velocity.y > -15)
-                playerRigidbody.gameObject.transform.position += Time.deltaTime * new Vector3(movement, (playerRigidbody.velocity.y) * fallMulti, 0);
-
-        
     }
 
     /// <summary>
@@ -130,6 +178,14 @@ public class BetterMovementScript : MonoBehaviour
         playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, 0);
         playerRigidbody.AddRelativeForce(new Vector2(side * -1 * 4, fallMulti * 4f), ForceMode2D.Impulse);
         countdown = 0.4f;
+    }
+
+    /// <summary>
+    /// Motion Sickness Incoming
+    /// </summary>
+    private void iSpinMyHeadRightRoundRightRoundWhenYouGoDown()
+    {
+        gameObject.transform.rotation = Quaternion.Euler(new Vector3(gameObject.transform.rotation.eulerAngles.x, gameObject.transform.rotation.eulerAngles.y, gameObject.transform.rotation.eulerAngles.z + 0.1f));
     }
 
 }
