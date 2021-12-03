@@ -14,8 +14,10 @@ public class UIProfileSite : MonoBehaviour {
 
 	private RectTransform _playerContent, _worldContent;
 
-	private bool _characterSelectionOpen;
-	private bool CharacterSelectionOpen { get => _characterSelectionOpen; set {
+	private bool _characterSelectionOpen = true;
+	private bool CharacterSelectionOpen { 
+		get => _characterSelectionOpen; 
+		set {
 			_characterSelectionOpen = value;
 			characterSelectionSite.SetActive(value);
 			worldSelectionSite.SetActive(!value);
@@ -28,32 +30,42 @@ public class UIProfileSite : MonoBehaviour {
 				ListContentUI uiPSC = Instantiate(listContentPrefab, _playerContent.transform).GetComponent<ListContentUI>();
 				int x = profile.LastIndexOf(@"\"), y = profile.LastIndexOf('.');
 				uiPSC.contentName.text = profile.Substring(x+1, y-x-1);
-			}}}
+				uiPSC.CharacterBtn = true;
+			}
+		}}
 	private List<string> _foundCharacterProfiles = new List<string>();
 
 	private List<string> FoundWorldProfiles { get => _foundWorldProfiles; set { 
 			_foundWorldProfiles = value;
 			foreach(string profile in value) {
 				ListContentUI uiPSC = Instantiate(listContentPrefab, _worldContent.transform).GetComponent<ListContentUI>();
-				uiPSC.contentName.text = profile;
-			}}} 
+				int x = profile.LastIndexOf(@"\"), y = profile.LastIndexOf('.');
+				uiPSC.contentName.text = profile.Substring(x + 1, y - x - 1);
+				uiPSC.CharacterBtn = false;
+			}
+		}} 
 	private List<string> _foundWorldProfiles= new List<string>();
 
 	private bool _characterSelectonOpen;
-	public bool CharacterSelectonOpen { get { return _characterSelectonOpen; } set { 
+	public bool CharacterSelectonOpen { get { 
+			return _characterSelectonOpen; 
+		} set { 
 			_characterSelectonOpen = value;
 			characterSelectionSite.SetActive(value);
 			worldSelectionSite.SetActive(!value);
 		} 
 	}
 
-	public void SelectItem() {
+	public void SelectedItem() {
+		//UI
 		if (CharacterSelectionOpen && NetworkManager.Singleton.IsClient)
 				CharacterSelectionOpen = false;
-			else
-				if(((GameManager.playerProfileNow == null) != NetworkManager.Singleton.IsClient) && 
-				((GameManager.worldProfileNow == null) != NetworkManager.Singleton.IsServer))
-					GlobalVariables.UILobby.SiteIndexOpen = 1;
+			else if(((ListContentUI.selectedBtnNameCharacter?.Trim() == string.Empty ) != NetworkManager.Singleton.IsClient) && ((ListContentUI.selectedBtnNameWorld?.Trim() == string.Empty) != NetworkManager.Singleton.IsServer)) {
+			GameManager.playerProfileNow = FileHandler.ImportProfile(ListContentUI.selectedBtnNameCharacter, true) as PlayerProfile;
+			GameManager.worldProfileNow = FileHandler.ImportProfile(ListContentUI.selectedBtnNameWorld, false) as WorldProfile;
+			GlobalVariables.UILobby.SiteIndexOpen = 1;
+			}
+					
 	}
 
 	private void InitButtons(){
@@ -65,7 +77,7 @@ public class UIProfileSite : MonoBehaviour {
 			GlobalVariables.UILobby.SiteIndexOpen = 0;
 		});
 		
-		nextBtn.onClick.AddListener(SelectItem);
+		//nextBtn.onClick.AddListener(SelectedItem);
 
 		characterSlectBtn.onClick.AddListener(() => {
 			CharacterSelectionOpen = true;
@@ -85,11 +97,12 @@ public class UIProfileSite : MonoBehaviour {
 				FileHandler.ExportProfile(p, false);
 				GameManager.worldProfileNow = p;
 			}
-			FindAllprofiles();
-			SelectItem();
+			FindAllProfiles();
+			SelectedItem();
 			///TODO: Characterdialoge...
 
 		});
+		
 	}
 
 	public bool ValidateInput() {
@@ -99,18 +112,20 @@ public class UIProfileSite : MonoBehaviour {
 	}
 
 	public void Start() {
-		FindAllprofiles();
+		FindAllProfiles();
 	}
 
-	public void FindAllprofiles() {
-		FoundPlayerProfiles = FileHandler.FindAllPlayerProfiles();
-		Debug.Log(FoundPlayerProfiles.Count);
+	public void FindAllProfiles() {
+		FoundPlayerProfiles = FileHandler.FindAllProfiles(true);
+		FoundWorldProfiles = FileHandler.FindAllProfiles(false);
+		if(GlobalVariables.checkProfileCount)
+			Debug.Log($"PlayerProfiles: {FoundPlayerProfiles.Count}, WorldProfiles: {FoundWorldProfiles.Count}");
 	}
 
 	public void Awake()
 	{
-		CharacterSelectionOpen = true;
 		GlobalVariables.UIProfileSite = this;
+		CharacterSelectionOpen = true;
 		InitButtons();
 		_playerContent = playerScrollRect.content;
 		_worldContent = worldScrollRect.content;

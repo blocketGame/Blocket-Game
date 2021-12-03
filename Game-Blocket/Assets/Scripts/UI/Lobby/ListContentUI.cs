@@ -10,6 +10,8 @@ public class ListContentUI : MonoBehaviour
 
 	public static string selectedBtnNameCharacter, selectedBtnNameWorld;
 
+	public bool CharacterBtn { get; set; }
+
 	/// <summary>
 	/// UNDONE
 	/// </summary>
@@ -22,11 +24,11 @@ public class ListContentUI : MonoBehaviour
 
 	public void Awake() {
 		btn.onClick.AddListener(() => {
-			if(GlobalVariables.UIProfileSite.CharacterSelectonOpen)
+			if(CharacterBtn)
 				selectedBtnNameCharacter = contentName.text;
 			else
 				selectedBtnNameWorld = contentName.text;
-			GlobalVariables.UIProfileSite.SelectItem();
+			GlobalVariables.UIProfileSite.SelectedItem();
 		});
 	}
 }

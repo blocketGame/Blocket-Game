@@ -9,7 +9,7 @@ using UnityEngine;
 [Serializable]
 public abstract class Profile{
 	public int profileHash;
-	public readonly string name;
+	public string name;
 
 	public Profile(string name, int? profileHash)
     {
@@ -24,15 +24,11 @@ public abstract class Profile{
 public class WorldProfile : Profile
 {
 	public List<SaveAbleChunk> chunks = new List<SaveAbleChunk>();
-	
 
-	public WorldProfile(string name, int? profileHash) : base(name, profileHash)
-	{
-		
-	}
+	public WorldProfile(string name, int? profileHash) : base(name, profileHash){}
 
 	[Serializable]
-	public struct SaveAbleChunk {
+	public class SaveAbleChunk {
 		public Vector2Int chunkPosition;
 		public byte[,] blockIDs, blockIDsBG;
 		public List<SaveAbleDrop> drops;
@@ -73,9 +69,12 @@ public class SettingsProfile : Profile{
 public class PlayerProfile : Profile
 {
 	#region Inventory
-	public List<SaveAbleItem> inventoryItems = new List<SaveAbleItem>();
-	public List<SaveAbleItem> accessoiresItems = new List<SaveAbleItem>();
-	public List<SaveAbleItem> armorItems = new List<SaveAbleItem>();
+	/// <summary>
+	/// TODO capcity not hardcoded
+	/// </summary>
+	public List<SaveAbleItem> inventoryItems = new List<SaveAbleItem>(40);
+	public List<SaveAbleItem> accessoiresItems = new List<SaveAbleItem>(7);
+	public List<SaveAbleItem> armorItems = new List<SaveAbleItem>(3	);
 	#endregion
 	#region PlayerVariables
 	public ushort health, armor, maxHealth, maxArmor;

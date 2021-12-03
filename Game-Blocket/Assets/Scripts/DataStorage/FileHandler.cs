@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -5,27 +6,35 @@ using System.IO;
 using UnityEngine;
 
 using static PlayerProfile;
-using static Profile;
 using static WorldProfile;
 
 /// <summary>
 /// UNDONE
-/// Will be used for Saving and Loading data
+/// Will be used for Saving and Loading data<br></br>
+/// <b>2 Sections: </b><br></br>
+/// Import/Export=> From/ To File <br></br>
+/// Sava/Load => From/ To Component
 /// </summary>
 public static class FileHandler
 {
 	/// <summary>
 	/// The Parent Directory for all profiles
 	/// </summary>
-	public static string profileParent = @"Profiles";
-	public static string playerProfileParent = profileParent + @"\Players", worldProfileParent = profileParent + @"\Worlds";
+	public static string profileParent = @"Profiles", playerProfileParent = profileParent + @"\Players", worldProfileParent = profileParent + @"\Worlds";
 
 	#region ProfileHandling
+	/// <summary>
+	/// 
+	/// </summary>
 	public static void CheckParent(){
 		if (!Directory.Exists(profileParent))
 			Directory.CreateDirectory(profileParent);
 		if (!Directory.Exists(playerProfileParent))
 			Directory.CreateDirectory(playerProfileParent);
+		if (!Directory.Exists(worldProfileParent))
+			Directory.CreateDirectory(worldProfileParent);
+		//foreach(string f in Directory.GetFiles(playerProfileParent))
+		//	Debug.Log(f + File.Exists(f));
 	}
 
 	/// <summary>
@@ -36,64 +45,82 @@ public static class FileHandler
 
 		CheckParent();
 		string strToWrite = JsonUtility.ToJson(p, true);
+		if(p.name == null) {
+			Debug.LogWarning((player ? "Player" : "World") + "profile null!");
+			p.name = player ? ListContentUI.selectedBtnNameCharacter : ListContentUI.selectedBtnNameWorld;
+		}
 		File.WriteAllText(prePath + @$"\{p.name}.json", strToWrite);
 	}
 
+	/// <summary>
+	/// 
+	/// </summary>
 	public static void ExportProfile(bool player) {
-		if(player)
-			ExportProfile(SavePlayerProfile(), player);
-		else
-			ExportProfile(SaveWorldProfile(), player);
+		if (player) {
+			SavePlayerProfile();
+			ExportProfile(GameManager.playerProfileNow, player);
+		} else {
+			SaveWorldProfile();
+			ExportProfile(GameManager.worldProfileNow, player);
+		}
+			
 	}
 
 	/// <summary>
 	/// Imports the Profile played now
 	/// </summary>
-	public static void ImportProfile(string profileName, bool player)
+	public static Profile ImportProfile(string profileName, bool player)
 	{
 		CheckParent();
 		string data = string.Empty;
-		foreach(string iString in FindAllPlayerProfiles())
-			if (iString.StartsWith(profileName))
+		foreach(string iString in FindAllProfiles(player)) {
+			int x = iString.LastIndexOf(@"\"), y = iString.LastIndexOf('.');
+			if (iString.Substring(x + 1, y - x - 1).Equals(profileName))
 			{
-				data = File.ReadAllText(playerProfileParent + @"\" + iString);
+				string path = iString;
+				//Readoperation
+				
+				if (!File.Exists(path))
+					throw new IOException("File not Found");
+				data = File.ReadAllText(path);
 				break;
 			}
-		if (data.Trim() == string.Empty)
-			return;
-		if (player)
-			LoadPlayerProfile(JsonUtility.FromJson<PlayerProfile>(data));
-		else
-			return; ///UNDONE
+		}
+		return data.Trim() == string.Empty
+			? null
+			: player ? JsonUtility.FromJson<PlayerProfile>(data) : (Profile)JsonUtility.FromJson<WorldProfile>(data);
 	}
 
-	
-
-	#region PlayerProfiles
-	/// <summary>
+/// <summary>
 	/// Recognises all Profiles in the Parent dir
 	/// </summary>
 	/// <returns></returns>
-	public static List<string> FindAllPlayerProfiles()
+	public static List<string> FindAllProfiles(bool player)
 	{
 		CheckParent();
 		List<string> temp = new List<string>();
-		foreach (string iString in Directory.GetFiles(playerProfileParent))
+		string path = player ? playerProfileParent : worldProfileParent;
+		foreach (string iString in Directory.GetFiles(path))
 			if (iString.EndsWith(".json"))
 				temp.Add(iString);
 		return temp;
 	}
 
-	public static PlayerProfile SavePlayerProfile() {
-		return SavePlayerProfile(GameManager.playerProfileNow);
+	#region PlayerProfiles
+	
+
+	public static void SavePlayerProfile() {
+		SaveComponentsInPlayerProfile(GameManager.playerProfileNow);
 	}
 
 		/// <summary>
 		/// Overrides the profile for saving
 		/// </summary>
 		/// <returns></returns>
-	public static PlayerProfile SavePlayerProfile(PlayerProfile pfN) {
+	public static void SaveComponentsInPlayerProfile(PlayerProfile pfN) {
 		Inventory inventory = GlobalVariables.Inventory;
+		if (pfN == null)
+			throw new NullReferenceException("Playerprofile is null!");
 		if(inventory != null) { 
 			//Inventory
 			for(int i = 0; i < inventory.InvSlots.Count; i++)
@@ -113,20 +140,24 @@ public static class FileHandler
 			pfN.healthLost = GlobalVariables.PlayerVariables.healthLost;
 			pfN.maxHealth = GlobalVariables.PlayerVariables.MaxHealth;
 		}
-		return pfN;
 	}
 
 	/// <summary>
 	/// Overrides game components => matching profile
 	/// </summary>
 	/// <param name="profile"></param>
-	public static void LoadPlayerProfile(PlayerProfile profile){
-		GameManager.playerProfileNow = profile;
+	public static void LoadComponentsFromPlayerProfile(PlayerProfile profile){
+		if(profile != null && GameManager.playerProfileNow == null)
+			GameManager.playerProfileNow = profile;
+		if (GameManager.playerProfileNow == null)
+			throw new NullReferenceException("PlayerProfile is null!");
 		Inventory inventory = GlobalVariables.Inventory;
 		if (inventory != null) {
 			ItemAssets iA = GlobalVariables.PlayerVariables.uIInventory.itemAssets;
 			//Inventory
 			for (int i = 0; i < inventory.InvSlots.Count; i++) {
+				if (profile.inventoryItems.Count <= i)
+					break;
 				SaveAbleItem itemNow = profile.inventoryItems[i];
 				inventory.InvSlots[i].Item = iA.GetItemFromItemID(itemNow.itemId);
 				inventory.InvSlots[i].ItemCount = itemNow.count;
@@ -134,12 +165,16 @@ public static class FileHandler
 				
 			//Armor Slots
 			for (int i = 0; i < inventory.ArmorSlots.Count; i++) {
+				if (profile.armorItems.Count <= i)
+					break;
 				SaveAbleItem itemNow = profile.armorItems[i];
 				inventory.ArmorSlots[i].Item = iA.GetItemFromItemID(itemNow.itemId);
 				inventory.ArmorSlots[i].ItemCount = itemNow.count;
 			}
 			//Accessoires
 			for (int i = 0; i < inventory.AccessoiresSlots.Count; i++) {
+				if (profile.accessoiresItems.Count <= i)
+					break;
 				SaveAbleItem itemNow = profile.accessoiresItems[i];
 				inventory.AccessoiresSlots[i].Item = iA.GetItemFromItemID(itemNow.itemId);
 				inventory.AccessoiresSlots[i].ItemCount = itemNow.count;
@@ -156,21 +191,29 @@ public static class FileHandler
 	#endregion
 	#region Worldprofiles
 
-	public static WorldProfile SaveWorldProfile() {
-		return SaveWorldProfile(GameManager.worldProfileNow);
+	/// <summary>
+	/// 
+	/// </summary>
+	public static void SaveWorldProfile() {
+		SaveComponentsInWorldProfile(GameManager.worldProfileNow);
 	}
 
-	public static WorldProfile SaveWorldProfile(WorldProfile worldProfile) {
+	/// <summary>
+	/// 
+	/// </summary>
+	public static void SaveComponentsInWorldProfile(WorldProfile worldProfile) {
 		foreach (TerrainChunk tc in GlobalVariables.WorldData.Chunks.Values) {
 			List<SaveAbleDrop> drops = new List<SaveAbleDrop>(tc.Drops.Count);
 			foreach (Drop drop in tc.Drops)
 				drops.Add(new SaveAbleDrop(drop.GameObject.transform.position, drop.DropID, drop.Count));
 			worldProfile.chunks.Add(new SaveAbleChunk(tc.ChunkPositionWorldSpace, tc.BlockIDs, tc.BlockIDsBG, drops));
 		}
-		return worldProfile;
 	}
 
-	public static void LoadWorldProfile(WorldProfile worldProfile) {
+	/// <summary>
+	/// 
+	/// </summary>
+	public static void LoadComponentsFromWorldProfile(WorldProfile worldProfile) {
 		GameManager.worldProfileNow = worldProfile;
 
 		foreach (SaveAbleChunk chunkNow in worldProfile.chunks) {

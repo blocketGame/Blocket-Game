@@ -17,7 +17,7 @@ public class GameManager : NetworkBehaviour
 
 	public GameObject playerPrefab, worldPrefab;
 	/// <summary>Is true if the MainGame is online</summary>
-	public static bool gameRunning;
+	public static bool severRunning, gameRunning;
 	/// <summary>Not used!</summary>
 	public static bool isMultiplayer = true;
 	public static List<NetworkObject> Players { get; } = new List<NetworkObject>();
@@ -35,11 +35,10 @@ public class GameManager : NetworkBehaviour
 
 	public void FixedUpdate()
 	{
-		if (GlobalVariables.LocalPlayer == null && gameRunning){
+		if (GlobalVariables.LocalPlayer == null && severRunning){
 			FindAndSetPlayer();
 			InitPlayerComponents();
 		}
-			
 	}
 
 	/// <summary>
@@ -98,6 +97,9 @@ public class GameManager : NetworkBehaviour
 			GlobalVariables.WorldData.Grid = GlobalVariables.World.GetComponentInChildren<Grid>();
 			GlobalVariables.World.GetComponent<NetworkObject>().Spawn();
 		}
+
+		FileHandler.LoadComponentsFromPlayerProfile(playerProfileNow);
+		FileHandler.LoadComponentsFromWorldProfile(worldProfileNow);
 	}
 
 	/// <summary>
@@ -110,7 +112,17 @@ public class GameManager : NetworkBehaviour
 		if(NetworkManager.Singleton.IsHost)
 			SpawnPlayers();
 		//Both
-		gameRunning = true;
+		severRunning = true;
+	}
+
+	public void OnApplicationQuit() {
+		if (severRunning) {
+			FileHandler.SavePlayerProfile();
+			FileHandler.ExportProfile(playerProfileNow, true);
+			FileHandler.SaveWorldProfile();
+			FileHandler.ExportProfile(worldProfileNow, false);
+		}
+			
 	}
 
 }

@@ -34,6 +34,7 @@ public static class GlobalVariables {
 
 	#region Debug Variables
 	public static readonly bool itemSlotButtonPressedLog = true;
+	public static readonly bool checkProfileCount = true;
 	public static readonly bool itemTest = true;
 	public static readonly bool generateChunksOnClient = true;
 	#endregion
