@@ -190,7 +190,6 @@ MonoBehaviour:
   chunkWidth: 24
   chunkHeight: 24
   chunkDistance: 4
-  caveSize: 0.6
   seed: 1337
   scale: 80
   octives: 5
@@ -226,8 +225,8 @@ MonoBehaviour:
   grid: {fileID: 0}
   groupdistance: 1.5
   pickUpDistance: 1.5
-  initCaveSize: 0
-  stoneSize: 0
+  initCaveSize: -0.6
+  stoneSize: 0.2
 --- !u!1 &1651735029580647344
 GameObject:
   m_ObjectHideFlags: 0
