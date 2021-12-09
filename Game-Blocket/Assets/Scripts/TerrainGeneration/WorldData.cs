@@ -28,8 +28,6 @@ public class WorldData : NetworkBehaviour
 	[SerializeField]
 	private int chunkDistance;
 	[SerializeField]
-	private float caveSize;
-	[SerializeField]
 	private int seed;
 	[SerializeField]
 	private float scale;
@@ -69,7 +67,6 @@ public class WorldData : NetworkBehaviour
 	public AnimationCurve Heightcurve { get => heightcurve; set => heightcurve = value; }
 	public int Octives { get => octives; set => octives = value; }
 	public float Scale { get => scale; set => scale = value; }
-	public float CaveSize { get => caveSize; set => caveSize = value; }
 	public int Seed { get => seed; set => seed = value; }
 	public int ChunkDistance { get => chunkDistance; set => chunkDistance = value; }
 	public int ChunkHeight { get => chunkHeight; set => chunkHeight = value; }
@@ -132,8 +129,8 @@ public class WorldData : NetworkBehaviour
 		TerrainChunk chunk = GetChunkFromCoordinate(x, y);
 		if (chunk != null)
 		{
-			int chunkX = x - ChunkWidth * chunk.ChunkPositionWorldSpace.x;
-			int chunkY = y - ChunkHeight * chunk.ChunkPositionWorldSpace.y;
+			int chunkX = x - ChunkWidth * chunk.ChunkPosition.x;
+			int chunkY = y - ChunkHeight * chunk.ChunkPosition.y;
 			if (chunkX < ChunkWidth && chunkY < ChunkHeight)
 			{
 				return chunk.BlockIDs[chunkX, chunkY];
@@ -150,8 +147,8 @@ public class WorldData : NetworkBehaviour
 	{
 		TerrainChunk chunk = GetChunkFromCoordinate(coordinate.x, coordinate.y);
 
-		int chunkX = coordinate.x - chunk.ChunkPositionWorldSpace.x * ChunkWidth;
-		int chunkY = coordinate.y - chunk.ChunkPositionWorldSpace.y * ChunkHeight;
+		int chunkX = coordinate.x - chunk.ChunkPosition.x * ChunkWidth;
+		int chunkY = coordinate.y - chunk.ChunkPosition.y * ChunkHeight;
 
 		chunk.CollisionTileMap.SetTile(new Vector3Int(chunkX, chunkY, 0), null);
 

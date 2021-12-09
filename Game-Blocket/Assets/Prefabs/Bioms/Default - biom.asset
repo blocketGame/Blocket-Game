@@ -15,10 +15,6 @@ MonoBehaviour:
   index: 0
   biomName: Default Biom
   ores:
-  - name: Stone
-    noiseValueFrom: 0.5
-    noiseValueTo: 0.75
-    blockID: 12
   - name: Bernstein
     noiseValueFrom: 0.7
     noiseValueTo: 0.701
@@ -36,6 +32,7 @@ MonoBehaviour:
   structures: 00
   treeSpawnChance: 5
   treeSpawnDistance: 5
+  stoneBlockId: 12
   size: 1000
   heightCurve:
     serializedVersion: 2

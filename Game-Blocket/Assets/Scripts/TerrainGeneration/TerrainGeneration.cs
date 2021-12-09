@@ -1,24 +1,18 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Tilemaps;
-using Unity.Mathematics;
-using MLAPI.Messaging;
-using static TerrainChunk;
-using System;
-using MLAPI;
-using UnityEngine.UIElements;
-using MLAPI.Serialization;
-using static TerrainChunk.ChunkList;
 using System.Threading;
+
+using UnityEngine;
+
+using MLAPI;
+using MLAPI.Messaging;
+
+using static TerrainChunk;
+using static TerrainChunk.ChunkList;
 
 /*
  * @Author : Cse19455 / Thomas Boigner
  */
 public class TerrainGeneration : NetworkBehaviour {
-
-
-
 	#region Serialization
 	[SerializeField]
 	private List<TerrainChunk> chunksVisibleLastUpdate;
@@ -32,40 +26,57 @@ public class TerrainGeneration : NetworkBehaviour {
 	public WorldData World { get => GlobalVariables.WorldData; }
 	public Queue<TerrainChunk> ChunkCollisionQueue { get; set; } = new Queue<TerrainChunk>();
 
-	public static System.Random prng;
-
 	private Queue<TerrainChunk> chunkTileInitializationQueue = new Queue<TerrainChunk>();
-	public Dictionary<ulong, Vector3> PlayerLastUpdate { get; } = new Dictionary<ulong, Vector3>();
+	private Vector3 playerChunk;
 
+	public Dictionary<ulong, Vector3> PlayerLastUpdate { get; } = new Dictionary<ulong, Vector3>();
 	public void Awake() {
 		GlobalVariables.TerrainGeneration = this;
 		ChunksVisibleLastUpdate = new List<TerrainChunk>();
-
+		playerChunk = new Vector3(0, 0, 0);
 		//World.putBlocksIntoTxt();
 		//World.putBiomsIntoTxt();
-		prng = new System.Random(World.Seed);
 	}
 
 	public void FixedUpdate() {
+		Vector3 distance = GlobalVariables.LocalPlayerPos - playerChunk;
 		NetworkObject localPlayerNO = GlobalVariables.LocalPlayer.GetComponent<NetworkObject>();
 		if (GlobalVariables.generateChunksOnClient)
 		{
-			UpdateChunks(null);
+			if (distance.x <= 0 || distance.x >= GlobalVariables.WorldData.ChunkWidth || distance.y <= 0 || distance.y >= GlobalVariables.WorldData.ChunkHeight)
+			{
+				UpdateChunks(null);
+				TerrainChunk pco = GlobalVariables.WorldData.GetChunkFromCoordinate(GlobalVariables.LocalPlayerPos.x, GlobalVariables.LocalPlayerPos.y);
+				if (pco != null)
+					playerChunk = pco.ChunkPositionWorldSpace;
+			}
 		}
 		else
 		{
 			if (NetworkManager.Singleton.IsServer)
-			foreach (NetworkObject no in GameManager.Players)
-				if (!PlayerLastUpdate.ContainsKey(no.NetworkInstanceId) || Vector3.Distance(no.gameObject.transform.position, PlayerLastUpdate[no.NetworkInstanceId]) >= (GlobalVariables.WorldData.ChunkDistance * GlobalVariables.WorldData.ChunkWidth) / 8)
-					UpdateChunks(no);
-		}
-		if (NetworkManager.Singleton.IsClient)
-			if (!PlayerLastUpdate.ContainsKey(localPlayerNO.NetworkInstanceId) || Vector3.Distance(GlobalVariables.LocalPlayerPos, PlayerLastUpdate[localPlayerNO.NetworkInstanceId]) >= (GlobalVariables.WorldData.ChunkDistance * GlobalVariables.WorldData.ChunkWidth) / 8)
+			{
+				foreach (NetworkObject no in GameManager.Players)
 				{
+					if (!PlayerLastUpdate.ContainsKey(no.NetworkInstanceId) || Vector3.Distance(no.gameObject.transform.position, PlayerLastUpdate[no.NetworkInstanceId]) >= (GlobalVariables.WorldData.ChunkDistance * GlobalVariables.WorldData.ChunkWidth) / 8)
+					{
+						UpdateChunks(no);
+					}
+				}
+			}
+		}
+
+		if (NetworkManager.Singleton.IsClient)
+		{
+			if (!PlayerLastUpdate.ContainsKey(localPlayerNO.NetworkInstanceId) || Vector3.Distance(GlobalVariables.LocalPlayerPos, PlayerLastUpdate[localPlayerNO.NetworkInstanceId]) >= (GlobalVariables.WorldData.ChunkDistance * GlobalVariables.WorldData.ChunkWidth) / 8)
+			{
 				if (!GlobalVariables.generateChunksOnClient)
+				{
 					ActivateLocalChunks();
+				}
 				DisableChunksOutOfRange();
 			}
+		}
+
 		if (chunkTileInitializationQueue.Count > 0) {
 			lock (chunkTileInitializationQueue) {
 				foreach (TerrainChunk terrainChunk in chunkTileInitializationQueue) {
@@ -100,10 +111,8 @@ public class TerrainGeneration : NetworkBehaviour {
 	//	}
 	//	ChunkCollisionQueue.Clear();
 	//}
-
 	public void UpdateChunks(NetworkObject playerNO)
 	{
-
 		if (GlobalVariables.generateChunksOnClient)
 		{
 			CheckChunksAroundPlayerStatic();

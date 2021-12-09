@@ -78,7 +78,7 @@ public class BlockInteraction : MonoBehaviour{
 		}
 
 		if (Input.GetKey(GlobalVariables.rightClick) &&
-			GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).BlockIDs[coordinate.x - GlobalVariables.WorldData.ChunkWidth * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.x, coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.y] == 0 
+			GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).BlockIDs[coordinate.x - GlobalVariables.WorldData.ChunkWidth * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x, coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.y] == 0 
 			//&& !(Input.mousePosition.y - 429 < 55 && Input.mousePosition.y - 429 > -5 && Input.mousePosition.x - 959 > -40 && Input.mousePosition.x - 959 < 40))
 			)
 			{
@@ -136,8 +136,8 @@ public class BlockInteraction : MonoBehaviour{
 		if (selectedBlock <= -1)
 			return;
 		
-		chunk.ChunkTileMap.SetTile(new Vector3Int(coordinate.x - GlobalVariables.WorldData.ChunkWidth * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.x, coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.y, 0), GlobalVariables.WorldData.Blocks[selectedBlock].Tile);
-		chunk.BlockIDs[(coordinate.x - GlobalVariables.WorldData.ChunkWidth * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.x), coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.y] = GlobalVariables.WorldData.Blocks[selectedBlock].BlockID;
+		chunk.ChunkTileMap.SetTile(new Vector3Int(coordinate.x - GlobalVariables.WorldData.ChunkWidth * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x, coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.y, 0), GlobalVariables.WorldData.Blocks[selectedBlock].Tile);
+		chunk.BlockIDs[(coordinate.x - GlobalVariables.WorldData.ChunkWidth * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x), coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.y] = GlobalVariables.WorldData.Blocks[selectedBlock].BlockID;
 		GlobalVariables.WorldData.UpdateCollisionsAt(coordinate);
 		GlobalVariables.WorldData.UpdateCollisionsAt(new Vector3Int(coordinate.x + 1, coordinate.y, coordinate.z));
 		GlobalVariables.WorldData.UpdateCollisionsAt(new Vector3Int(coordinate.x, coordinate.y + 1, coordinate.z));
