@@ -14,11 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 1
   biomName: Desert
-  ores:
-  - name: 
-    noiseValueFrom: 0
-    noiseValueTo: 0
-    blockID: 0
+  ores: []
   regions:
   - regionRange: 1
     blockID: 4
@@ -29,9 +25,10 @@ MonoBehaviour:
     blockID: 9
   - regionRange: 2
     blockID: 8
-  structures: 01
+  structures: 00
   treeSpawnChance: 10
   treeSpawnDistance: 5
+  stoneBlockId: 5
   size: 1000
   heightCurve:
     serializedVersion: 2

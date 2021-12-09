@@ -11,15 +11,13 @@ public class NoiseGenerator : MonoBehaviour
 		cellular
     }
 
-	public static System.Random prng;
-
 	public static float[] GenerateNoiseMap1D(int mapWith, int seed, float scale, int octaves, float persistance, float lacunarity, float offset)
 	{
 		//Noise
 		float[] noiseMap = new float[mapWith];
 
 		//Random
-		prng = new System.Random(seed);
+		System.Random prng = new System.Random(seed);
 
 		float[] octaveOffsets = new float[octaves];
 
@@ -67,7 +65,7 @@ public class NoiseGenerator : MonoBehaviour
 		float[,] noiseMap = new float[mapWidth, mapHeight];
 
 		//Random
-		prng = new System.Random(seed);
+		System.Random prng	 = new System.Random(seed);
 
 		Vector2[] octaveOffsets = new Vector2[octaves];
 
