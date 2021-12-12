@@ -1,23 +1,20 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Tilemaps;
-using Unity.Mathematics;
-using MLAPI.Messaging;
-using static TerrainChunk;
-using System;
-using MLAPI;
-using UnityEngine.UIElements;
-using MLAPI.Serialization;
-using static TerrainChunk.ChunkList;
 using System.Threading;
 
-/*
- * @Author : Cse19455 / Thomas Boigner
- */
+using MLAPI;
+using MLAPI.Messaging;
+
+using static TerrainChunk;
+using static TerrainChunk.ChunkList;
+
+using UnityEngine;
+
+/// <summary>
+/// Used to generate and display chunks<br></br>
+/// <b>TODO: Split up to TerrainHandler and TerrainGeneration</b><br></br>
+/// Author: Cse19455 / Thomas Boigner / Fabiii
+/// </summary>
 public class TerrainGeneration : NetworkBehaviour {
-
-
 
 	#region Serialization
 	[SerializeField]
@@ -29,23 +26,24 @@ public class TerrainGeneration : NetworkBehaviour {
 	public GameObject ChunkParent { get => chunkParent; set => chunkParent = value; }
 	#endregion
 
-	public WorldData World { get => GlobalVariables.WorldData; }
+	public WorldData World => GlobalVariables.WorldData;
 	public Queue<TerrainChunk> ChunkCollisionQueue { get; set; } = new Queue<TerrainChunk>();
 
 	public static System.Random prng;
 
-	private Queue<TerrainChunk> chunkTileInitializationQueue = new Queue<TerrainChunk>();
+	private readonly Queue<TerrainChunk> chunkTileInitializationQueue = new Queue<TerrainChunk>();
 	public Dictionary<ulong, Vector3> PlayerLastUpdate { get; } = new Dictionary<ulong, Vector3>();
 
 	public void Awake() {
 		GlobalVariables.TerrainGeneration = this;
 		ChunksVisibleLastUpdate = new List<TerrainChunk>();
-		//World.putBlocksIntoTxt();
-		//World.putBiomsIntoTxt();
 		prng = new System.Random(World.Seed);
 	}
 
 	public void FixedUpdate() {
+		if (GlobalVariables.World == null)
+			return;
+
 		NetworkObject localPlayerNO = GlobalVariables.LocalPlayer.GetComponent<NetworkObject>();
 		if (GlobalVariables.generateChunksOnClient)
 		{
@@ -65,6 +63,7 @@ public class TerrainGeneration : NetworkBehaviour {
 					ActivateLocalChunks();
 				DisableChunksOutOfRange();
 			}
+
 		if (chunkTileInitializationQueue.Count > 0) {
 			lock (chunkTileInitializationQueue) {
 				foreach (TerrainChunk terrainChunk in chunkTileInitializationQueue) {
@@ -102,7 +101,6 @@ public class TerrainGeneration : NetworkBehaviour {
 
 	public void UpdateChunks(NetworkObject playerNO)
 	{
-
 		if (GlobalVariables.generateChunksOnClient)
 		{
 			CheckChunksAroundPlayerStatic();
@@ -158,48 +156,15 @@ public class TerrainGeneration : NetworkBehaviour {
 					BuildChunk(viewedChunkCoord);
 					//World.Chunks[viewedChunkCoord] = chunk;
 					//chunk.BuildCollisions();
-				} else if (World.Chunks.ContainsKey(viewedChunkCoord))
-					World.Chunks[viewedChunkCoord].ChunkVisible = true;
+				} else if (World.Chunks.ContainsKey(viewedChunkCoord)) {
+					if (World.Chunks[viewedChunkCoord].ChunkObject == null)
+						BuildChunk(World.Chunks[viewedChunkCoord]);
+					else
+						World.Chunks[viewedChunkCoord].ChunkVisible = true;
+				}
 			}
 		}
 	}
-		/// <summary>
-		/// Activates and deactivates Chunks
-		/// </summary>
-	//	public void CheckChunksAroundPlayerNetworked(NetworkObject playerNO) {
-	//	Vector3 playerPos = playerNO.transform.position;
-	//	Vector2Int currentChunkCoord = new Vector2Int(Mathf.RoundToInt(playerPos.x / World.ChunkWidth), Mathf.RoundToInt(playerPos.y / World.ChunkHeight));
-
-
-	//	ChunkList chunksToSend = new ChunkList();
-	//	for(int xOffset = -World.ChunkDistance; xOffset < World.ChunkDistance; xOffset++) {
-	//		for(int yOffset = -World.ChunkDistance; yOffset < World.ChunkDistance; yOffset++) {
-	//			Vector2Int viewedChunkCoord = new Vector2Int(currentChunkCoord.x + xOffset, currentChunkCoord.y + yOffset);
-	//			///Chunks
-	//			TerrainChunk chunk;
-	//			if (!World.Chunks.ContainsKey(viewedChunkCoord))
-	//			{
-	//				//Request Chunk
-	//				chunk = BuildChunk(viewedChunkCoord);
-	//				chunk.BuildCollisions();
-	//			}else{
-	//				chunk = World.Chunks[viewedChunkCoord];
-	//			}
-	//			if (chunk == null)
-	//				Debug.LogWarning("Chunk is null!");
-	//			if (GlobalVariables.generateChunksOnClient)
-	//			{
-	//				World.Chunks[viewedChunkCoord] = chunk;
-	//				chunk.ChunkVisible = true;
-	//				World.Chunks[viewedChunkCoord].BuildCollisions();
-	//			}
-	//			else
-	//				chunksToSend.Add(Chunk.TransferBlocksToChunk(chunk));
-	//		}
-	//	}
-	//	if(!GlobalVariables.generateChunksOnClient)
-	//		SendChunkClientRpc(chunksToSend, playerNO.OwnerClientId);
-	//}
 
 	[ClientRpc]
 	public void SendChunkClientRpc(ChunkList chunkList, ulong clientID)
@@ -256,6 +221,7 @@ public class TerrainGeneration : NetworkBehaviour {
 	private void BuildChunk(Vector2Int position) {
 		TerrainChunk chunk = new TerrainChunk(position, ChunkParent);
 		ThreadStart threadStart = delegate {
+			Thread.CurrentThread.IsBackground = true;
 			List<Biom> bioms;
 			if (position.y > -20)
 				bioms = GlobalVariables.WorldData.GetBiomsByType(Biomtype.OVERWORLD);
@@ -281,19 +247,44 @@ public class TerrainGeneration : NetworkBehaviour {
 				  caveNoiseMap,
 				  oreNoiseMap,
 				  biomNoiseMap);
-			lock (GlobalVariables.WorldData.Chunks) {
-				World.Chunks[position] = chunk;
-			}
-			//lock (chunksVisibleLastUpdate) {
-			//	chunksVisibleLastUpdate.Add(chunk);
-			//}
-			lock (ChunkCollisionQueue) {
-				ChunkCollisionQueue.Enqueue(chunk);
-			}
-			lock (chunkTileInitializationQueue) {
-				chunkTileInitializationQueue.Enqueue(chunk);
-			}
+			GenerateFrontendChunk(position, chunk);
 		};
 		new Thread(threadStart).Start();
 	}
+
+	/// <summary>
+	/// Used if the Chunk is loaded from a file and no Tilmaps are existing
+	/// </summary>
+	/// <param name="terrainChunk"></param>
+	private void BuildChunk(TerrainChunk terrainChunk) {
+		if (terrainChunk.ChunkObject != null)
+			return;
+		terrainChunk.ChunkObject = terrainChunk.BuildAllChunkLayers(chunkParent);
+		new Thread(() => {
+			Thread.CurrentThread.IsBackground = true;
+			GenerateFrontendChunk(terrainChunk.ChunkPositionWorldSpace, terrainChunk);
+			Thread.CurrentThread.Join();
+		}).Start();
+	}
+
+	/// <summary>
+	/// Generates the Frontend of the Chunk
+	/// </summary>
+	/// <param name="position"></param>
+	/// <param name="chunk"></param>
+	private void GenerateFrontendChunk(Vector2Int position, TerrainChunk chunk) {
+		lock (GlobalVariables.WorldData.Chunks) {
+			World.Chunks[position] = chunk;
+		}
+		//lock (chunksVisibleLastUpdate) {
+		//	chunksVisibleLastUpdate.Add(chunk);
+		//}
+		lock (ChunkCollisionQueue) {
+			ChunkCollisionQueue.Enqueue(chunk);
+		}
+		lock (chunkTileInitializationQueue) {
+			chunkTileInitializationQueue.Enqueue(chunk);
+		}
+	}
+
 }

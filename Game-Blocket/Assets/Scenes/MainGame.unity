@@ -470,14 +470,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9ba95a79dd30c24f89b69370de5a33f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grid: {fileID: 0}
   mainCamera: {fileID: 0}
   selectedBlock: 0
-  world: {fileID: 0}
   coordinate: {x: 0, y: 0, z: 0}
   count: 0
-  deleteSprite: {fileID: 0}
-  crackTile: {fileID: 0}
+  deleteSprite: {fileID: 459162580}
+  crackTile: {fileID: 21300000, guid: 6fd9b926d8624364594a1c9d9f2d86b3, type: 3}
 --- !u!4 &1140740554
 Transform:
   m_ObjectHideFlags: 0

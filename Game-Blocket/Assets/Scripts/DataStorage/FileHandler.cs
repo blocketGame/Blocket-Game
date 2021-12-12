@@ -6,6 +6,7 @@ using System.IO;
 using UnityEngine;
 
 using static PlayerProfile;
+using static TerrainChunk.ChunkList;
 using static WorldProfile;
 
 /// <summary>
@@ -17,6 +18,9 @@ using static WorldProfile;
 /// </summary>
 public static class FileHandler
 {
+
+	public static int chunkWidth = 32, chunkHeight = 32;
+
 	/// <summary>
 	/// The Parent Directory for all profiles
 	/// </summary>
@@ -194,6 +198,7 @@ public static class FileHandler
 	/// <summary>
 	/// 
 	/// </summary>
+	[Obsolete]
 	public static void SaveWorldProfile() {
 		SaveComponentsInWorldProfile(GameManager.worldProfileNow);
 	}
@@ -222,5 +227,182 @@ public static class FileHandler
 
 	}
 	#endregion
+	#endregion
+	#region NewWorldProfileHandling
+
+	/// <summary>
+	/// UNDONE: Check if Worlddire is vaild
+	/// </summary>
+	/// <returns></returns>
+	public static List<string> FindAllWorldDirectories() {
+		return new List<string>(Directory.GetDirectories(worldProfileParent));
+	}
+	/// <summary>
+	/// TODO: Move to ConfigFile
+	/// </summary>
+	public static readonly string chunkLocation = "chunks";
+
+	public static string GetWorldDirFromName(string name) => $@"{worldProfileParent}\{name}";
+
+	public static string GetChunkLocationFromMainDir(string mainDirName) => $@"{mainDirName}\{chunkLocation}";
+
+	/// <summary>
+	/// Checks if the Worlddirectory is valid
+	/// </summary>
+	/// <param name="mainDirName">Path to the Worlddirecotry (NOT general perent)</param>
+	/// <returns>true if not null</returns>
+	private static bool CheckWorldDirectory(string mainDirName) {
+		CheckParent();
+		if (mainDirName == null)
+			return false;
+		if(!Directory.Exists(mainDirName))
+			Directory.CreateDirectory(mainDirName);
+		if (!Directory.Exists(GetChunkLocationFromMainDir(mainDirName)))
+			Directory.CreateDirectory(GetChunkLocationFromMainDir(mainDirName));
+		return true;
+	}
+
+	#region WorldSave
+	/// <summary>
+	/// Saves the World<br></br>
+	/// Used if new World created
+	/// </summary>
+	/// <param name="worldName">Worldname</param>
+	/// <returns></returns>
+	public static WorldProfile SaveWorld(string worldName) {
+		CheckWorldDirectory(worldName);
+		WorldProfile w = new WorldProfile(worldName, null);
+		SaveWorldProfile(GetWorldDirFromName(worldName), w);
+		return w;
+	}
+
+	/// <summary>
+	/// Saves the World<br></br>
+	/// Used if World is available
+	/// </summary>
+	/// <param name="wpToSave">Worldprofile</param>
+	/// <returns>TODO</returns>
+	public static bool SaveWorld(WorldProfile wpToSave) {
+		SaveWorldProfile(GetWorldDirFromName(wpToSave.name), wpToSave);
+		return true;
+	}
+
+	/// <summary>
+	/// Converts a single bytearray to a string
+	/// </summary>
+	/// <param name="chunk">Chunkarray</param>
+	/// <returns>string with lines</returns>
+	private static string ConvertChunkArrToString(byte[,] chunk) {
+		string data = string.Empty;
+		for (int x = 0; x < GlobalVariables.WorldData.ChunkWidth; x++) {
+			for (int y = 0; y < GlobalVariables.WorldData.ChunkHeight; y++) {
+				data += $"{chunk[x,y]},";
+			}
+			//Remove last ,
+			data.Remove(data.Length - 1);
+			data += "\n";
+		}
+		return data;
+	}
+
+	/// <summary>
+	/// Converts a whole chunk to a string (IDs, IDBackgrounds, Drops) 
+	/// </summary>
+	/// <param name="sc"><see cref="SaveAbleChunk"/></param>
+	/// <returns>the string which will directly be writeable</returns>
+	private static string ConvertSavableChunkToString(SaveAbleChunk sc) {
+		string data = string.Empty;
+		data += "Chunks:\n";
+		data += ConvertChunkArrToString(sc.blockIDs);
+		data += "ChunksBG:\n";
+		data += ConvertChunkArrToString(sc.blockIDsBG);
+		data += "Drops:\n";
+		//Drops
+		string tempDrops = string.Empty;
+		foreach(SaveAbleDrop d in sc.drops)
+			tempDrops += $"{d.itemID},{d.itemCount},{d.position};";
+		//Remove last ;
+		data.Remove(data.Length - 1);
+		data += tempDrops;
+
+		return data;
+	}
+
+	/// <summary>
+	/// Inner Method of Worldsaving
+	/// </summary>
+	/// <param name="mainDirName">Worlddirectory (NOT Parent)</param>
+	/// <param name="worldToSave">WorldProfile</param>
+	private static void SaveWorldProfile(string mainDirName, WorldProfile worldToSave) {
+		CheckWorldDirectory(mainDirName);
+		foreach(SaveAbleChunk sc in worldToSave.chunks) {
+			string chunkPathI = GetChunkLocationFromMainDir(mainDirName) + @$"\Chunk {sc.chunkPosition.x} {sc.chunkPosition.y}";
+			StreamWriter sw = File.Exists(chunkPathI) ? new StreamWriter(chunkPathI, false) :File.CreateText(chunkPathI);
+			string data = ConvertSavableChunkToString(sc);
+			sw.Write(data);
+			sw.Close();
+			if(GlobalVariables.showLoadAndSave)
+				Debug.Log($"Chunk saved: {sc.chunkPosition}");
+		}
+
+	}
+	#endregion
+
+	#region WorldLoad
+	/// <summary>
+	/// Converts a string[] to chunks
+	/// </summary>
+	/// <param name="stringlines"></param>
+	/// <returns>Byte Array</returns>
+	/// <exception cref="ArgumentException">If False Input is given</exception>
+	private static byte[,] ConvertStringLinesToByteArr(string[] stringlines) {
+		byte[,] bytes = new byte[chunkWidth, chunkHeight];
+		for (int x = 0; x < chunkWidth; x++) {
+			string[] smallStringArr = stringlines[x].Split(',');
+			for (int y = 0; y < chunkHeight; y++) {
+				bytes[x, y] = byte.TryParse(smallStringArr[y].Trim(), out byte result) ? result : throw new ArgumentException("Chunk Loading: Parse Error");
+			}
+		}
+		return bytes;
+	}
+
+	/// <summary>
+	/// TODO: Exceptionhandling
+	/// </summary>
+	/// <param name="path"></param>
+	/// <returns></returns>
+	public static SaveAbleChunk GetChunkFromFile(string path) {
+		List<string> dataLines = new List<string>(File.ReadAllLines(path));
+
+		//Static Number bc of heading in File
+		byte[,] blockIDs = ConvertStringLinesToByteArr(dataLines.GetRange(1, chunkWidth).ToArray());
+		byte[,] blockIDBGs = ConvertStringLinesToByteArr(dataLines.GetRange(2 + chunkWidth, chunkWidth).ToArray());
+
+		//Drops: 3 + GlobalVariables.WorldData.ChunkWidth
+		List<SaveAbleDrop> drops = new List<SaveAbleDrop>();
+
+		//Position
+		string posString = path.Substring(path.LastIndexOf('\\') + "Chunk ".Length);
+		string stringX = posString.Trim().Split(' ')[0], stringY = posString.Trim().Split(' ')[1];
+
+		return new SaveAbleChunk(new Vector2Int(int.Parse(stringX), int.Parse(stringY)), blockIDs, blockIDBGs, drops);
+	}
+
+	public static WorldProfile LoadWorldProfile(string worldname) {
+		CheckWorldDirectory(worldname);
+		string mainPath = GetChunkLocationFromMainDir(GetWorldDirFromName(worldname));
+
+		List<SaveAbleChunk> chunks = new List<SaveAbleChunk>();
+
+		foreach (string pathI in Directory.GetFiles(mainPath)) {
+			chunks.Add(GetChunkFromFile(pathI));
+			if(GlobalVariables.showLoadAndSave)
+				Debug.Log($"Loaded Cunk: {pathI}");
+		}
+			
+		return new WorldProfile(worldname, null) { chunks = chunks };
+	}
+	#endregion
+
 	#endregion
 }

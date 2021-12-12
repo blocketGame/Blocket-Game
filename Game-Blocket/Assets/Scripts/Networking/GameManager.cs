@@ -75,9 +75,13 @@ public class GameManager : NetworkBehaviour
 			{
 				GlobalVariables.LocalPlayer = iGo;
 				iGo.name += "(this)";
-			}
-			else
+			} else {
+				//Remove Static Player in MainGameScene
+				if (iGo.GetComponent<NetworkObject>()?.IsOwner ?? false)
+					Destroy(iGo);
 				iGo.GetComponent<PlayerVariables>().playerLogic.SetActive(false);
+				iGo.GetComponent<Rigidbody2D>().simulated = false;
+			}
 		}
 	}
 
@@ -120,7 +124,7 @@ public class GameManager : NetworkBehaviour
 			FileHandler.SavePlayerProfile();
 			FileHandler.ExportProfile(playerProfileNow, true);
 			FileHandler.SaveWorldProfile();
-			FileHandler.ExportProfile(worldProfileNow, false);
+			FileHandler.SaveWorld(worldProfileNow);
 		}
 			
 	}

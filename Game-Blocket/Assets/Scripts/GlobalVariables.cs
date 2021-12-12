@@ -37,6 +37,7 @@ public static class GlobalVariables {
 	public static readonly bool checkProfileCount = true;
 	public static readonly bool itemTest = true;
 	public static readonly bool generateChunksOnClient = true;
+	public static readonly bool showLoadAndSave = false;
 	#endregion
 
 	#region Setted Keys
@@ -81,6 +82,15 @@ public static class GlobalVariables {
 	private static PlayerVariables _playerVariables;
 	public static Vector3 LocalPlayerPos { get => LocalPlayer.transform.position; }
 
+	public static BlockInteraction BlockInteraction { get => _blockInteraction; set {
+			_blockInteraction = value;
+			_blockInteraction.mainCamera = LocalPlayer?.GetComponentInChildren<Camera>();
+			if(_blockInteraction.mainCamera == null)
+				Debug.LogWarning("No Camera found!");
+		} 
+	}
+	private static BlockInteraction _blockInteraction;
+
 	public static GameObject LocalPlayer
 	{
 		get => _localPlayer; set
@@ -88,6 +98,8 @@ public static class GlobalVariables {
 			_localPlayer = value;
 			_playerVariables = value.GetComponent<PlayerVariables>();
 			_inventory = value.GetComponentInChildren<Inventory>();
+			if(BlockInteraction != null)
+				_blockInteraction.mainCamera = LocalPlayer.GetComponentInChildren<Camera>();
 		}
 	}
 	private static GameObject _localPlayer;

@@ -39,8 +39,8 @@ public class UIProfileSite : MonoBehaviour {
 			_foundWorldProfiles = value;
 			foreach(string profile in value) {
 				ListContentUI uiPSC = Instantiate(listContentPrefab, _worldContent.transform).GetComponent<ListContentUI>();
-				int x = profile.LastIndexOf(@"\"), y = profile.LastIndexOf('.');
-				uiPSC.contentName.text = profile.Substring(x + 1, y - x - 1);
+				int x = profile.LastIndexOf(@"\");
+				uiPSC.contentName.text = profile.Substring(x + 1);
 				uiPSC.CharacterBtn = false;
 			}
 		}} 
@@ -58,14 +58,18 @@ public class UIProfileSite : MonoBehaviour {
 
 	public void SelectedItem() {
 		//UI
-		if (CharacterSelectionOpen && NetworkManager.Singleton.IsClient)
+		if (CharacterSelectionOpen && NetworkManager.Singleton.IsClient) { 
 				CharacterSelectionOpen = false;
-			else if(((ListContentUI.selectedBtnNameCharacter?.Trim() == string.Empty ) != NetworkManager.Singleton.IsClient) && ((ListContentUI.selectedBtnNameWorld?.Trim() == string.Empty) != NetworkManager.Singleton.IsServer)) {
+			return;
+		}
+		if(((ListContentUI.selectedBtnNameCharacter?.Trim() == string.Empty ) != NetworkManager.Singleton.IsClient) && ((ListContentUI.selectedBtnNameWorld?.Trim() == string.Empty) != NetworkManager.Singleton.IsServer)) 
+			{
 			GameManager.playerProfileNow = FileHandler.ImportProfile(ListContentUI.selectedBtnNameCharacter, true) as PlayerProfile;
-			GameManager.worldProfileNow = FileHandler.ImportProfile(ListContentUI.selectedBtnNameWorld, false) as WorldProfile;
+			//GameManager.worldProfileNow = FileHandler.ImportProfile(ListContentUI.selectedBtnNameWorld, false) as WorldProfile;
+			GameManager.worldProfileNow = FileHandler.LoadWorldProfile(ListContentUI.selectedBtnNameWorld);
 			GlobalVariables.UILobby.SiteIndexOpen = 1;
 			}
-					
+		
 	}
 
 	private void InitButtons(){
@@ -93,9 +97,7 @@ public class UIProfileSite : MonoBehaviour {
 				FileHandler.ExportProfile(p, true);
 				GameManager.playerProfileNow = p;
 			} else {
-				WorldProfile p = new WorldProfile(createInput.text, null);
-				FileHandler.ExportProfile(p, false);
-				GameManager.worldProfileNow = p;
+				GameManager.worldProfileNow = FileHandler.SaveWorld(createInput.text);
 			}
 			FindAllProfiles();
 			SelectedItem();
@@ -117,7 +119,7 @@ public class UIProfileSite : MonoBehaviour {
 
 	public void FindAllProfiles() {
 		FoundPlayerProfiles = FileHandler.FindAllProfiles(true);
-		FoundWorldProfiles = FileHandler.FindAllProfiles(false);
+		FoundWorldProfiles = FileHandler.FindAllWorldDirectories();
 		if(GlobalVariables.checkProfileCount)
 			Debug.Log($"PlayerProfiles: {FoundPlayerProfiles.Count}, WorldProfiles: {FoundWorldProfiles.Count}");
 	}

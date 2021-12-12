@@ -115,7 +115,7 @@ public class TerrainChunk
 	/// Creates Chunk - Bg / Collision / - tilemaps
 	/// </summary>
 	/// <returns></returns>
-	private GameObject BuildAllChunkLayers(GameObject chunkParent)
+	public GameObject BuildAllChunkLayers(GameObject chunkParent)
 	{
 		GameObject chunkObject = new GameObject($"Chunk {ChunkPositionWorldSpace.x} {ChunkPositionWorldSpace.y}");
 		chunkObject.tag = "Chunk";
