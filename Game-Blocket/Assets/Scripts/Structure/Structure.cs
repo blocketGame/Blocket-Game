@@ -46,7 +46,7 @@ public class Structure : MonoBehaviour
                 TileBase tile = allTiles[x + y * bounds.size.x];
                 if (tile != null)
                 {
-                    blocks[x, y] = GlobalVariables.WorldData.getBlockFromTile(tile);
+                    blocks[x, y] = GlobalVariables.WorldData.GetBlockFromTile(tile);
                     //Debug.Log(blocks[x, y]);
                 }
             }
