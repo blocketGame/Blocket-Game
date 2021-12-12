@@ -16,6 +16,7 @@ public class GameManager : NetworkBehaviour
 {
 
 	public GameObject playerPrefab, worldPrefab;
+	public ItemAssets ia;
 	/// <summary>Is true if the MainGame is online</summary>
 	public static bool severRunning, gameRunning;
 	/// <summary>Not used!</summary>
@@ -31,6 +32,7 @@ public class GameManager : NetworkBehaviour
 	/// <summary>Sets this class into the <see cref="GlobalVariables"/></summary>
 	public void Awake() {
 		GlobalVariables.GameManager = this;
+		//GlobalVariables.PrefabAssets = assets;
 	}
 
 	public void FixedUpdate()

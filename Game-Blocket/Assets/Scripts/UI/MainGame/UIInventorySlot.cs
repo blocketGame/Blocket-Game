@@ -31,15 +31,15 @@ public class UIInventorySlot : MonoBehaviour
 	public UIInventorySlot parent;
 	#endregion
 
-	/// <summary><see cref="Item"/></summary>
-	private Item _item;
-
+	/// <summary><see cref="ItemID"/></summary>
+	private uint _itemId;
 	private ushort _itemCount = 0;
 
-	public Item Item { 
-		get => _item;
+	public uint ItemID { 
+		get => _itemId;
 		set {
-			_item = value;
+			_itemId = value;
+			ItemObject = GlobalVariables.ItemAssets?.GetItemFromItemID(value);
 			ReloadSlot();
 		}
 	}
@@ -52,20 +52,23 @@ public class UIInventorySlot : MonoBehaviour
 		}
 	}
 
+	private Item ItemObject {get; set; }
+
 	/// <summary>Reloads the Itemslot<br></br><b>Be carfull when deleting!</b></summary>
 	public void ReloadSlot() {
-		itemImage.sprite = _item?.itemImage;
+
+		itemImage.sprite = ItemObject?.itemImage;
 		itemImage.sprite ??= defaultSprite;
 		//Hide counttext if item is Single type
-		if(_item != null) {
-			textDown.gameObject.SetActive(_item.itemType == Item.ItemType.STACKABLE);
+		if(ItemObject != null) {
+			textDown.gameObject.SetActive(ItemObject.itemType == Item.ItemType.STACKABLE);
 			//Write itemCount into the texfield
 			textDown.color = Color.white;
 			//textDown.gameObject.transform.position.Set(textDown.gameObject.transform.position.x,textDown.gameObject.transform.position.y + 100, textDown.gameObject.transform.position.z);
 			textDown.text = string.Empty+_itemCount;
 		}
-		itemImage.gameObject.SetActive(_item != null);
-		textDown.gameObject.SetActive(_item != null);
+		itemImage.gameObject.SetActive(ItemObject != null);
+		textDown.gameObject.SetActive(ItemObject != null);
 	}
 
 	private bool _active;
@@ -73,8 +76,9 @@ public class UIInventorySlot : MonoBehaviour
 		get { return _active; }
 		set {
 			if(value) {
-				_uIInventory.DescriptionText = _item?.description ?? string.Empty;
-				_uIInventory.TitleText = _item?.name ?? string.Empty;
+
+				_uIInventory.DescriptionText = ItemObject?.description ?? string.Empty;
+				_uIInventory.TitleText = ItemObject?.name ?? string.Empty;
 			}
 			_active = value;
 		}

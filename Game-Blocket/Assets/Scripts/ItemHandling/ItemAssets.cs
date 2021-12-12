@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -43,6 +44,6 @@ public class ItemAssets : MonoBehaviour
         foreach (Item item in UseableItemsInGame)
             if (item.id == itemId)
                 return item;
-        return null;
+        throw new ArgumentException($"Item Not Found itemid:{itemId}");
     }
 }

@@ -128,13 +128,13 @@ public static class FileHandler
 		if(inventory != null) { 
 			//Inventory
 			for(int i = 0; i < inventory.InvSlots.Count; i++)
-				pfN.inventoryItems.Add(new SaveAbleItem(inventory.InvSlots[i].Item?.id ?? 0, inventory.InvSlots[i]?.ItemCount ?? 0));
+				pfN.inventoryItems.Add(new SaveAbleItem(inventory.InvSlots[i].ItemID, inventory.InvSlots[i]?.ItemCount ?? 0));
 			//Armor Slots
 			for (int i = 0; i < inventory.ArmorSlots.Count; i++)
-				pfN.armorItems.Add(new SaveAbleItem(inventory.ArmorSlots[i].Item?.id ?? 0, inventory.ArmorSlots[i]?.ItemCount ?? 0));
+				pfN.armorItems.Add(new SaveAbleItem(inventory.ArmorSlots[i].ItemID, inventory.ArmorSlots[i]?.ItemCount ?? 0));
 			//Accessoires
 			for (int i = 0; i < inventory.AccessoiresSlots.Count; i++)
-				pfN.accessoiresItems.Add(new SaveAbleItem(inventory.AccessoiresSlots[i].Item?.id ?? 0, inventory.AccessoiresSlots[i]?.ItemCount ?? 0));
+				pfN.accessoiresItems.Add(new SaveAbleItem(inventory.AccessoiresSlots[i].ItemID, inventory.AccessoiresSlots[i]?.ItemCount ?? 0));
 		}
 		if(GlobalVariables.PlayerVariables != null) { 
 			//PlayerVariables
@@ -163,7 +163,7 @@ public static class FileHandler
 				if (profile.inventoryItems.Count <= i)
 					break;
 				SaveAbleItem itemNow = profile.inventoryItems[i];
-				inventory.InvSlots[i].Item = iA.GetItemFromItemID(itemNow.itemId);
+				inventory.InvSlots[i].ItemID = itemNow.itemId;
 				inventory.InvSlots[i].ItemCount = itemNow.count;
 			}
 				
@@ -172,7 +172,7 @@ public static class FileHandler
 				if (profile.armorItems.Count <= i)
 					break;
 				SaveAbleItem itemNow = profile.armorItems[i];
-				inventory.ArmorSlots[i].Item = iA.GetItemFromItemID(itemNow.itemId);
+				inventory.ArmorSlots[i].ItemID = itemNow.itemId;
 				inventory.ArmorSlots[i].ItemCount = itemNow.count;
 			}
 			//Accessoires
@@ -180,7 +180,7 @@ public static class FileHandler
 				if (profile.accessoiresItems.Count <= i)
 					break;
 				SaveAbleItem itemNow = profile.accessoiresItems[i];
-				inventory.AccessoiresSlots[i].Item = iA.GetItemFromItemID(itemNow.itemId);
+				inventory.AccessoiresSlots[i].ItemID = itemNow.itemId;
 				inventory.AccessoiresSlots[i].ItemCount = itemNow.count;
 			}
 		}
@@ -198,7 +198,6 @@ public static class FileHandler
 	/// <summary>
 	/// 
 	/// </summary>
-	[Obsolete]
 	public static void SaveWorldProfile() {
 		SaveComponentsInWorldProfile(GameManager.worldProfileNow);
 	}
@@ -390,11 +389,11 @@ public static class FileHandler
 
 	public static WorldProfile LoadWorldProfile(string worldname) {
 		CheckWorldDirectory(worldname);
-		string mainPath = GetChunkLocationFromMainDir(GetWorldDirFromName(worldname));
+		string chunkPath = GetChunkLocationFromMainDir(GetWorldDirFromName(worldname));
 
 		List<SaveAbleChunk> chunks = new List<SaveAbleChunk>();
 
-		foreach (string pathI in Directory.GetFiles(mainPath)) {
+		foreach (string pathI in Directory.GetFiles(chunkPath)) {
 			chunks.Add(GetChunkFromFile(pathI));
 			if(GlobalVariables.showLoadAndSave)
 				Debug.Log($"Loaded Cunk: {pathI}");

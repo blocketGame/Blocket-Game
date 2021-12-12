@@ -267,7 +267,7 @@ public class UIInventory : MonoBehaviour
 				{
 					if (!sl1.isHotBarSlot && sl.parent.name.Equals(sl1.name))
 					{
-						sl1.Item = sl.Item;
+						sl1.ItemID = sl.ItemID;
 						sl1.ItemCount = sl.ItemCount;
 					}
 				}
@@ -288,7 +288,7 @@ public class UIInventory : MonoBehaviour
 				{
 					if (!sl1.isHotBarSlot&&sl.parent.name.Equals(sl1.name))
 					{
-						sl.Item = sl1.Item;
+						sl.ItemID = sl1.ItemID;
 						sl.ItemCount = sl1.ItemCount;
 					}
 				}

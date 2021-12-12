@@ -27,20 +27,20 @@ public class Inventory : MonoBehaviour{
 	/// </summary>
 	/// <param name="slotPressed">Slot that was pressed by the local user</param>
 	public void PressedSlot(UIInventorySlot slotPressed) {
-		Item temp = atHand.Item;
+		uint temp = atHand.ItemID;
 		ushort iCT = atHand.ItemCount;
 
-		atHand.Item = slotPressed.Item;
+		atHand.ItemID = slotPressed.ItemID;
 		atHand.ItemCount = slotPressed.ItemCount;
 
 		slotPressed.ItemCount = iCT;
-		slotPressed.Item = temp;
+		slotPressed.ItemID = temp;
 
-		atHand.gameObject.SetActive(atHand.Item != null);
+		atHand.gameObject.SetActive(atHand.ItemID != 0);
 	}
 
 	public void Update() {
-		if(atHand?.Item != null)
+		if(atHand?.ItemID != null)
 			atHand.transform.position = atHandVector + new Vector2(Input.mousePosition.x, Input.mousePosition.y);
 			
 	}
@@ -69,7 +69,7 @@ public class Inventory : MonoBehaviour{
 		if(itemToAdd.itemType == Item.ItemType.SINGLE) {
 			wannaAddThere = GetNextFreeSlot();
 			if(wannaAddThere) {
-				wannaAddThere.Item = itemToAdd;
+				wannaAddThere.ItemID = itemToAdd.id;
 				itemCountNotAdded = 0;
 				return true;
 			}
@@ -92,8 +92,8 @@ public class Inventory : MonoBehaviour{
 
 			//Add the Item if a slot has been found
 			if(wannaAddThere) {
-				if(wannaAddThere.Item == null) {
-					wannaAddThere.Item = itemToAdd;
+				if(wannaAddThere.ItemID == 0) {
+					wannaAddThere.ItemID = itemToAdd.id;
 					wannaAddThere.ItemCount = toAddNow;
 					toAddNow = 0;
 				} else {
@@ -122,7 +122,7 @@ public class Inventory : MonoBehaviour{
 	public List<UIInventorySlot> FindItem(Item itemToFind) {
 		List<UIInventorySlot> itemSlotsFound = new List<UIInventorySlot>();
 		foreach(UIInventorySlot invSlotNow in InvSlots)
-			if(invSlotNow.Item == itemToFind)
+			if(invSlotNow.ItemID == itemToFind.id)
 				itemSlotsFound.Add(invSlotNow);
 		return itemSlotsFound;
 	}
@@ -135,7 +135,7 @@ public class Inventory : MonoBehaviour{
 	/// <returns>First free slot<br></br>Null if no slot is free</returns>
 	public UIInventorySlot GetNextFreeSlot() {
 		foreach(UIInventorySlot invSlotNow in InvSlots)
-			if(invSlotNow.Item == null)
+			if(invSlotNow.ItemID == 0)
 				return invSlotNow;
 		return null;
 	}
@@ -147,7 +147,7 @@ public class Inventory : MonoBehaviour{
 	/// <returns>Null if no Item has been found<br></br>An <see cref="UIInventorySlot"/> with the Item to find</returns>
 	public UIInventorySlot FindFirstItem(Item itemtToFind) {
 		foreach(UIInventorySlot invSlotNow in InvSlots)
-			if(invSlotNow.Item == itemtToFind)
+			if(invSlotNow.ItemID == itemtToFind.id)
 				return invSlotNow;
 		return null;
 	}
@@ -175,10 +175,10 @@ public class Inventory : MonoBehaviour{
 		UIInventorySlot slotToRemove = FindFirstItem(itemToRemove);
 		if(slotToRemove.ItemCount < countToRemove) {
 			int toRemoveAfter = countToRemove - slotToRemove.ItemCount;
-			slotToRemove.Item = null;
+			slotToRemove.ItemID = 0;
 			RemoveItem(itemToRemove, (ushort)toRemoveAfter);
 		} else if(slotToRemove.ItemCount == countToRemove)
-			slotToRemove.Item = null;
+			slotToRemove.ItemID = 0;
 		else
 			slotToRemove.ItemCount -= countToRemove;
 		return true;

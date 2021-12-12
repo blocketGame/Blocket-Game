@@ -96,8 +96,10 @@ public class UIProfileSite : MonoBehaviour {
 				PlayerProfile p = new PlayerProfile(createInput.text, null);
 				FileHandler.ExportProfile(p, true);
 				GameManager.playerProfileNow = p;
+				ListContentUI.selectedBtnNameCharacter = createInput.text;
 			} else {
 				GameManager.worldProfileNow = FileHandler.SaveWorld(createInput.text);
+				ListContentUI.selectedBtnNameWorld = createInput.text;
 			}
 			FindAllProfiles();
 			SelectedItem();

@@ -4,7 +4,9 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - prefabUI: {fileID: 7667816536096445537, guid: d75712829b2513f4d8d9ef17a0cfc772, type: 3}
+  - prefabUI: {fileID: 7667816536096445537, guid: 7716d501ae6a90847890cfece489a3df, type: 3}
+  - world: {fileID: 1085889088375208448, guid: 990ea520e4841294280bed8d99cce5d1, type: 3}
+  - playerNetPrefab: {fileID: 2794137725677328093, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
