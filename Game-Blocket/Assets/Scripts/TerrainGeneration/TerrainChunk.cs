@@ -25,8 +25,11 @@ public class TerrainChunk
 
 	public bool ChunkVisible { 
 		get {
-			if (ChunkObject.activeSelf != BackgroundObject.activeSelf)
+			if (ChunkObject.activeSelf != BackgroundObject.activeSelf) {
 				Debug.LogWarning("ChunkObject and BG not same!");
+				BackgroundObject.SetActive(ChunkObject.activeSelf);
+			}
+				
 			return ChunkObject.activeSelf;
 		}
 		set{
@@ -37,7 +40,10 @@ public class TerrainChunk
 
 	public Vector2Int ChunkPositionWorldSpace { get => chunkPosition; set => chunkPosition = value; }
 	public byte[,] BlockIDs { get => blockIDs; set => blockIDs = value; }
-	public GameObject ChunkObject { get => chunkObject; set => chunkObject = value; }
+	public GameObject ChunkObject { get => chunkObject; set { 
+			chunkObject = value; 
+		} 
+	}
 	public GameObject CollisionObject { get => collisionObject; set => collisionObject = value; }
 	#endregion
 

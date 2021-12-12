@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 /// <summary>
-/// @Cse19455
+/// @Cse19455<br></br>
 /// Real Blocket Controller
 /// </summary>
 public class BetterMovementScript : MonoBehaviour {
@@ -27,10 +27,10 @@ public class BetterMovementScript : MonoBehaviour {
         Clipping();
     }
 
+    /// <summary>
+    /// TODO: Make variable before checking
+    /// </summary>
     private void TurnAnim() {
-        if (GlobalVariables.LocalPlayer == null)
-            return;
-
         if (GlobalVariables.LocalPlayer.GetComponentInChildren<SpriteRenderer>().gameObject.transform.localScale.x != side && side != 0
             && GlobalVariables.LocalPlayer.GetComponentInChildren<SpriteRenderer>().gameObject.transform.localScale.x < 1
             && GlobalVariables.LocalPlayer.GetComponentInChildren<SpriteRenderer>().gameObject.transform.localScale.x > -1)
@@ -39,8 +39,11 @@ public class BetterMovementScript : MonoBehaviour {
     }
 
     void Update() {
-        TurnAnim();
+        //Player needs to get spawned by server
+        if (GlobalVariables.LocalPlayer == null)
+            return;
 
+        TurnAnim();
         VelocityUpdate();
         /// Input Freeze Countdown
         if (countdown > 0) {
@@ -73,10 +76,7 @@ public class BetterMovementScript : MonoBehaviour {
         if (playerRigidbody.velocity.y < 0)
             if (playerRigidbody.velocity.y > -15)
                 playerRigidbody.gameObject.transform.position += Time.deltaTime * new Vector3(movement, (playerRigidbody.velocity.y) * fallMulti, 0);
-
-
     }
-
 
     /// <summary>
     /// 

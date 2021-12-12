@@ -11,6 +11,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public static class GlobalVariables {
 
+
 	public static readonly ushort maxItemCountForMultiple = 128;
 
 	public static GameObject networkVariablesGO;
@@ -20,6 +21,10 @@ public static class GlobalVariables {
 			networkVariablesGO = value.gameObject;
 		} 
 	}
+
+	#region Tags
+	public static readonly string chunkTag = "Chunk";
+	#endregion
 
 	#region UIScripts
 	public static UILobby UILobby { get; set; }
@@ -38,6 +43,7 @@ public static class GlobalVariables {
 	public static readonly bool itemTest = true;
 	public static readonly bool generateChunksOnClient = true;
 	public static readonly bool showLoadAndSave = false;
+	public static readonly bool showRayCastTargets = false;
 	#endregion
 
 	#region Setted Keys

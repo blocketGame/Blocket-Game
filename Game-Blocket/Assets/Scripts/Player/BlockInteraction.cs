@@ -7,6 +7,8 @@ using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+using static UnityEngine.UI.Image;
+
 /// <summary>
 /// Used for Interacten per Mouse with Tilemap<br></br>
 /// <b>TODO: Cleanup!!</b>
@@ -26,10 +28,30 @@ public class BlockInteraction : MonoBehaviour {
 		GlobalVariables.BlockInteraction = this;
 	}
 
+	private void HadleRayCast() {
+		if (!GameManager.severRunning)
+			return;
+		RaycastHit2D rHit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.down);
+		if (!rHit)
+			return;
+		if (GlobalVariables.showRayCastTargets)
+			Debug.Log(rHit.collider.gameObject.name);
+		GameObject objHited = rHit.collider.gameObject;
+		if (objHited.CompareTag(GlobalVariables.chunkTag)) {
+				
+			///TODO: Get Block and so on...
+		}
+		///UNDONE: Andere Raycastobjects (Player / Mobs)
+	}
+
 	public void Update() {
+		//HadleRayCast();
+		//return;
+
+		//Unused code
 		if (mainCamera == null)
 			return;
-
+		
 		//FABIAN PROBLEM WITH INV MOVE TILES NOT VALUES.
 
 		//Was is?

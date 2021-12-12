@@ -63,7 +63,10 @@ public class TerrainGeneration : NetworkBehaviour {
 					ActivateLocalChunks();
 				DisableChunksOutOfRange();
 			}
+		HandleChunks();
+	}
 
+	private void HandleChunks() {
 		if (chunkTileInitializationQueue.Count > 0) {
 			lock (chunkTileInitializationQueue) {
 				foreach (TerrainChunk terrainChunk in chunkTileInitializationQueue) {
@@ -159,8 +162,11 @@ public class TerrainGeneration : NetworkBehaviour {
 				} else if (World.Chunks.ContainsKey(viewedChunkCoord)) {
 					if (World.Chunks[viewedChunkCoord].ChunkObject == null)
 						BuildChunk(World.Chunks[viewedChunkCoord]);
-					else
-						World.Chunks[viewedChunkCoord].ChunkVisible = true;
+					else {
+						if (!World.Chunks[viewedChunkCoord].ChunkVisible)
+							World.Chunks[viewedChunkCoord].ChunkVisible = true;
+					}
+						
 				}
 			}
 		}
