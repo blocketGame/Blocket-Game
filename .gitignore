@@ -500,4 +500,7 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
+ Game-Blocket/PRE-ReriTara_Data
 # End of https://www.toptal.com/developers/gitignore/api/unity,csharp
+
+Game-Blocket/PRE-ReriTara_Data/Managed/Unity.2D.Tilemap.Extras.dll
