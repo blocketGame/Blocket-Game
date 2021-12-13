@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<< HEAD:Game-Blocket/Assets/Scripts/Camera/FluentCameraBehaviour.cs.meta
+guid: 8485495cceb89cf40911ddef000831e0
+=======
+guid: ae66a57fe4a7cee4eae09b5b604a5eaa
+>>>>>>> 407705a (Implemened Profiles 2 / 4):Game-Blocket/Assets/Scripts/Player/BlockInteraction.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
