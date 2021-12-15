@@ -12,39 +12,35 @@ using UnityEngine.Tilemaps;
 /// <b>TODO: Cleanup!!</b>
 /// </summary>
 public class BlockInteraction : MonoBehaviour{
-
 	public Camera mainCamera;
 	public int selectedBlock;
 	public Vector3Int coordinate;
 	public float count;
 	public GameObject deleteSprite;
 	public Sprite crackTile;
-	ItemAssets itemAssets ;
-	private Vector3 mouseWorldPos { get => mainCamera.ScreenToWorldPoint(Input.mousePosition); }
-	private Inventory Inv { get => GlobalVariables.Inventory; } 
-	TerrainChunk chunk;
 
 	private Vector3 PlayerPos { get => GlobalVariables.LocalPlayerPos; }
-    private void Awake()
-    {
-		itemAssets = GlobalVariables.Assets.GetComponent<ItemAssets>();
 
-	}
-    #region UnityMethods
-    public void Update()
+	#region UnityMethods
+	public void Update()
 	{
-		chunk = GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y);
-		
+		//FABIAN PROBLEM WITH INV MOVE TILES NOT VALUES.
 
+		//Was is?
+
+		TerrainChunk chunk = GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y);
+		Inventory inv = GlobalVariables.Inventory;
+		Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+		ItemAssets itemAssets = GameObject.Find("Assets").GetComponent<ItemAssets>();
+
+		if (GameObject.FindGameObjectWithTag("SlotOptions") != null)
+			return;
 		if (chunk == null)
 			return;
 		if (chunk.CollidewithDrop(GlobalVariables.World.GetComponentInChildren<Grid>().WorldToCell(PlayerPos).x, GlobalVariables.World.GetComponentInChildren<Grid>().WorldToCell(PlayerPos).y) != null)
 		{
-			Debug.Log("1");
 			Drop collissionDrop = chunk.CollidewithDrop(GlobalVariables.World.GetComponentInChildren<Grid>().WorldToCell(PlayerPos).x, GlobalVariables.World.GetComponentInChildren<Grid>().WorldToCell(PlayerPos).y);
-			Debug.Log("2"); 
-			TakeDrops(itemAssets.BlockItemsInGame[collissionDrop.DropID], collissionDrop.Anzahl);
-			Debug.Log("3");
+			TakeDrops(inv,itemAssets.BlockItemsInGame[collissionDrop.DropID], collissionDrop.Anzahl);
 			chunk.RemoveDropfromView(collissionDrop);
 		}
 		ChangeCoordinate(mouseWorldPos);
@@ -59,6 +55,10 @@ public class BlockInteraction : MonoBehaviour{
 
 		if (Input.GetKey(GlobalVariables.leftClick))
 		{
+
+			//if (GameObject.FindGameObjectWithTag("LeftClick")!=null)
+			//{
+				//CHECK IF IT IS A BLOCK OR NOT
 				try
 				{
 					chunk = GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y);
@@ -74,10 +74,11 @@ public class BlockInteraction : MonoBehaviour{
 				{
 						Debug.Log(e.Message);
 				}
+			//}
 		}
 
 		if (Input.GetKey(GlobalVariables.rightClick) &&
-			GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).BlockIDs[coordinate.x - GlobalVariables.WorldData.ChunkWidth * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.x, coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.y] == 0 
+			GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).BlockIDs[coordinate.x - GlobalVariables.WorldData.ChunkWidth * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x, coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.y] == 0 
 			//&& !(Input.mousePosition.y - 429 < 55 && Input.mousePosition.y - 429 > -5 && Input.mousePosition.x - 959 > -40 && Input.mousePosition.x - 959 < 40))
 			)
 			{
@@ -118,12 +119,12 @@ public class BlockInteraction : MonoBehaviour{
 	/// <param name="inv"></param>
 	/// <param name="blockitem"></param>
 	/// <param name="anzahl"></param>
-	private void TakeDrops(BlockItem blockitem,int anzahl)
+	private void TakeDrops(Inventory inv,BlockItem blockitem,int anzahl)
 	{
 		//Player collides with Drop
 		for(int x=0;x<anzahl;x++)
-			Inv.AddItem(blockitem);
-		GlobalVariables.UIInventory.SynchronizeToHotbar();
+			inv.AddItem(blockitem);
+		GameObject.FindGameObjectWithTag("Inventory").GetComponent<UIInventory>().SynchronizeToHotbar();
 	}
 
 	/// <summary>
@@ -135,8 +136,8 @@ public class BlockInteraction : MonoBehaviour{
 		if (selectedBlock <= -1)
 			return;
 		
-		chunk.ChunkTileMap.SetTile(new Vector3Int(coordinate.x - GlobalVariables.WorldData.ChunkWidth * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.x, coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.y, 0), GlobalVariables.WorldData.Blocks[selectedBlock].Tile);
-		chunk.BlockIDs[(coordinate.x - GlobalVariables.WorldData.ChunkWidth * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.x), coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.y] = GlobalVariables.WorldData.Blocks[selectedBlock].BlockID;
+		chunk.ChunkTileMap.SetTile(new Vector3Int(coordinate.x - GlobalVariables.WorldData.ChunkWidth * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x, coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.y, 0), GlobalVariables.WorldData.Blocks[selectedBlock].Tile);
+		chunk.BlockIDs[(coordinate.x - GlobalVariables.WorldData.ChunkWidth * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x), coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.y] = GlobalVariables.WorldData.Blocks[selectedBlock].BlockID;
 		GlobalVariables.WorldData.UpdateCollisionsAt(coordinate);
 		GlobalVariables.WorldData.UpdateCollisionsAt(new Vector3Int(coordinate.x + 1, coordinate.y, coordinate.z));
 		GlobalVariables.WorldData.UpdateCollisionsAt(new Vector3Int(coordinate.x, coordinate.y + 1, coordinate.z));

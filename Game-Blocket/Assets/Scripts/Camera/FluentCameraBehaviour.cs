@@ -39,8 +39,6 @@ public class FluentCameraBehaviour : MonoBehaviour
     }
     private void FixedUpdate()
     {
-
-
         if (Input.GetKey(KeyCode.LeftShift))
         {
             //if(OffSetX< (GlobalVariables.World.GetComponentInChildren<Grid>().LocalToWorld(Input.mousePosition).x / 60) - 18  || -OffSetX > (GlobalVariables.World.GetComponentInChildren<Grid>().LocalToWorld(Input.mousePosition).x / 60 - 18))
