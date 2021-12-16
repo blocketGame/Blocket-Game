@@ -43,6 +43,9 @@ public static class GlobalVariables {
 	public static KeyCode openInventoryKey = KeyCode.E;
 	public static KeyCode leftClick = KeyCode.Mouse0;
 	public static KeyCode rightClick = KeyCode.Mouse1;
+	public static KeyCode jump = KeyCode.Space;
+	public static KeyCode roll = KeyCode.LeftControl;
+	public static KeyCode crawl = KeyCode.LeftShift;
 	#endregion
 
 	#region Properties + Fields
@@ -69,7 +72,8 @@ public static class GlobalVariables {
 		} 
 	}
 	private static GameObject _world;
-	
+
+	public static UIInventory UIInventory { get; set; }
 
 	#region LocalPlayer
 	public static Inventory Inventory { get => _inventory; }

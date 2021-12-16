@@ -17,6 +17,8 @@ public class TerrainChunk
 	[SerializeField]
 	private Vector2Int chunkPosition;
 	[SerializeField]
+	private Vector3 chunkPositionWorldSpace;
+	[SerializeField]
 	private byte[,] blockIDs;
 	[SerializeField]
 	private GameObject chunkObject;
@@ -35,7 +37,8 @@ public class TerrainChunk
 		}
 	}
 
-	public Vector2Int ChunkPositionWorldSpace { get => chunkPosition; set => chunkPosition = value; }
+	public Vector2Int ChunkPosition { get => chunkPosition; set => chunkPosition = value; }
+	public Vector3 ChunkPositionWorldSpace { get => chunkPositionWorldSpace; set => chunkPositionWorldSpace = value; }
 	public byte[,] BlockIDs { get => blockIDs; set => blockIDs = value; }
 	public GameObject ChunkObject { get => chunkObject; set => chunkObject = value; }
 	public GameObject CollisionObject { get => collisionObject; set => collisionObject = value; }
@@ -95,7 +98,8 @@ public class TerrainChunk
 
 	public TerrainChunk(Vector2Int chunkPosition, GameObject chunkParent)
 	{
-		this.ChunkPositionWorldSpace = chunkPosition;
+		this.ChunkPosition = chunkPosition;
+		this.ChunkPositionWorldSpace = new Vector3(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth, chunkPosition.y * GlobalVariables.WorldData.ChunkHeight);
 		this.BlockIDs = new byte[GlobalVariables.WorldData.ChunkWidth, GlobalVariables.WorldData.ChunkHeight];
 		this.blockIDsBG = new byte[GlobalVariables.WorldData.ChunkWidth, GlobalVariables.WorldData.ChunkHeight];
 		this.Drops = new List<Drop>();
@@ -104,7 +108,7 @@ public class TerrainChunk
 
 	public TerrainChunk(Vector2 vector2, GameObject chunkParent)
 	{
-		this.ChunkPositionWorldSpace = TerrainGeneration.CastVector2ToInt(vector2);
+		this.ChunkPosition = TerrainGeneration.CastVector2ToInt(vector2);
 		this.BlockIDs = new byte[GlobalVariables.WorldData.ChunkWidth, GlobalVariables.WorldData.ChunkHeight];
 		this.BlockIDsBG = new byte[GlobalVariables.WorldData.ChunkWidth, GlobalVariables.WorldData.ChunkHeight];
 		this.Drops = new List<Drop>();
@@ -117,30 +121,31 @@ public class TerrainChunk
 	/// <returns></returns>
 	private GameObject BuildAllChunkLayers(GameObject chunkParent)
 	{
-		GameObject chunkObject = new GameObject($"Chunk {ChunkPositionWorldSpace.x} {ChunkPositionWorldSpace.y}");
+		GameObject chunkObject = new GameObject($"Chunk {ChunkPosition.x} {ChunkPosition.y}");
 		chunkObject.tag = "Chunk";
 		chunkObject.transform.SetParent(chunkParent.transform);
-		chunkObject.transform.position = new Vector3(ChunkPositionWorldSpace.x * GlobalVariables.WorldData.ChunkWidth, ChunkPositionWorldSpace.y * GlobalVariables.WorldData.ChunkHeight, 0f);
+		chunkObject.transform.position = new Vector3(ChunkPosition.x * GlobalVariables.WorldData.ChunkWidth, ChunkPosition.y * GlobalVariables.WorldData.ChunkHeight, 0f);
 
 		ChunkTileMap = chunkObject.AddComponent<Tilemap>();
 		ChunkTileMapRenderer = chunkObject.AddComponent<TilemapRenderer>();
 		ChunkTileMap.tileAnchor = new Vector3(0.5f, 0.5f, 0f);
 
-		BackgroundObject = new GameObject($"Chunk {ChunkPositionWorldSpace.x} {ChunkPositionWorldSpace.y} background");
+		BackgroundObject = new GameObject($"Chunk {ChunkPosition.x} {ChunkPosition.y} background");
 		BackgroundObject.transform.SetParent(ChunkTileMap.transform);
-		BackgroundObject.transform.position = new Vector3(ChunkPositionWorldSpace.x * GlobalVariables.WorldData.ChunkWidth, ChunkPositionWorldSpace.y * GlobalVariables.WorldData.ChunkHeight, 0.001f);
+		BackgroundObject.transform.position = new Vector3(ChunkPosition.x * GlobalVariables.WorldData.ChunkWidth, ChunkPosition.y * GlobalVariables.WorldData.ChunkHeight, 0.001f);
 		BackgroundTilemap = BackgroundObject.AddComponent<Tilemap>();
 		BackgroundObject.AddComponent<TilemapRenderer>();
 
-		CollisionObject = new GameObject($"Chunk {ChunkPositionWorldSpace.x} {ChunkPositionWorldSpace.y} collision");
+		CollisionObject = new GameObject($"Chunk {ChunkPosition.x} {ChunkPosition.y} collision");
+		CollisionObject.tag = "Terrain";
 		CollisionObject.transform.SetParent(ChunkTileMap.transform);
-		CollisionObject.transform.position = new Vector3(ChunkPositionWorldSpace.x * GlobalVariables.WorldData.ChunkWidth, ChunkPositionWorldSpace.y * GlobalVariables.WorldData.ChunkHeight, 0f);
+		CollisionObject.transform.position = new Vector3(ChunkPosition.x * GlobalVariables.WorldData.ChunkWidth, ChunkPosition.y * GlobalVariables.WorldData.ChunkHeight, 0f);
 		CollisionTileMap = CollisionObject.AddComponent<Tilemap>();
 		ChunkTileMapCollider = CollisionObject.AddComponent<TilemapCollider2D>();
 		CollisionTileMap.tileAnchor = new Vector3(0.5f, 0.5f, 0f);
 
 
-		DropObject = new GameObject($"Chunk {ChunkPositionWorldSpace.x} {ChunkPositionWorldSpace.y} drops");
+		DropObject = new GameObject($"Chunk {ChunkPosition.x} {ChunkPosition.y} drops");
 		DropObject.transform.SetParent(ChunkTileMap.transform);
 		InsertDrops();
 
@@ -156,7 +161,8 @@ public class TerrainChunk
 		float caveSize = GlobalVariables.WorldData.InitCaveSize;
 		if (chunkPosition.y < 0) {
 			caveSize = GlobalVariables.WorldData.InitCaveSize - chunkPosition.y * GlobalVariables.WorldData.ChunkHeight * 0.001f;
-		} else
+		} 
+		else
 		if (chunkPosition.y > 0) {
 			caveSize = GlobalVariables.WorldData.InitCaveSize + chunkPosition.y * GlobalVariables.WorldData.ChunkHeight * 0.001f;
 		}
@@ -196,13 +202,13 @@ public class TerrainChunk
 						}
 					}
 				}
+				//Place Trees.
+				if (x % 5 == 0 && chunkPosition.y == 0)
+				{
+					//	//try to spawn a Tree
+					GenerateTrees(x, positionHeight, biom.Index);
+				}
 			}
-
-			//Place Trees.
-			//if (x % 5 == 0 && chunkPosition.y == 0) {
-			//	//try to spawn a Tree
-			//	GenerateTrees(x, positionHeight);
-			//}
 		}
 	}
 
@@ -261,8 +267,8 @@ public class TerrainChunk
 		{
 			for (int y = 0; y < GlobalVariables.WorldData.ChunkHeight; y++)
 			{
-				int worldX = x + ChunkPositionWorldSpace.x * GlobalVariables.WorldData.ChunkWidth;
-				int worldY = y + ChunkPositionWorldSpace.y * GlobalVariables.WorldData.ChunkHeight;
+				int worldX = x + ChunkPosition.x * GlobalVariables.WorldData.ChunkWidth;
+				int worldY = y + ChunkPosition.y * GlobalVariables.WorldData.ChunkHeight;
 				if (BlockIDs[x, y] != 0 &&
 					(GlobalVariables.WorldData.GetBlockFormCoordinate(worldX + 1, worldY) == 0 ||
 					GlobalVariables.WorldData.GetBlockFormCoordinate(worldX, worldY + 1) == 0 ||
@@ -399,22 +405,22 @@ public class TerrainChunk
 	{
 		return obj is TerrainChunk other && chunkPosition.Equals(other.chunkPosition);
 	}
-
-	public void GenerateTrees(int x, int y) {
+	public void GenerateTrees(int x, int y, int biom) {
 		//Chunk = 32 in der width.
-		//Trees benötigen 5 Blöcke in der width bis der nächste BAum spawnen kann
-		//[Funktioniert, aber ned schön]
+		//Trees benï¿½tigen 5 Blï¿½cke in der width bis der nï¿½chste BAum spawnen kann
+		//[Funktioniert, aber ned schï¿½n]
 
-		if (new System.Random(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth + x).Next(1, 5) == 4 && x > GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0) && x < (32 - GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0))) {
-			int rando = new System.Random(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth + x).Next(5, 10);
+		if (new System.Random(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth + x).Next(1, 5) == 4 && x > GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0) && x < (32 - GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0))) {
+			//int rando = new System.Random(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth + x).Next(5, 10);
 			//for (int i = 0;i<rando;i++)
 			//BlockIDsBG[x, y+i] = world.Strukturen[0].blocks[2,5];
 
-
-			for (int z = 0; z < GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0); z++) {
-				for (int q = 0; q < GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(1); q++) {
-					if (BlockIDsBG[x + z - GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0) / 2, y + q] == 0)
-						BlockIDsBG[x + z - GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0) / 2, y + q] = GlobalVariables.WorldData.Strukturen[0].blocks[z, q];
+			for (int z = 0; z < GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0); z++) {
+				for (int q = 0; q < GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(1); q++) {
+                    try { 
+						if (BlockIDsBG[x + z - GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0) / 2, y + q] == 0)
+							BlockIDsBG[x + z - GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0) / 2, y + q] = GlobalVariables.Assets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks[z, q];
+					}catch { }
 				}
 			}
 			//int breite=0;
@@ -492,7 +498,7 @@ public class TerrainChunk
 					blocks = chunk.BlockIDs,
 					bgBlocks = chunk.BlockIDsBG,
 					drops = chunk.Drops.ToArray(),
-					chunkPositionWorldSpace = new Vector2(chunk.ChunkPositionWorldSpace.x, chunk.ChunkPositionWorldSpace.y)
+					chunkPositionWorldSpace = new Vector2(chunk.ChunkPosition.x, chunk.ChunkPosition.y)
 				};
 			}
 			/// <summary>

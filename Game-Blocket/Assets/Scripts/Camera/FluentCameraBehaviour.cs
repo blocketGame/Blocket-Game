@@ -11,9 +11,31 @@ public class FluentCameraBehaviour : MonoBehaviour
     private float OffSetX = 0;
     private float OffSetY = 0;
     private Vector3 originalPos;
+
+    private float camZoom = 20f;
+    public KeyCode Scroll;
     private void Awake()
     {
         originalPos = gameObject.transform.localPosition;
+    }
+
+    private void Update()
+    {
+        GetComponent<Camera>().orthographicSize = camZoom;
+        if (Input.mouseScrollDelta.y != 0)
+        {
+            float delta = Input.mouseScrollDelta.y;
+            if (delta < 0)
+            {
+                if (camZoom < 40f)
+                    camZoom++;
+            }
+            else if (delta > 0)
+            {
+                if (camZoom > 10f)
+                    camZoom--;
+            }
+        }
     }
     private void FixedUpdate()
     {

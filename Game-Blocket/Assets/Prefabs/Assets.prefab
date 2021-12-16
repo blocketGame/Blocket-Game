@@ -45,13 +45,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d984b8f0d51ece49a553e0de44df8f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BlockItemsInGame: []
+  BlockItemsInGame:
+  - name: Dirt
+    id: 0
+    description: 
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: f01308597c751ff40bb35eecf55b550d, type: 3}
+    blockId: 3
   ToolItemsInGame: []
   EquipableItemsInGame: []
   UseableItemsInGame: []
   Structures:
   - {fileID: 7804717356263989844}
-  - {fileID: 6077844198942109844}
+  Enemies:
+  - {fileID: 11400000, guid: 5fa23f42fd79765418b7e844d5d84e6b, type: 2}
 --- !u!114 &1909828132783296647
 MonoBehaviour:
   m_ObjectHideFlags: 0

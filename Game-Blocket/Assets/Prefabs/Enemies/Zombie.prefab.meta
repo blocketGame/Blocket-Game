@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-<<<<<<< HEAD:Game-Blocket/Assets/Prefabs/Enemies/Zombie.prefab.meta
-guid: cb06378105f95a94e9f7a0dfe2a4bb0d
+<<<<<<< HEAD:Game-Blocket/Assets/Prefabs/Enemies/ZombieSprite.prefab.meta
+guid: 25e96d27f77036248ba82bfd5313d68c
 =======
-guid: 1922f37c175d0fa419dae2c557099bf0
->>>>>>> 407705a (Implemened Profiles 2 / 4):Game-Blocket/Assets/Prefabs/UI/LobbyClient.prefab.meta
+guid: 1117d065e42134949bf2969a0e60cf7b
+>>>>>>> origin/Blocket_Development:Game-Blocket/Assets/Prefabs/Enemies/Zombie.prefab.meta
 PrefabImporter:
   externalObjects: {}
   userData: 

@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 [CreateAssetMenu]
 public class Biom : ScriptableObject, ISerializationCallbackReceiver {
@@ -24,6 +22,8 @@ public class Biom : ScriptableObject, ISerializationCallbackReceiver {
 	private Decoration[] decorations;
 	[SerializeField]
 	private byte[] structures;
+	[SerializeField]
+	private byte[] enemies;
 	[SerializeField]
 	private int treeSpawnChance ;
 	[SerializeField]
