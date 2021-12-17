@@ -62,6 +62,8 @@ public static class GlobalVariables {
 	private static GameObject _globalAssets;
 	public static PrefabAssets PrefabAssets { get => _prefabAssets; }
 	private static PrefabAssets _prefabAssets;
+
+	public static ItemAssets ItemAssets { get; set; }
 	#endregion
 
 	public static WorldData WorldData { get; set; }

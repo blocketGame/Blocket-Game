@@ -14,6 +14,7 @@ using MLAPI.NetworkVariable;
 /// </summary>
 public class GameManager : NetworkBehaviour
 {
+	public static GameState GameState { get; private set; } = GameState.MENU;
 
 	public GameObject playerPrefab, worldPrefab;
 	/// <summary>Is true if the MainGame is online</summary>
@@ -31,6 +32,7 @@ public class GameManager : NetworkBehaviour
 	/// <summary>Sets this class into the <see cref="GlobalVariables"/></summary>
 	public void Awake() {
 		GlobalVariables.GameManager = this;
+		GameState = GameState.LOBBY;
 	}
 
 	public void FixedUpdate()
@@ -111,8 +113,7 @@ public class GameManager : NetworkBehaviour
 			return;
 		if(NetworkManager.Singleton.IsHost)
 			SpawnPlayers();
-		//Both
-		severRunning = true;
+		GameState = GameState.LOADING;
 	}
 
 	public void OnApplicationQuit() {
@@ -125,4 +126,29 @@ public class GameManager : NetworkBehaviour
 			
 	}
 
+}
+
+/// <summary>
+/// Defines in which State our Game is
+/// </summary>
+public enum GameState {
+	/// <summary>
+	/// Game is in MainMenu
+	/// </summary>
+	MENU,
+
+	/// <summary>
+	/// Game is in Lobby
+	/// </summary>
+	LOBBY, 
+
+	/// <summary>
+	/// Started but LOADING
+	/// </summary>
+	LOADING, 
+
+	/// <summary>
+	/// Loading finished and playable
+	/// </summary>
+	INGAME
 }

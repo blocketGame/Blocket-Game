@@ -21,6 +21,8 @@ public class FluentCameraBehaviour : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.GameState != GameState.INGAME)
+            return;
         GetComponent<Camera>().orthographicSize = camZoom;
         if (Input.mouseScrollDelta.y != 0)
         {
@@ -39,6 +41,8 @@ public class FluentCameraBehaviour : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if (GameManager.GameState != GameState.INGAME)
+            return;
         if (Input.GetKey(KeyCode.LeftShift))
         {
             //if(OffSetX< (GlobalVariables.World.GetComponentInChildren<Grid>().LocalToWorld(Input.mousePosition).x / 60) - 18  || -OffSetX > (GlobalVariables.World.GetComponentInChildren<Grid>().LocalToWorld(Input.mousePosition).x / 60 - 18))

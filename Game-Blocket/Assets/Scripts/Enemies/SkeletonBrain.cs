@@ -41,12 +41,10 @@ public class SkeletonBrain : MonoBehaviour
 
     }
 
-    private void Update()
-    {
-        
-    }
     void FixedUpdate()
     {
+        if (GameManager.GameState != GameState.INGAME)
+            return;
         TurnAnim();
         if (activeCooldown > 0)
         {

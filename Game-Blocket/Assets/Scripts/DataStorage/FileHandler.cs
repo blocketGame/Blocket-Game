@@ -206,7 +206,7 @@ public static class FileHandler
 			List<SaveAbleDrop> drops = new List<SaveAbleDrop>(tc.Drops.Count);
 			foreach (Drop drop in tc.Drops)
 				drops.Add(new SaveAbleDrop(drop.GameObject.transform.position, drop.DropID, drop.Count));
-			worldProfile.chunks.Add(new SaveAbleChunk(tc.ChunkPositionWorldSpace, tc.BlockIDs, tc.BlockIDsBG, drops));
+			worldProfile.chunks.Add(new SaveAbleChunk(tc.ChunkPosition, tc.BlockIDs, tc.BlockIDsBG, drops));
 		}
 	}
 

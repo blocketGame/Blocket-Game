@@ -15,7 +15,7 @@ public class ItemAssets : MonoBehaviour
     public List<Structure> Structures = new List<Structure>();
     public List<Enemy> Enemies = new List<Enemy>();
 
-    /*
+	/*
     private void Awake()
     {
         foreach (Structure s in Structures) {
@@ -23,12 +23,16 @@ public class ItemAssets : MonoBehaviour
         }
     }*/
 
-    /// <summary>
-    /// Returns a Sprite from Item-ID
-    /// </summary>
-    /// <param name="itemId"></param>
-    /// <returns></returns>
-    public Sprite GetSpriteFromItemID(uint itemId) {
+	private void Awake() {
+        GlobalVariables.ItemAssets = this;
+	}
+
+	/// <summary>
+	/// Returns a Sprite from Item-ID
+	/// </summary>
+	/// <param name="itemId"></param>
+	/// <returns></returns>
+	public Sprite GetSpriteFromItemID(uint itemId) {
         return GetItemFromItemID(itemId)?.itemImage;
     }
 
