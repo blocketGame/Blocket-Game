@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
 /// <summary>
@@ -13,13 +13,9 @@ public class ItemAssets : MonoBehaviour
     public List<UseAbleItem> UseableItemsInGame = new List<UseAbleItem>();
     public List<Structure> Structures = new List<Structure>();
 
-    /*
-    private void Awake()
-    {
-        foreach (Structure s in Structures) {
-            s.ReadStructureFromTilemap();
-        }
-    }*/
+    
+    private void Awake() => GlobalVariables.ItemAssets = this;
+    
 
     /// <summary>
     /// Returns a Sprite from Item-ID
@@ -43,6 +39,7 @@ public class ItemAssets : MonoBehaviour
         foreach (Item item in UseableItemsInGame)
             if (item.id == itemId)
                 return item;
+        Debug.LogWarning($"Item not found: {itemId}");
         return null;
     }
 }

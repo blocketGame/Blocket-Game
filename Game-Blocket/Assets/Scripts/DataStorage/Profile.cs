@@ -1,6 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
 /// <summary>
@@ -17,6 +17,8 @@ public abstract class Profile{
 		this.profileHash = profileHash ?? new System.Random().Next();
 	}
 }
+
+
 
 /// <summary>
 /// UNDONE
@@ -52,6 +54,14 @@ public class WorldProfile : Profile
 			this.itemID = itemID;
 			this.itemCount = itemCount;
 		}
+	}
+
+	public static ChunkData CastSAChunkToChunk(SaveAbleChunk s) {
+		return new ChunkData(s.blockIDs, s.blockIDsBG, null, s.chunkPosition);
+	}
+
+	public static SaveAbleChunk CastSAChunkToChunk(ChunkData s) {
+		return new SaveAbleChunk(TerrainHandler.CastVector2ToInt(s.chunkPosition), s.blocks, s.bgBlocks, null);
 	}
 }
 

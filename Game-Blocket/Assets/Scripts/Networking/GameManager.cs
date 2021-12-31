@@ -1,12 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 using MLAPI;
 using UnityEngine.SceneManagement;
 using MLAPI.Transports.UNET;
-using MLAPI.NetworkVariable.Collections;
-using MLAPI.NetworkVariable;
 
 /// <summary>
 /// Used for importend Gameengineparts<br></br>
@@ -71,13 +68,19 @@ public class GameManager : NetworkBehaviour
 	public void FindAndSetPlayer(){
 		foreach (GameObject iGo in GameObject.FindGameObjectsWithTag("Player"))
 		{
-			if (iGo.GetComponent<NetworkObject>()?.IsLocalPlayer ?? false)
+			if (iGo.TryGetComponent(out NetworkObject no) && no.IsLocalPlayer)
 			{
 				GlobalVariables.LocalPlayer = iGo;
 				iGo.name += "(this)";
-			}
-			else
+			} else {
 				iGo.GetComponent<PlayerVariables>().playerLogic.SetActive(false);
+				if (iGo.TryGetComponent(out Rigidbody2D rig))
+					rig.gravityScale = 0;
+				else
+					Debug.LogWarning($"Rigidody Missing: {no.NetworkObjectId}");
+			
+			}
+				
 		}
 	}
 
@@ -98,8 +101,8 @@ public class GameManager : NetworkBehaviour
 			GlobalVariables.World.GetComponent<NetworkObject>().Spawn();
 		}
 
-		FileHandler.LoadComponentsFromPlayerProfile(playerProfileNow);
-		FileHandler.LoadComponentsFromWorldProfile(worldProfileNow);
+		//ProfileHandler.LoadComponentsFromPlayerProfile(playerProfileNow);
+		//ProfileHandler.LoadComponentsFromWorldProfile(worldProfileNow);
 	}
 
 	/// <summary>
@@ -109,18 +112,19 @@ public class GameManager : NetworkBehaviour
 	public void SceneSwitched(Scene s1, LoadSceneMode lsm) {
 		if(s1.name != "MainGame")
 			return;
-		if(NetworkManager.Singleton.IsHost)
+		if (NetworkManager.Singleton.IsHost) {
 			SpawnPlayers();
+		}
 		//Both
 		severRunning = true;
 	}
 
 	public void OnApplicationQuit() {
 		if (severRunning) {
-			FileHandler.SavePlayerProfile();
-			FileHandler.ExportProfile(playerProfileNow, true);
-			FileHandler.SaveWorldProfile();
-			FileHandler.ExportProfile(worldProfileNow, false);
+			ProfileHandler.SavePlayerProfile();
+			ProfileHandler.ExportProfile(playerProfileNow, true);
+			ProfileHandler.ExportProfile(false);
+			ProfileHandler.SaveWorld(worldProfileNow);
 		}
 			
 	}

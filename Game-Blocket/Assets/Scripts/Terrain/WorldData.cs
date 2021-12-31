@@ -2,15 +2,12 @@ using System.Collections.Generic;
 using System.IO;
 
 using MLAPI;
-using MLAPI.NetworkVariable;
-using MLAPI.NetworkVariable.Collections;
 
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-using static TerrainChunk;
-
 /// <summary>
+/// TODO: Move to TerrainGeneeration
 /// <b>Author : Cse19455 / Thomas Boigner</b>
 /// </summary>
 public class WorldData : NetworkBehaviour
@@ -77,7 +74,6 @@ public class WorldData : NetworkBehaviour
 	public int ChunkWidth { get => chunkWidth; set => chunkWidth = value; }
 	public BlockData[] Blocks { get => blocks; set => blocks = value; }
 	public Biom[] Biom{	get => biom; set => biom = value;}
-	public Dictionary<Vector2Int, TerrainChunk> Chunks { get; set; } = new Dictionary<Vector2Int, TerrainChunk>();
 	public Grid Grid { get => grid; set => grid = value; }
 	public float Groupdistance { get => groupdistance; set => groupdistance = value; }
 	public float PickUpDistance { get => pickUpDistance; set => pickUpDistance = value; }
@@ -87,14 +83,8 @@ public class WorldData : NetworkBehaviour
 	public float StoneSize { get => stoneSize; set => stoneSize = value; }
 	#endregion
 
-	/// <summary>
-	/// Stores this class to <see cref="GlobalVariables"/>
-	/// </summary>
-	public void Awake() {
-		GlobalVariables.WorldData = this;
-		//GlobalVariables.GlobalAssets.GetComponent<ItemAssets>().Structures[0].ReadStructureFromTilemap();
-	}
-
+	/// <summary>Stores this class to <see cref="GlobalVariables"/></summary>
+	public void Awake() => GlobalVariables.WorldData = this;
 
 	public byte GetBlockFromTile(TileBase tile)
 	{
@@ -106,81 +96,6 @@ public class WorldData : NetworkBehaviour
 		}
 		return 0;
 	}
-	/// <summary>
-	/// Returns the chunk the given coordinate is in
-	/// </summary>
-	/// <param name="x">coordinate in a chunk</param>
-	/// <returns></returns>
-	public TerrainChunk GetChunkFromCoordinate(float x, float y)
-	{
-		Vector2Int chunkPosition = new Vector2Int(Mathf.FloorToInt(x / ChunkWidth), Mathf.FloorToInt(y / ChunkHeight));
-		if (Chunks.ContainsKey(chunkPosition))
-		{
-			return Chunks[chunkPosition];
-		}
-		return null;
-	}
-
-	/// <summary>
-	/// Returns the block on any coordinate
-	/// </summary>
-	/// <param name="x">x coordinate</param>
-	/// <param name="y">y coordinate</param>
-	/// <returns></returns>
-	public byte GetBlockFormCoordinate(int x, int y)
-	{
-		TerrainChunk chunk = GetChunkFromCoordinate(x, y);
-		if (chunk != null)
-		{
-			int chunkX = x - ChunkWidth * chunk.ChunkPositionWorldSpace.x;
-			int chunkY = y - ChunkHeight * chunk.ChunkPositionWorldSpace.y;
-			if (chunkX < ChunkWidth && chunkY < ChunkHeight)
-			{
-				return chunk.BlockIDs[chunkX, chunkY];
-			}
-		}
-		return 1;
-	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="coordinate"></param>
-	public void UpdateCollisionsAt(Vector3Int coordinate)
-	{
-		TerrainChunk chunk = GetChunkFromCoordinate(coordinate.x, coordinate.y);
-
-		int chunkX = coordinate.x - chunk.ChunkPositionWorldSpace.x * ChunkWidth;
-		int chunkY = coordinate.y - chunk.ChunkPositionWorldSpace.y * ChunkHeight;
-
-		chunk.CollisionTileMap.SetTile(new Vector3Int(chunkX, chunkY, 0), null);
-
-		if (GetBlockFormCoordinate(coordinate.x, coordinate.y) != 0 &&
-			(GetBlockFormCoordinate(coordinate.x + 1, coordinate.y) == 0 ||
-			GetBlockFormCoordinate(coordinate.x, coordinate.y + 1) == 0 ||
-			GetBlockFormCoordinate(coordinate.x - 1, coordinate.y) == 0 ||
-			GetBlockFormCoordinate(coordinate.x, coordinate.y - 1) == 0))
-		{
-			chunk.CollisionTileMap.SetTile(new Vector3Int(chunkX, chunkY, 0), GetBlockbyId(1).Tile);
-		}
-	}
-
-	/// <summary>
-	/// returns the BlockData object of the index
-	/// </summary>
-	/// <param name="id">index of the block</param>
-	/// <returns></returns>
-	public BlockData GetBlockbyId(byte id)
-	{
-		foreach (BlockData bd in Blocks)
-		{
-			if (bd.BlockID == id)
-			{
-				return bd;
-			}
-		}
-		return Blocks[0];
-	}
 
 	/// <summary>
 	/// 
@@ -189,36 +104,13 @@ public class WorldData : NetworkBehaviour
 	/// <returns></returns>
 	public List<Biom> GetBiomsByType(Biomtype type) {
 		List<Biom> biomlist = new List<Biom>();
-		foreach(Biom b in biom) {
-			if(b.Biomtype.Contains(type))
+		foreach (Biom b in Biom) {
+			if (b.Biomtype.Contains(type))
 				biomlist.Add(b);
 		}
 		return biomlist;
 	}
 
-	/**
-	public bool getBlocksFromTxt()
-	{
-		string[] lines = System.IO.File.ReadAllLines(@"Docs/Blocks.txt");
-		if(lines[lines.Length-1].Equals("Changed : true"))
-		{
-			Debug.Log("HI I AM HERE");
-			//Auslesen der Daten im Txt file In den Block array
-			return true;
-		}
-		return false;
-	}
-	**/
-
-	/// <summary>
-	/// Method at wrong PLACE
-	/// </summary>
-	public void IgnoreDropCollision()
-	{
-		//foreach (TerrainChunk t in GlobalVariables.localGameVariables.terrainGeneration.ChunksVisibleLastUpdate)
-		//    foreach (Drop d in t.Drops)
-		Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Drops"), LayerMask.NameToLayer("Player"));
-	}
 
 	#region Filehandling
 

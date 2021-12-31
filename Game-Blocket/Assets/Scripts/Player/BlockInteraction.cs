@@ -1,11 +1,7 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Security.Cryptography;
 
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 /// <summary>
 /// Used for Interacten per Mouse with Tilemap<br></br>
@@ -21,6 +17,8 @@ public class BlockInteraction : MonoBehaviour{
 	public GameObject deleteSprite;
 	public Sprite crackTile;
 
+	private TerrainHandler TH => GlobalVariables.TerrainHandler;
+
 	private Vector3 PlayerPos { get => GlobalVariables.LocalPlayerPos; }
 
 	#region UnityMethods
@@ -30,7 +28,7 @@ public class BlockInteraction : MonoBehaviour{
 
 		//Was is?
 
-		TerrainChunk chunk = world.GetChunkFromCoordinate(coordinate.x, coordinate.y);
+		TerrainChunk chunk = TH.GetChunkFromCoordinate(coordinate.x, coordinate.y);
 		Inventory inv = GameObject.Find("Player").GetComponent<Inventory>();
 		Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
 		ItemAssets itemAssets = GameObject.Find("Assets").GetComponent<ItemAssets>();
@@ -48,7 +46,7 @@ public class BlockInteraction : MonoBehaviour{
 		ChangeCoordinate(mouseWorldPos);
 
 
-		if (world.GetBlockbyId(world.GetBlockFormCoordinate(coordinate.x, coordinate.y)).BlockID != 0)
+		if (TH.GetBlockbyId(TH.GetBlockFormCoordinate(coordinate.x, coordinate.y)).BlockID != 0)
 			SetBlockOnFocus(mouseWorldPos);
 		else { deleteSprite.SetActive(false); }
 
@@ -63,7 +61,7 @@ public class BlockInteraction : MonoBehaviour{
 				//CHECK IF IT IS A BLOCK OR NOT
 				try
 				{
-					chunk = world.GetChunkFromCoordinate(coordinate.x, coordinate.y);
+					chunk = TH.GetChunkFromCoordinate(coordinate.x, coordinate.y);
 					if ((coordinate.x.Equals(grid.WorldToCell(mouseWorldPos).x) && coordinate.y.Equals(grid.WorldToCell(mouseWorldPos).y)))
 					{
 						StartCoroutine(Count(mouseWorldPos));
@@ -79,23 +77,26 @@ public class BlockInteraction : MonoBehaviour{
 			//}
 		}
 
-		if (Input.GetKey(GlobalVariables.rightClick) && 
-			world.GetChunkFromCoordinate(coordinate.x, coordinate.y).BlockIDs[coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.x, coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.y] == 0 &&
-			!(Input.mousePosition.y - 429 < 55 && Input.mousePosition.y - 429 > -5 && Input.mousePosition.x - 959 > -40 && Input.mousePosition.x - 959 < 40))
-			{
-			///[TODO]
-				ItemAssets assets = GameObject.FindGameObjectWithTag("Assets").GetComponent<ItemAssets>();
-			//for (int x = 0; x < assets.BlockItemsInGame.Count; x++)
-			//    selectedBlock = (byte)assets.BlockItemsInGame[x].blockId;
-				SetTile(chunk);
-			}
+		//if (Input.GetKey(GlobalVariables.rightClick) && 
+		//	world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkData.blocks[coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkData.chunkPosition.x, coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkData.chunkPosition.y] == 0 &&
+		//	!(Input.mousePosition.y - 429 < 55 && Input.mousePosition.y - 429 > -5 && Input.mousePosition.x - 959 > -40 && Input.mousePosition.x - 959 < 40))
+		//	{
+		//	///[TODO]
+		//		ItemAssets assets = GameObject.FindGameObjectWithTag("Assets").GetComponent<ItemAssets>();
+		//	//for (int x = 0; x < assets.BlockItemsInGame.Count; x++)
+		//	//    selectedBlock = (byte)assets.BlockItemsInGame[x].blockId;
+		//		SetTile(chunk);
+		//	}
 	}
 
+	/// <summary>
+	/// UNDONE
+	/// </summary>
 	public void FixedUpdate()
 	{
-		world.IgnoreDropCollision();
-		for (int x = 0; x < GlobalVariables.TerrainGeneration.ChunksVisibleLastUpdate.Count; x++)
-			GlobalVariables.TerrainGeneration.ChunksVisibleLastUpdate[x].InsertDrops();
+		//world.IgnoreDropCollision();
+		//for (int x = 0; x < GlobalVariables.TerrainGeneration.ChunksVisibleLastUpdate.Count; x++)
+		//	GlobalVariables.TerrainHandler.ChunksVisibleLastUpdate[x].InsertDrops();
 	}
 
 	#endregion
@@ -137,13 +138,13 @@ public class BlockInteraction : MonoBehaviour{
 		if (selectedBlock <= -1)
 			return;
 		
-		chunk.ChunkTileMap.SetTile(new Vector3Int(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.x, coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.y, 0), world.Blocks[selectedBlock].Tile);
-		chunk.BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.x), coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.y] = world.Blocks[selectedBlock].BlockID;
-		world.UpdateCollisionsAt(coordinate);
-		world.UpdateCollisionsAt(new Vector3Int(coordinate.x + 1, coordinate.y, coordinate.z));
-		world.UpdateCollisionsAt(new Vector3Int(coordinate.x, coordinate.y + 1, coordinate.z));
-		world.UpdateCollisionsAt(new Vector3Int(coordinate.x - 1, coordinate.y, coordinate.z));
-		world.UpdateCollisionsAt(new Vector3Int(coordinate.x, coordinate.y - 1, coordinate.z));
+		//chunk.ChunkTileMap.SetTile(new Vector3Int(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.x, coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.y, 0), world.Blocks[selectedBlock].Tile);
+		//chunk.BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.x), coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.y] = world.Blocks[selectedBlock].BlockID;
+		//world.UpdateCollisionsAt(coordinate);
+		//world.UpdateCollisionsAt(new Vector3Int(coordinate.x + 1, coordinate.y, coordinate.z));
+		//world.UpdateCollisionsAt(new Vector3Int(coordinate.x, coordinate.y + 1, coordinate.z));
+		//world.UpdateCollisionsAt(new Vector3Int(coordinate.x - 1, coordinate.y, coordinate.z));
+		//world.UpdateCollisionsAt(new Vector3Int(coordinate.x, coordinate.y - 1, coordinate.z));
 	}
 
 	/// <summary>
@@ -167,7 +168,7 @@ public class BlockInteraction : MonoBehaviour{
 		{
 			coordinate = grid.WorldToCell(mouseWorldPos);
 			coordinate.z = 0;
-			count = world.GetBlockbyId(world.GetBlockFormCoordinate(coordinate.x, coordinate.y)).RemoveDuration;
+			count = TH.GetBlockbyId(TH.GetBlockFormCoordinate(coordinate.x, coordinate.y)).RemoveDuration;
 		}
 	}
 
@@ -176,9 +177,9 @@ public class BlockInteraction : MonoBehaviour{
 	/// </summary>
 	private void RemoveBlockAfterDuration()
 	{
-		world.GetChunkFromCoordinate(coordinate.x, coordinate.y).DeleteBlock(coordinate);
-		world.GetChunkFromCoordinate(coordinate.x, coordinate.y).BuildCollisions();
-		count = world.GetBlockbyId(world.GetBlockFormCoordinate(coordinate.x, coordinate.y)).RemoveDuration;
+		TH.GetChunkFromCoordinate(coordinate.x, coordinate.y).DeleteBlock(coordinate);
+		TH.GetChunkFromCoordinate(coordinate.x, coordinate.y).BuildCollisions();
+		count = TH.GetBlockbyId(TH.GetBlockFormCoordinate(coordinate.x, coordinate.y)).RemoveDuration;
 	}
 }
  

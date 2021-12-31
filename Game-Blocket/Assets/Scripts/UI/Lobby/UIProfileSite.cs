@@ -1,7 +1,7 @@
 using MLAPI;
 
-using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -61,8 +61,8 @@ public class UIProfileSite : MonoBehaviour {
 		if (CharacterSelectionOpen && NetworkManager.Singleton.IsClient)
 				CharacterSelectionOpen = false;
 			else if(((ListContentUI.selectedBtnNameCharacter?.Trim() == string.Empty ) != NetworkManager.Singleton.IsClient) && ((ListContentUI.selectedBtnNameWorld?.Trim() == string.Empty) != NetworkManager.Singleton.IsServer)) {
-			GameManager.playerProfileNow = FileHandler.ImportProfile(ListContentUI.selectedBtnNameCharacter, true) as PlayerProfile;
-			GameManager.worldProfileNow = FileHandler.ImportProfile(ListContentUI.selectedBtnNameWorld, false) as WorldProfile;
+			GameManager.playerProfileNow = ProfileHandler.ImportProfile(ListContentUI.selectedBtnNameCharacter, true) as PlayerProfile;
+			GameManager.worldProfileNow = ProfileHandler.ImportProfile(ListContentUI.selectedBtnNameWorld, false) as WorldProfile;
 			GlobalVariables.UILobby.SiteIndexOpen = 1;
 			}
 					
@@ -90,12 +90,14 @@ public class UIProfileSite : MonoBehaviour {
 				return;
 			if (CharacterSelectionOpen) { 
 				PlayerProfile p = new PlayerProfile(createInput.text, null);
-				FileHandler.ExportProfile(p, true);
+				ProfileHandler.ExportProfile(p, true);
 				GameManager.playerProfileNow = p;
+				ListContentUI.selectedBtnNameCharacter = createInput.text;
 			} else {
 				WorldProfile p = new WorldProfile(createInput.text, null);
-				FileHandler.ExportProfile(p, false);
+				ProfileHandler.ExportProfile(p, false);
 				GameManager.worldProfileNow = p;
+				ListContentUI.selectedBtnNameWorld = createInput.text;
 			}
 			FindAllProfiles();
 			SelectedItem();
@@ -116,8 +118,8 @@ public class UIProfileSite : MonoBehaviour {
 	}
 
 	public void FindAllProfiles() {
-		FoundPlayerProfiles = FileHandler.FindAllProfiles(true);
-		FoundWorldProfiles = FileHandler.FindAllProfiles(false);
+		FoundPlayerProfiles = ProfileHandler.FindAllProfiles(true);
+		FoundWorldProfiles = ProfileHandler.FindAllProfiles(false);
 		if(GlobalVariables.checkProfileCount)
 			Debug.Log($"PlayerProfiles: {FoundPlayerProfiles.Count}, WorldProfiles: {FoundWorldProfiles.Count}");
 	}
