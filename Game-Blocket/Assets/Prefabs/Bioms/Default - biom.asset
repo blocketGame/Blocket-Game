@@ -29,7 +29,8 @@ MonoBehaviour:
     blockID: 9
   - regionRange: 2
     blockID: 8
-  structures: 00
+  structures: 0001
+  enemies: 
   treeSpawnChance: 5
   treeSpawnDistance: 5
   stoneBlockId: 12
