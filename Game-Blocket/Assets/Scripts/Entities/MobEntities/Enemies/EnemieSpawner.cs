@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-
-
  public class EnemieSpawner : MonoBehaviour
  {
     List<GameObject> enemiesonScreen = new List<GameObject>();

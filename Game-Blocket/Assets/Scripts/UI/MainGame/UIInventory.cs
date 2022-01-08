@@ -153,10 +153,10 @@ public class UIInventory : MonoBehaviour {
 		}
 	}
 
+	/// <summary></summary>
 	private void InitHudSlots() {
 		//Get With and height from the Prefab
-		float prefW = prefabItemSlot.GetComponent<RectTransform>().rect.width,
-		prefH = prefabItemSlot.GetComponent<RectTransform>().rect.height;
+		float prefW = prefabItemSlot.GetComponent<RectTransform>().rect.width;
 		//Go through every Slot
 		for (byte a = 0; a < coloums; a++) {
 			//Calc the !absolute Pos
@@ -171,9 +171,9 @@ public class UIInventory : MonoBehaviour {
 			itemSlot.GetComponent<UIInventorySlot>().isHotBarSlot = true;
 			itemSlot.GetComponent<UIInventorySlot>().parent = _inventory.InvSlots[a];
 			//Add to Inventory Logic
-			_inventory.InvSlots.Add(itemSlot.GetComponent<UIInventorySlot>());
-
+			_inventory.HudSlots.Add(itemSlot.GetComponent<UIInventorySlot>());
 		}
+		_inventory.SelectedSlot = 0;
 	}
 	#endregion
 
@@ -197,17 +197,28 @@ public class UIInventory : MonoBehaviour {
 
 
 	public void Update() {
-		if (Input.anyKeyDown)
-			if (Input.GetKeyDown(GlobalVariables.openInventoryKey)) {
+		if (Input.GetKeyDown(GameManager.SPNow.Keys["InventoryKey"])) {
+			InventoryOpened = !InventoryOpened;
+			if (!InventoryOpened)
+				SynchronizeToHotbar();
+			else
+				SynchronizeToInv();
+			uiHud.SetActive(!InventoryOpened);
 
-				InventoryOpened = !InventoryOpened;
-				if (!InventoryOpened)
-					SynchronizeToHotbar();
+		}
+		if (Input.mouseScrollDelta.y != 0) {
+			float val = Input.mouseScrollDelta.y;
+			if (val < 0)
+				if(_inventory.SelectedSlot == _inventory.HudSlots.Count - 1)
+					_inventory.SelectedSlot = 0;
 				else
-					SynchronizeToInv();
-				uiHud.SetActive(!InventoryOpened);
-
-			}
+					_inventory.SelectedSlot += 1;
+			else
+				if (_inventory.SelectedSlot == 0)
+					_inventory.SelectedSlot = (byte)(_inventory.HudSlots.Count - 1);
+				else
+					_inventory.SelectedSlot -= 1;
+		}
 	}
 	#endregion
 

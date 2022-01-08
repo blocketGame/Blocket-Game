@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SkeletonBrain : MonoBehaviour
@@ -23,7 +21,7 @@ public class SkeletonBrain : MonoBehaviour
     public Sprite arrowSprite;
     public Animator animator;
 
-    private float globalTime = 0;
+    //private float globalTime = 0;
     private int side = 0;
     private Transform player;
 

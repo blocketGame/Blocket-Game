@@ -283,9 +283,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc5d0ec43c9c58149ac8626f1bde4a62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seconds: 0
-  minutes: 0
-  hours: 0
 --- !u!1 &3809052275081045831
 GameObject:
   m_ObjectHideFlags: 0
@@ -856,7 +853,7 @@ Canvas:
   m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
-  m_PixelPerfect: 0
+  m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0

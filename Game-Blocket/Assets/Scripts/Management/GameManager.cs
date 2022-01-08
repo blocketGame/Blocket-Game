@@ -1,9 +1,11 @@
-using System.Collections.Generic;
-using UnityEngine;
-
 using MLAPI;
-using UnityEngine.SceneManagement;
 using MLAPI.Transports.UNET;
+
+using System;
+using System.Collections.Generic;
+
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Used for importend Gameengineparts<br></br>
@@ -11,7 +13,13 @@ using MLAPI.Transports.UNET;
 /// </summary>
 public class GameManager : NetworkBehaviour
 {
-	public static GameState State { get; private set; } = GameState.MENU;
+	public static GameState State { get => _state; 
+		set { 
+			_state = value;
+			SateSwitched(value);
+		} 
+	}
+	private static GameState _state;
 
 	public GameObject playerPrefab, worldPrefab;
 	/// <summary>Is true if the MainGame is online</summary>
@@ -22,9 +30,31 @@ public class GameManager : NetworkBehaviour
 
 	public static PlayerProfile playerProfileNow;
 	public static WorldProfile worldProfileNow;
+	public static SettingsProfile SPNow { get; private set; } = new SettingsProfile("local", null);
 
 	public UNetTransport uNetTransport;
 	//TODO: Coroutines, Ticks....
+
+	public static void SateSwitched(GameState state) {
+		if (DebugVariables.showGameStateEvent)
+			Debug.Log($"GameState Switched to: {state}");
+		switch (state) {
+			case GameState.MENU: break;
+			case GameState.LOBBY: break;
+			case GameState.LOADING: 
+				break;
+			case GameState.INGAME:
+				///TODO: Clean
+				if (!GlobalVariables.LocalPlayer.TryGetComponent(out Rigidbody2D rig))
+					throw new NullReferenceException("Rigidbody is Null!");
+				rig.simulated = true;
+				rig.gravityScale = 1;
+			break;
+			case GameState.PAUSED: break;
+			case GameState.NEVER: throw new ArgumentException();
+		}
+		
+	}
 
 	/// <summary>Sets this class into the <see cref="GlobalVariables"/></summary>
 	public void Awake() {
@@ -120,14 +150,15 @@ public class GameManager : NetworkBehaviour
 		}
 	}
 
-	public void OnApplicationQuit() {
-		if (severRunning) {
-			ProfileHandler.SavePlayerProfile();
-			ProfileHandler.ExportProfile(playerProfileNow, true);
-			ProfileHandler.ExportProfile(false);
-			ProfileHandler.SaveWorld(worldProfileNow);
-		}
-			
+	public void OnApplicationQuit() => SaveAll();
+
+	public static void SaveAll() {
+		if (State != GameState.INGAME && State != GameState.PAUSED)
+			return;
+		ProfileHandler.SavePlayerProfile();
+		ProfileHandler.ExportProfile(playerProfileNow, true);
+		ProfileHandler.SaveComponentsInWorldProfile(worldProfileNow);
+		ProfileHandler.SaveWorld(worldProfileNow);
 	}
 
 }
@@ -154,5 +185,15 @@ public enum GameState {
 	/// <summary>
 	/// Loading finished and playable
 	/// </summary>
-	INGAME
+	INGAME,
+
+	/// <summary>
+	/// Ingame but the Game is paused; For frontend and singleplayer
+	/// </summary>
+	PAUSED,
+
+	/// <summary>
+	/// Debug Only! Will never ocure
+	/// </summary>
+	NEVER
 }

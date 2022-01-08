@@ -12,6 +12,8 @@ public class Drop{
 	[SerializeField]
 	private byte _dropID, _count;
 
+	public Vector3 Position { get; set; }
+
 	public byte DropID { get => _dropID; set => _dropID = value; }
 	public string Name { get => _name; set => _name = value; }
 	public GameObject GameObject { get => _gameObject; set => _gameObject = value; }

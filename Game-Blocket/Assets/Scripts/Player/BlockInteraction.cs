@@ -1,117 +1,92 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Security.Cryptography;
 
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 /// <summary>
 /// Used for Interacten per Mouse with Tilemap<br></br>
 /// <b>TODO: Cleanup!!</b>
 /// </summary>
-public class BlockInteraction : MonoBehaviour{
-	public Camera mainCamera;
-	public int selectedBlock;
-	public Vector3Int coordinate;
-	public float count;
+public class BlockInteraction : MonoBehaviour {
+	
 	public GameObject deleteSprite;
 	public Sprite crackTile;
 
-	private Vector3 PlayerPos { get => GlobalVariables.LocalPlayerPos; }
+	public Coroutine BreakCoroutine { get; set; }
+
+	/// <summary>Used for the Mouse Offset<br></br>Due to not perfect input</summary>
+	public readonly float mouseOfsetX = -0.5f, mouseOfsetY = -0.5f;
 
 	#region UnityMethods
-	public void Update()
-	{
-		//FABIAN PROBLEM WITH INV MOVE TILES NOT VALUES.
-
-		//Was is?
-
-		TerrainChunk chunk = GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y);
-		Inventory inv = GlobalVariables.Inventory;
-		Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-		ItemAssets itemAssets = GameObject.Find("Assets").GetComponent<ItemAssets>();
-
-		if (GameObject.FindGameObjectWithTag("SlotOptions") != null)
+	public void Update() {
+		if (GameManager.State != GameState.INGAME)
 			return;
-		if (chunk == null)
-			return;
-		if (chunk.CollidewithDrop(GlobalVariables.World.GetComponentInChildren<Grid>().WorldToCell(PlayerPos).x, GlobalVariables.World.GetComponentInChildren<Grid>().WorldToCell(PlayerPos).y) != null)
-		{
-			Drop collissionDrop = chunk.CollidewithDrop(GlobalVariables.World.GetComponentInChildren<Grid>().WorldToCell(PlayerPos).x, GlobalVariables.World.GetComponentInChildren<Grid>().WorldToCell(PlayerPos).y);
-			TakeDrops(inv,itemAssets.BlockItemsInGame[collissionDrop.DropID], collissionDrop.Anzahl);
-			chunk.RemoveDropfromView(collissionDrop);
+
+		///Gather Information
+		Vector3 temp = Camera.main.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
+		Vector2Int blockHoverdAbsolute = new Vector2Int(Mathf.RoundToInt(temp.x + mouseOfsetX), Mathf.RoundToInt(temp.y + mouseOfsetY));
+		Vector2Int blockInchunkCoord = new Vector2Int(blockHoverdAbsolute.x%ProfileHandler.chunkWidth, blockHoverdAbsolute.y % ProfileHandler.chunkHeight);
+		if (blockInchunkCoord.x < 0)
+			blockInchunkCoord.x = ProfileHandler.chunkWidth + blockInchunkCoord.x;
+		if (blockInchunkCoord.y < 0)
+			blockInchunkCoord.y = ProfileHandler.chunkWidth + blockInchunkCoord.y;
+
+		TerrainChunk thisChunk = GlobalVariables.TerrainHandler.GetChunkFromCoordinate(blockHoverdAbsolute.x, blockHoverdAbsolute.y);
+		SetFocusGO(blockHoverdAbsolute);
+		byte targetBlockID = thisChunk.ChunkData.blocks[blockInchunkCoord.x, blockInchunkCoord.y];
+
+		///Reset if not Pressed
+		if (BreakCoroutine != null && !Input.GetKey(GameManager.SPNow.Keys["MainInteractionKey"])) {
+			if(DebugVariables.blockInteractionCR)
+				Debug.Log("Stopped");
+			StopCoroutine(BreakCoroutine);
+			BreakCoroutine = null;
 		}
-		ChangeCoordinate(mouseWorldPos);
+			
 
+		if (Input.GetKeyDown(GameManager.SPNow.Keys["MainInteractionKey"])) {
+			if(DebugVariables.blockInteractionInfo)
+				Debug.Log(thisChunk.ChunkData.blocks[blockInchunkCoord.x, blockInchunkCoord.y]);
 
-		if (GlobalVariables.WorldData.GetBlockbyId(GlobalVariables.WorldData.GetBlockFormCoordinate(coordinate.x, coordinate.y)).BlockID != 0)
-			SetBlockOnFocus(mouseWorldPos);
-		else { deleteSprite.SetActive(false); }
-
-		 // if (Input.mousePosition.x-959 < -200 || Input.mousePosition.x-959 > 200 ||Input.mousePosition.y - 429 < -150 || Input.mousePosition.y - 429 > 150 )
-		 //   return;
-
-		if (Input.GetKey(GlobalVariables.leftClick))
-		{
-
-			//if (GameObject.FindGameObjectWithTag("LeftClick")!=null)
-			//{
-				//CHECK IF IT IS A BLOCK OR NOT
-				try
-				{
-					chunk = GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y);
-					if ((coordinate.x.Equals(GlobalVariables.World.GetComponentInChildren<Grid>().WorldToCell(mouseWorldPos).x) && coordinate.y.Equals(GlobalVariables.World.GetComponentInChildren<Grid>().WorldToCell(mouseWorldPos).y)))
-					{
-						StartCoroutine(Count(mouseWorldPos));
-						if (!(count > 0))
-							RemoveBlockAfterDuration();
-					}
-
-				}
-				catch (Exception e)
-				{
-						Debug.Log(e.Message);
-				}
-			//}
-		}
-
-		if (Input.GetKey(GlobalVariables.rightClick) &&
-			GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).BlockIDs[coordinate.x - GlobalVariables.WorldData.ChunkWidth * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x, coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.y] == 0 
-			//&& !(Input.mousePosition.y - 429 < 55 && Input.mousePosition.y - 429 > -5 && Input.mousePosition.x - 959 > -40 && Input.mousePosition.x - 959 < 40))
-			)
-			{
-			///[TODO]
-				ItemAssets assets = GameObject.FindGameObjectWithTag("Assets").GetComponent<ItemAssets>();
-			//for (int x = 0; x < assets.BlockItemsInGame.Count; x++)
-			//    selectedBlock = (byte)assets.BlockItemsInGame[x].blockId;
-				SetTile(chunk);
+			if(BreakCoroutine == null) {
+				byte targetRemoveDuration = GlobalVariables.WorldData.Blocks[targetBlockID].RemoveDuration;
+				BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int>(targetRemoveDuration, targetBlockID, thisChunk, blockInchunkCoord));
+				if (DebugVariables.blockInteractionCR)
+					Debug.Log("Started!");
 			}
-	}
+		}
 
-	public void FixedUpdate()
-	{
-		GlobalVariables.WorldData.IgnoreDropCollision();
-		for (int x = 0; x < GlobalVariables.TerrainGeneration.ChunksVisibleLastUpdate.Count; x++)
-			GlobalVariables.TerrainGeneration.ChunksVisibleLastUpdate[x].InsertDrops();
+		if (Input.GetKey(GameManager.SPNow.Keys["SideInteractionKey"])) {
+			if (DebugVariables.blockInteractionInfo)
+				Debug.Log($"{blockHoverdAbsolute}, {blockInchunkCoord}, {thisChunk.ChunkData.ChunkPositionInt}");
+			///UNDONE
+		}
+
 	}
 
 	#endregion
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="mouseWorldPos"></param>
-	/// <returns></returns>
-	public IEnumerator Count(Vector3 mouseWorldPos)
-	{
-		yield return null;
-		count -= Time.deltaTime * 5;
-		if (!(count > 0))
-			StopCoroutine(Count(mouseWorldPos));
+
+	/// <summary>Set the Position of the FocusGO</summary>
+	/// <param name="mouseWorldPos">Position of the Mouse</param>
+	private void SetFocusGO(Vector2Int mouseWorldPos) => deleteSprite.transform.position = new Vector3(mouseWorldPos.x + 0.5f, mouseWorldPos.y + 0.5f, -10);
+
+	/// <summary>Waits the amount of time. Then it will execute the statements after</summary>
+	/// <param name="obj">Tuple of the blockID, the seconds and the position</param>
+	/// <returns>WaitTimer as yield return</returns>
+	public IEnumerator BreakBlock(object obj) {
+		Tuple<byte, byte, TerrainChunk,  Vector2Int> values = obj as Tuple<byte, byte, TerrainChunk, Vector2Int> ?? throw new ArgumentException();
+		yield return new WaitForSecondsRealtime(values.Item1);
+		if (DebugVariables.blockInteractionCR)
+			Debug.Log("Finished");
+		StopCoroutine(BreakCoroutine);
+		BlockBreaked(values.Item2, values.Item3, values.Item4);
 	}
 
-	
+	private void BlockBreaked(byte blockID, TerrainChunk thisChunk, Vector2Int blockInChunk) {
+		if (DebugVariables.blockInteractionCR)
+			Debug.Log($"Block breaked: {blockID}");
+		thisChunk.DeleteBlock(new Vector3Int(blockInChunk.x, blockInChunk.y, 0));
+	}
 
 	/// <summary>
 	/// 
@@ -119,65 +94,10 @@ public class BlockInteraction : MonoBehaviour{
 	/// <param name="inv"></param>
 	/// <param name="blockitem"></param>
 	/// <param name="anzahl"></param>
-	private void TakeDrops(Inventory inv,BlockItem blockitem,int anzahl)
-	{
+	private void TakeDrops(Inventory inv, BlockItem blockitem, int anzahl) {
 		//Player collides with Drop
-		for(int x=0;x<anzahl;x++)
+		for (int x = 0; x < anzahl; x++)
 			inv.AddItem(blockitem);
 		GameObject.FindGameObjectWithTag("Inventory").GetComponent<UIInventory>().SynchronizeToHotbar();
 	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="chunk"></param>
-	private void SetTile(TerrainChunk chunk)
-	{
-		if (selectedBlock <= -1)
-			return;
-		
-		chunk.ChunkTileMap.SetTile(new Vector3Int(coordinate.x - GlobalVariables.WorldData.ChunkWidth * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x, coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.y, 0), GlobalVariables.WorldData.Blocks[selectedBlock].Tile);
-		chunk.BlockIDs[(coordinate.x - GlobalVariables.WorldData.ChunkWidth * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.x), coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPosition.y] = GlobalVariables.WorldData.Blocks[selectedBlock].BlockID;
-		GlobalVariables.WorldData.UpdateCollisionsAt(coordinate);
-		GlobalVariables.WorldData.UpdateCollisionsAt(new Vector3Int(coordinate.x + 1, coordinate.y, coordinate.z));
-		GlobalVariables.WorldData.UpdateCollisionsAt(new Vector3Int(coordinate.x, coordinate.y + 1, coordinate.z));
-		GlobalVariables.WorldData.UpdateCollisionsAt(new Vector3Int(coordinate.x - 1, coordinate.y, coordinate.z));
-		GlobalVariables.WorldData.UpdateCollisionsAt(new Vector3Int(coordinate.x, coordinate.y - 1, coordinate.z));
-	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="mouseWorldPos"></param>
-	private void SetBlockOnFocus(Vector3 mouseWorldPos)
-	{
-		deleteSprite.SetActive(true);
-		deleteSprite.transform.position = new Vector3(GlobalVariables.World.GetComponentInChildren<Grid>().WorldToCell(mouseWorldPos).x + 0.5f, GlobalVariables.World.GetComponentInChildren<Grid>().WorldToCell(mouseWorldPos).y + 0.5f, -2);
-		deleteSprite.GetComponent<SpriteRenderer>().sprite = crackTile;
-	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="mouseWorldPos"></param>
-	private void ChangeCoordinate(Vector3 mouseWorldPos)
-	{
-		if (!(coordinate.x.Equals(GlobalVariables.World.GetComponentInChildren<Grid>().WorldToCell(mouseWorldPos).x) && coordinate.y.Equals(GlobalVariables.World.GetComponentInChildren<Grid>().WorldToCell(mouseWorldPos).y)))
-		{
-			coordinate = GlobalVariables.World.GetComponentInChildren<Grid>().WorldToCell(mouseWorldPos);
-			coordinate.z = 0;
-			count = GlobalVariables.WorldData.GetBlockbyId(GlobalVariables.WorldData.GetBlockFormCoordinate(coordinate.x, coordinate.y)).RemoveDuration;
-		}
-	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	private void RemoveBlockAfterDuration()
-	{
-		GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).DeleteBlock(coordinate);
-		GlobalVariables.WorldData.GetChunkFromCoordinate(coordinate.x, coordinate.y).BuildCollisions();
-		count = GlobalVariables.WorldData.GetBlockbyId(GlobalVariables.WorldData.GetBlockFormCoordinate(coordinate.x, coordinate.y)).RemoveDuration;
-	}
 }
- 

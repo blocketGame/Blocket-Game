@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8512227375263116681}
-  - component: {fileID: 6401217149934598122}
   - component: {fileID: 6245959439507821}
   - component: {fileID: 1909828132783296647}
   m_Layer: 0
@@ -28,24 +27,12 @@ Transform:
   m_GameObject: {fileID: 2417270971905375398}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8887320424079863396}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6401217149934598122
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2417270971905375398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8704df93ecba99e42b6e492872c87a98, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6245959439507821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,6 +57,7 @@ MonoBehaviour:
   UseableItemsInGame: []
   Structures:
   - {fileID: 7804717356263989844}
+  - {fileID: 0}
   Enemies:
   - {fileID: 11400000, guid: 5fa23f42fd79765418b7e844d5d84e6b, type: 2}
 --- !u!114 &1909828132783296647
@@ -87,6 +75,7 @@ MonoBehaviour:
   prefabUI: {fileID: 7667816536096445537, guid: d75712829b2513f4d8d9ef17a0cfc772, type: 3}
   world: {fileID: 1085889088375208448, guid: 6f8afa7ba4b1ace43a1488e9989f22f5, type: 3}
   playerNetPrefab: {fileID: 2794137725677328093, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
+  loadingScreen: {fileID: 1659422467158985314, guid: bf0b35f4090f7fc409bc4e6c5154ffcf, type: 3}
 --- !u!1 &5550657725122004391
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,7 +282,7 @@ TilemapRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 0
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}

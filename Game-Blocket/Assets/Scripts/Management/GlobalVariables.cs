@@ -8,6 +8,7 @@ using UnityEngine;
 public static class GlobalVariables {
 
 	public static readonly ushort maxItemCountForMultiple = 128;
+	public static string chunkTag = "Chunk";
 
 	public static GameObject networkVariablesGO;
 	private static NetworkVariables _networkVariables;
@@ -26,23 +27,6 @@ public static class GlobalVariables {
 	public static string ipAddress = UILobby.GetLocalIPAddress();
 	public static int portAddress = 7777;
 	public static bool muliplayer = false;
-	#endregion
-
-	#region Debug Variables
-	public static readonly bool itemSlotButtonPressedLog = true;
-	public static readonly bool checkProfileCount = true;
-	public static readonly bool itemTest = true;
-	public static readonly bool generateChunksOnClient = true;
-	public static readonly bool showLoadAndSave = false;
-	#endregion
-
-	#region Setted Keys
-	public static KeyCode openInventoryKey = KeyCode.E;
-	public static KeyCode leftClick = KeyCode.Mouse0;
-	public static KeyCode rightClick = KeyCode.Mouse1;
-	public static KeyCode jump = KeyCode.Space;
-	public static KeyCode roll = KeyCode.LeftControl;
-	public static KeyCode crawl = KeyCode.LeftShift;
 	#endregion
 
 	#region Properties + Fields
