@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Net.Sockets;
 using System.Net;
@@ -28,7 +27,7 @@ public class UILobby : NetworkBehaviour {
 	public Button startGame;
 	public Button goBackBtn, testBtn;
 
-	public static readonly bool useProfiles = false;
+	public static readonly bool useProfiles = true;
 	#endregion
 
 	private byte _siteIndexOpen;
@@ -62,7 +61,7 @@ public class UILobby : NetworkBehaviour {
 	/// Inits the Buttons from the LobbyUI
 	/// </summary>
 	private void InitButtons()
-    {
+	{
 		serverBtn.onClick.AddListener(() => {
 			CheckAndSetInputs();
 			SetNetworkAddress();
@@ -90,14 +89,13 @@ public class UILobby : NetworkBehaviour {
 		});
 
 		goBackBtn.onClick.AddListener(() => {
-
 			SiteIndexOpen = 0;
 			startGame.gameObject.SetActive(true);
 			NetworkManager.Singleton.Shutdown();
 		});
 
 		testBtn.onClick.AddListener(() => {
-			Debug.Log("Pending: " + NetworkManager.Singleton.PendingClients.Keys.ToList<ulong>().Count);
+			Debug.Log("Pending: " + NetworkManager.Singleton.PendingClients.Keys.ToList().Count);
 			Debug.Log("Connected: " + NetworkManager.Singleton.ConnectedClientsList.Count);
 		});
 	}

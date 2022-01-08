@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Used for Global (Unique) Variables/Settings
@@ -18,7 +14,7 @@ public static class GlobalVariables {
 	public static NetworkVariables NetworkVariables { get => _networkVariables; set {
 			_networkVariables = value;
 			networkVariablesGO = value.gameObject;
-		} 
+		}
 	}
 
 	#region UIScripts
@@ -34,8 +30,10 @@ public static class GlobalVariables {
 
 	#region Debug Variables
 	public static readonly bool itemSlotButtonPressedLog = true;
+	public static readonly bool checkProfileCount = true;
 	public static readonly bool itemTest = true;
 	public static readonly bool generateChunksOnClient = true;
+	public static readonly bool showLoadAndSave = false;
 	#endregion
 
 	#region Setted Keys
@@ -53,7 +51,7 @@ public static class GlobalVariables {
 	//public static readonly List<GameObject> players = new List<GameObject>();
 
 	#region Assets
-	public static GameObject GlobalAssets { get => _globalAssets; set { 
+	public static GameObject GlobalAssets { get => _globalAssets; set {
 			_globalAssets = value;
 			_prefabAssets = value.GetComponent<PrefabAssets>();
 		}
@@ -61,11 +59,12 @@ public static class GlobalVariables {
 	private static GameObject _globalAssets;
 	public static PrefabAssets PrefabAssets { get => _prefabAssets; }
 	private static PrefabAssets _prefabAssets;
+	public static ItemAssets ItemAssets { get; set; }
 	#endregion
 
 	public static WorldData WorldData { get; set; }
-	public static ItemAssets Assets { get; set; }
 	public static TerrainGeneration TerrainGeneration { get; set; }
+	public static TerrainHandler TerrainHandler { get; set;}
 
 	public static GameObject World { get => _world; set { 
 			_world = value;
@@ -77,7 +76,8 @@ public static class GlobalVariables {
 
 	#region LocalPlayer
 	public static Inventory Inventory { get => _inventory; }
-	private static Inventory _inventory; public static PlayerVariables PlayerVariables { get => _playerVariables; }
+	private static Inventory _inventory; 
+	public static PlayerVariables PlayerVariables { get => _playerVariables; }
 	private static PlayerVariables _playerVariables;
 	public static Vector3 LocalPlayerPos { get => LocalPlayer.transform.position; }
 

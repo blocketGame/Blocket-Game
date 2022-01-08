@@ -1,12 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 using MLAPI;
 using UnityEngine.SceneManagement;
 using MLAPI.Transports.UNET;
-using MLAPI.NetworkVariable.Collections;
-using MLAPI.NetworkVariable;
 
 /// <summary>
 /// Used for importend Gameengineparts<br></br>
@@ -14,13 +11,17 @@ using MLAPI.NetworkVariable;
 /// </summary>
 public class GameManager : NetworkBehaviour
 {
+	public static GameState State { get; private set; } = GameState.MENU;
 
 	public GameObject playerPrefab, worldPrefab;
 	/// <summary>Is true if the MainGame is online</summary>
-	public static bool gameRunning;
+	public static bool severRunning, gameRunning;
 	/// <summary>Not used!</summary>
 	public static bool isMultiplayer = true;
 	public static List<NetworkObject> Players { get; } = new List<NetworkObject>();
+
+	public static PlayerProfile playerProfileNow;
+	public static WorldProfile worldProfileNow;
 
 	public UNetTransport uNetTransport;
 	//TODO: Coroutines, Ticks....
@@ -28,15 +29,15 @@ public class GameManager : NetworkBehaviour
 	/// <summary>Sets this class into the <see cref="GlobalVariables"/></summary>
 	public void Awake() {
 		GlobalVariables.GameManager = this;
+		State = GameState.LOBBY;
 	}
 
 	public void FixedUpdate()
 	{
-		if (GlobalVariables.LocalPlayer == null && gameRunning){
+		if (GlobalVariables.LocalPlayer == null && State == GameState.LOADING){
 			FindAndSetPlayer();
 			InitPlayerComponents();
 		}
-			
 	}
 
 	/// <summary>
@@ -69,13 +70,19 @@ public class GameManager : NetworkBehaviour
 	public void FindAndSetPlayer(){
 		foreach (GameObject iGo in GameObject.FindGameObjectsWithTag("Player"))
 		{
-			if (iGo.GetComponent<NetworkObject>()?.IsLocalPlayer ?? false)
+			if (iGo.TryGetComponent(out NetworkObject no) && no.IsLocalPlayer)
 			{
 				GlobalVariables.LocalPlayer = iGo;
 				iGo.name += "(this)";
-			}
-			else
+			} else {
 				iGo.GetComponent<PlayerVariables>().playerLogic.SetActive(false);
+				if (iGo.TryGetComponent(out Rigidbody2D rig))
+					rig.gravityScale = 0;
+				else
+					Debug.LogWarning($"Rigidody Missing: {no.NetworkObjectId}");
+			
+			}
+				
 		}
 	}
 
@@ -95,6 +102,9 @@ public class GameManager : NetworkBehaviour
 			GlobalVariables.WorldData.Grid = GlobalVariables.World.GetComponentInChildren<Grid>();
 			GlobalVariables.World.GetComponent<NetworkObject>().Spawn();
 		}
+
+		//ProfileHandler.LoadComponentsFromPlayerProfile(playerProfileNow);
+		//ProfileHandler.LoadComponentsFromWorldProfile(worldProfileNow);
 	}
 
 	/// <summary>
@@ -102,46 +112,47 @@ public class GameManager : NetworkBehaviour
 	/// </summary>
 	/// <param name="s1"></param>
 	public void SceneSwitched(Scene s1, LoadSceneMode lsm) {
-		if(s1.name != "MainGame")
+		if (s1.name != "MainGame")
 			return;
-		if(NetworkManager.Singleton.IsHost)
+		if (NetworkManager.Singleton.IsHost) {
 			SpawnPlayers();
-		//Both
-		gameRunning = true;
-		/** Old Code
-			Debug.LogWarning($"Switched");
-			//GameObject.FindGameObjectWithTag("Player")?.SetActive(false);
-			GameObject thisPlayer = null;
-
-
-			foreach(ulong clientNow in NetworkManager.Singleton.ConnectedClients.Keys) {
-				GameObject go = Instantiate(playerNetPrefab.gameObject, new Vector3Int(0, 100, 0), Quaternion.identity);
-				go.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientNow);
-				if(clientNow == NetworkManager.Singleton.LocalClientId)
-					thisPlayer = go;
-
-				if(clientNow == NetworkManager.Singleton.LocalClientId) {
-					//if player is localplayer
-					thisPlayer = go;
-
-					GameObject.Find("UI").GetComponent<UIInventory>().inventory = thisPlayer.GetComponent<Inventory>();
-					GameObject.Find("Block Editing").GetComponent<Block_Editing>().mainCamera = thisPlayer.GetComponentInChildren<Camera>();
-					GameObject.Find("Block Editing").GetComponent<Block_Editing>().player = thisPlayer;
-					GameObject.Find("World-Generation").GetComponent<World_Data>().player = thisPlayer;
-					GameObject.Find("UI").GetComponent<UIInventory>().Load();
-					GameObject.Find("World-Generation").GetComponent<Terrain_Generation>().PlayerPosition = thisPlayer.transform;
-
-					thisPlayer.transform.position = new Vector3Int(0, 100, 0);
-					GlobalVariables.gameStarted = true;
-				} else {
-					go.GetComponentInChildren<Camera>().enabled = false;
-				}
-
-			}
-			GameObject.Find("World-Generation").GetComponent<TerrainGeneration>().PlayerPosition = thisPlayer.transform;
-			GameObject.Find("UI").GetComponent<UIInventory>(). = thisPlayer.GetComponent<Inventory>();
-			GameObject.Find("UI").GetComponent<UIInventory>().Load();
-		*/
+			State = GameState.LOADING;
+		}
 	}
 
+	public void OnApplicationQuit() {
+		if (severRunning) {
+			ProfileHandler.SavePlayerProfile();
+			ProfileHandler.ExportProfile(playerProfileNow, true);
+			ProfileHandler.ExportProfile(false);
+			ProfileHandler.SaveWorld(worldProfileNow);
+		}
+			
+	}
+
+}
+
+/// <summary>
+/// Defines in which State our Game is
+/// </summary>
+public enum GameState {
+	/// <summary>
+	/// Game is in MainMenu
+	/// </summary>
+	MENU,
+
+	/// <summary>
+	/// Game is in Lobby
+	/// </summary>
+	LOBBY, 
+
+	/// <summary>
+	/// Started but LOADING
+	/// </summary>
+	LOADING, 
+
+	/// <summary>
+	/// Loading finished and playable
+	/// </summary>
+	INGAME
 }

@@ -187,9 +187,10 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 01c6b008d66f42d46b162c2546a9a8fa, type: 3}
     removeDuration: 4
     item: 0
-  chunkWidth: 24
-  chunkHeight: 24
+  chunkWidth: 32
+  chunkHeight: 32
   chunkDistance: 4
+  caveSize: 0.6
   seed: 1337
   scale: 80
   octives: 5
@@ -225,8 +226,9 @@ MonoBehaviour:
   grid: {fileID: 0}
   groupdistance: 1.5
   pickUpDistance: 1.5
-  initCaveSize: -0.6
-  stoneSize: 0.2
+  initCaveSize: 0
+  strukturen: []
+  stoneSize: 0
 --- !u!1 &1651735029580647344
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,7 +238,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1251178604338937875}
-  - component: {fileID: 2758310753677763571}
+  - component: {fileID: 784341906419161498}
   m_Layer: 0
   m_Name: Generation
   m_TagString: Untagged
@@ -258,7 +260,7 @@ Transform:
   m_Father: {fileID: 6023490687631140924}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2758310753677763571
+--- !u!114 &784341906419161498
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -267,11 +269,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1651735029580647344}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b62b494d2f78d5f48a5a9ef0d5ddf2b9, type: 3}
+  m_Script: {fileID: 11500000, guid: 55e464d4999465f49a75bb202764c88d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chunksVisibleLastUpdate: []
-  chunkParent: {fileID: 2868377673276327341}
+  ChunkParent: {fileID: 2868377673276327341}
 --- !u!1 &2868377673276327341
 GameObject:
   m_ObjectHideFlags: 0

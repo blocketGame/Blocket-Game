@@ -3,6 +3,7 @@
 [Oo]bj/
 [Bb]uild/
 [Bb]uilds/
+Game-Blocket/Profiles/*
 Assets/AssetStoreTools*
 
 # Visual Studio cache directory

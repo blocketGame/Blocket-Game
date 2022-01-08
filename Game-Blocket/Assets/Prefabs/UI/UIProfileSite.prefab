@@ -121,7 +121,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 4260108342245480911}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.99999994
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -559,7 +559,7 @@ MonoBehaviour:
   characterSelectionSite: {fileID: 7017255284365816443}
   listContentPrefab: {fileID: 6253489515017362622, guid: d1dff97ee8dcf4348ae5b1d4ece67cdb, type: 3}
   backBtn: {fileID: 6872678270332219866}
-  selectBtn: {fileID: 8594495653866464726}
+  nextBtn: {fileID: 8594495653866464726}
   characterSlectBtn: {fileID: 6345473219362589051}
   worldSelectBtn: {fileID: 1341144582791401495}
   createBtn: {fileID: 1196917547196057166}
@@ -941,11 +941,11 @@ RectTransform:
   m_Father: {fileID: 7899843936889351244}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.0000086982955}
-  m_SizeDelta: {x: 0, y: 300}
-  m_Pivot: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0.000030517578, y: -0.11999512}
+  m_SizeDelta: {x: 0, y: 0.23999023}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2588735248647533269
 GameObject:
   m_ObjectHideFlags: 0
@@ -2154,7 +2154,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.0000086982955}
+  m_AnchoredPosition: {x: 0, y: 0.000003095812}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &5788990550121699541
@@ -2502,7 +2502,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 6534921152962979225}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9998549
+  m_Size: 0.99991083
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2744,8 +2744,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5303126018163642741}
   m_HandleRect: {fileID: 2041714296355038623}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.9998549
+  m_Value: 1
+  m_Size: 0.99951464
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2913,7 +2913,7 @@ GameObject:
   - component: {fileID: 2632449905112830310}
   - component: {fileID: 8594495653866464726}
   m_Layer: 5
-  m_Name: StartBtn
+  m_Name: NextBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

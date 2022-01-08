@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PlayerVariables : MonoBehaviour
 {
@@ -22,7 +19,6 @@ public class PlayerVariables : MonoBehaviour
 	#endregion
 
 	#region Properties
-	public PlayerProfile ProfileNow { get; set; }
 
 	public ushort Health { get => _health; 
 		set 

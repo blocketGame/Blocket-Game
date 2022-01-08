@@ -12,7 +12,9 @@ using UnityEngine;
 
     private void FixedUpdate()
     {
-        if(enemiesonScreen.Count < 5)
+        if (GameManager.State != GameState.INGAME)
+            return;
+        if (enemiesonScreen.Count < 5)
         {
             //Spawn();
         }
@@ -20,7 +22,7 @@ using UnityEngine;
 
     private void Spawn()
     {
-        GameObject Enemy = GlobalVariables.Assets.Enemies[0].EnemiePrefab;
+        GameObject Enemy = GlobalVariables.ItemAssets.Enemies[0].EnemiePrefab;
         enemiesonScreen.Add(Enemy);
         Enemy.transform.position = GlobalVariables.LocalPlayerPos;
         Instantiate(Enemy);
