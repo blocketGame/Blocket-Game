@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 using UnityEngine;
 
-using static System.Net.WebRequestMethods;
 using static TerrainChunk;
 
 /// <summary>
@@ -74,19 +73,6 @@ public  class TerrainHandler : MonoBehaviour
 		//DisableChunksOutOfRange();
 	}
 	#endregion
-
-	private void DisableChunksOutOfRange() {
-		foreach (GameObject chunkGo in GameObject.FindGameObjectsWithTag("Chunk")) {
-			float f = Vector2.Distance(chunkGo.transform.position, GlobalVariables.LocalPlayerPos);
-			if (f >= GlobalVariables.WorldData.ChunkDistance * GlobalVariables.WorldData.ChunkWidth) {
-				if (chunkGo.activeSelf) {
-					chunkGo.SetActive(false);
-				}
-			}
-		}
-	}
-
-
 	public void UpdateChunksTask(object _) {
 		Debug.Log("Updated Chunks");
 		if (TerrainTask == null || TerrainTask.IsCompleted) {
@@ -133,6 +119,7 @@ public  class TerrainHandler : MonoBehaviour
 						tc?.BuildCollisions();
 					}catch(Exception e) {
 						ChunkCollisionQueue.Enqueue(tc);
+						throw e;
 					}
 				}	
 			}

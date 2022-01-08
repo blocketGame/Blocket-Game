@@ -31,6 +31,7 @@ public sealed class TerrainChunk
 			return ChunkObject != null && BackgroundObject != null;
 		}
 	}
+	public bool InQueueForImport { get; set; } = false;
 
 	#region Shortcuts
 	private Vector2 ChunkPosition => ChunkData.chunkPosition;
@@ -44,20 +45,16 @@ public sealed class TerrainChunk
 	#region WorldSpecifications
 	public GameObject dropParent;
 	[SerializeField]
-	private GameObject chunkObject;
+	private GameObject thisGO;
 	[SerializeField]
-	private GameObject collisionObject;
-
+	private GameObject collisionGO;
 	
-	public GameObject ChunkObject { get => chunkObject; set => chunkObject = value; }
-	public GameObject CollisionObject { get => collisionObject; set => collisionObject = value; }
-	private Tilemap backgroundTilemap;
-	private GameObject backgroundObject;
+	public GameObject ChunkObject { get => thisGO; set => thisGO = value; }
+	public GameObject CollisionObject { get => collisionGO; set => collisionGO = value; }
 
-	public Tilemap BackgroundTilemap { get {
-			return backgroundTilemap;
-		} set => backgroundTilemap = value; }
-	public GameObject BackgroundObject { get => backgroundObject; set => backgroundObject = value; }
+	public Tilemap BackgroundTilemap { get; set; }
+	public GameObject BackgroundObject { get; set; }
+
 	[SerializeField]
 	private Tilemap chunkTileMap;
 	[SerializeField]
@@ -94,47 +91,68 @@ public sealed class TerrainChunk
 	/// </summary>
 	/// <param name="parent"></param>
 	public void ImportChunk(GameObject parent) {
-		BuildAllChunkLayers(parent, out GameObject chunkObj);
-		ChunkObject = chunkObj;
+		BuildAllChunkLayers(parent);
 		PlaceAllTiles();
-		IsVisible = true;
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="pos"></param>
+	/// <param name="kind"></param>
+	/// <returns></returns>
+	private static string ChunkName(Vector2 pos, byte kind) {
+		return kind switch {
+			0 => $"Chunk {pos.x} {pos.y}",
+			1 => $"Chunk {pos.x} {pos.y} background",
+			2 => $"Chunk {pos.x} {pos.y} collision",
+			3 => $"Chunk {pos.x} {pos.y} drops",
+			_ => throw new ArgumentException($"{kind}"),
+		};
 	}
 
 	/// <summary>
 	/// Creates Chunk - Bg / Collision / - tilemaps
 	/// </summary>
 	/// <returns></returns>
-	private void BuildAllChunkLayers(GameObject chunkParent, out GameObject chunkGO)
+	private void BuildAllChunkLayers(GameObject chunkParent)
 	{
-		GameObject chunkObject = new GameObject($"Chunk {ChunkPosition.x} {ChunkPosition.y}");
-		chunkObject.tag = "Chunk";
-		chunkObject.transform.SetParent(chunkParent.transform);
-		chunkObject.transform.position = new Vector3(ChunkPosition.x * GlobalVariables.WorldData.ChunkWidth, ChunkPosition.y * GlobalVariables.WorldData.ChunkHeight, 0f);
+		if (ChunkObject != null) { 
+			Debug.LogWarning($"ChunkGO existing!: {ChunkPositionInt}");
+			return;
+		}
+		///Chunk GO
+		ChunkObject = new GameObject(ChunkName(ChunkPosition, 0)) {
+			tag = "Chunk"
+		};
+		ChunkObject.transform.SetParent(chunkParent.transform);
+		ChunkObject.transform.position = new Vector3(ChunkPosition.x * GlobalVariables.WorldData.ChunkWidth, ChunkPosition.y * GlobalVariables.WorldData.ChunkHeight, 0f);
 
-		ChunkTileMap = chunkObject.AddComponent<Tilemap>();
-		ChunkTileMapRenderer = chunkObject.AddComponent<TilemapRenderer>();
+		ChunkTileMap = ChunkObject.AddComponent<Tilemap>();
+		ChunkTileMapRenderer = ChunkObject.AddComponent<TilemapRenderer>();
 		ChunkTileMap.tileAnchor = new Vector3(0.5f, 0.5f, 0f);
 
-		BackgroundObject = new GameObject($"Chunk {ChunkPosition.x} {ChunkPosition.y} background");
+		///BGChunk GO
+		BackgroundObject = new GameObject(ChunkName(ChunkPosition, 1));
 		BackgroundObject.transform.SetParent(ChunkTileMap.transform);
 		BackgroundObject.transform.position = new Vector3(ChunkPosition.x * GlobalVariables.WorldData.ChunkWidth, ChunkPosition.y * GlobalVariables.WorldData.ChunkHeight, 0.001f);
 		BackgroundTilemap = BackgroundObject.AddComponent<Tilemap>();
 		BackgroundObject.AddComponent<TilemapRenderer>();
 
-		CollisionObject = new GameObject($"Chunk {ChunkPosition.x} {ChunkPosition.y} collision");
-		CollisionObject.tag = "Terrain";
+		///Collision GO
+		CollisionObject = new GameObject(ChunkName(ChunkPosition, 2)) {
+			tag = "Terrain"
+		};
 		CollisionObject.transform.SetParent(ChunkTileMap.transform);
 		CollisionObject.transform.position = new Vector3(ChunkPosition.x * GlobalVariables.WorldData.ChunkWidth, ChunkPosition.y * GlobalVariables.WorldData.ChunkHeight, 0f);
 		CollisionTileMap = CollisionObject.AddComponent<Tilemap>();
 		ChunkTileMapCollider = CollisionObject.AddComponent<TilemapCollider2D>();
 		CollisionTileMap.tileAnchor = new Vector3(0.5f, 0.5f, 0f);
 
-
-		dropParent = new GameObject($"Chunk {ChunkPositionWorldSpace.x} {ChunkPositionWorldSpace.y} drops");
+		///Drop GO
+		dropParent = new GameObject(ChunkName(ChunkPosition, 3));
 		dropParent.transform.SetParent(ChunkTileMap.transform);
 		InsertDrops();
-
-		chunkGO = chunkObject;
 	}
 
 	/// <summary>
