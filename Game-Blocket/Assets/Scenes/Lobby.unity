@@ -1094,7 +1094,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DontDestroy: 1
   RunInBackground: 1
-  LogLevel: 0
+  LogLevel: 1
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 676633705}
@@ -2167,7 +2167,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: aecaa40757bb6fb47b4ad9f674e44841, type: 3}
+  m_Sprite: {fileID: 8505319441370871801, guid: 8677609e8c52a9a43aa838781fcc8c56, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8512227375263116681}
-  - component: {fileID: 6401217149934598122}
   - component: {fileID: 6245959439507821}
   - component: {fileID: 1909828132783296647}
+  - component: {fileID: -448414925542145110}
   m_Layer: 0
   m_Name: Assets
   m_TagString: Assets
@@ -28,24 +28,12 @@ Transform:
   m_GameObject: {fileID: 2417270971905375398}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8887320424079863396}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6401217149934598122
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2417270971905375398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8704df93ecba99e42b6e492872c87a98, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6245959439507821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,18 +48,47 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BlockItemsInGame:
   - name: Dirt
-    id: 0
-    description: 
+    id: 1
+    description: Simple Dirtblock
     itemType: 1
     itemImage: {fileID: 21300000, guid: f01308597c751ff40bb35eecf55b550d, type: 3}
     blockId: 3
+  - name: Stone
+    id: 2
+    description: Hard Stone
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: 74bbea64cb1802a43967b7af1eb4dd03, type: 3}
+    blockId: 3
+  - name: Sand
+    id: 3
+    description: I do not know how i can hold that
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: 2df48377b487aa243b5a6e0e637890bc, type: 3}
+    blockId: 5
+  - name: Snowblock
+    id: 4
+    description: It is cold!
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: ef8a05a4ebd504240914473cda9b6542, type: 3}
+    blockId: 6
   ToolItemsInGame: []
   EquipableItemsInGame: []
   UseableItemsInGame: []
-  Structures:
-  - {fileID: 7804717356263989844}
+  CommonItems:
+  - name: Opal
+    id: 5001
+    description: 
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: 33430ddc929da284ba9d8fbedc2e7b43, type: 3}
+  - name: Bernstein
+    id: 5002
+    description: 
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: 35aabff55aa791248b87d99dde69c0d1, type: 3}
   Enemies:
   - {fileID: 11400000, guid: 5fa23f42fd79765418b7e844d5d84e6b, type: 2}
+  Structures:
+  - {fileID: 7804717356263989844}
 --- !u!114 &1909828132783296647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,6 +104,156 @@ MonoBehaviour:
   prefabUI: {fileID: 7667816536096445537, guid: d75712829b2513f4d8d9ef17a0cfc772, type: 3}
   world: {fileID: 1085889088375208448, guid: 6f8afa7ba4b1ace43a1488e9989f22f5, type: 3}
   playerNetPrefab: {fileID: 2794137725677328093, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
+  loadingScreen: {fileID: 1659422467158985314, guid: bf0b35f4090f7fc409bc4e6c5154ffcf, type: 3}
+--- !u!114 &-448414925542145110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2417270971905375398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1b6f45dcff0c4948bc122b03fbc6c73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bioms:
+  - {fileID: 11400000, guid: 29b0f6e63e160294face5a7539aa68dc, type: 2}
+  - {fileID: 11400000, guid: 6679dc32c099c0d40967d40357bebee9, type: 2}
+  blocks:
+  - name: Air
+    blockID: 0
+    tile: {fileID: 0}
+    removeDuration: 0
+    blockDrops: []
+  - name: Collision
+    blockID: 1
+    tile: {fileID: 11400000, guid: 0bcc34212cd215a4584d42c3c4ba8f29, type: 2}
+    removeDuration: 0
+    blockDrops: []
+  - name: Grasblock
+    blockID: 2
+    tile: {fileID: 11400000, guid: 02761f359227ea640b301f8ed4704793, type: 2}
+    removeDuration: 5
+    blockDrops:
+    - itemID: 1
+      dropchance: 100
+      toolItemType: 5
+  - name: Dirtblock
+    blockID: 3
+    tile: {fileID: 11400000, guid: 0bcc34212cd215a4584d42c3c4ba8f29, type: 2}
+    removeDuration: 3
+    blockDrops:
+    - itemID: 1
+      dropchance: 100
+      toolItemType: 5
+  - name: Sandblock (Top)
+    blockID: 4
+    tile: {fileID: 11400000, guid: 6db0c34d3b5fc7b49a67163528b99ce5, type: 2}
+    removeDuration: 2
+    blockDrops:
+    - itemID: 3
+      dropchance: 100
+      toolItemType: 5
+  - name: Sandblock
+    blockID: 5
+    tile: {fileID: 11400000, guid: 240b651a1bc670d4793c99d2d9d9748e, type: 2}
+    removeDuration: 2
+    blockDrops:
+    - itemID: 3
+      dropchance: 100
+      toolItemType: 5
+  - name: Snowblock
+    blockID: 6
+    tile: {fileID: 11400000, guid: cf38a69b1c9243a4a98ca4aca2367547, type: 2}
+    removeDuration: 2
+    blockDrops:
+    - itemID: 4
+      dropchance: 100
+      toolItemType: 5
+  - name: SnowedDirtblock
+    blockID: 7
+    tile: {fileID: 11400000, guid: 0230af7654f2e154f8a8cfe6ab61bdd1, type: 2}
+    removeDuration: 2
+    blockDrops:
+    - itemID: 1
+      dropchance: 100
+      toolItemType: 5
+    - itemID: 4
+      dropchance: 50
+      toolItemType: 5
+  - name: DirtBG
+    blockID: 8
+    tile: {fileID: 11400000, guid: 30439b9c5e3b02142848ef927c278843, type: 2}
+    removeDuration: 0
+    blockDrops: []
+  - name: DirtBG (Top)
+    blockID: 9
+    tile: {fileID: 11400000, guid: 7aa42f6081c4f8a498d228fa119ea557, type: 2}
+    removeDuration: 0
+    blockDrops: []
+  - name: Bernstein
+    blockID: 10
+    tile: {fileID: 11400000, guid: 368f8ab243ec2b24bb4dd5751cbf20f6, type: 2}
+    removeDuration: 8
+    blockDrops:
+    - itemID: 5002
+      dropchance: 100
+      toolItemType: 4
+  - name: Opal
+    blockID: 11
+    tile: {fileID: 11400000, guid: 69dd537b464e3f142b42eca477a96bc2, type: 2}
+    removeDuration: 8
+    blockDrops:
+    - itemID: 5001
+      dropchance: 100
+      toolItemType: 4
+  - name: Stone
+    blockID: 12
+    tile: {fileID: 11400000, guid: 4cd28115759dee2499f06013f9211b55, type: 2}
+    removeDuration: 7
+    blockDrops:
+    - itemID: 2
+      dropchance: 50
+      toolItemType: 5
+    - itemID: 2
+      dropchance: 100
+      toolItemType: 4
+  - name: SandBG
+    blockID: 13
+    tile: {fileID: 11400000, guid: 6a63c0c826cab3f4ea878397525659ce, type: 2}
+    removeDuration: 2
+    blockDrops: []
+  - name: SandBG (Top)
+    blockID: 14
+    tile: {fileID: 11400000, guid: c20608446e77f9c44a3819cef2944b0f, type: 2}
+    removeDuration: 2
+    blockDrops: []
+  - name: Perl
+    blockID: 15
+    tile: {fileID: 11400000, guid: bc76d9a08eedba04888f09f100db4f02, type: 2}
+    removeDuration: 4
+    blockDrops: []
+  - name: Trunk
+    blockID: 16
+    tile: {fileID: 11400000, guid: a2b039ad21dbea343a3af1d7a3f3e9c2, type: 2}
+    removeDuration: 4
+    blockDrops: []
+  - name: Leaf
+    blockID: 17
+    tile: {fileID: 11400000, guid: 0d94620a8cdce1e4694bd8d615d2101c, type: 2}
+    removeDuration: 4
+    blockDrops: []
+  - name: CactusFlower
+    blockID: 18
+    tile: {fileID: 11400000, guid: d6ff0195f0b383e408cde8a71dca16e7, type: 2}
+    removeDuration: 4
+    blockDrops: []
+  - name: Cactus
+    blockID: 19
+    tile: {fileID: 11400000, guid: 6ce94ed2ae6b5c7448c1717aac7342ec, type: 2}
+    removeDuration: 4
+    blockDrops: []
 --- !u!1 &5550657725122004391
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,7 +460,7 @@ TilemapRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 0
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}

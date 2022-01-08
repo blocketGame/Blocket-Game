@@ -1,10 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
@@ -14,9 +8,9 @@ using UnityEngine.UI;
 /// 
 /// </summary>
 public class UIInventorySlot : MonoBehaviour {
-	#region Static Resources
-	/// <summary><see cref="UIInventory"/> </summary>
-	public UIInventory _uIInventory;
+    #region Static Resources
+    /// <summary><see cref="global::UIInventory"/> </summary>
+    public UIInventory UIInventory => GlobalVariables.UIInventory;
 	/// <summary><see cref="Text"/></summary>
 	public Text textDown;
 	/// <summary><see cref="Button"/>-Button</summary>
@@ -31,18 +25,26 @@ public class UIInventorySlot : MonoBehaviour {
 	public UIInventorySlot parent;
 	#endregion
 
-	/// <summary><see cref="ItemID"/></summary>
-	private uint _itemId;
-	private ushort _itemCount = 0;
+	public readonly bool useOldPointerhandling = true;
 
+	public bool IsSelected { get => _isSelected; set {
+			_isSelected = value;
+			backgroundImage.color = value ? new Color(0.5f, 0.5f, 0.5f) : Color.white;
+		} }
+	private bool _isSelected;
+
+	/// <summary><see cref="ItemID"/></summary>
 	public uint ItemID {
 		get => _itemId;
 		set {
 			_itemId = value;
 			ItemObject = GlobalVariables.ItemAssets?.GetItemFromItemID(value);
+			if (value == 0)
+				ItemCount = 0;
 			ReloadSlot();
 		}
 	}
+	private uint _itemId;
 
 	public ushort ItemCount {
 		get => _itemCount;
@@ -51,12 +53,13 @@ public class UIInventorySlot : MonoBehaviour {
 			ReloadSlot();
 		}
 	}
+	private ushort _itemCount = 0;
 
 	private Item ItemObject { get; set; }
 
 	/// <summary>Reloads the Itemslot<br></br><b>Be carfull when deleting!</b></summary>
 	public void ReloadSlot() {
-
+		
 		itemImage.sprite = ItemObject?.itemImage;
 		itemImage.sprite ??= defaultSprite;
 		//Hide counttext if item is Single type
@@ -77,30 +80,32 @@ public class UIInventorySlot : MonoBehaviour {
 		set {
 			if (value) {
 
-				_uIInventory.DescriptionText = ItemObject?.description ?? string.Empty;
-				_uIInventory.TitleText = ItemObject?.name ?? string.Empty;
+				UIInventory.DescriptionText = ItemObject?.description ?? string.Empty;
+				UIInventory.TitleText = ItemObject?.name ?? string.Empty;
 			}
 			_active = value;
 		}
 	}
 
 	public void Awake() {
-		button.gameObject.AddComponent<SlotOptionsScript>();
-		button.gameObject.GetComponent<SlotOptionsScript>().invSlot = this;
-		if (_uIInventory != null)
-			button.gameObject.GetComponent<SlotOptionsScript>().SlotOptions = _uIInventory._slotOptions;
 
+		button ??= GetComponentInChildren<Button>();
+
+		if (useOldPointerhandling)
+			button.onClick.AddListener(() => {
+				Debug.Log("Pressed!");
+				GlobalVariables.Inventory.PressedSlot(this); 
+			});
+        else
+        {
+			button.gameObject.AddComponent<SlotOptionsScript>();
+			button.gameObject.GetComponent<SlotOptionsScript>().invSlot = this;
+			if (UIInventory != null)
+				button.gameObject.GetComponent<SlotOptionsScript>().SlotOptions = UIInventory._slotOptions;
+        }
 	}
 
 	public void OnMouseOver() {
 		Debug.Log("A");
-	}
-
-	/// <summary>
-	/// Asign <see cref="EventHandler"/> (Listeners) for Button-Presses Event
-	/// </summary>
-	public void Start() {
-		_uIInventory = GameObject.Find("UI").GetComponent<UIInventory>();
-
 	}
 }

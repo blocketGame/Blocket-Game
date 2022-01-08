@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 using UnityEngine;
 
-using static System.Net.WebRequestMethods;
 using static TerrainChunk;
 
 /// <summary>
@@ -16,183 +15,206 @@ using static TerrainChunk;
 /// </summary>
 public  class TerrainHandler : MonoBehaviour
 {
-	public GameObject ChunkParent;
-	public static Dictionary<Vector2Int, TerrainChunk> Chunks { get; } = new Dictionary<Vector2Int, TerrainChunk>();
+	private readonly byte _updatePayload = 2;
+	private readonly byte _pickUpDist = 2;
 
-	/// <summary>
-	/// Chunk was ONLY Visible Last Update: Stores Chunks that has to get turned of
-	/// </summary>
-	public static List<TerrainChunk> ChunksVisibleOLU { get; set; } = new List<TerrainChunk>();
-	/// <summary>
-	/// Chunk Visible this Update
-	/// </summary>
-	public static List<TerrainChunk> ChunksVisibleTU { get; set; } = new List<TerrainChunk>();
-	public static Queue<TerrainChunk> ChunkCollisionQueue { get;} = new Queue<TerrainChunk>();
+	public GameObject ChunkParent;
+
+	public static Dictionary<Vector2Int, TerrainChunk> Chunks { get; } = new Dictionary<Vector2Int, TerrainChunk>();
 	public static Queue<TerrainChunk> ChunkTileInitializationQueue { get;} = new Queue<TerrainChunk>();
-	public static Dictionary<ulong, Vector3> PlayerLastUpdate { get; } = new Dictionary<ulong, Vector3>();
 
 	public WorldData WD => GlobalVariables.WorldData;
 
-	private static readonly bool useItemer = false;
-	private readonly uint _checkTime = 1000;
-	private readonly byte _updatePayload = 2;
-	public Timer TimerInstance { get; private set; }
-	public static Task TerrainTask { get; private set; }
-	public static Vector3 PlayerPos { get; private set; }
-	public static Vector3 PlayerPosLast { get; private set; }
+	//Not multiplayer save
+	public Vector2Int CurrentChunkCoord => new Vector2Int((int)(PlPosNow.x / WD.ChunkWidth), (int)(PlPosNow.y / WD.ChunkHeight));
+
+	public TerrainChunk CurrentChunk => Chunks.ContainsKey(CurrentChunkCoord) == true ? Chunks[CurrentChunkCoord] : null;
+	public bool CurrentChunkReady => !(CurrentChunk == null || !CurrentChunk.IsImported || !CurrentChunk.Visible);
+
+	public static Vector3 PlPosNow { get; private set; }
+
+	public TerrainChunk lastChunk;//=> Chunks[new Vector2Int((int)(PlPosLastUpdateL.x / WD.ChunkWidth), (int)(PlPosLastUpdateL.y / WD.ChunkHeight))];
 
 	#region Unity Scripts
 	public void Awake() => GlobalVariables.TerrainHandler = this;
 
-	private void Start() {
-		NetworkObject localPlayerNO = GlobalVariables.LocalPlayer.GetComponent<NetworkObject>();
-		if(useItemer)
-			TimerInstance = new Timer(new TimerCallback(UpdateChunksTask), null, 0, _checkTime);
-	}
-
-	private void OnApplicationQuit() {
-		TimerInstance?.Change(Timeout.Infinite, Timeout.Infinite);
-		TimerInstance = null;
-		GC.Collect();
-	}
-
-	private void OnApplicationPause(bool pause) {
-		Debug.Log($"Pause: {pause}");
-	}
-
-	private void FixedUpdate() {
-		if (Input.GetKeyDown(KeyCode.L))
-		Debug.Log($"{ChunksVisibleTU.Count}, {ChunksVisibleOLU.Count}, {ChunkCollisionQueue.Count}, {ChunkTileInitializationQueue.Count}");
-		if (!useItemer)
-			CheckChunksAroundPlayerStatic();
-	}
-
-	void Update() => UpdateChunks(null);
-
-	public void LateUpdate() {
-		PlayerPos = GlobalVariables.LocalPlayerPos;
-		//DisableChunksOutOfRange();
-	}
-	#endregion
-
-	private void DisableChunksOutOfRange() {
-		foreach (GameObject chunkGo in GameObject.FindGameObjectsWithTag("Chunk")) {
-			float f = Vector2.Distance(chunkGo.transform.position, GlobalVariables.LocalPlayerPos);
-			if (f >= GlobalVariables.WorldData.ChunkDistance * GlobalVariables.WorldData.ChunkWidth) {
-				if (chunkGo.activeSelf) {
-					chunkGo.SetActive(false);
-				}
-			}
-		}
-	}
-
-
-	public void UpdateChunksTask(object _) {
-		Debug.Log("Updated Chunks");
-		if (TerrainTask == null || TerrainTask.IsCompleted) {
-			TerrainTask = new Task(CheckChunksAroundPlayerStatic);
-			TerrainTask.Start();
-		} else
-			Debug.LogWarning($"Terraintask: {TerrainTask.Status}");
+	public void FixedUpdate() {
+		if (GameManager.State != GameState.INGAME)
+			return;
+		CheckDrops();
 		
 	}
 
-	public void UpdateChunks(NetworkObject playerNO) {
-		int fUP = _updatePayload;
-		///Disable Chunkss
-		if (ChunksVisibleOLU.Count > 0) {
-			lock (ChunksVisibleOLU) {
-				foreach (TerrainChunk tc in ChunksVisibleOLU)
-					tc.IsVisible = false;
+	/// <summary>
+	/// TODO: 
+	/// </summary>
+	private void CheckDrops()
+	{
+		TerrainChunk tc = GetChunkFromCoordinate(GlobalVariables.LocalPlayerPos.x, GlobalVariables.LocalPlayerPos.y) ?? throw new NullReferenceException($"Chunk not found!");
+
+		foreach(Drop drop in tc.Drops){
+			if (Vector3.Distance(drop.GameObject.transform.position, GlobalVariables.LocalPlayerPos) < _pickUpDist)
+			{
+				tc.PickedUpDrop(drop);
+				break;
 			}
-			ChunksVisibleOLU.Clear();
 		}
+	}
 
-		//EnableChunks
-		if (ChunksVisibleTU.Count > 0) {
-			lock (ChunksVisibleTU) {
-				foreach (TerrainChunk tc in ChunksVisibleTU)
-					tc.IsVisible = true;
-			}
-			ChunksVisibleTU.Clear();
+	public void Update(){
+		PlPosNow = GlobalVariables.LocalPlayerPos;
+		//Init Queue
+		lock (ChunkTileInitializationQueue) {
+			if (ChunkTileInitializationQueue.Count > 0)
+				for (int i = 0; i < ChunkTileInitializationQueue.Count && i < _updatePayload; i++) {
+					TerrainChunk tc = ChunkTileInitializationQueue.Dequeue();
+					if (!tc.IsImported)
+						tc.ImportChunk(ChunkParent);
+					else
+						if (DebugVariables.ShowMultipleTasksOrExecution)
+							Debug.LogWarning($"Already Imported: {tc.chunkPosition}");
+				}
 		}
+	}
 
-		///TileInit
-		if (ChunkTileInitializationQueue.Count > 0)
-			lock (ChunkTileInitializationQueue) {
-				for (int i = 0; i < ChunkTileInitializationQueue.Count && i < fUP; i++)
-					ChunkTileInitializationQueue.Dequeue().ImportChunk(ChunkParent);
+	public void LateUpdate() {
+		if (GameManager.State == GameState.LOADING || lastChunk?.chunkPosition != CurrentChunk?.chunkPosition)
+		{
+			IterateChunksAroundPlayerStatic();
+		}
+		
+		if (GameManager.State != GameState.INGAME)
+			return;
+
+
+		if (lastChunk?.chunkPosition != CurrentChunk?.chunkPosition)
+        {
+			List<TerrainChunk> chunksVisibleNow = UpdateVisible();
+			foreach (TerrainChunk tc in chunksVisibleNow)
+				if (ChunksLastUpdate.Contains(tc))
+					ChunksLastUpdate.Remove(tc);
+				DisableChunk(ChunksLastUpdate);
+				ChunksLastUpdate = chunksVisibleNow;
+				UpdateLoaded();
+        }
+		lastChunk = CurrentChunk;
+	}
+	private List<TerrainChunk> ChunksLastUpdate { get; set; } = new List<TerrainChunk>();
+
+	#endregion
+
+	public void UpdateLoaded(){
+		for (int i = 0; i < GlobalVariables.TerrainHandler.ChunkParent.transform.childCount; i++) {
+			Transform chunkIGO = GlobalVariables.TerrainHandler.ChunkParent.transform.GetChild(i);
+			if (Vector3.Distance(chunkIGO.position, PlPosNow) > WorldAssets.ChunkLength * GlobalVariables.WorldData.ChunkDistance * 2) {
+				Vector2Int cPosI = new Vector2Int((int)chunkIGO.position.x / WorldAssets.ChunkLength, (int)chunkIGO.position.y / WorldAssets.ChunkLength);
+				if (!Chunks.TryGetValue(cPosI, out TerrainChunk tcToSave)){
+					Debug.LogWarning($"Destroying unkown TerrainchunkGO: Name: {chunkIGO.name}, Pos: {chunkIGO.position}");
+					Destroy(chunkIGO.gameObject);
+					continue;
+				}
+				Chunks.Remove(cPosI);
+				Destroy(chunkIGO.gameObject);
+				WorldProfile.SaveChunk(tcToSave);
+				Debug.Log($"Removed Chunk: {tcToSave.ChunkPositionInt}");
 			}
+		}
+	}
 
-		///Collision Init
-		if (ChunkCollisionQueue.Count > 0)
-			lock (ChunkCollisionQueue) {
-				for (int i = 0; i < ChunkCollisionQueue.Count && i < fUP; i++) {
-					TerrainChunk tc = ChunkCollisionQueue.Dequeue();
-					try{
-						tc?.BuildCollisions();
-					}catch(Exception e) {
-						ChunkCollisionQueue.Enqueue(tc);
-					}
-				}	
+	public List<TerrainChunk> UpdateVisible() {
+		List<TerrainChunk> chunksVisibleNow = new List<TerrainChunk>();
+		for (int x = -WD.ChunkDistance; x <= WD.ChunkDistance; x++) {
+			for (int y = -WD.ChunkDistance; y <= WD.ChunkDistance; y++) {
+				Vector2Int cCC = new Vector2Int(CurrentChunkCoord.x + x, CurrentChunkCoord.y + y);
+				Chunks.TryGetValue(cCC, out TerrainChunk chunkI);
+				if (chunkI == null || chunkI.InImportQueue || !chunkI.IsImported)
+					continue;
+				if (!chunkI.Visible)
+					chunkI.Visible = true;
+				chunksVisibleNow.Add(chunkI);
 			}
+		}
+		return chunksVisibleNow;
+	}
 
-
-		//PlayerLastUpdate[playerNO.NetworkInstanceId] = playerNO.gameObject.transform.position;
-		//CheckChunksAroundPlayerNetworked(playerNO);
+	private void DisableChunk(List<TerrainChunk> chunksToDisable) {
+		foreach(TerrainChunk tc in chunksToDisable)
+			tc.Visible = false;
 	}
 
 	private void OrderChunk(Vector2Int chunkPosInt) {
-		//2. Search in File
-		///TODO...
-		//3. Generate
-		TerrainGeneration.BuildChunk(chunkPosInt, ChunkParent);
-		Debug.Log($"Chunk Ordered: {chunkPosInt}");
+		TerrainChunk tc = WorldProfile.LoadChunk(chunkPosInt);
+		if (tc == null)
+			TerrainGeneration.BuildChunk(chunkPosInt, ChunkParent);
+		else
+			lock(Chunks)
+				Chunks.Add(chunkPosInt, tc);
 	}
 
 	/// <summary>
 	/// Checks if the Chunk is generated and or activated
 	/// </summary>
-	private void SearchChunk(Vector2Int chunkPosInt) {
+	/// <returns>If there is work for the chunk</returns>
+	private bool CheckChunk(Vector2Int chunkPosInt) {
 		lock(Chunks)
 			if (Chunks.TryGetValue(chunkPosInt, out TerrainChunk tc)) {
-				if (tc.IsImported) {
-					lock(ChunksVisibleOLU)
-						lock (ChunksVisibleTU) {
-							if (tc.IsVisible)
-								ChunksVisibleOLU.Remove(tc);
-							else
-								ChunksVisibleTU.Add(tc);
-						}
-				} else
-					lock(ChunkTileInitializationQueue)
+				if(tc.InImportQueue)
+					return true;
+				if (!tc.IsImported) {
+					lock (ChunkTileInitializationQueue)
 						ChunkTileInitializationQueue.Enqueue(tc);
-			} else
+						tc.InImportQueue = true;
+					return true;
+				}
+			} else { 
 				OrderChunk(chunkPosInt);
+				return true;
+			}
+		return false;
 	}
 
-	public void CheckChunksAroundPlayerStatic() {
-		if (PlayerPos == PlayerPosLast)
-			return;
-
-		Vector2Int currentChunkCoord = new Vector2Int(Mathf.RoundToInt(PlayerPos.x / WD.ChunkWidth), Mathf.RoundToInt(PlayerPos.y / WD.ChunkHeight));
-
+	public void IterateChunksAroundPlayerStatic() {
+		bool noUpdates = true;
+		
 		for (int x = -WD.ChunkDistance; x <= WD.ChunkDistance; x++) {
 			for (int y = -WD.ChunkDistance; y <= WD.ChunkDistance; y++) {
-				SearchChunk(new Vector2Int(currentChunkCoord.x + x, currentChunkCoord.y + y));
+				bool needsWork = CheckChunk(new Vector2Int(CurrentChunkCoord.x + x, CurrentChunkCoord.y + y));
+				//if (needsWork && DebugVariables.ShowMultipleTasksOrExecution)
+					//Debug.Log($"{x}, {y}");
+				if (needsWork && noUpdates)
+                {
+					noUpdates = false;
+                }
 			}
+		}
+
+		if (GameManager.State == GameState.LOADING && noUpdates) {
+            if (TerrainGeneration.TerrainGenerationTaskNames.Count != 0)
+            {
+                ///TODO: Try with locking
+                string names = "Unfinished Tasks!: ";
+                lock (TerrainGeneration.TerrainGenerationTaskNames)
+                    foreach (string s in TerrainGeneration.TerrainGenerationTaskNames)
+                        if (!string.IsNullOrEmpty(s))
+                            names += $";";
+                if (DebugVariables.ShowMultipleTasksOrExecution)
+                    Debug.LogWarning(names);
+                if (DebugVariables.ShowGameStateEvent)
+                    Debug.LogWarning("Switching to Playmode!");
+            }
+            GameManager.State = GameState.INGAME;
 		}
 	}
 
-	[ClientRpc]
-	public void SendChunkClientRpc(ChunkList chunkList, ulong clientID) {
-		Debug.Log(clientID);
-		foreach (ChunkData chunk in chunkList) {
-			//TerrainChunk terrainChunkToReturn = Chunk.TransferChunkToBlocks(chunk, ChunkParent);
-			//WD.Chunks[CastVector2ToInt(chunk.ChunkPosition)] = terrainChunkToReturn;
-			//terrainChunkToReturn.ChunkVisible = true;
-		}
-	}
+	//[ClientRpc]
+	//public void SendChunkClientRpc(ChunkList chunkList, ulong clientID) {
+	//	Debug.Log(clientID);
+	//	foreach (ChunkData chunk in chunkList) {
+	//		//TerrainChunk terrainChunkToReturn = Chunk.TransferChunkToBlocks(chunk, ChunkParent);
+	//		//WD.Chunks[CastVector2ToInt(chunk.ChunkPosition)] = terrainChunkToReturn;
+	//		//terrainChunkToReturn.ChunkVisible = true;
+	//	}
+	//}
 
 	/// <summary>Returns the chunk the given coordinate is in</summary>
 	/// <param name="x">coordinate in a chunk</param>
@@ -208,7 +230,7 @@ public  class TerrainHandler : MonoBehaviour
 	/// <param name="y">y coordinate</param>
 	/// <returns></returns>
 	public byte GetBlockFormCoordinate(int x, int y) {
-		ChunkData chunk = GetChunkFromCoordinate(x, y)?.ChunkData;
+		ChunkData chunk = GetChunkFromCoordinate(x, y);
 		if (chunk != null) {
 			int chunkX = x - WD.ChunkWidth * chunk.ChunkPositionInt.x;
 			int chunkY = y - WD.ChunkHeight * chunk.ChunkPositionInt.y;
@@ -223,11 +245,11 @@ public  class TerrainHandler : MonoBehaviour
 	/// 
 	/// </summary>
 	/// <param name="coordinate"></param>
-	public void UpdateCollisionsAt(Vector3Int coordinate) {
+	public void UpdateCollisionsAt(Vector2Int coordinate) {
 		TerrainChunk chunk = GetChunkFromCoordinate(coordinate.x, coordinate.y);
 
-		int chunkX = coordinate.x - chunk.ChunkData.ChunkPositionInt.x * WD.ChunkWidth;
-		int chunkY = coordinate.y - chunk.ChunkData.ChunkPositionInt.y * WD.ChunkHeight;
+		int chunkX = coordinate.x - chunk.ChunkPositionInt.x * WD.ChunkWidth;
+		int chunkY = coordinate.y - chunk.ChunkPositionInt.y * WD.ChunkHeight;
 
 		chunk.CollisionTileMap.SetTile(new Vector3Int(chunkX, chunkY, 0), null);
 
@@ -236,31 +258,8 @@ public  class TerrainHandler : MonoBehaviour
 			GetBlockFormCoordinate(coordinate.x, coordinate.y + 1) == 0 ||
 			GetBlockFormCoordinate(coordinate.x - 1, coordinate.y) == 0 ||
 			GetBlockFormCoordinate(coordinate.x, coordinate.y - 1) == 0)) {
-			chunk.CollisionTileMap.SetTile(new Vector3Int(chunkX, chunkY, 0), GetBlockbyId(1).Tile);
+			chunk.CollisionTileMap.SetTile(new Vector3Int(chunkX, chunkY, 0), GlobalVariables.WorldAssets.GetBlockbyId(1).tile);
 		}
-	}
-
-	/// <summary>
-	/// returns the BlockData object of the index
-	/// </summary>
-	/// <param name="id">index of the block</param>
-	/// <returns></returns>
-	public BlockData GetBlockbyId(byte id) {
-		foreach (BlockData bd in WD.Blocks) {
-			if (bd.BlockID == id) {
-				return bd;
-			}
-		}
-		return WD.Blocks[0];
-	}
-
-	/// <summary>
-	/// Method at wrong PLACE
-	/// </summary>
-	public void IgnoreDropCollision() {
-		//foreach (TerrainChunk t in GlobalVariables.localGameVariables.terrainGeneration.ChunksVisibleLastUpdate)
-		//    foreach (Drop d in t.Drops)
-		Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Drops"), LayerMask.NameToLayer("Player"));
 	}
 
 	public static Vector2Int CastVector2ToInt(Vector2 vectorToCast) => new Vector2Int((int)vectorToCast.x, (int)vectorToCast.y);

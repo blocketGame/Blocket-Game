@@ -13,9 +13,10 @@ public class ItemAssets : MonoBehaviour
 	public List<ToolItem> ToolItemsInGame = new List<ToolItem>();
 	public List<EquipableItem> EquipableItemsInGame = new List<EquipableItem>();
 	public List<UseAbleItem> UseableItemsInGame = new List<UseAbleItem>();
-	public List<Structure> Structures = new List<Structure>();
-	public List<Enemy> Enemies = new List<Enemy>();
+	public List<CommonItem> CommonItems = new List<CommonItem>();
 
+	public List<EnemySO> Enemies = new List<EnemySO>();
+	public List<Structure> Structures = new List<Structure>();
 	
 	private void Awake() => GlobalVariables.ItemAssets = this;
 
@@ -29,6 +30,8 @@ public class ItemAssets : MonoBehaviour
 	}
 
 	public Item GetItemFromItemID(uint itemId) {
+		if (itemId == 0)
+			return null;
 		foreach (Item item in BlockItemsInGame)
 			if (item.id == itemId)
 				return item;
@@ -41,7 +44,26 @@ public class ItemAssets : MonoBehaviour
 		foreach (Item item in UseableItemsInGame)
 			if (item.id == itemId)
 				return item;
+		foreach (Item item in CommonItems)
+			if (item.id == itemId)
+				return item;
 		Debug.LogWarning($"Item not found: {itemId}");
 		return null;
+	}
+
+	public uint GetItemIdFromBlockID(byte blockID)
+	{
+		foreach (BlockItem item in BlockItemsInGame)
+			if (item.blockId == blockID)
+				return item.id;
+		return 0;
+	}
+
+	public byte GetBlockIdFromItemID(uint itemId)
+	{
+		foreach (BlockItem item in BlockItemsInGame)
+			if (item.id == itemId)
+				return item.blockId;
+		return 0;
 	}
 }

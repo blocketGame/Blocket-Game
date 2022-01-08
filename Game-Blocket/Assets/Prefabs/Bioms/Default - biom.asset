@@ -20,16 +20,21 @@ MonoBehaviour:
     noiseValueTo: 0.701
     blockID: 10
   regions:
-  - regionRange: 1
+  - description: Grass
+    regionRange: 1
     blockID: 2
-  - regionRange: 2
+  - description: Dirt
+    regionRange: 2
     blockID: 3
   bgRegions:
-  - regionRange: 1
+  - description: DIrtBG (Top)
+    regionRange: 1
     blockID: 9
-  - regionRange: 2
+  - description: DirtBG
+    regionRange: 2
     blockID: 8
-  structures: 00
+  structures: 0001
+  enemies: 
   treeSpawnChance: 5
   treeSpawnDistance: 5
   stoneBlockId: 12
