@@ -265,9 +265,15 @@ public sealed class TerrainChunk
 			ChunkTileMap.SetTile(new Vector3Int(x, y, 0), tile);
 	}
 
-	public void BuildCollisions()
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <returns>True if colliosion is sucessfully build</returns>
+	public bool BuildCollisions()
 	{
-		collisionTileMap.ClearAllTiles();
+		if (CollisionTileMap == null)
+			return false;
+		CollisionTileMap.ClearAllTiles();
 		for (int x = 0; x < GlobalVariables.WorldData.ChunkWidth; x++) {
 			for (int y = 0; y < GlobalVariables.WorldData.ChunkHeight; y++) {
 				int worldX = x + ChunkPositionInt.x * GlobalVariables.WorldData.ChunkWidth;
@@ -288,6 +294,7 @@ public sealed class TerrainChunk
 				}
 			}
 		}
+		return true;
 	}
 
 	/// <summary>

@@ -32,7 +32,7 @@ public  class TerrainHandler : MonoBehaviour
 
 	public WorldData WD => GlobalVariables.WorldData;
 
-	private static readonly bool useItemer = false;
+	private static readonly bool useItemer = true;
 	private readonly uint _checkTime = 1000;
 	private readonly byte _updatePayload = 2;
 	public Timer TimerInstance { get; private set; }
@@ -70,12 +70,14 @@ public  class TerrainHandler : MonoBehaviour
 
 	public void LateUpdate() {
 		PlayerPos = GlobalVariables.LocalPlayerPos;
+		
 		//DisableChunksOutOfRange();
 	}
 	#endregion
 	public void UpdateChunksTask(object _) {
 		Debug.Log("Updated Chunks");
 		if (TerrainTask == null || TerrainTask.IsCompleted) {
+			TerrainTask = null;
 			TerrainTask = new Task(CheckChunksAroundPlayerStatic);
 			TerrainTask.Start();
 		} else
@@ -88,8 +90,11 @@ public  class TerrainHandler : MonoBehaviour
 		///Disable Chunkss
 		if (ChunksVisibleOLU.Count > 0) {
 			lock (ChunksVisibleOLU) {
-				foreach (TerrainChunk tc in ChunksVisibleOLU)
+				foreach (TerrainChunk tc in ChunksVisibleOLU) {
 					tc.IsVisible = false;
+					Debug.Log(tc.ChunkData.chunkPosition);
+				}
+					
 			}
 			ChunksVisibleOLU.Clear();
 		}
@@ -106,8 +111,15 @@ public  class TerrainHandler : MonoBehaviour
 		///TileInit
 		if (ChunkTileInitializationQueue.Count > 0)
 			lock (ChunkTileInitializationQueue) {
-				for (int i = 0; i < ChunkTileInitializationQueue.Count && i < fUP; i++)
-					ChunkTileInitializationQueue.Dequeue().ImportChunk(ChunkParent);
+				for (int i = 0; i < ChunkTileInitializationQueue.Count && i < fUP; i++) {
+					TerrainChunk tc = ChunkTileInitializationQueue.Dequeue();
+					if (!tc.IsImported)
+						tc.ImportChunk(ChunkParent);
+					else
+						if (DebugVariables.showMultipleTasksOrExecution)
+							Debug.LogWarning($"Already Imported: {tc.ChunkData.chunkPosition}");
+				}
+					
 			}
 
 		///Collision Init
@@ -115,16 +127,13 @@ public  class TerrainHandler : MonoBehaviour
 			lock (ChunkCollisionQueue) {
 				for (int i = 0; i < ChunkCollisionQueue.Count && i < fUP; i++) {
 					TerrainChunk tc = ChunkCollisionQueue.Dequeue();
-					try{
-						tc?.BuildCollisions();
-					}catch(Exception e) {
+					if (!(tc?.BuildCollisions() ?? false))
 						ChunkCollisionQueue.Enqueue(tc);
-						throw e;
-					}
 				}	
 			}
 
-
+		ChunksVisibleOLU = ChunksVisibleTU;
+		ChunksVisibleTU = new List<TerrainChunk>();
 		//PlayerLastUpdate[playerNO.NetworkInstanceId] = playerNO.gameObject.transform.position;
 		//CheckChunksAroundPlayerNetworked(playerNO);
 	}
@@ -134,13 +143,14 @@ public  class TerrainHandler : MonoBehaviour
 		///TODO...
 		//3. Generate
 		TerrainGeneration.BuildChunk(chunkPosInt, ChunkParent);
-		Debug.Log($"Chunk Ordered: {chunkPosInt}");
+		//Debug.Log($"Chunk Ordered: {chunkPosInt}");
 	}
 
 	/// <summary>
 	/// Checks if the Chunk is generated and or activated
 	/// </summary>
-	private void SearchChunk(Vector2Int chunkPosInt) {
+	/// <returns>If there is work for the chunk</returns>
+	private bool SearchChunk(Vector2Int chunkPosInt) {
 		lock(Chunks)
 			if (Chunks.TryGetValue(chunkPosInt, out TerrainChunk tc)) {
 				if (tc.IsImported) {
@@ -151,23 +161,42 @@ public  class TerrainHandler : MonoBehaviour
 							else
 								ChunksVisibleTU.Add(tc);
 						}
-				} else
+				} else { 
 					lock(ChunkTileInitializationQueue)
 						ChunkTileInitializationQueue.Enqueue(tc);
-			} else
+					return true;
+				}
+			} else { 
 				OrderChunk(chunkPosInt);
+				return true;
+			}
+		return false;
 	}
 
 	public void CheckChunksAroundPlayerStatic() {
 		if (PlayerPos == PlayerPosLast)
 			return;
-
+		bool noUpdates = true;
 		Vector2Int currentChunkCoord = new Vector2Int(Mathf.RoundToInt(PlayerPos.x / WD.ChunkWidth), Mathf.RoundToInt(PlayerPos.y / WD.ChunkHeight));
 
 		for (int x = -WD.ChunkDistance; x <= WD.ChunkDistance; x++) {
 			for (int y = -WD.ChunkDistance; y <= WD.ChunkDistance; y++) {
-				SearchChunk(new Vector2Int(currentChunkCoord.x + x, currentChunkCoord.y + y));
+				noUpdates = !SearchChunk(new Vector2Int(currentChunkCoord.x + x, currentChunkCoord.y + y));
 			}
+		}
+
+
+
+		if (GameManager.State == GameState.LOADING && noUpdates) { 
+			if (TerrainGeneration.TerrainGenerationTaskNames.Count != 0) {
+				///TODO: Try with locking
+				string names = "Unfinished Tasks!: ";
+				foreach (string s in TerrainGeneration.TerrainGenerationTaskNames)
+					names += $"s;";
+				Debug.LogWarning(names);
+				Debug.LogWarning("Switching to Playmode!");
+			}
+			GameManager.State = GameState.INGAME;
 		}
 	}
 

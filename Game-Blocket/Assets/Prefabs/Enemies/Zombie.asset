@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Zombie
   m_EditorClassIdentifier: 
   spawnchance: 10
-  enemiePrefab: {fileID: 5233001062729408506, guid: fc8cbdd599f638d498bc484efbbc7e00, type: 3}
+  enemiePrefab: {fileID: 8864517857189748619, guid: 25e96d27f77036248ba82bfd5313d68c, type: 3}
   spawnhabitat: 0

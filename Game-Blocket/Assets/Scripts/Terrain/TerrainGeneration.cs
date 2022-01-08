@@ -25,7 +25,8 @@ public class TerrainGeneration {
 	/// <param name="parent"></param>
 	public static void BuildChunk(Vector2Int position, GameObject parent) {
 		if (TerrainGenerationTaskNames.Contains(ThreadName(position))){
-			Debug.LogWarning($"Tasks exists!: {ThreadName(position)}");
+			if(DebugVariables.showMultipleTasksOrExecution)
+				Debug.LogWarning($"Tasks exists!: {ThreadName(position)}");
 			return;
 		}
 			
@@ -69,10 +70,12 @@ public class TerrainGeneration {
 	}
 
 	public static void QueueChunkForLoad(TerrainChunk tc, Vector2Int position) {
-		if(position != null)
+		if (position != null)
 			lock (TerrainHandler.Chunks) {
 				TerrainHandler.Chunks[position] = tc;
 			}
+		else
+			throw new ArgumentException();
 		lock (TerrainHandler.ChunkCollisionQueue) {
 			TerrainHandler.ChunkCollisionQueue.Enqueue(tc);
 		}

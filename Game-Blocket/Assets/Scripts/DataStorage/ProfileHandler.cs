@@ -342,7 +342,7 @@ public static class ProfileHandler {
 			string data = ConvertSavableChunkToString(sc);
 			sw.Write(data);
 			sw.Close();
-			if (GlobalVariables.showLoadAndSave)
+			if (DebugVariables.showLoadAndSave)
 				Debug.Log($"Chunk saved: {sc.chunkPosition}");
 		}
 
@@ -402,7 +402,7 @@ public static class ProfileHandler {
 
 		foreach (string pathI in Directory.GetFiles(chunkPath)) {
 			chunks.Add(GetChunkFromFile(pathI));
-			if (GlobalVariables.showLoadAndSave)
+			if (DebugVariables.showLoadAndSave)
 				Debug.Log($"Loaded Cunk: {pathI}");
 		}
 

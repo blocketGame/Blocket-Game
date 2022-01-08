@@ -120,7 +120,7 @@ public class UIProfileSite : MonoBehaviour {
 	public void FindAllProfiles() {
 		FoundPlayerProfiles = ProfileHandler.FindAllProfiles(true);
 		FoundWorldProfiles = ProfileHandler.FindAllProfiles(false);
-		if(GlobalVariables.checkProfileCount)
+		if(DebugVariables.checkProfileCount)
 			Debug.Log($"PlayerProfiles: {FoundPlayerProfiles.Count}, WorldProfiles: {FoundWorldProfiles.Count}");
 	}
 

@@ -23,7 +23,18 @@ public class BlockInteraction : MonoBehaviour {
 
 	#region UnityMethods
 	public void Update() {
-		if (GameManager.State != GameState.INGAME)
+		RaycastHit2D r = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.down);
+		if (r) {
+			if (DebugVariables.showRayCastTargets)
+				Debug.Log(r.collider.gameObject.name);
+			GameObject objHited = r.collider.gameObject;
+			if (objHited.tag == GlobalVariables.chunkTag) {
+				///TODO: Get Block and so on...
+			}
+		}
+
+
+		if (GameManager.State != GameState.NEVER)
 			return;
 		//FABIAN PROBLEM WITH INV MOVE TILES NOT VALUES.
 
