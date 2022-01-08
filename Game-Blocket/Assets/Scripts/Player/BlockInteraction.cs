@@ -11,7 +11,7 @@ public class BlockInteraction : MonoBehaviour{
 	public Grid grid;
 	public Camera mainCamera;
 	public int selectedBlock;
-	public WorldData world;
+	public WorldData world => GlobalVariables.WorldData;
 	public Vector3Int coordinate;
 	public float count;
 	public GameObject deleteSprite;
@@ -24,6 +24,8 @@ public class BlockInteraction : MonoBehaviour{
 	#region UnityMethods
 	public void Update()
 	{
+		if (GameManager.GameState != GameState.INGAME)
+			return;
 		//FABIAN PROBLEM WITH INV MOVE TILES NOT VALUES.
 
 		//Was is?
@@ -98,8 +100,8 @@ public class BlockInteraction : MonoBehaviour{
 		//for (int x = 0; x < GlobalVariables.TerrainGeneration.ChunksVisibleLastUpdate.Count; x++)
 		//	GlobalVariables.TerrainHandler.ChunksVisibleLastUpdate[x].InsertDrops();
 	}
-
 	#endregion
+
 	/// <summary>
 	/// 
 	/// </summary>

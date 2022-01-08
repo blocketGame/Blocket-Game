@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
@@ -22,6 +23,8 @@ public class Biom : ScriptableObject, ISerializationCallbackReceiver {
 	private Decoration[] decorations;
 	[SerializeField]
 	private byte[] structures;
+	[SerializeField]
+	private byte[] enemies;
 	[SerializeField]
 	private int treeSpawnChance ;
 	[SerializeField]

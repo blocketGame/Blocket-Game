@@ -24,8 +24,6 @@ public class WorldData : NetworkBehaviour
 	[SerializeField]
 	private int chunkDistance;
 	[SerializeField]
-	private float caveSize;
-	[SerializeField]
 	private int seed;
 	[SerializeField]
 	private float scale;
@@ -53,8 +51,6 @@ public class WorldData : NetworkBehaviour
 	[SerializeField]
 	private float initCaveSize;
 	[SerializeField]
-	private List<Structure> strukturen;
-	[SerializeField]
 	private float stoneSize;
 	#endregion
 
@@ -67,7 +63,6 @@ public class WorldData : NetworkBehaviour
 	public AnimationCurve Heightcurve { get => heightcurve; set => heightcurve = value; }
 	public int Octives { get => octives; set => octives = value; }
 	public float Scale { get => scale; set => scale = value; }
-	public float CaveSize { get => caveSize; set => caveSize = value; }
 	public int Seed { get => seed; set => seed = value; }
 	public int ChunkDistance { get => chunkDistance; set => chunkDistance = value; }
 	public int ChunkHeight { get => chunkHeight; set => chunkHeight = value; }
@@ -79,7 +74,6 @@ public class WorldData : NetworkBehaviour
 	public float PickUpDistance { get => pickUpDistance; set => pickUpDistance = value; }
 	public Dictionary<int, float[]> Noisemaps { get; set; } = new Dictionary<int, float[]>();
 	public float InitCaveSize { get => initCaveSize; set => initCaveSize = value; }
-	public List<Structure> Strukturen { get => strukturen; set => strukturen = value; }
 	public float StoneSize { get => stoneSize; set => stoneSize = value; }
 	#endregion
 
