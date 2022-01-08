@@ -249,30 +249,26 @@ public sealed class TerrainChunk
 
 	public void BuildCollisions()
 	{
-		try {
-			collisionTileMap.ClearAllTiles();
-			for (int x = 0; x < GlobalVariables.WorldData.ChunkWidth; x++) {
-				for (int y = 0; y < GlobalVariables.WorldData.ChunkHeight; y++) {
-					int worldX = x + ChunkPositionInt.x * GlobalVariables.WorldData.ChunkWidth;
-					int worldY = y + ChunkPositionInt.y * GlobalVariables.WorldData.ChunkHeight;
+		collisionTileMap.ClearAllTiles();
+		for (int x = 0; x < GlobalVariables.WorldData.ChunkWidth; x++) {
+			for (int y = 0; y < GlobalVariables.WorldData.ChunkHeight; y++) {
+				int worldX = x + ChunkPositionInt.x * GlobalVariables.WorldData.ChunkWidth;
+				int worldY = y + ChunkPositionInt.y * GlobalVariables.WorldData.ChunkHeight;
 
-					try {
-						_ = BlockIDs[x, y];
-					} catch (Exception) {
-						Debug.LogWarning($"Not existing in Chunk {ChunkData.chunkPosition}: {x}, {y}");
-					}
+				try {
+					_ = BlockIDs[x, y];
+				} catch (Exception) {
+					Debug.LogWarning($"Not existing in Chunk {ChunkData.chunkPosition}: {x}, {y}");
+				}
 
-					if (BlockIDs[x, y] != 0 &&
-						(GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX + 1, worldY) == 0 ||
-						GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX, worldY + 1) == 0 ||
-						GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX - 1, worldY) == 0 ||
-						GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX, worldY - 1) == 0)) {
-						CollisionTileMap.SetTile(new Vector3Int(x, y, 0), GlobalVariables.TerrainHandler.GetBlockbyId(1).Tile);
-					}
+				if (BlockIDs[x, y] != 0 &&
+					(GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX + 1, worldY) == 0 ||
+					GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX, worldY + 1) == 0 ||
+					GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX - 1, worldY) == 0 ||
+					GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX, worldY - 1) == 0)) {
+					CollisionTileMap.SetTile(new Vector3Int(x, y, 0), GlobalVariables.TerrainHandler.GetBlockbyId(1).Tile);
 				}
 			}
-		} catch (Exception) {
-
 		}
 	}
 
