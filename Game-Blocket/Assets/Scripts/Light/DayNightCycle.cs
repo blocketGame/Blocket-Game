@@ -14,7 +14,7 @@ public class DayNightCycle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.GameState != GameState.INGAME)
+        if (GameManager.State != GameState.INGAME)
             return;
         seconds += Time.deltaTime;
         if (seconds >= 60)
@@ -33,7 +33,7 @@ public class DayNightCycle : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (GameManager.GameState != GameState.INGAME)
+        if (GameManager.State != GameState.INGAME)
             return;
         if ((hours>19||hours<5) && globalLight.intensity>0)
         {

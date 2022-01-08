@@ -30,14 +30,14 @@ public class BetterMovementScript : MonoBehaviour
 	#region UnityMethods
 	protected void FixedUpdate()
 	{
-		if (GameManager.GameState != GameState.INGAME)
+		if (GameManager.State != GameState.INGAME)
 			return;
 		Clipping();
 	}
 
 	protected void Update()
 	{
-		if (GameManager.GameState != GameState.INGAME)
+		if (GameManager.State != GameState.INGAME)
 			return;
 		TurnAnim();
 
@@ -127,7 +127,7 @@ public class BetterMovementScript : MonoBehaviour
 			//Walljump 
 			if (Input.GetKeyDown(GlobalVariables.jump))
 			{
-				if (GlobalVariables.WorldData.GetBlockFormCoordinate(
+				if (GlobalVariables.TerrainHandler.GetBlockFormCoordinate(
 				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + (-0.5f), playerRigidbody.position.y, 0)).x,
 				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + side, playerRigidbody.position.y - 1, 0)).y)
 				!= 0)
@@ -135,7 +135,7 @@ public class BetterMovementScript : MonoBehaviour
 					side = -1;
 					Walljump();
 				}
-				else if (GlobalVariables.WorldData.GetBlockFormCoordinate(
+				else if (GlobalVariables.TerrainHandler.GetBlockFormCoordinate(
 				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + (0.5f), playerRigidbody.position.y, 0)).x,
 				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + side, playerRigidbody.position.y - 1, 0)).y)
 				!= 0)
@@ -171,7 +171,7 @@ public class BetterMovementScript : MonoBehaviour
 	/// </summary>
 	private void Clipping()
 	{
-		if (GlobalVariables.WorldData.GetBlockFormCoordinate(
+		if (GlobalVariables.TerrainHandler.GetBlockFormCoordinate(
 			GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + (side*0.5f), playerRigidbody.position.y, 0)).x,
 			GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + side, playerRigidbody.position.y-0.1f , 0)).y)
 			!= 0)

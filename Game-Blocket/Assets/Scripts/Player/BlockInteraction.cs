@@ -24,7 +24,7 @@ public class BlockInteraction : MonoBehaviour{
 	#region UnityMethods
 	public void Update()
 	{
-		if (GameManager.GameState != GameState.INGAME)
+		if (GameManager.State != GameState.INGAME)
 			return;
 		//FABIAN PROBLEM WITH INV MOVE TILES NOT VALUES.
 

@@ -43,7 +43,7 @@ public class SkeletonBrain : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (GameManager.GameState != GameState.INGAME)
+        if (GameManager.State != GameState.INGAME)
             return;
         TurnAnim();
         if (activeCooldown > 0)
@@ -77,7 +77,7 @@ public class SkeletonBrain : MonoBehaviour
                 Jump();
             }*/
 
-            if (GlobalVariables.WorldData.GetBlockFormCoordinate(
+            if (GlobalVariables.TerrainHandler.GetBlockFormCoordinate(
                 GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(gameObject.transform.position.x + (0.5f) * side, gameObject.transform.position.y, 0)).x,
                 GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(gameObject.transform.position.x + side, gameObject.transform.position.y - 1, 0)).y)
                 != 0)

@@ -187,10 +187,10 @@ public sealed class TerrainChunk
 					}
 				}
 				//Place Trees.
-				if (x % 5 == 0 && chunkPosition.y == 0)
+				if (x % 5 == 0 && ChunkPosition.y == 0)
 				{
 					//	//try to spawn a Tree
-					GenerateTrees(x, positionHeight, biom.Index);
+					//GenerateTrees(x, positionHeight, biom.Index);
 				}
 			}
 		}
@@ -249,22 +249,30 @@ public sealed class TerrainChunk
 
 	public void BuildCollisions()
 	{
-		collisionTileMap.ClearAllTiles();
-		for (int x = 0; x < GlobalVariables.WorldData.ChunkWidth; x++)
-		{
-			for (int y = 0; y < GlobalVariables.WorldData.ChunkHeight; y++)
-			{
-				int worldX = x + ChunkPositionInt.x * GlobalVariables.WorldData.ChunkWidth;
-				int worldY = y + ChunkPositionInt.y * GlobalVariables.WorldData.ChunkHeight;
-				if (BlockIDs[x, y] != 0 &&
-					(GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX + 1, worldY) == 0 ||
-					GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX, worldY + 1) == 0 ||
-					GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX - 1, worldY) == 0 ||
-					GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX, worldY - 1) == 0))
-				{
-					CollisionTileMap.SetTile(new Vector3Int(x, y, 0), GlobalVariables.TerrainHandler.GetBlockbyId(1).Tile);
+		try {
+			collisionTileMap.ClearAllTiles();
+			for (int x = 0; x < GlobalVariables.WorldData.ChunkWidth; x++) {
+				for (int y = 0; y < GlobalVariables.WorldData.ChunkHeight; y++) {
+					int worldX = x + ChunkPositionInt.x * GlobalVariables.WorldData.ChunkWidth;
+					int worldY = y + ChunkPositionInt.y * GlobalVariables.WorldData.ChunkHeight;
+
+					try {
+						_ = BlockIDs[x, y];
+					} catch (Exception) {
+						Debug.LogWarning($"Not existing in Chunk {ChunkData.chunkPosition}: {x}, {y}");
+					}
+
+					if (BlockIDs[x, y] != 0 &&
+						(GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX + 1, worldY) == 0 ||
+						GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX, worldY + 1) == 0 ||
+						GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX - 1, worldY) == 0 ||
+						GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX, worldY - 1) == 0)) {
+						CollisionTileMap.SetTile(new Vector3Int(x, y, 0), GlobalVariables.TerrainHandler.GetBlockbyId(1).Tile);
+					}
 				}
 			}
+		} catch (Exception) {
+
 		}
 	}
 
@@ -392,36 +400,36 @@ public sealed class TerrainChunk
 	{
 		return obj is TerrainChunk other && ChunkPositionInt.Equals(other.ChunkPositionInt);
 	}
-	public void GenerateTrees(int x, int y, int biom) {
-		//Chunk = 32 in der width.
-		//Trees ben�tigen 5 Bl�cke in der width bis der n�chste BAum spawnen kann
-		//[Funktioniert, aber ned sch�n]
+	//public void GenerateTrees(int x, int y, int biom) {
+	//	//Chunk = 32 in der width.
+	//	//Trees ben�tigen 5 Bl�cke in der width bis der n�chste BAum spawnen kann
+	//	//[Funktioniert, aber ned sch�n]
 
-		if (new System.Random(ChunkPositionInt.x * GlobalVariables.WorldData.ChunkWidth + x).Next(1, 5) == 4 && x > GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0) && x < (32 - GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0))) {
-			int rando = new System.Random(ChunkPositionInt.x * GlobalVariables.WorldData.ChunkWidth + x).Next(5, 10);
-			//for (int i = 0;i<rando;i++)
-			//BlockIDsBG[x, y+i] = world.Strukturen[0].blocks[2,5];
+	//	if (new System.Random(ChunkPositionInt.x * GlobalVariables.WorldData.ChunkWidth + x).Next(1, 5) == 4 && x > GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0) && x < (32 - GlobalVariables.WorldData.Strukturen[0].blocks.GetLength(0))) {
+	//		int rando = new System.Random(ChunkPositionInt.x * GlobalVariables.WorldData.ChunkWidth + x).Next(5, 10);
+	//		//for (int i = 0;i<rando;i++)
+	//		//BlockIDsBG[x, y+i] = world.Strukturen[0].blocks[2,5];
 
-			for (int z = 0; z < GlobalVariables.ItemAssets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0); z++) {
-				for (int q = 0; q < GlobalVariables.ItemAssets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(1); q++) {
-                    try { 
-						if (BlockIDsBG[x + z - GlobalVariables.ItemAssets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0) / 2, y + q] == 0)
-							BlockIDsBG[x + z - GlobalVariables.ItemAssets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0) / 2, y + q] = GlobalVariables.ItemAssets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks[z, q];
-					}catch { }
-				}
-			}
-			//int breite=0;
-			//for(int b= rando+2; b > 4; b--)
-			//{
-			//    for(int o = -breite; o <= breite; o++)
-			//    {
-			//        if(BlockIDsBG[x + o, y + rando]==0)
-			//        BlockIDsBG[x+o, y+b] = 17;
-			//    }
-			//    breite++;
-			//}
-		}
-	}
+	//		for (int z = 0; z < GlobalVariables.ItemAssets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0); z++) {
+	//			for (int q = 0; q < GlobalVariables.ItemAssets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(1); q++) {
+ //                   try { 
+	//					if (BlockIDsBG[x + z - GlobalVariables.ItemAssets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0) / 2, y + q] == 0)
+	//						BlockIDsBG[x + z - GlobalVariables.ItemAssets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks.GetLength(0) / 2, y + q] = GlobalVariables.ItemAssets.Structures[GlobalVariables.WorldData.Biom[biom].Structures[0]].blocks[z, q];
+	//				}catch { }
+	//			}
+	//		}
+	//		//int breite=0;
+	//		//for(int b= rando+2; b > 4; b--)
+	//		//{
+	//		//    for(int o = -breite; o <= breite; o++)
+	//		//    {
+	//		//        if(BlockIDsBG[x + o, y + rando]==0)
+	//		//        BlockIDsBG[x+o, y+b] = 17;
+	//		//    }
+	//		//    breite++;
+	//		//}
+	//	}
+	//}
 
 
 

@@ -39,7 +39,7 @@ public  class TerrainHandler : MonoBehaviour
 	public Timer TimerInstance { get; private set; }
 	public static Task TerrainTask { get; private set; }
 	public static Vector3 PlayerPos { get; private set; }
-	public static Vector3 LastPlayerPos { get; private set; }
+	public static Vector3 PlayerPosLast { get; private set; }
 
 	#region Unity Scripts
 	public void Awake() => GlobalVariables.TerrainHandler = this;
@@ -130,9 +130,8 @@ public  class TerrainHandler : MonoBehaviour
 				for (int i = 0; i < ChunkCollisionQueue.Count && i < fUP; i++) {
 					TerrainChunk tc = ChunkCollisionQueue.Dequeue();
 					try{
-						tc.BuildCollisions();
+						tc?.BuildCollisions();
 					}catch(Exception e) {
-						Debug.LogWarning($"Thread: {Thread.CurrentThread.Name} \n {e.Message}");
 						ChunkCollisionQueue.Enqueue(tc);
 					}
 				}	
@@ -155,8 +154,6 @@ public  class TerrainHandler : MonoBehaviour
 	/// Checks if the Chunk is generated and or activated
 	/// </summary>
 	private void SearchChunk(Vector2Int chunkPosInt) {
-		if (chunkPosInt.x == 4)
-			Debug.Log(4);
 		lock(Chunks)
 			if (Chunks.TryGetValue(chunkPosInt, out TerrainChunk tc)) {
 				if (tc.IsImported) {
@@ -175,11 +172,13 @@ public  class TerrainHandler : MonoBehaviour
 	}
 
 	public void CheckChunksAroundPlayerStatic() {
+		if (PlayerPos == PlayerPosLast)
+			return;
+
 		Vector2Int currentChunkCoord = new Vector2Int(Mathf.RoundToInt(PlayerPos.x / WD.ChunkWidth), Mathf.RoundToInt(PlayerPos.y / WD.ChunkHeight));
 
 		for (int x = -WD.ChunkDistance; x <= WD.ChunkDistance; x++) {
 			for (int y = -WD.ChunkDistance; y <= WD.ChunkDistance; y++) {
-				Debug.Log($"Searched Chunk: {x}, {y}");
 				SearchChunk(new Vector2Int(currentChunkCoord.x + x, currentChunkCoord.y + y));
 			}
 		}

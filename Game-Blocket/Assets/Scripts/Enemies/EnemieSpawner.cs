@@ -12,7 +12,7 @@ using UnityEngine;
 
     private void FixedUpdate()
     {
-        if (GameManager.GameState != GameState.INGAME)
+        if (GameManager.State != GameState.INGAME)
             return;
         if (enemiesonScreen.Count < 5)
         {
