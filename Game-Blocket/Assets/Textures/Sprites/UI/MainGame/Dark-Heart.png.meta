@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Game-Blocket/Assets/Textures/Sprites/UI/MainGame/Dark-Heart.png.meta
 guid: 373bc7acf8b1502409f0f280264752ca
+=======
+guid: 1295e0bb2d9e50d4792ab71ea2fe790e
+>>>>>>> b9e20d9 (World generation bug fixes):Game-Blocket/Assets/Textures/Sprites/UI/Lobby/Trashcan.png.meta
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}

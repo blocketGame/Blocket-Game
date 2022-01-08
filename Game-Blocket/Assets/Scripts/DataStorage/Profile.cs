@@ -20,15 +20,35 @@ public abstract class Profile{
 
 public class SettingsProfile : Profile{
 
-	public Dictionary<string, KeyCode> Keys { get; set; } = new Dictionary<string, KeyCode>() {
+
+	/// <summary>
+	/// Default Keys for the whole game
+	/// </summary>
+	public Dictionary<string, KeyCode> Keys { private get; set; } = new Dictionary<string, KeyCode>() {
 		///Default Keys:
+		//UI
 		{"InventoryKey",KeyCode.E},
+		{"ChatKey", KeyCode.T },
+
+		//Mechanics
 		{"MainInteractionKey", KeyCode.Mouse0 },
 		{"SideInteractionKey", KeyCode.Mouse1 },
 		{"JumpKey", KeyCode.Space },
 		{"RollKey", KeyCode.LeftControl },
 		{"CrawlKey", KeyCode.LeftShift }
 	};
+
+	/// <summary>
+	/// Checks if special UI is open and resitricts imput
+	/// </summary>
+	/// <param name="str">Name of the Command</param>
+	/// <returns>keycode if exists</returns>
+	public KeyCode GetKeyCode(string str){
+		if(!GlobalVariables.UIInventory.ChatOpened)
+			return Keys[str];
+		return KeyCode.None;
+    }
+
 	public SettingsProfile(string name, int? profileHash) : base(name, profileHash) { }
 }
 

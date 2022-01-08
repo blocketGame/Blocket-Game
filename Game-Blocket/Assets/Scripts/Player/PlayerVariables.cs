@@ -4,7 +4,19 @@ using UnityEngine;
 
 public class PlayerVariables : MonoBehaviour
 {
-	public Gamemode Gamemode { get; set; } = Gamemode.SURVIVAL;
+
+	public static Gamemode Gamemode { get => gamemode; set {	
+		switch(value){
+				case Gamemode.SURVIVAL: 
+					
+				break;
+				case Gamemode.CREATIVE: 
+					
+				break;
+        }
+		gamemode = value;
+	} }
+	private static Gamemode gamemode;
 
 	#region Static Resources
 	public GameObject playerModel, playerLogic;

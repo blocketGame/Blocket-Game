@@ -11374,6 +11374,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LeftHandbone_11
       objectReference: {fileID: 0}
+    - target: {fileID: -5247778097588937709, guid: 367dd789b5d80bc49a462f98114b7f4a, type: 3}
+      propertyPath: m_Name
+      value: LeftHandbone_11
+      objectReference: {fileID: 0}
     - target: {fileID: -3055257684249698336, guid: 367dd789b5d80bc49a462f98114b7f4a, type: 3}
       propertyPath: m_RenderingLayerMask
       value: 1

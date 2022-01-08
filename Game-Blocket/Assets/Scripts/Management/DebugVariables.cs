@@ -12,5 +12,7 @@
 	public static bool BlockInteractionCR => false;
 	public static bool ShowlobbyButtons => false;
 	public static bool ShowChunkHandle => false;
+	public static bool ShowChatEntrys => true;
+	public static bool ShowScrollViewInfo => true;
 }
 

@@ -4,7 +4,7 @@ using MLAPI;
 using UnityEngine;
 
 public class PrefabAssets : NetworkBehaviour{ 
-	public GameObject prefabUI, world, playerNetPrefab, loadingScreen , craftingUIListView;
+	public GameObject prefabUI, world, playerNetPrefab, loadingScreenPrefab, consoleText, craftingUIListView;
 
     public void Awake() => GlobalVariables.PrefabAssets = this;
 

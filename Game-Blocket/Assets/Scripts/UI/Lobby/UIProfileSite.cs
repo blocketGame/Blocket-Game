@@ -10,9 +10,9 @@ public class UIProfileSite : MonoBehaviour {
 	public Text createInput;
 	public GameObject worldSelectionSite, characterSelectionSite, listContentPrefab;
 	public Button backBtn, nextBtn, characterSlectBtn, worldSelectBtn, createBtn;
-	public ScrollRect playerScrollRect, worldScrollRect;
+	public ScrollViewHandler playerSVH, worldSVH;
 
-	private RectTransform _playerContent, _worldContent;
+	ScrollRect test;
 
 	private bool _characterSelectionOpen = true;
 	private bool CharacterSelectionOpen { 
@@ -27,7 +27,9 @@ public class UIProfileSite : MonoBehaviour {
 	private List<string> FoundPlayerProfiles { get => _foundCharacterProfiles; set {
 			_foundCharacterProfiles = value;
 			foreach (string profile in value) {
-				ListContentUI uiPSC = Instantiate(listContentPrefab, _playerContent.transform).GetComponent<ListContentUI>();
+				GameObject go = Instantiate(listContentPrefab, playerSVH.contenGO.transform);
+				playerSVH.Add(go.GetComponent<RectTransform>());
+				ListContentUI uiPSC = go.GetComponent<ListContentUI>();
 				int x = profile.LastIndexOf(@"\"), y = profile.LastIndexOf('.');
 				uiPSC.contentName.text = profile.Substring(x+1, y-x-1);
 				uiPSC.CharacterBtn = true;
@@ -38,7 +40,9 @@ public class UIProfileSite : MonoBehaviour {
 	private List<string> FoundWorldProfiles { get => _foundWorldProfiles; set { 
 			_foundWorldProfiles = value;
 			foreach(string profile in value) {
-				ListContentUI uiPSC = Instantiate(listContentPrefab, _worldContent.transform).GetComponent<ListContentUI>();
+				GameObject go = Instantiate(listContentPrefab, worldSVH.contenGO.transform);
+				worldSVH.Add(go.GetComponent<RectTransform>());
+				ListContentUI uiPSC = go.GetComponent<ListContentUI>();
 				int x = profile.LastIndexOf(@"\"), y = profile.LastIndexOf('.');
 				uiPSC.contentName.text = profile.Substring(x + 1, y - x - 1);
 				uiPSC.CharacterBtn = false;
@@ -129,7 +133,5 @@ public class UIProfileSite : MonoBehaviour {
 		GlobalVariables.UIProfileSite = this;
 		CharacterSelectionOpen = true;
 		InitButtons();
-		_playerContent = playerScrollRect.content;
-		_worldContent = worldScrollRect.content;
 	}
 }
