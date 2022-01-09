@@ -24,15 +24,18 @@ public class TerrainGeneration {
 	/// <param name="position"></param>
 	/// <param name="parent"></param>
 	public static void BuildChunk(Vector2Int position, GameObject parent) {
-		if (TerrainGenerationTaskNames.Contains(ThreadName(position))){
-			if(DebugVariables.showMultipleTasksOrExecution)
-				Debug.LogWarning($"Tasks exists!: {ThreadName(position)}");
-			return;
-		}
+		Task t = null;
+		lock (TerrainGenerationTaskNames) { 
+			if (TerrainGenerationTaskNames.Contains(ThreadName(position))){
+				if(DebugVariables.showMultipleTasksOrExecution)
+					Debug.LogWarning($"Tasks exists!: {ThreadName(position)}");
+				return;
+			}
 			
-		Task t = new Task(BuildChunk, new Tuple<Vector2Int, GameObject>(position, parent));
-		TerrainGenerationTaskNames.Add(ThreadName(position));
-		t.Start();
+			t = new Task(BuildChunk, new Tuple<Vector2Int, GameObject>(position, parent));
+			TerrainGenerationTaskNames.Add(ThreadName(position));
+		}
+		t?.Start();
 	}
 
 	/// <summary>Generates Chunk From Noisemap without any extra consideration</summary>
@@ -66,7 +69,8 @@ public class TerrainGeneration {
 
 		chunk.GenerateChunk(noisemap,caveNoiseMap,oreNoiseMap,biomNoiseMap);
 		QueueChunkForLoad(chunk, position);
-		TerrainGenerationTaskNames.Remove(ThreadName(position));
+		lock(TerrainGenerationTaskNames)
+			TerrainGenerationTaskNames.Remove(ThreadName(position));
 	}
 
 	public static void QueueChunkForLoad(TerrainChunk tc, Vector2Int position) {

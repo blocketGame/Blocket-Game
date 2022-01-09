@@ -294,6 +294,8 @@ public static class ProfileHandler {
 	/// <param name="chunk">Chunkarray</param>
 	/// <returns>string with lines</returns>
 	private static string ConvertChunkArrToString(byte[,] chunk) {
+		if (chunk == null)
+			throw new ArgumentNullException("Chunk is null!");
 		string data = string.Empty;
 		for (int x = 0; x < GlobalVariables.WorldData.ChunkWidth; x++) {
 			for (int y = 0; y < GlobalVariables.WorldData.ChunkHeight; y++) {
