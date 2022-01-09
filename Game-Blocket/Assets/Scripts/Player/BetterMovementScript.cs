@@ -43,7 +43,7 @@ public class BetterMovementScript : MonoBehaviour
 
 		GlobalVariables.LocalPlayer.GetComponentInChildren<Camera>().orthographicSize = camZoom;
 
-		if (Input.GetKey(GlobalVariables.crawl))
+		if (Input.GetKey(GameManager.SPNow.CrawlKey))
 			Crawl();
 
 		VelocityUpdate();
@@ -125,7 +125,7 @@ public class BetterMovementScript : MonoBehaviour
 
 		if (playerRigidbody.velocity.y != 0)
 			//Walljump 
-			if (Input.GetKeyDown(GlobalVariables.jump))
+			if (Input.GetKeyDown(GameManager.SPNow.JumpKey))
 			{
 				if (GlobalVariables.TerrainHandler.GetBlockFormCoordinate(
 				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + (-0.5f), playerRigidbody.position.y, 0)).x,
@@ -145,7 +145,7 @@ public class BetterMovementScript : MonoBehaviour
 				}
 			}
 			//Wall kick
-			else if (lockvar && Input.GetKeyDown(GlobalVariables.roll))
+			else if (lockvar && Input.GetKeyDown(GameManager.SPNow.RollKey))
 				Wallkick();
 			else
 				movement = Input.GetAxis("Horizontal");
@@ -154,10 +154,10 @@ public class BetterMovementScript : MonoBehaviour
 		{
 			animator.SetBool("IsJumping", false);
 			//Jump
-			if (Input.GetKey(GlobalVariables.jump))
+			if (Input.GetKey(GameManager.SPNow.JumpKey))
 				Jump();
 			//Roll
-			else if (!lockvar && Input.GetKeyDown(GlobalVariables.roll))
+			else if (!lockvar && Input.GetKeyDown(GameManager.SPNow.RollKey))
 				Roll();
 			//Move  
 			else

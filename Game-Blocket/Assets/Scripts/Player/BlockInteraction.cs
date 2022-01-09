@@ -8,116 +8,85 @@ using UnityEngine;
 /// <b>TODO: Cleanup!!</b>
 /// </summary>
 public class BlockInteraction : MonoBehaviour {
-	public Grid grid;
-	public Camera mainCamera;
-	public int selectedBlock;
-	public WorldData world => GlobalVariables.WorldData;
-	public Vector3Int coordinate;
-	public float count;
+	
 	public GameObject deleteSprite;
 	public Sprite crackTile;
 
-	private TerrainHandler TH => GlobalVariables.TerrainHandler;
+	public Coroutine BreakCoroutine { get; set; }
 
-	private Vector3 PlayerPos { get => GlobalVariables.LocalPlayerPos; }
+	/// <summary>Used for the Mouse Offset<br></br>Due to not perfect input</summary>
+	public readonly float mouseOfsetX = -0.5f, mouseOfsetY = -0.5f;
 
 	#region UnityMethods
 	public void Update() {
-		RaycastHit2D r = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.down);
-		if (r) {
-			if (DebugVariables.showRayCastTargets)
-				Debug.Log(r.collider.gameObject.name);
-			GameObject objHited = r.collider.gameObject;
-			if (objHited.tag == GlobalVariables.chunkTag) {
-				///TODO: Get Block and so on...
+		if (GameManager.State != GameState.INGAME)
+			return;
+
+		///Gather Information
+		Vector3 temp = Camera.main.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
+		Vector2Int blockHoverdAbsolute = new Vector2Int(Mathf.RoundToInt(temp.x + mouseOfsetX), Mathf.RoundToInt(temp.y + mouseOfsetY));
+		Vector2Int blockInchunkCoord = new Vector2Int(blockHoverdAbsolute.x%ProfileHandler.chunkWidth, blockHoverdAbsolute.y % ProfileHandler.chunkHeight);
+		if (blockInchunkCoord.x < 0)
+			blockInchunkCoord.x = ProfileHandler.chunkWidth + blockInchunkCoord.x;
+		if (blockInchunkCoord.y < 0)
+			blockInchunkCoord.y = ProfileHandler.chunkWidth + blockInchunkCoord.y;
+
+		TerrainChunk thisChunk = GlobalVariables.TerrainHandler.GetChunkFromCoordinate(blockHoverdAbsolute.x, blockHoverdAbsolute.y);
+		SetFocusGO(blockHoverdAbsolute);
+		byte targetBlockID = thisChunk.ChunkData.blocks[blockInchunkCoord.x, blockInchunkCoord.y];
+
+		///Reset if not Pressed
+		if (BreakCoroutine != null && !Input.GetKey(GameManager.SPNow.MainInteractionKey)) {
+			if(DebugVariables.blockInteractionCR)
+				Debug.Log("Stopped");
+			StopCoroutine(BreakCoroutine);
+			BreakCoroutine = null;
+		}
+			
+
+		if (Input.GetKeyDown(GameManager.SPNow.MainInteractionKey)) {
+			if(DebugVariables.blockInteractionInfo)
+				Debug.Log(thisChunk.ChunkData.blocks[blockInchunkCoord.x, blockInchunkCoord.y]);
+
+			if(BreakCoroutine == null) {
+				byte targetRemoveDuration = GlobalVariables.WorldData.Blocks[targetBlockID].RemoveDuration;
+				BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int>(targetRemoveDuration, targetBlockID, thisChunk, blockInchunkCoord));
+				if (DebugVariables.blockInteractionCR)
+					Debug.Log("Started!");
 			}
 		}
 
-
-		if (GameManager.State != GameState.NEVER)
-			return;
-		//FABIAN PROBLEM WITH INV MOVE TILES NOT VALUES.
-
-		//Was is?
-
-		TerrainChunk chunk = TH.GetChunkFromCoordinate(coordinate.x, coordinate.y);
-		Inventory inv = GameObject.Find("Player").GetComponent<Inventory>();
-		Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-		ItemAssets itemAssets = GameObject.Find("Assets").GetComponent<ItemAssets>();
-
-		if (GameObject.FindGameObjectWithTag("SlotOptions") != null)
-			return;
-		if (chunk == null)
-			return;
-		if (chunk.CollidewithDrop(grid.WorldToCell(PlayerPos).x, grid.WorldToCell(PlayerPos).y) != null) {
-			Drop collissionDrop = chunk.CollidewithDrop(grid.WorldToCell(PlayerPos).x, grid.WorldToCell(PlayerPos).y);
-			TakeDrops(inv, itemAssets.BlockItemsInGame[collissionDrop.DropID], collissionDrop.Count);
-			chunk.RemoveDropfromView(collissionDrop);
-		}
-		ChangeCoordinate(mouseWorldPos);
-
-
-		if (TH.GetBlockbyId(TH.GetBlockFormCoordinate(coordinate.x, coordinate.y)).BlockID != 0)
-			SetBlockOnFocus(mouseWorldPos);
-		else { deleteSprite.SetActive(false); }
-
-		// if (Input.mousePosition.x-959 < -200 || Input.mousePosition.x-959 > 200 ||Input.mousePosition.y - 429 < -150 || Input.mousePosition.y - 429 > 150 )
-		//   return;
-
-		if (Input.GetKey(GlobalVariables.leftClick)) {
-
-			//if (GameObject.FindGameObjectWithTag("LeftClick")!=null)
-			//{
-			//CHECK IF IT IS A BLOCK OR NOT
-			try {
-				chunk = TH.GetChunkFromCoordinate(coordinate.x, coordinate.y);
-				if ((coordinate.x.Equals(grid.WorldToCell(mouseWorldPos).x) && coordinate.y.Equals(grid.WorldToCell(mouseWorldPos).y))) {
-					StartCoroutine(Count(mouseWorldPos));
-					if (!(count > 0))
-						RemoveBlockAfterDuration();
-				}
-
-			} catch (Exception e) {
-				Debug.Log(e.Message);
-			}
-			//}
+		if (Input.GetKey(GameManager.SPNow.SideInteractionKey)) {
+			if (DebugVariables.blockInteractionInfo)
+				Debug.Log($"{blockHoverdAbsolute}, {blockInchunkCoord}, {thisChunk.ChunkData.ChunkPositionInt}");
+			///UNDONE
 		}
 
-		//if (Input.GetKey(GlobalVariables.rightClick) && 
-		//	world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkData.blocks[coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkData.chunkPosition.x, coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkData.chunkPosition.y] == 0 &&
-		//	!(Input.mousePosition.y - 429 < 55 && Input.mousePosition.y - 429 > -5 && Input.mousePosition.x - 959 > -40 && Input.mousePosition.x - 959 < 40))
-		//	{
-		//	///[TODO]
-		//		ItemAssets assets = GameObject.FindGameObjectWithTag("Assets").GetComponent<ItemAssets>();
-		//	//for (int x = 0; x < assets.BlockItemsInGame.Count; x++)
-		//	//    selectedBlock = (byte)assets.BlockItemsInGame[x].blockId;
-		//		SetTile(chunk);
-		//	}
 	}
 
-	/// <summary>
-	/// UNDONE
-	/// </summary>
-	public void FixedUpdate() {
-		//world.IgnoreDropCollision();
-		//for (int x = 0; x < GlobalVariables.TerrainGeneration.ChunksVisibleLastUpdate.Count; x++)
-		//	GlobalVariables.TerrainHandler.ChunksVisibleLastUpdate[x].InsertDrops();
-	}
 	#endregion
 
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="mouseWorldPos"></param>
-	/// <returns></returns>
-	public IEnumerator Count(Vector3 mouseWorldPos) {
-		yield return null;
-		count -= Time.deltaTime * 5;
-		if (!(count > 0))
-			StopCoroutine(Count(mouseWorldPos));
+	/// <summary>Set the Position of the FocusGO</summary>
+	/// <param name="mouseWorldPos">Position of the Mouse</param>
+	private void SetFocusGO(Vector2Int mouseWorldPos) => deleteSprite.transform.position = new Vector3(mouseWorldPos.x + 0.5f, mouseWorldPos.y + 0.5f, -10);
+
+	/// <summary>Waits the amount of time. Then it will execute the statements after</summary>
+	/// <param name="obj">Tuple of the blockID, the seconds and the position</param>
+	/// <returns>WaitTimer as yield return</returns>
+	public IEnumerator BreakBlock(object obj) {
+		Tuple<byte, byte, TerrainChunk,  Vector2Int> values = obj as Tuple<byte, byte, TerrainChunk, Vector2Int> ?? throw new ArgumentException();
+		yield return new WaitForSecondsRealtime(values.Item1);
+		if (DebugVariables.blockInteractionCR)
+			Debug.Log("Finished");
+		StopCoroutine(BreakCoroutine);
+		BlockBreaked(values.Item2, values.Item3, values.Item4);
 	}
 
-
+	private void BlockBreaked(byte blockID, TerrainChunk thisChunk, Vector2Int blockInChunk) {
+		if (DebugVariables.blockInteractionCR)
+			Debug.Log($"Block breaked: {blockID}");
+		thisChunk.DeleteBlock(blockInChunk);
+	}
 
 	/// <summary>
 	/// 
@@ -130,53 +99,5 @@ public class BlockInteraction : MonoBehaviour {
 		for (int x = 0; x < anzahl; x++)
 			inv.AddItem(blockitem);
 		GameObject.FindGameObjectWithTag("Inventory").GetComponent<UIInventory>().SynchronizeToHotbar();
-	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="chunk"></param>
-	private void SetTile(TerrainChunk chunk) {
-		if (selectedBlock <= -1)
-			return;
-
-		//chunk.ChunkTileMap.SetTile(new Vector3Int(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.x, coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.y, 0), world.Blocks[selectedBlock].Tile);
-		//chunk.BlockIDs[(coordinate.x - world.ChunkWidth * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.x), coordinate.y - world.ChunkHeight * world.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionWorldSpace.y] = world.Blocks[selectedBlock].BlockID;
-		//world.UpdateCollisionsAt(coordinate);
-		//world.UpdateCollisionsAt(new Vector3Int(coordinate.x + 1, coordinate.y, coordinate.z));
-		//world.UpdateCollisionsAt(new Vector3Int(coordinate.x, coordinate.y + 1, coordinate.z));
-		//world.UpdateCollisionsAt(new Vector3Int(coordinate.x - 1, coordinate.y, coordinate.z));
-		//world.UpdateCollisionsAt(new Vector3Int(coordinate.x, coordinate.y - 1, coordinate.z));
-	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="mouseWorldPos"></param>
-	private void SetBlockOnFocus(Vector3 mouseWorldPos) {
-		deleteSprite.SetActive(true);
-		deleteSprite.transform.position = new Vector3(grid.WorldToCell(mouseWorldPos).x + 0.5f, grid.WorldToCell(mouseWorldPos).y + 0.5f, -2);
-		deleteSprite.GetComponent<SpriteRenderer>().sprite = crackTile;
-	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="mouseWorldPos"></param>
-	private void ChangeCoordinate(Vector3 mouseWorldPos) {
-		if (!(coordinate.x.Equals(grid.WorldToCell(mouseWorldPos).x) && coordinate.y.Equals(grid.WorldToCell(mouseWorldPos).y))) {
-			coordinate = grid.WorldToCell(mouseWorldPos);
-			coordinate.z = 0;
-			count = TH.GetBlockbyId(TH.GetBlockFormCoordinate(coordinate.x, coordinate.y)).RemoveDuration;
-		}
-	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	private void RemoveBlockAfterDuration() {
-		TH.GetChunkFromCoordinate(coordinate.x, coordinate.y).DeleteBlock(coordinate);
-		TH.GetChunkFromCoordinate(coordinate.x, coordinate.y).BuildCollisions();
-		count = TH.GetBlockbyId(TH.GetBlockFormCoordinate(coordinate.x, coordinate.y)).RemoveDuration;
 	}
 }

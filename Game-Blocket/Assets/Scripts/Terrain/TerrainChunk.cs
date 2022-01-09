@@ -39,7 +39,7 @@ public sealed class TerrainChunk
 	private Vector3 ChunkPositionWorldSpace => new Vector3(ChunkPosition.x, ChunkPosition.y);
 	private byte[,] BlockIDs => ChunkData.blocks;
 	private byte[,] BlockIDsBG => ChunkData.bgBlocks;
-	private List<Drop> Drops => new List<Drop>(ChunkData.drops);
+	private List<Drop> Drops { get; } = new List<Drop>();
 	#endregion
 
 	#region WorldSpecifications
@@ -123,7 +123,7 @@ public sealed class TerrainChunk
 		}
 		///Chunk GO
 		ChunkObject = new GameObject(ChunkName(ChunkPosition, 0)) {
-			tag = "Chunk"
+			tag = GlobalVariables.chunkTag
 		};
 		ChunkObject.transform.SetParent(chunkParent.transform);
 		ChunkObject.transform.position = new Vector3(ChunkPosition.x * GlobalVariables.WorldData.ChunkWidth, ChunkPosition.y * GlobalVariables.WorldData.ChunkHeight, 0f);
@@ -141,7 +141,8 @@ public sealed class TerrainChunk
 
 		///Collision GO
 		CollisionObject = new GameObject(ChunkName(ChunkPosition, 2)) {
-			tag = "Terrain"
+			tag = "Terrain",
+			layer = 6
 		};
 		CollisionObject.transform.SetParent(ChunkTileMap.transform);
 		CollisionObject.transform.position = new Vector3(ChunkPosition.x * GlobalVariables.WorldData.ChunkWidth, ChunkPosition.y * GlobalVariables.WorldData.ChunkHeight, 0f);
@@ -300,45 +301,51 @@ public sealed class TerrainChunk
 	/// <summary>
 	/// Removes the block out of the tilemap
 	/// </summary>
-	public void DeleteBlock(Vector3Int coordinate)
+	public void DeleteBlock(Vector2Int coordinate)
 	{
 		if (BlockIDs[(coordinate.x - GlobalVariables.WorldData.ChunkWidth * ChunkPositionInt.x), (coordinate.y - GlobalVariables.WorldData.ChunkHeight * ChunkPositionInt.y)] == 0) return;
 
-		InstantiateDrop(coordinate);
+		InstantiateDrop(coordinate, 1);
 		ChunkTileMap.SetTile(new Vector3Int(coordinate.x - GlobalVariables.WorldData.ChunkWidth * GlobalVariables.TerrainHandler.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionInt.x, coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.TerrainHandler.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionInt.y, 0), null);
 		BlockIDs[(coordinate.x - GlobalVariables.WorldData.ChunkWidth * GlobalVariables.TerrainHandler.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionInt.x), coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.TerrainHandler.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionInt.y] = 0;
 		GlobalVariables.TerrainHandler.UpdateCollisionsAt(coordinate);
-		GlobalVariables.TerrainHandler.UpdateCollisionsAt(new Vector3Int(coordinate.x + 1, coordinate.y, coordinate.z));
-		GlobalVariables.TerrainHandler.UpdateCollisionsAt(new Vector3Int(coordinate.x, coordinate.y + 1, coordinate.z));
-		GlobalVariables.TerrainHandler.UpdateCollisionsAt(new Vector3Int(coordinate.x - 1, coordinate.y, coordinate.z));
-		GlobalVariables.TerrainHandler.UpdateCollisionsAt(new Vector3Int(coordinate.x, coordinate.y - 1, coordinate.z));
+		GlobalVariables.TerrainHandler.UpdateCollisionsAt(new Vector2Int(coordinate.x + 1, coordinate.y));
+		GlobalVariables.TerrainHandler.UpdateCollisionsAt(new Vector2Int(coordinate.x, coordinate.y + 1));
+		GlobalVariables.TerrainHandler.UpdateCollisionsAt(new Vector2Int(coordinate.x - 1, coordinate.y));
+		GlobalVariables.TerrainHandler.UpdateCollisionsAt(new Vector2Int(coordinate.x, coordinate.y - 1));
 	}
 
 	/// <summary>
 	/// TODO: Move to BlockInteraction
 	/// Creating Drop + rigidbody and other Components
 	/// </summary>
-	public void InstantiateDrop(Vector3Int coordinate)
+	public void InstantiateDrop(Vector2Int coordinate, byte count)
 	{
-		Drop d = new Drop();
-		d.DropID = GlobalVariables.WorldData.Blocks[BlockIDs[(coordinate.x - GlobalVariables.WorldData.ChunkWidth * GlobalVariables.TerrainHandler.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionInt.x), coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.TerrainHandler.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionInt.y]].Item1;
-		d.Name = GlobalVariables.WorldData.Blocks[BlockIDs[(coordinate.x - GlobalVariables.WorldData.ChunkWidth * GlobalVariables.TerrainHandler.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionInt.x), coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.TerrainHandler.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionInt.y]].Name;
-		d.GameObject = new GameObject($"Drop {d.DropID}");
-		d.GameObject.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
-		d.GameObject.AddComponent<SpriteRenderer>();
-		d.GameObject.GetComponent<SpriteRenderer>().sprite = GlobalVariables.WorldData.Blocks[BlockIDs[(coordinate.x - GlobalVariables.WorldData.ChunkWidth * ChunkPositionInt.x), coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.TerrainHandler.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionInt.y]].Sprite;
-		Vector3 c = coordinate;
-		c.y = coordinate.y + 0.5f;
-		c.x = coordinate.x + 0.5f;
-		d.GameObject.transform.SetPositionAndRotation(c, new Quaternion());
-		d.GameObject.AddComponent<Rigidbody2D>();
-		d.GameObject.GetComponent<Rigidbody2D>().gravityScale = 20;
-		d.GameObject.AddComponent<BoxCollider2D>();
-		d.GameObject.layer = LayerMask.NameToLayer("Drops");
-		d.Count = 1;
-		Drops.Add(d);
+		///Drop Instance
+		Drop drop = new Drop {
+			DropID = GlobalVariables.WorldData.Blocks[BlockIDs[(coordinate.x - GlobalVariables.WorldData.ChunkWidth * GlobalVariables.TerrainHandler.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionInt.x), coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.TerrainHandler.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionInt.y]].Item1,
+			Name = GlobalVariables.WorldData.Blocks[BlockIDs[(coordinate.x - GlobalVariables.WorldData.ChunkWidth * GlobalVariables.TerrainHandler.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionInt.x), coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.TerrainHandler.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionInt.y]].Name
+		};
+
+		///Drop GO
+		drop.GameObject = new GameObject($"Drop {drop.DropID}");
+		drop.GameObject.transform.SetParent(dropParent.transform);
+		drop.GameObject.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+		Vector3 c = new Vector3(coordinate.x + 0.5f, coordinate.y + 0.5f, 0);
+		drop.GameObject.transform.SetPositionAndRotation(c, new Quaternion());
+		drop.GameObject.layer = LayerMask.NameToLayer("Drops");
+
+		///Drop-GO Components
+		Rigidbody2D dropRB = drop.GameObject.AddComponent<Rigidbody2D>();
+		dropRB.gravityScale = 20;
+		
+
+		drop.GameObject.AddComponent<BoxCollider2D>().isTrigger = true;
+		drop.GameObject.AddComponent<SpriteRenderer>().sprite = GlobalVariables.WorldData.Blocks[BlockIDs[(coordinate.x - GlobalVariables.WorldData.ChunkWidth * ChunkPositionInt.x), coordinate.y - GlobalVariables.WorldData.ChunkHeight * GlobalVariables.TerrainHandler.GetChunkFromCoordinate(coordinate.x, coordinate.y).ChunkPositionInt.y]].Sprite;
+
+		drop.Count = count;
+		Drops.Add(drop);
 		InsertDrops();
-		d.GameObject.transform.SetParent(dropParent.transform);
 	}
 	/// <summary>
 	/// Creates the Gameobject out of the Drops list

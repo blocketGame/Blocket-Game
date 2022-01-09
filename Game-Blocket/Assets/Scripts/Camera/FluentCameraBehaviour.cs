@@ -22,7 +22,7 @@ public class FluentCameraBehaviour : MonoBehaviour
         if (GameManager.State != GameState.INGAME)
             return;
         GetComponent<Camera>().orthographicSize = camZoom;
-        if (Input.mouseScrollDelta.y != 0)
+        if (Input.mouseScrollDelta.y != 0 && Input.GetKey(KeyCode.LeftControl))
         {
             float delta = Input.mouseScrollDelta.y;
             if (delta < 0)

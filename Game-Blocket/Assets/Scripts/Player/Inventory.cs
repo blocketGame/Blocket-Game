@@ -15,6 +15,19 @@ public class Inventory : MonoBehaviour {
 	/// <summary>List of the inventory Slots => <seealso cref="UIInventorySlot"/></summary>
 	public List<UIInventorySlot> InvSlots { get; } = new List<UIInventorySlot>();
 
+	/// <summary>List of the Hud Slots</summary>
+	public List<UIInventorySlot> HudSlots { get; } = new List<UIInventorySlot>();
+
+	public byte SelectedSlot { get => _selectedSlot; set {
+			if (value >= HudSlots.Count || value < 0)
+				throw new ArgumentException($"{value}");
+			HudSlots[_selectedSlot].IsSelected = false;
+			_selectedSlot = value;
+			HudSlots[_selectedSlot].IsSelected = true;
+		}
+	}
+	private byte _selectedSlot = 0;
+
 	/// <summary>Last slot active pressed</summary>
 	[HideInInspector]
 	public UIInventorySlot atHand;

@@ -30,6 +30,7 @@ public class GameManager : NetworkBehaviour
 
 	public static PlayerProfile playerProfileNow;
 	public static WorldProfile worldProfileNow;
+	public static SettingsProfile SPNow { get; private set; } = new SettingsProfile("local", null);
 
 	public UNetTransport uNetTransport;
 	//TODO: Coroutines, Ticks....

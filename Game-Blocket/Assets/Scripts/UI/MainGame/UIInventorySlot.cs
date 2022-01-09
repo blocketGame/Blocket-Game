@@ -31,10 +31,13 @@ public class UIInventorySlot : MonoBehaviour {
 	public UIInventorySlot parent;
 	#endregion
 
-	/// <summary><see cref="ItemID"/></summary>
-	private uint _itemId;
-	private ushort _itemCount = 0;
+	public bool IsSelected { get => _isSelected; set {
+			_isSelected = value;
+			backgroundImage.color = value ? new Color(0.5f, 0.5f, 0.5f) : Color.white;
+		} }
+	private bool _isSelected;
 
+	/// <summary><see cref="ItemID"/></summary>
 	public uint ItemID {
 		get => _itemId;
 		set {
@@ -43,6 +46,7 @@ public class UIInventorySlot : MonoBehaviour {
 			ReloadSlot();
 		}
 	}
+	private uint _itemId;
 
 	public ushort ItemCount {
 		get => _itemCount;
@@ -51,6 +55,7 @@ public class UIInventorySlot : MonoBehaviour {
 			ReloadSlot();
 		}
 	}
+	private ushort _itemCount = 0;
 
 	private Item ItemObject { get; set; }
 

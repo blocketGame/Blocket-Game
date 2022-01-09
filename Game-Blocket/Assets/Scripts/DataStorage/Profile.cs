@@ -66,11 +66,13 @@ public class WorldProfile : Profile
 }
 
 public class SettingsProfile : Profile{
-
-	public SettingsProfile(string name, int? profileHash) : base(name, profileHash)
-	{
-
-	}
+	public KeyCode InventoryKey { get; set; } = KeyCode.E;
+	public KeyCode MainInteractionKey { get; set; } = KeyCode.Mouse0;
+	public KeyCode SideInteractionKey { get; set; } = KeyCode.Mouse1;
+	public KeyCode JumpKey { get; set; } = KeyCode.Space;
+	public KeyCode RollKey { get; set; } = KeyCode.LeftControl;
+	public KeyCode CrawlKey { get; set; } = KeyCode.LeftShift;
+	public SettingsProfile(string name, int? profileHash) : base(name, profileHash){}
 }
 
 /// <summary>

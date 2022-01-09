@@ -32,7 +32,7 @@ public  class TerrainHandler : MonoBehaviour
 
 	public WorldData WD => GlobalVariables.WorldData;
 
-	private static readonly bool useItemer = true;
+	private static readonly bool useItemer = false;
 	private readonly uint _checkTime = 1000;
 	private readonly byte _updatePayload = 2;
 	public Timer TimerInstance { get; private set; }
@@ -69,6 +69,7 @@ public  class TerrainHandler : MonoBehaviour
 	void Update() => UpdateChunks(null);
 
 	public void LateUpdate() {
+		PlayerPosLast = PlayerPos;
 		PlayerPos = GlobalVariables.LocalPlayerPos;
 		
 		//DisableChunksOutOfRange();
@@ -174,14 +175,18 @@ public  class TerrainHandler : MonoBehaviour
 	}
 
 	public void CheckChunksAroundPlayerStatic() {
-		if (PlayerPos == PlayerPosLast)
+		if (PlayerPos == PlayerPosLast && GameManager.State == GameState.INGAME)
 			return;
 		bool noUpdates = true;
 		Vector2Int currentChunkCoord = new Vector2Int(Mathf.RoundToInt(PlayerPos.x / WD.ChunkWidth), Mathf.RoundToInt(PlayerPos.y / WD.ChunkHeight));
 
 		for (int x = -WD.ChunkDistance; x <= WD.ChunkDistance; x++) {
 			for (int y = -WD.ChunkDistance; y <= WD.ChunkDistance; y++) {
-				noUpdates = !SearchChunk(new Vector2Int(currentChunkCoord.x + x, currentChunkCoord.y + y));
+				bool needsWork = SearchChunk(new Vector2Int(currentChunkCoord.x + x, currentChunkCoord.y + y));
+				if (needsWork && DebugVariables.showMultipleTasksOrExecution)
+					Debug.Log($"{x}, {y}");
+				if (needsWork && noUpdates)
+					noUpdates = false;
 			}
 		}
 
@@ -239,7 +244,7 @@ public  class TerrainHandler : MonoBehaviour
 	/// 
 	/// </summary>
 	/// <param name="coordinate"></param>
-	public void UpdateCollisionsAt(Vector3Int coordinate) {
+	public void UpdateCollisionsAt(Vector2Int coordinate) {
 		TerrainChunk chunk = GetChunkFromCoordinate(coordinate.x, coordinate.y);
 
 		int chunkX = coordinate.x - chunk.ChunkData.ChunkPositionInt.x * WD.ChunkWidth;
