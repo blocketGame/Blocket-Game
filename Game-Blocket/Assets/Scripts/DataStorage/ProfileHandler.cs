@@ -5,7 +5,6 @@ using System.IO;
 using UnityEngine;
 
 using static PlayerProfile;
-using static TerrainChunk.ChunkList;
 using static WorldProfile;
 
 /// <summary>
@@ -22,15 +21,11 @@ public static class ProfileHandler {
 	/// </summary>
 	public static int chunkWidth = 32, chunkHeight = 32;
 
-	/// <summary>
-	/// The Parent Directory for all profiles
-	/// </summary>
+	/// <summary>The Parent Directory for all profiles</summary>
 	public static string profileParent = @"Profiles", playerProfileParent = profileParent + @"\Players", worldProfileParent = profileParent + @"\Worlds";
 
 	#region ProfileHandling
-	/// <summary>
-	/// 
-	/// </summary>
+	/// <summary></summary>
 	public static void CheckParent() {
 		if (!Directory.Exists(profileParent))
 			Directory.CreateDirectory(profileParent);
@@ -42,9 +37,7 @@ public static class ProfileHandler {
 		//	Debug.Log(f + File.Exists(f));
 	}
 
-	/// <summary>
-	/// Exports the profile played now
-	/// </summary>
+	/// <summary>Exports the profile played now</summary>
 	public static void ExportProfile(Profile p, bool player) {
 		string prePath = player ? playerProfileParent : worldProfileParent;
 
@@ -62,18 +55,15 @@ public static class ProfileHandler {
 	/// </summary>
 	public static void ExportProfile(bool player) {
 		if (player) {
-			SavePlayerProfile();
 			ExportProfile(GameManager.playerProfileNow, player);
+			SavePlayerProfile();
 		} else {
 			SaveWorldProfile();
-			ExportProfile(GameManager.worldProfileNow, player);
 		}
 
 	}
 
-	/// <summary>
-	/// Imports the Profile played now
-	/// </summary>
+	/// <summary>Imports the Profile played now</summary>
 	public static Profile ImportProfile(string profileName, bool player) {
 		CheckParent();
 		string data = string.Empty;
@@ -94,9 +84,7 @@ public static class ProfileHandler {
 			: player ? JsonUtility.FromJson<PlayerProfile>(data) : (Profile)JsonUtility.FromJson<WorldProfile>(data);
 	}
 
-	/// <summary>
-	/// Recognises all Profiles in the Parent dir
-	/// </summary>
+	/// <summary>Recognises all Profiles in the Parent dir</summary>
 	/// <returns></returns>
 	public static List<string> FindAllProfiles(bool player) {
 		CheckParent();
@@ -204,12 +192,10 @@ public static class ProfileHandler {
 	/// 
 	/// </summary>
 	public static void SaveComponentsInWorldProfile(WorldProfile worldProfile) {
-		foreach (TerrainChunk tc in TerrainHandler.Chunks.Values) {
-			ChunkData cD = tc.ChunkData;
-			List<SaveAbleDrop> drops = new List<SaveAbleDrop>(cD.drops.Length);
-			foreach (Drop drop in cD.drops)
-				drops.Add(new SaveAbleDrop(drop.GameObject.transform.position, drop.DropID, drop.Count));
-			worldProfile.chunks.Add(new SaveAbleChunk(cD.ChunkPositionInt, cD.blocks, cD.bgBlocks, drops));
+		foreach (TerrainChunk tc in TerrainHandler.Chunks.Values) { 
+			if (tc == null || tc?.ChunkData == null)
+				throw new ArgumentNullException();
+			worldProfile.chunks.Add(tc.ChunkData);
 		}
 	}
 
@@ -219,28 +205,24 @@ public static class ProfileHandler {
 	public static void LoadComponentsFromWorldProfile(WorldProfile worldProfile) {
 		GameManager.worldProfileNow = worldProfile;
 
-		foreach (SaveAbleChunk chunkNow in worldProfile.chunks) {
-			if (TerrainHandler.Chunks.ContainsKey(chunkNow.chunkPosition)) {
+		foreach (ChunkData chunkNow in worldProfile.chunks) {
+			if (TerrainHandler.Chunks.ContainsKey(chunkNow.ChunkPositionInt)) {
 				Debug.LogWarning($"Key already Contained: {chunkNow.chunkPosition}");
 				continue;
 			}
-			TerrainHandler.Chunks.Add(chunkNow.chunkPosition, new TerrainChunk(chunkNow.chunkPosition, chunkNow.blockIDs, chunkNow.blockIDsBG, new List<Drop>()));
+			TerrainHandler.Chunks.Add(chunkNow.ChunkPositionInt, new TerrainChunk(chunkNow));
 		}
 	}
 	#endregion
 	#endregion
 	#region NewWorldProfileHandling
 
-	/// <summary>
-	/// UNDONE: Check if Worlddire is vaild
-	/// </summary>
+	/// <summary>UNDONE: Check if Worlddire is vaild</summary>
 	/// <returns></returns>
 	public static List<string> FindAllWorldDirectories() {
 		return new List<string>(Directory.GetDirectories(worldProfileParent));
 	}
-	/// <summary>
-	/// TODO: Move to ConfigFile
-	/// </summary>
+	/// <summary>TODO: Move to ConfigFile</summary>
 	public static readonly string chunkLocation = "chunks";
 
 	public static string GetWorldDirFromName(string name) => $@"{worldProfileParent}\{name}";
@@ -254,7 +236,7 @@ public static class ProfileHandler {
 	/// <returns>true if not null</returns>
 	private static bool CheckWorldDirectory(string mainDirName) {
 		CheckParent();
-		if (mainDirName == null)
+		if (string.IsNullOrEmpty(mainDirName.Trim()))
 			return false;
 		if (!Directory.Exists(mainDirName))
 			Directory.CreateDirectory(mainDirName);
@@ -313,17 +295,17 @@ public static class ProfileHandler {
 	/// </summary>
 	/// <param name="sc"><see cref="SaveAbleChunk"/></param>
 	/// <returns>the string which will directly be writeable</returns>
-	private static string ConvertSavableChunkToString(SaveAbleChunk sc) {
+	private static string ConvertChunkDataToString(ChunkData cd) {
 		string data = string.Empty;
 		data += "Chunks:\n";
-		data += ConvertChunkArrToString(sc.blockIDs);
+		data += ConvertChunkArrToString(cd.blocks);
 		data += "ChunksBG:\n";
-		data += ConvertChunkArrToString(sc.blockIDsBG);
-		data += "Drops:\n";
+		data += ConvertChunkArrToString(cd.bgBlocks);
+		data += "Drops:\n";	
 		//Drops
 		string tempDrops = string.Empty;
-		foreach (SaveAbleDrop d in sc.drops)
-			tempDrops += $"{d.itemID},{d.itemCount},{d.position};";
+		foreach (Drop d in cd.drops)
+			tempDrops += $"{d.DropID},{d.Count},{d.Position};";
 		//Remove last ;
 		data.Remove(data.Length - 1);
 		data += tempDrops;
@@ -338,14 +320,14 @@ public static class ProfileHandler {
 	/// <param name="worldToSave">WorldProfile</param>
 	private static void SaveWorldProfile(string mainDirName, WorldProfile worldToSave) {
 		CheckWorldDirectory(mainDirName);
-		foreach (SaveAbleChunk sc in worldToSave.chunks) {
-			string chunkPathI = GetChunkLocationFromMainDir(mainDirName) + @$"\Chunk {sc.chunkPosition.x} {sc.chunkPosition.y}";
+		foreach (ChunkData cd in worldToSave.chunks) {
+			string chunkPathI = GetChunkLocationFromMainDir(mainDirName) + @$"\Chunk {cd.ChunkPositionInt.x} {cd.ChunkPositionInt.y}";
 			StreamWriter sw = File.Exists(chunkPathI) ? new StreamWriter(chunkPathI, false) : File.CreateText(chunkPathI);
-			string data = ConvertSavableChunkToString(sc);
+			string data = ConvertChunkDataToString(cd);
 			sw.Write(data);
 			sw.Close();
 			if (DebugVariables.showLoadAndSave)
-				Debug.Log($"Chunk saved: {sc.chunkPosition}");
+				Debug.Log($"Chunk saved: {cd.chunkPosition}");
 		}
 
 	}
@@ -370,11 +352,11 @@ public static class ProfileHandler {
 	}
 
 	/// <summary>
-	/// TODO: Exceptionhandling
+	/// TODO: Exceptionhandling, DROPS
 	/// </summary>
 	/// <param name="path"></param>
 	/// <returns></returns>
-	public static SaveAbleChunk GetChunkFromFile(string path) {
+	public static ChunkData GetChunkFromFile(string path) {
 		List<string> dataLines = new List<string>(File.ReadAllLines(path));
 
 		//Static Number bc of heading in File
@@ -382,13 +364,14 @@ public static class ProfileHandler {
 		byte[,] blockIDBGs = ConvertStringLinesToByteArr(dataLines.GetRange(2 + chunkWidth, chunkWidth).ToArray());
 
 		//Drops: 3 + GlobalVariables.WorldData.ChunkWidth
-		List<SaveAbleDrop> drops = new List<SaveAbleDrop>();
+		List<Drop> drops = new List<Drop>();
+
 
 		//Position
 		string posString = path.Substring(path.LastIndexOf('\\') + "Chunk ".Length);
 		string stringX = posString.Trim().Split(' ')[0], stringY = posString.Trim().Split(' ')[1];
 
-		return new SaveAbleChunk(new Vector2Int(int.Parse(stringX), int.Parse(stringY)), blockIDs, blockIDBGs, drops);
+		return new ChunkData(blockIDs, blockIDBGs, drops.ToArray(),new Vector2Int(int.Parse(stringX),int.Parse(stringY)));
 	}
 
 	/// <summary>
@@ -400,7 +383,7 @@ public static class ProfileHandler {
 		CheckWorldDirectory(worldname);
 		string chunkPath = GetChunkLocationFromMainDir(GetWorldDirFromName(worldname));
 
-		List<SaveAbleChunk> chunks = new List<SaveAbleChunk>();
+		List<ChunkData> chunks = new List<ChunkData>();
 
 		foreach (string pathI in Directory.GetFiles(chunkPath)) {
 			chunks.Add(GetChunkFromFile(pathI));
@@ -411,6 +394,5 @@ public static class ProfileHandler {
 		return new WorldProfile(worldname, null) { chunks = chunks };
 	}
 	#endregion
-
 	#endregion
 }

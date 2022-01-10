@@ -40,6 +40,7 @@ public  class TerrainHandler : MonoBehaviour
 		NetworkObject localPlayerNO = GlobalVariables.LocalPlayer.GetComponent<NetworkObject>();
 		if(useItemer)
 			TimerInstance = new Timer(new TimerCallback(UpdateChunksTask), null, 0, _checkTime);
+		IgnoreDropCollision();
 	}
 
 	private void OnApplicationQuit() {

@@ -36,7 +36,7 @@ public class BlockInteraction : MonoBehaviour {
 		byte targetBlockID = thisChunk.ChunkData.blocks[blockInchunkCoord.x, blockInchunkCoord.y];
 
 		///Reset if not Pressed
-		if (BreakCoroutine != null && !Input.GetKey(GameManager.SPNow.MainInteractionKey)) {
+		if (BreakCoroutine != null && !Input.GetKey(GameManager.SPNow.Keys["MainInteractionKey"])) {
 			if(DebugVariables.blockInteractionCR)
 				Debug.Log("Stopped");
 			StopCoroutine(BreakCoroutine);
@@ -44,7 +44,7 @@ public class BlockInteraction : MonoBehaviour {
 		}
 			
 
-		if (Input.GetKeyDown(GameManager.SPNow.MainInteractionKey)) {
+		if (Input.GetKeyDown(GameManager.SPNow.Keys["MainInteractionKey"])) {
 			if(DebugVariables.blockInteractionInfo)
 				Debug.Log(thisChunk.ChunkData.blocks[blockInchunkCoord.x, blockInchunkCoord.y]);
 
@@ -56,7 +56,7 @@ public class BlockInteraction : MonoBehaviour {
 			}
 		}
 
-		if (Input.GetKey(GameManager.SPNow.SideInteractionKey)) {
+		if (Input.GetKey(GameManager.SPNow.Keys["SideInteractionKey"])) {
 			if (DebugVariables.blockInteractionInfo)
 				Debug.Log($"{blockHoverdAbsolute}, {blockInchunkCoord}, {thisChunk.ChunkData.ChunkPositionInt}");
 			///UNDONE
@@ -85,7 +85,7 @@ public class BlockInteraction : MonoBehaviour {
 	private void BlockBreaked(byte blockID, TerrainChunk thisChunk, Vector2Int blockInChunk) {
 		if (DebugVariables.blockInteractionCR)
 			Debug.Log($"Block breaked: {blockID}");
-		thisChunk.DeleteBlock(blockInChunk);
+		thisChunk.DeleteBlock(new Vector3Int(blockInChunk.x, blockInChunk.y, 0));
 	}
 
 	/// <summary>

@@ -62,7 +62,7 @@ public class UIProfileSite : MonoBehaviour {
 				CharacterSelectionOpen = false;
 			else if(((ListContentUI.selectedBtnNameCharacter?.Trim() == string.Empty ) != NetworkManager.Singleton.IsClient) && ((ListContentUI.selectedBtnNameWorld?.Trim() == string.Empty) != NetworkManager.Singleton.IsServer)) {
 			GameManager.playerProfileNow = ProfileHandler.ImportProfile(ListContentUI.selectedBtnNameCharacter, true) as PlayerProfile;
-			GameManager.worldProfileNow = ProfileHandler.ImportProfile(ListContentUI.selectedBtnNameWorld, false) as WorldProfile;
+			GameManager.worldProfileNow = new WorldProfile(ListContentUI.selectedBtnNameWorld, null);
 			GlobalVariables.UILobby.SiteIndexOpen = 1;
 			}
 					
@@ -108,14 +108,13 @@ public class UIProfileSite : MonoBehaviour {
 	}
 
 	public bool ValidateInput() {
-		if(createInput.text == null || createInput.text.Trim() == "")
+		if(createInput.text == null || string.IsNullOrEmpty(createInput.text.Trim()))
 			return false;
 		return true;
 	}
 
-	public void Start() {
-		FindAllProfiles();
-	}
+	public void Start() => FindAllProfiles();
+	
 
 	public void FindAllProfiles() {
 		FoundPlayerProfiles = ProfileHandler.FindAllProfiles(true);

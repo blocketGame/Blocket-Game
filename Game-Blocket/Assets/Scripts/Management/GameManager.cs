@@ -1,11 +1,11 @@
-using System.Collections.Generic;
-using UnityEngine;
-
 using MLAPI;
-using UnityEngine.SceneManagement;
 using MLAPI.Transports.UNET;
+
 using System;
-using static UnityEngine.Rendering.DebugUI;
+using System.Collections.Generic;
+
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Used for importend Gameengineparts<br></br>
@@ -157,7 +157,7 @@ public class GameManager : NetworkBehaviour
 			return;
 		ProfileHandler.SavePlayerProfile();
 		ProfileHandler.ExportProfile(playerProfileNow, true);
-		ProfileHandler.ExportProfile(false);
+		ProfileHandler.SaveComponentsInWorldProfile(worldProfileNow);
 		ProfileHandler.SaveWorld(worldProfileNow);
 	}
 

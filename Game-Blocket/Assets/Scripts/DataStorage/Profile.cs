@@ -25,7 +25,7 @@ public abstract class Profile{
 /// </summary>
 public class WorldProfile : Profile
 {
-	public List<SaveAbleChunk> chunks = new List<SaveAbleChunk>();
+	public List<ChunkData> chunks = new List<ChunkData>();
 
 	public WorldProfile(string name, int? profileHash) : base(name, profileHash){}
 
@@ -66,13 +66,17 @@ public class WorldProfile : Profile
 }
 
 public class SettingsProfile : Profile{
-	public KeyCode InventoryKey { get; set; } = KeyCode.E;
-	public KeyCode MainInteractionKey { get; set; } = KeyCode.Mouse0;
-	public KeyCode SideInteractionKey { get; set; } = KeyCode.Mouse1;
-	public KeyCode JumpKey { get; set; } = KeyCode.Space;
-	public KeyCode RollKey { get; set; } = KeyCode.LeftControl;
-	public KeyCode CrawlKey { get; set; } = KeyCode.LeftShift;
-	public SettingsProfile(string name, int? profileHash) : base(name, profileHash){}
+
+	public Dictionary<string, KeyCode> Keys { get; set; } = new Dictionary<string, KeyCode>() {
+		///Default Keys:
+		{"InventoryKey",KeyCode.E},
+		{"MainInteractionKey", KeyCode.Mouse0 },
+		{"SideInteractionKey", KeyCode.Mouse1 },
+		{"JumpKey", KeyCode.Space },
+		{"RollKey", KeyCode.LeftControl },
+		{"CrawlKey", KeyCode.LeftShift }
+	};
+	public SettingsProfile(string name, int? profileHash) : base(name, profileHash) { }
 }
 
 /// <summary>
