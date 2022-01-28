@@ -197,6 +197,9 @@ public class UIInventory : MonoBehaviour {
 
 
 	public void Update() {
+		if (GameManager.State != GameState.INGAME)
+			return;
+
 		if (Input.GetKeyDown(GameManager.SPNow.Keys["InventoryKey"])) {
 			InventoryOpened = !InventoryOpened;
 			if (!InventoryOpened)

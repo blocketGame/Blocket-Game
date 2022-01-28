@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class Enemy : ScriptableObject, ISerializationCallbackReceiver
+public class EnemySO : ScriptableObject, ISerializationCallbackReceiver
 {
     [SerializeField]
     private int spawnchance;

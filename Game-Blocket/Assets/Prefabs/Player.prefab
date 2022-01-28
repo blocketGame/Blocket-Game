@@ -892,7 +892,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uIInventory: {fileID: 0}
   healthScript: {fileID: 0}
-  playerModel: {fileID: 0}
+  playerModel: {fileID: 2588202752137757625}
   playerLogic: {fileID: 4913946665464429532}
   inventory: {fileID: 4126958736040315794}
   healthGained: 0

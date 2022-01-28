@@ -14,7 +14,7 @@ public class ItemAssets : MonoBehaviour
 	public List<EquipableItem> EquipableItemsInGame = new List<EquipableItem>();
 	public List<UseAbleItem> UseableItemsInGame = new List<UseAbleItem>();
 	public List<Structure> Structures = new List<Structure>();
-	public List<Enemy> Enemies = new List<Enemy>();
+	public List<EnemySO> Enemies = new List<EnemySO>();
 
 	
 	private void Awake() => GlobalVariables.ItemAssets = this;

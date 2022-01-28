@@ -1,10 +1,12 @@
+using System;
+
 using UnityEngine;
 
 /// <summary>
 /// @Cse19455
 /// Real Blocket Controller
 /// </summary>
-public class BetterMovementScript : MonoBehaviour
+public class Movement : MonoBehaviour
 {
 	#region Properties + Atributes
 	#region Player-Settings
@@ -15,6 +17,7 @@ public class BetterMovementScript : MonoBehaviour
 	#endregion
 
 	#region State-variables
+	//TODO change to boolean lookinng left/right
 	private int side;
 	private bool lockvar = false;
 	private float countdown;
@@ -25,6 +28,8 @@ public class BetterMovementScript : MonoBehaviour
 	public ParticleSystem dust;
 	public ParticleSystem wallDust;
 	public Animator animator;
+
+	public Transform PlayerModelT => GlobalVariables.PlayerVariables.playerModel.transform != null ? GlobalVariables.PlayerVariables.playerModel.transform : throw new NullReferenceException();
 	#endregion
 
 	#region UnityMethods
@@ -63,7 +68,7 @@ public class BetterMovementScript : MonoBehaviour
 				if (playerRigidbody.velocity.y == 0)
 					CreateDust();
 				side = 1;
-				GlobalVariables.LocalPlayer.GetComponentInChildren<Animator>().gameObject.transform.localScale = new Vector3(GlobalVariables.LocalPlayer.GetComponentInChildren<Animator>().gameObject.transform.localScale.x + side * 0.05f, 1, 0);
+				PlayerModelT.localScale = new Vector3(side, 1, 0);
 			}
 		}
 		else if (movement < 0)
@@ -74,7 +79,7 @@ public class BetterMovementScript : MonoBehaviour
 				if (playerRigidbody.velocity.y == 0)
 					CreateDust();
 				side = -1;
-				GlobalVariables.LocalPlayer.GetComponentInChildren<Animator>().gameObject.transform.localScale = new Vector3(GlobalVariables.LocalPlayer.GetComponentInChildren<Animator>().gameObject.transform.localScale.x + side * 0.05f, 1, 0);
+				PlayerModelT.localScale = new Vector3(side, 1, 0);
 			}
 		}
 		else
@@ -98,10 +103,7 @@ public class BetterMovementScript : MonoBehaviour
 	}
 	#endregion
 
-	private void CreateDust()
-	{
-		dust.Play();
-	}
+	private void CreateDust() => dust.Play();
 
 	private void CreateWallDust()
 	{
@@ -111,11 +113,8 @@ public class BetterMovementScript : MonoBehaviour
 
 	private void TurnAnim()
 	{
-		if(GlobalVariables.LocalPlayer.GetComponentInChildren<Animator>().gameObject.transform.localScale.x!=side && side!=0 
-			&& GlobalVariables.LocalPlayer.GetComponentInChildren<Animator>().gameObject.transform.localScale.x <1
-			&& GlobalVariables.LocalPlayer.GetComponentInChildren<Animator>().gameObject.transform.localScale.x >-1)
-			GlobalVariables.LocalPlayer.GetComponentInChildren<Animator>().gameObject.transform.localScale = new Vector3(GlobalVariables.LocalPlayer.GetComponentInChildren<Animator>().gameObject.transform.localScale.x+side*0.05f, 1, 0);
-		
+		//if (PlayerModelT.localScale.x != side && side != 0 && PlayerModelT.localScale.x < 1 && PlayerModelT.localScale.x > -1)
+		//	PlayerModelT.localScale = new Vector3(PlayerModelT.localScale.x + side * 0.05f, 1, 0);
 	}    
 
 	/// <summary>
@@ -223,7 +222,7 @@ public class BetterMovementScript : MonoBehaviour
 	/// <summary>
 	/// Motion Sickness Incoming
 	/// </summary>
-	private void iSpinMyHeadRightRoundRightRoundWhenYouGoDown()
+	private void ISpinMyHeadRightRoundRightRoundWhenYouGoDown()
 	{
 		gameObject.transform.rotation = Quaternion.Euler(new Vector3(gameObject.transform.rotation.eulerAngles.x, gameObject.transform.rotation.eulerAngles.y, gameObject.transform.rotation.eulerAngles.z + 0.1f));
 	}
