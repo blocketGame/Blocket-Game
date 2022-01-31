@@ -21,7 +21,7 @@ public class SlotOptionsScript : MonoBehaviour, IPointerClickHandler {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             GameObject.FindWithTag("Player").GetComponent<Inventory>().PressedSlot(invSlot);
-            if (DebugVariables.itemSlotButtonPressedLog)
+            if (DebugVariables.ItemSlotButtonPressedLog)
                 Debug.Log("Button Pressed");
 
             SlotOptions = GameObject.FindWithTag("SlotOptions");

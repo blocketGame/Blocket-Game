@@ -4,7 +4,8 @@ using UnityEngine;
 
 /// <summary>
 /// @Cse19455
-/// Real Blocket Controller
+/// Real Player Controller<br></br>
+/// TODO: Move animations to own class
 /// </summary>
 public class Movement : MonoBehaviour
 {
@@ -32,15 +33,26 @@ public class Movement : MonoBehaviour
 	public Transform PlayerModelT => GlobalVariables.PlayerVariables.playerModel.transform != null ? GlobalVariables.PlayerVariables.playerModel.transform : throw new NullReferenceException();
 	#endregion
 
+	public bool PlayerLocked{ get => _playerLocked; 
+	private set {
+			playerRigidbody.simulated = !value;
+			playerRigidbody.bodyType = value ? RigidbodyType2D.Static : RigidbodyType2D.Dynamic;
+			_playerLocked = value;
+		}
+	}
+	private bool _playerLocked;
+
 	#region UnityMethods
 	protected void FixedUpdate()
 	{
 		if (GameManager.State != GameState.INGAME)
 			return;
+		if (CheckChunk())
+			return;
 		Clipping();
 	}
 
-	protected void Update()
+	public void Update()
 	{
 		if (GameManager.State != GameState.INGAME)
 			return;
@@ -101,7 +113,18 @@ public class Movement : MonoBehaviour
 
 		
 	}
+
+	public void Awake() => GlobalVariables.Movement = this;
 	#endregion
+
+	/// <summary> Let the player be locked if the chunk is not loaded/imported/visible</summary>
+	/// <returns><see langword="true"/> if player is locked</returns>
+	public bool CheckChunk() {
+		bool locked = GlobalVariables.TerrainHandler.CurrentChunkReady;
+		if (locked != PlayerLocked)
+			PlayerLocked = locked;
+		return locked;
+	}
 
 	private void CreateDust() => dust.Play();
 

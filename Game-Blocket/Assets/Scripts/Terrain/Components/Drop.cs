@@ -10,13 +10,15 @@ public class Drop{
 	[SerializeField]
 	private string _name;
 	[SerializeField]
-	private byte _dropID, _count;
+	private uint _itemId;
+	[SerializeField]
+	private ushort _count;
 
 	public Vector3 Position { get; set; }
 
-	public byte DropID { get => _dropID; set => _dropID = value; }
+	public uint ItemId { get => _itemId; set => _itemId = value; }
 	public string Name { get => _name; set => _name = value; }
 	public GameObject GameObject { get => _gameObject; set => _gameObject = value; }
-	public byte Count { get => _count; set => _count = value; }
+	public ushort Count { get => _count; set => _count = value; }
 	#endregion
 }

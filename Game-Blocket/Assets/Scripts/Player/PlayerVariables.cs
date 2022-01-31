@@ -1,11 +1,13 @@
+using System;
+
 using UnityEngine;
 
 public class PlayerVariables : MonoBehaviour
 {
 	#region Static Resources
-	public UIInventory uIInventory;
-	public HealthScript healthScript;
+	
 	public GameObject playerModel, playerLogic;
+	public SpriteRenderer holdingItemPlaceholder;
 	#endregion
 
 	#region Dyniamic Variables
@@ -24,8 +26,9 @@ public class PlayerVariables : MonoBehaviour
 		set 
 		{ 
 			_health = value;
-			uIInventory.heartStat.text = $"{_health}/{_maxHealth}";
-			healthScript.CurrentHealth = _health;
+			if(GlobalVariables.UIInventory?.heartStat != null)
+				GlobalVariables.UIInventory.heartStat.text = $"{_health}/{_maxHealth}";
+			GlobalVariables.PlayerHealth.CurrentHealth = _health;
 		} 
 	}
 	public ushort MaxHealth {
@@ -33,26 +36,27 @@ public class PlayerVariables : MonoBehaviour
 		set 
 		{ 
 			_maxHealth = value;
-			uIInventory.heartStat.text = $"{_health}/{_maxHealth}";
-			healthScript.maxHealth = _maxHealth;
-			healthScript.InitiateSprites();
+			if (GlobalVariables.UIInventory?.heartStat != null)
+				GlobalVariables.UIInventory.heartStat.text = $"{_health}/{_maxHealth}";
+			GlobalVariables.PlayerHealth.maxHealth = _maxHealth;
+			GlobalVariables.PlayerHealth.InitiateSprites();
 		}
 	}
 	public ushort MaxArmor {
 		get => _maxArmor;
-		set { _maxArmor = value;	uIInventory.shieldStat.text = $"{_armor}/{_maxArmor}";}
+		set { _maxArmor = value; GlobalVariables.UIInventory.shieldStat.text = $"{_armor}/{_maxArmor}";}
 	}
 	public ushort Armor {
 		get => _armor;
-		set { _armor = value; uIInventory.shieldStat.text = $"{_armor}/{_maxArmor}"; }
+		set { _armor = value; GlobalVariables.UIInventory.shieldStat.text = $"{_armor}/{_maxArmor}"; }
 	}
 	public ushort Strength {
 		get => _strength;
-		set { _strength = value; uIInventory.swordStat.text = $"{_strength}/{_maxStrength}"; }
+		set { _strength = value; GlobalVariables.UIInventory.swordStat.text = $"{_strength}/{_maxStrength}"; }
 	}
 	public ushort MaxStrength {
 		get => _maxStrength;
-		set { _maxStrength = value; uIInventory.swordStat.text = $"{_strength}/{_maxStrength}"; }
+		set { _maxStrength = value; GlobalVariables.UIInventory.swordStat.text = $"{_strength}/{_maxStrength}"; }
 	}
 	#endregion
 
@@ -74,14 +78,16 @@ public class PlayerVariables : MonoBehaviour
 		//TODO
 	}
 
-	public void Awake1()
-	{
-		healthScript?.InitiateSprites();
-		MaxHealth = 40;
-		MaxArmor = 40;
-		MaxStrength = 40;
-		Health = MaxHealth;
-		Armor = 1;
-		Strength = 1;
+	public void ReloadItemInHand(){
+ 		holdingItemPlaceholder.sprite = GlobalVariables.Inventory.SelectedItemObj?.itemImage;
+    }
+
+	public void Init(){
+		MaxHealth = GameManager.playerProfileNow.maxHealth;
+		Health = GameManager.playerProfileNow.health != 0 ? GameManager.playerProfileNow.health : MaxHealth;
+		Armor = GameManager.playerProfileNow.armor;
+		healthGained = GameManager.playerProfileNow.healthGained;
+		healthLost = GameManager.playerProfileNow.healthLost;
+
 	}
 }

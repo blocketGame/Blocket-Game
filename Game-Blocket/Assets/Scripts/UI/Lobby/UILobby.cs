@@ -70,8 +70,8 @@ public class UILobby : NetworkBehaviour {
 		});
 		hostBtn.onClick.AddListener(() => {
 			CheckAndSetInputs();
-			if (GlobalVariables.ipAddress != "127.0.0.1")
-				GlobalVariables.ipAddress = GetLocalIPAddress();
+			if (NetworkVariables.ipAddress != "127.0.0.1")
+				NetworkVariables.ipAddress = GetLocalIPAddress();
 			SiteIndexOpen = useProfiles ? (byte)2 : (byte)1;
 			SetNetworkAddress();
 			NetworkManager.Singleton.StartHost(null, null, false, playPrefab.PrefabHash);
@@ -106,14 +106,14 @@ public class UILobby : NetworkBehaviour {
 		//NetworkManager.Singleton.OnClientConnectedCallback += ClientConnectCallback;
 		SceneManager.sceneLoaded += GlobalVariables.GameManager.SceneSwitched;
 		SiteIndexOpen = 0;
-		ipPlaceHolder.text = GlobalVariables.ipAddress;
+		ipPlaceHolder.text = NetworkVariables.ipAddress;
 		InitButtons();
 	}
 
 	private void SetNetworkAddress()
 	{
-		GlobalVariables.GameManager.uNetTransport.ConnectAddress = GlobalVariables.ipAddress;
-		GlobalVariables.GameManager.uNetTransport.ConnectPort = GlobalVariables.portAddress;
+		GlobalVariables.GameManager.uNetTransport.ConnectAddress = NetworkVariables.ipAddress;
+		GlobalVariables.GameManager.uNetTransport.ConnectPort = NetworkVariables.portAddress;
 	}
 
 	/// <summary>
@@ -122,14 +122,14 @@ public class UILobby : NetworkBehaviour {
 	/// <returns></returns>
 	private void CheckAndSetInputs(){
 		if (ipInput.text.Length > 8 && ipInput.text.Trim() != string.Empty && ipInput.text.IndexOf(".") != ipInput.text.LastIndexOf("."))
-			GlobalVariables.ipAddress = ipInput.text;
+			NetworkVariables.ipAddress = ipInput.text;
 		else
-			Debug.LogWarning($"IP-Input empty! Using: {GlobalVariables.ipAddress}");
+			Debug.LogWarning($"IP-Input empty! Using: {NetworkVariables.ipAddress}");
 			
 		if (portInput.text.Trim() != "" && portInput.text.ToUpper() == portInput.text.ToLower())
-			GlobalVariables.portAddress = int.Parse(portInput.text);
+			NetworkVariables.portAddress = int.Parse(portInput.text);
 		else
-			Debug.LogWarning($"Port-Input empty! Using: {GlobalVariables.portAddress}");
+			Debug.LogWarning($"Port-Input empty! Using: {NetworkVariables.portAddress}");
 		
 	}
 

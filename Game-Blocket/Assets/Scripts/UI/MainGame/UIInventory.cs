@@ -61,12 +61,12 @@ public class UIInventory : MonoBehaviour {
 	public Image inventoryBackgroundImage;
 	/// <summary>Prefab from Inspector</summary>
 	public GameObject prefabItemSlot;
-	/// <summary>ItemAssets - Prefab </summary>
-	public ItemAssets itemAssets;
-	/// <summary><see cref="Inventory"/></summary>
-	private Inventory _inventory;
+	
 	public GameObject _slotOptions;
-	#endregion
+    #endregion
+
+    /// <summary><see cref="global::Inventory"/></summary>
+    private Inventory Inventory => GlobalVariables.Inventory;
 
 	#region Initzializement
 
@@ -78,12 +78,6 @@ public class UIInventory : MonoBehaviour {
 		InitHudSlots();
 		//InitPlayerInfo();
 		InitAtHand();
-		itemAssets = GlobalVariables.GlobalAssets.GetComponent<ItemAssets>();
-		if (!itemAssets)
-			Debug.LogException(new NullReferenceException("Item Assets not found!"));
-		/*if(GlobalVariables.itemTest)
-			foreach(Item i in itemAssets.BlockItemsInGame)
-				_inventory.AddItem(i);*/
 	}
 
 	/// <summary>
@@ -97,12 +91,12 @@ public class UIInventory : MonoBehaviour {
 		Destroy(atHandSlot.GetComponentInChildren<Button>());
 
 		UIInventorySlot atHandUISlot = atHandSlot.GetComponent<UIInventorySlot>();
-		_inventory.atHand = atHandUISlot;
+		Inventory.atHand = atHandUISlot;
 		atHandUISlot.itemImage.raycastTarget = false;
 
 		RectTransform atHandT = atHandSlot.GetComponent<RectTransform>();
 		atHandT.localScale = new Vector3(0.8f, 0.8f, 1);
-		_inventory.atHandVector = new Vector2(-atHandT.rect.width / 2, atHandT.rect.height / 2);
+		Inventory.atHandVector = new Vector2(-atHandT.rect.width / 2, atHandT.rect.height / 2);
 	}
 
 	/// <summary>
@@ -145,10 +139,12 @@ public class UIInventory : MonoBehaviour {
 				float itemSlotY = slotField.transform.position.y - (prefH * a + spaceToBorderY + rowspacingInvSlot * a);
 				//Instantiate the Gameobject
 				GameObject itemSlot = Instantiate(prefabItemSlot, new Vector3Int((int)(itemSlotX), (int)(itemSlotY), 1), Quaternion.identity, slotField.transform);
+				if (a == 0)
+					itemSlot.GetComponent<UIInventorySlot>().isHotBarSlot = true;
 				//Name it
 				itemSlot.name = $"Slot {a} - {b}";
 				//Add to Inventory Logic
-				_inventory.InvSlots.Add(itemSlot.GetComponent<UIInventorySlot>());
+				Inventory.InvSlots.Add(itemSlot.GetComponent<UIInventorySlot>());
 			}
 		}
 	}
@@ -169,32 +165,30 @@ public class UIInventory : MonoBehaviour {
 			itemSlot.name = $"HudSlot {a}";
 			//Specify that it is a HotbarSlot
 			itemSlot.GetComponent<UIInventorySlot>().isHotBarSlot = true;
-			itemSlot.GetComponent<UIInventorySlot>().parent = _inventory.InvSlots[a];
+			itemSlot.GetComponent<UIInventorySlot>().parent = Inventory.InvSlots[a];
 			//Add to Inventory Logic
-			_inventory.HudSlots.Add(itemSlot.GetComponent<UIInventorySlot>());
+			Inventory.HudSlots.Add(itemSlot.GetComponent<UIInventorySlot>());
 		}
-		_inventory.SelectedSlot = 0;
+	}
+
+	public void Init(){
+		if (Inventory == null)
+			Debug.LogError("Inventory not found!");
+		ReloadSettings();
+		InitUI();
+		Inventory.ArmorSlots = armorSlots;
+		Inventory.AccessoiresSlots = accessoiresSlots;
+		InventoryOpened = false;
+		Inventory.SelectedSlot = 0;
 	}
 	#endregion
 
 	#region UnityMethods
 	/// <summary>"Reload" at the beginning</summary>
 	public void Awake() {
-		GlobalVariables.PlayerVariables.uIInventory = this;
-		GlobalVariables.PlayerVariables.healthScript = GetComponentInChildren<HealthScript>();
-		GlobalVariables.PlayerVariables.MaxHealth = GlobalVariables.PlayerVariables.MaxHealth;
-		GlobalVariables.PlayerVariables.Health = GlobalVariables.PlayerVariables.Health;
+		GlobalVariables.UIInventory = this;
 		name = "UI";
-		_inventory = GlobalVariables.Inventory;
-		if (_inventory == null)
-			Debug.LogError("Inventory not found!");
-		ReloadSettings();
-		InitUI();
-		_inventory.ArmorSlots = armorSlots;
-		_inventory.AccessoiresSlots = accessoiresSlots;
-		InventoryOpened = false;
 	}
-
 
 	public void Update() {
 		if (GameManager.State != GameState.INGAME)
@@ -204,23 +198,21 @@ public class UIInventory : MonoBehaviour {
 			InventoryOpened = !InventoryOpened;
 			if (!InventoryOpened)
 				SynchronizeToHotbar();
-			else
-				SynchronizeToInv();
 			uiHud.SetActive(!InventoryOpened);
 
 		}
 		if (Input.mouseScrollDelta.y != 0) {
 			float val = Input.mouseScrollDelta.y;
 			if (val < 0)
-				if(_inventory.SelectedSlot == _inventory.HudSlots.Count - 1)
-					_inventory.SelectedSlot = 0;
+				if(Inventory.SelectedSlot == Inventory.HudSlots.Count - 1)
+					Inventory.SelectedSlot = 0;
 				else
-					_inventory.SelectedSlot += 1;
+					Inventory.SelectedSlot += 1;
 			else
-				if (_inventory.SelectedSlot == 0)
-					_inventory.SelectedSlot = (byte)(_inventory.HudSlots.Count - 1);
+				if (Inventory.SelectedSlot == 0)
+					Inventory.SelectedSlot = (byte)(Inventory.HudSlots.Count - 1);
 				else
-					_inventory.SelectedSlot -= 1;
+					Inventory.SelectedSlot -= 1;
 		}
 	}
 	#endregion
@@ -267,34 +259,16 @@ public class UIInventory : MonoBehaviour {
 	/// <summary>
 	/// Synchronizes Hotbar State of Slots Row 1
 	/// </summary>
-	public void SynchronizeToInv() {
-		foreach (UIInventorySlot sl in _inventory.InvSlots) {
-			if (sl.isHotBarSlot) {
-				///[TODO]
-				foreach (UIInventorySlot sl1 in _inventory.InvSlots) {
-					if (!sl1.isHotBarSlot && sl.parent.name.Equals(sl1.name)) {
-						sl1.ItemID = sl.ItemID;
-						sl1.ItemCount = sl.ItemCount;
-					}
-				}
-			}
-		}
-	}
+
 	/// <summary>
 	/// Synchronizes Inventory State of Slots Row 1
 	/// </summary>
 	public void SynchronizeToHotbar() {
-		foreach (UIInventorySlot sl in _inventory.InvSlots) {
-			if (sl.isHotBarSlot) {
-				///[TODO]
-				foreach (UIInventorySlot sl1 in _inventory.InvSlots) {
-					if (!sl1.isHotBarSlot && sl.parent.name.Equals(sl1.name)) {
-						sl.ItemID = sl1.ItemID;
-						sl.ItemCount = sl1.ItemCount;
-					}
-				}
+		for(int i = 0; i < Inventory.HudSlots.Count; i++){ 
+				Inventory.HudSlots[i].ItemID = Inventory.InvSlots[i].ItemID;
+				Inventory.HudSlots[i].ItemCount = Inventory.InvSlots[i].ItemCount;	
 			}
-		}
+		GlobalVariables.PlayerVariables.ReloadItemInHand();
 	}
 	#endregion
 

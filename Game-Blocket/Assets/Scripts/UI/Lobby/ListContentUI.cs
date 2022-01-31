@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class ListContentUI : MonoBehaviour
 {
 	public Text contentName;
-	public Button btn;
+	public Button mainBtn, deleteBtn, renameBtn;
 
 	public static string selectedBtnNameCharacter, selectedBtnNameWorld;
 
@@ -21,12 +21,21 @@ public class ListContentUI : MonoBehaviour
 	}
 
 	public void Awake() {
-		btn.onClick.AddListener(() => {
+		mainBtn.onClick.AddListener(() => {
 			if(CharacterBtn)
 				selectedBtnNameCharacter = contentName.text;
 			else
 				selectedBtnNameWorld = contentName.text;
 			GlobalVariables.UIProfileSite.SelectedItem();
+		});
+
+		deleteBtn.onClick.AddListener(() => {
+			if(DebugVariables.ShowlobbyButtons)
+				Debug.Log("Delete");
+		});
+		renameBtn.onClick.AddListener(() => {
+			if (DebugVariables.ShowlobbyButtons)
+				Debug.Log("Rename");
 		});
 	}
 }

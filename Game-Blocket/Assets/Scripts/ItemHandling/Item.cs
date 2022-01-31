@@ -37,16 +37,17 @@ public abstract class Item{
 
 [Serializable]
 public class BlockItem : Item {
-	public uint blockId;
+	public byte blockId;
 }
 
 [Serializable]
 public class ToolItem : Item {
 	public ushort durability, damage;
+	public byte toolHardness;
 	public ToolType toolType;
 
 	public enum ToolType {
-		SWORD, SHOVEL, AXE, BOW, PICKAXE
+		MEELE, RANGE, SHOVEL, AXE, PICKAXE, DEFAULT
 	}
 }
 
@@ -58,5 +59,10 @@ public class EquipableItem : Item {
 
 [Serializable]
 public class UseAbleItem : Item{
+
+}
+
+[Serializable]
+public class CommonItem : Item{
 
 }

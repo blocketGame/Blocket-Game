@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 /// <summary>
+/// Class that is used to store running variables of an world
 /// TODO: Move to TerrainGeneeration
 /// <b>Author : Cse19455 / Thomas Boigner</b>
 /// </summary>
@@ -14,15 +15,7 @@ public class WorldData : NetworkBehaviour
 {
 	#region Fields
 	[SerializeField]
-	private Biom[] biom;
-	[SerializeField]
-	private BlockData[] blocks;
-	[SerializeField]
-	private int chunkWidth;
-	[SerializeField]
-	private int chunkHeight;
-	[SerializeField]
-	private int chunkDistance;
+	private int chunkDistance; //Settings
 	[SerializeField]
 	private int seed;
 	[SerializeField]
@@ -42,8 +35,6 @@ public class WorldData : NetworkBehaviour
 	private int heightMultiplier;
 	[SerializeField]
 	private AnimationCurve heightcurve;
-	[SerializeField]
-	private Grid grid;
 	[SerializeField]
 	private float groupdistance;
 	[SerializeField]
@@ -65,11 +56,14 @@ public class WorldData : NetworkBehaviour
 	public float Scale { get => scale; set => scale = value; }
 	public int Seed { get => seed; set => seed = value; }
 	public int ChunkDistance { get => chunkDistance; set => chunkDistance = value; }
-	public int ChunkHeight { get => chunkHeight; set => chunkHeight = value; }
-	public int ChunkWidth { get => chunkWidth; set => chunkWidth = value; }
-	public BlockData[] Blocks { get => blocks; set => blocks = value; }
-	public Biom[] Biom{	get => biom; set => biom = value;}
-	public Grid Grid { get => grid; set => grid = value; }
+
+	//Shortcuts
+	public int ChunkHeight => WorldAssets.ChunkLength;
+	public int ChunkWidth => WorldAssets.ChunkLength;
+	public BlockData[] Blocks => GlobalVariables.WorldAssets.blocks.ToArray();
+
+	public Grid Grid { get; set; }
+
 	public float Groupdistance { get => groupdistance; set => groupdistance = value; }
 	public float PickUpDistance { get => pickUpDistance; set => pickUpDistance = value; }
 	public Dictionary<int, float[]> Noisemaps { get; set; } = new Dictionary<int, float[]>();
@@ -80,74 +74,6 @@ public class WorldData : NetworkBehaviour
 	/// <summary>Stores this class to <see cref="GlobalVariables"/></summary>
 	public void Awake() => GlobalVariables.WorldData = this;
 
-	public byte GetBlockFromTile(TileBase tile)
-	{
-		foreach (BlockData b in blocks)
-		{
-			if (b.Tile != null)
-				if (b.Tile.Equals(tile))
-					return b.BlockID;
-		}
-		return 0;
-	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="type"></param>
-	/// <returns></returns>
-	public List<Biom> GetBiomsByType(Biomtype type) {
-		List<Biom> biomlist = new List<Biom>();
-		foreach (Biom b in Biom) {
-			if (b.Biomtype.Contains(type))
-				biomlist.Add(b);
-		}
-		return biomlist;
-	}
-
-
-	#region Filehandling
-
-	/// <summary>
-	/// Creates Blocks.txt file as documentation for the blocks array
-	/// </summary>
-
-	public void PutBlocksIntoTxt()
-	{
-		string writeContent = "# This File is considered as documentation tool for the Blocks and their Ids \n";
-		for (int x = 0; x < blocks.Length; x++)
-		{
-			writeContent += "\n" +
-				" ID : " + blocks[x].BlockID + "\n" +
-				" Name : " + blocks[x].Name + "\n";
-		}
-
-		File.WriteAllText("Docs/Blocks.txt", writeContent);
-	}
-
-	public void PutBiomsIntoTxt()
-	{
-		string writeContent = "# This File is considered as documentation tool for the Bioms and their Indizes \n";
-		for (int x = 0; x < biom.Length; x++)
-		{
-			writeContent += "\n" +
-				" ID : " + biom[x].Index + "\n" +
-				" BiomName : " + biom[x].BiomName + "\n";
-			for (int y = 0; y < biom[x].Regions.Length; y++)
-			{
-				writeContent += "\n" +
-				"\t ID : " + biom[x].Regions[y].BlockID + "\n" +
-				"\t Range : " + biom[x].Regions[y].RegionRange + "\n";
-			}
-
-		}
-
-		writeContent += "\n ---------------------------- Rules ---------------------------------- \n Range : -1 => Infinity";
-
-		File.WriteAllText("Docs/Bioms.txt", writeContent);
-	}
-
-	#endregion
 }
 
 #region WorldDataAssets
@@ -173,6 +99,7 @@ public struct OreData
 [System.Serializable]
 public struct RegionData
 {
+	public string description;
 	[SerializeField]
 	private int regionRange; //-1 => infinite range
 	[SerializeField]
@@ -182,37 +109,5 @@ public struct RegionData
 	public byte BlockID { get => blockID; set => blockID = value; }
 }
 
-[System.Serializable]
-public struct BlockData
-{
-	#region Specification
-	[SerializeField]
-	private string _name;
-	[SerializeField]
-	private byte _blockID;
 
-	public string Name { get => _name; set => _name = value; }
-	public byte BlockID { get => _blockID; set => _blockID = value; }
-	#endregion
-
-	#region Graphics
-	[SerializeField]
-	private TileBase _tile;
-	[SerializeField]
-	private Sprite sprite;
-
-	public TileBase Tile { get => _tile; set => _tile = value; }
-	public Sprite Sprite { get => sprite; set => sprite = value; }
-	#endregion
-
-	#region Settings
-	[SerializeField]
-	private byte removeDuration;
-	[SerializeField]
-	private byte item;
-
-	public byte RemoveDuration { get => removeDuration; set => removeDuration = value; }
-	public byte Item1 { get => item; set => item = value; }
-	#endregion
-}
 #endregion

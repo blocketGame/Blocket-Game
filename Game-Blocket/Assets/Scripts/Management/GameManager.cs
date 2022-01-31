@@ -28,6 +28,7 @@ public class GameManager : NetworkBehaviour
 	public static bool isMultiplayer = true;
 	public static List<NetworkObject> Players { get; } = new List<NetworkObject>();
 
+	//TODO not static
 	public static PlayerProfile playerProfileNow;
 	public static WorldProfile worldProfileNow;
 	public static SettingsProfile SPNow { get; private set; } = new SettingsProfile("local", null);
@@ -36,7 +37,7 @@ public class GameManager : NetworkBehaviour
 	//TODO: Coroutines, Ticks....
 
 	public static void SateSwitched(GameState state) {
-		if (DebugVariables.showGameStateEvent)
+		if (DebugVariables.ShowGameStateEvent)
 			Debug.Log($"GameState Switched to: {state}");
 		switch (state) {
 			case GameState.MENU: break;
@@ -65,8 +66,9 @@ public class GameManager : NetworkBehaviour
 	public void FixedUpdate()
 	{
 		if (GlobalVariables.LocalPlayer == null && State == GameState.LOADING){
-			FindAndSetPlayer();
 			InitPlayerComponents();
+			FindAndSetPlayer();
+			InitLocal();
 		}
 	}
 
@@ -97,6 +99,11 @@ public class GameManager : NetworkBehaviour
 		}
 	}
 
+	public void InitLocal(){
+		GlobalVariables.UIInventory.Init();
+		GlobalVariables.PlayerVariables.Init();
+	}
+
 	public void FindAndSetPlayer(){
 		foreach (GameObject iGo in GameObject.FindGameObjectsWithTag("Player"))
 		{
@@ -121,9 +128,8 @@ public class GameManager : NetworkBehaviour
 	/// <see cref="TerrainGeneration"/>, <see cref="UIInventory"/>...
 	/// </summary>
 	public void InitPlayerComponents() {
-		GlobalVariables.GlobalAssets = GameObject.Find("Assets");
 		//Inventory
-		GlobalVariables.localUI = Instantiate(GlobalVariables.PrefabAssets.prefabUI);
+		GlobalVariables.LocalUI = Instantiate(GlobalVariables.PrefabAssets.prefabUI);
 
 		//Worldgeneration
 		if (NetworkManager.Singleton.IsHost)
@@ -155,10 +161,10 @@ public class GameManager : NetworkBehaviour
 	public static void SaveAll() {
 		if (State != GameState.INGAME && State != GameState.PAUSED)
 			return;
-		ProfileHandler.SavePlayerProfile();
+		PlayerProfile.SavePlayerProfile();
 		ProfileHandler.ExportProfile(playerProfileNow, true);
-		ProfileHandler.SaveComponentsInWorldProfile(worldProfileNow);
-		ProfileHandler.SaveWorld(worldProfileNow);
+		WorldProfile.SaveComponentsInWorldProfile();
+		WorldProfile.SaveWorld(worldProfileNow);
 	}
 
 }

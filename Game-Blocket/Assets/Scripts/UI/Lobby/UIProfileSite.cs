@@ -58,18 +58,19 @@ public class UIProfileSite : MonoBehaviour {
 
 	public void SelectedItem() {
 		//UI
-		if (CharacterSelectionOpen && NetworkManager.Singleton.IsClient)
-				CharacterSelectionOpen = false;
-			else if(((ListContentUI.selectedBtnNameCharacter?.Trim() == string.Empty ) != NetworkManager.Singleton.IsClient) && ((ListContentUI.selectedBtnNameWorld?.Trim() == string.Empty) != NetworkManager.Singleton.IsServer)) {
-			GameManager.playerProfileNow = ProfileHandler.ImportProfile(ListContentUI.selectedBtnNameCharacter, true) as PlayerProfile;
-			GameManager.worldProfileNow = new WorldProfile(ListContentUI.selectedBtnNameWorld, null);
-			GlobalVariables.UILobby.SiteIndexOpen = 1;
-			}
+		if (CharacterSelectionOpen && NetworkManager.Singleton.IsClient) { 
+			CharacterSelectionOpen = false;
+			createInput.text = string.Empty;
+		}else if(((ListContentUI.selectedBtnNameCharacter?.Trim() == string.Empty ) != NetworkManager.Singleton.IsClient) && ((ListContentUI.selectedBtnNameWorld?.Trim() == string.Empty) != NetworkManager.Singleton.IsServer)) {
+		GameManager.playerProfileNow = ProfileHandler.ImportProfile(ListContentUI.selectedBtnNameCharacter, true) as PlayerProfile;
+		GameManager.worldProfileNow = new WorldProfile(ListContentUI.selectedBtnNameWorld, null);
+		GlobalVariables.UILobby.SiteIndexOpen = 1;
+		}
 					
 	}
 
 	private void InitButtons(){
-		if(GlobalVariables.muliplayer)
+		if(NetworkVariables.muliplayer)
 			if(NetworkManager.Singleton.IsClient)
 				worldSelectBtn.interactable = false;
 
@@ -119,7 +120,7 @@ public class UIProfileSite : MonoBehaviour {
 	public void FindAllProfiles() {
 		FoundPlayerProfiles = ProfileHandler.FindAllProfiles(true);
 		FoundWorldProfiles = ProfileHandler.FindAllProfiles(false);
-		if(DebugVariables.checkProfileCount)
+		if(DebugVariables.CheckProfileCount)
 			Debug.Log($"PlayerProfiles: {FoundPlayerProfiles.Count}, WorldProfiles: {FoundWorldProfiles.Count}");
 	}
 
