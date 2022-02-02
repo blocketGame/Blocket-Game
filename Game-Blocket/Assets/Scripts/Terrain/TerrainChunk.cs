@@ -1,4 +1,3 @@
-using MLAPI.Serialization;
 
 using System;
 using System.Collections.Generic;
@@ -202,14 +201,8 @@ public sealed class TerrainChunk : ChunkData{
 	public void DeleteBlock(Vector3Int coordinate) {
 		//if (BlockIDs[(coordinate.x - GlobalVariables.WorldData.ChunkWidth * ChunkPositionInt.x), (coordinate.y - GlobalVariables.WorldData.ChunkHeight * ChunkPositionInt.y)] == 0) return;
 		byte blockId = BlockIDs[coordinate.x, coordinate.y];
-		uint itemId = GlobalVariables.ItemAssets.GetItemIdFromBlockID(blockId);
-
 		if (blockId == 0) {
 			Debug.LogWarning("Destoryed Air!");
-			return;
-		}
-		if (itemId == 0) {
-			Debug.LogWarning($"No existing Item to blockID:{blockId}");
 			return;
 		}
 
@@ -217,8 +210,20 @@ public sealed class TerrainChunk : ChunkData{
 		TileMap.SetTile(coordinate, GlobalVariables.WorldData.Blocks[0].tile);
 
 		BuildCollisions();
-		InstantiateDrop(coordinate, 1, itemId);
+		
+		foreach(uint itemId in GetDroppedIDs(blockId))
+			InstantiateDrop(coordinate, 1, itemId);
 	}
+
+	public List<uint> GetDroppedIDs(byte blockId){
+		List<uint> ids = new List<uint>();
+		System.Random rand = new System.Random();
+		foreach (BlockData.BlockDropAble blockDropAble in GlobalVariables.WorldAssets.GetBlockbyId(blockId).blockDrops)
+			if(GlobalVariables.Inventory.SelectedItemObj is ToolItem tool && tool.toolType == blockDropAble.toolItemType || blockDropAble.toolItemType == ToolItem.ToolType.DEFAULT)
+				if ((rand.NextDouble() * 100) + 1 < blockDropAble.dropchance)
+					ids.Add(blockDropAble.itemID);
+		return ids;
+    }
 	#endregion
 
 	#region Dropinteraction
@@ -257,7 +262,6 @@ public sealed class TerrainChunk : ChunkData{
 		BoxCollider2D dropCollider = drop.GameObject.AddComponent<BoxCollider2D>();
 
 		Physics2D.IgnoreCollision(TileMapCollider, dropCollider, false);
-		Physics2D.IgnoreLayerCollision(GlobalVariables.LocalPlayer.layer, LayerMask.NameToLayer("Drops"), true);
 
 		drop.GameObject.AddComponent<SpriteRenderer>().sprite = GlobalVariables.ItemAssets.GetSpriteFromItemID(itemID);
 

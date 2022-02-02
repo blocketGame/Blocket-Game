@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class PlayerVariables : MonoBehaviour
 {
+	public Gamemode Gamemode { get; set; } = Gamemode.SURVIVAL;
+
 	#region Static Resources
-	
 	public GameObject playerModel, playerLogic;
 	public SpriteRenderer holdingItemPlaceholder;
 	#endregion
@@ -79,8 +80,8 @@ public class PlayerVariables : MonoBehaviour
 	}
 
 	public void ReloadItemInHand(){
- 		holdingItemPlaceholder.sprite = GlobalVariables.Inventory.SelectedItemObj?.itemImage;
-    }
+		holdingItemPlaceholder.sprite = GlobalVariables.Inventory.SelectedItemObj?.itemImage;
+	}
 
 	public void Init(){
 		MaxHealth = GameManager.playerProfileNow.maxHealth;
@@ -89,5 +90,12 @@ public class PlayerVariables : MonoBehaviour
 		healthGained = GameManager.playerProfileNow.healthGained;
 		healthLost = GameManager.playerProfileNow.healthLost;
 
+		Physics2D.IgnoreLayerCollision(GlobalVariables.LocalPlayer.layer, LayerMask.NameToLayer("Drops"), true);
+		Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Drops"), LayerMask.NameToLayer("Drops"));
 	}
+
+	
+}
+public enum Gamemode{
+	SURVIVAL, CREATIVE
 }

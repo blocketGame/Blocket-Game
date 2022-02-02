@@ -15,17 +15,13 @@ using static TerrainChunk;
 /// </summary>
 public  class TerrainHandler : MonoBehaviour
 {
-	private static readonly bool useItemer = false;
-	private readonly uint _checkTime = 1000;
 	private readonly byte _updatePayload = 2;
 	private readonly byte _pickUpDist = 2;
 
 	public GameObject ChunkParent;
 
 	public static Dictionary<Vector2Int, TerrainChunk> Chunks { get; } = new Dictionary<Vector2Int, TerrainChunk>();
-	public static Queue<TerrainChunk> ChunkCollisionQueue { get;} = new Queue<TerrainChunk>();
 	public static Queue<TerrainChunk> ChunkTileInitializationQueue { get;} = new Queue<TerrainChunk>();
-	public static Dictionary<ulong, Vector3> PlayerLastUpdate { get; } = new Dictionary<ulong, Vector3>();
 
 	public WorldData WD => GlobalVariables.WorldData;
 
@@ -33,7 +29,7 @@ public  class TerrainHandler : MonoBehaviour
 	public Vector2Int CurrentChunkCoord => new Vector2Int(Mathf.RoundToInt(PlPosNow.x / WD.ChunkWidth), Mathf.RoundToInt(PlPosNow.y / WD.ChunkHeight));
 
 	public TerrainChunk CurrentChunk => Chunks[CurrentChunkCoord];
-	public bool CurrentChunkReady => (CurrentChunk == null || !CurrentChunk.IsImported || !CurrentChunk.Visible);
+	public bool CurrentChunkReady => !(CurrentChunk == null || !CurrentChunk.IsImported || !CurrentChunk.Visible);
 
 	public static Vector3 PlPosNow { get; private set; }
 	public static Vector3 PlPosLastUpdateV { get; private set; } = new Vector3();

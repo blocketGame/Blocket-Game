@@ -120,7 +120,7 @@ public class Movement : MonoBehaviour
 	/// <summary> Let the player be locked if the chunk is not loaded/imported/visible</summary>
 	/// <returns><see langword="true"/> if player is locked</returns>
 	public bool CheckChunk() {
-		bool locked = GlobalVariables.TerrainHandler.CurrentChunkReady;
+		bool locked = !GlobalVariables.TerrainHandler.CurrentChunkReady;
 		if (locked != PlayerLocked)
 			PlayerLocked = locked;
 		return locked;

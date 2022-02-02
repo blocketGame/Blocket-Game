@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using static UnityEditor.Progress;
-
 /// <summary>
 /// Handles all items in Game
 /// </summary>
@@ -44,6 +42,9 @@ public class ItemAssets : MonoBehaviour
 			if (item.id == itemId)
 				return item;
 		foreach (Item item in UseableItemsInGame)
+			if (item.id == itemId)
+				return item;
+		foreach (Item item in CommonItems)
 			if (item.id == itemId)
 				return item;
 		Debug.LogWarning($"Item not found: {itemId}");

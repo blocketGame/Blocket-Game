@@ -59,6 +59,18 @@ MonoBehaviour:
     itemType: 1
     itemImage: {fileID: 21300000, guid: 74bbea64cb1802a43967b7af1eb4dd03, type: 3}
     blockId: 3
+  - name: Sand
+    id: 3
+    description: I do not know how i can hold that
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: 2df48377b487aa243b5a6e0e637890bc, type: 3}
+    blockId: 5
+  - name: Snowblock
+    id: 4
+    description: It is cold!
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: ef8a05a4ebd504240914473cda9b6542, type: 3}
+    blockId: 6
   ToolItemsInGame: []
   EquipableItemsInGame: []
   UseableItemsInGame: []
@@ -139,22 +151,37 @@ MonoBehaviour:
     blockID: 4
     tile: {fileID: 11400000, guid: 6db0c34d3b5fc7b49a67163528b99ce5, type: 2}
     removeDuration: 2
-    blockDrops: []
+    blockDrops:
+    - itemID: 3
+      dropchance: 100
+      toolItemType: 5
   - name: Sandblock
     blockID: 5
     tile: {fileID: 11400000, guid: 240b651a1bc670d4793c99d2d9d9748e, type: 2}
     removeDuration: 2
-    blockDrops: []
+    blockDrops:
+    - itemID: 3
+      dropchance: 100
+      toolItemType: 5
   - name: Snowblock
-    blockID: 0
+    blockID: 6
     tile: {fileID: 11400000, guid: cf38a69b1c9243a4a98ca4aca2367547, type: 2}
-    removeDuration: 0
-    blockDrops: []
+    removeDuration: 2
+    blockDrops:
+    - itemID: 4
+      dropchance: 100
+      toolItemType: 5
   - name: SnowedDirtblock
     blockID: 7
     tile: {fileID: 11400000, guid: 0230af7654f2e154f8a8cfe6ab61bdd1, type: 2}
     removeDuration: 2
-    blockDrops: []
+    blockDrops:
+    - itemID: 1
+      dropchance: 100
+      toolItemType: 5
+    - itemID: 4
+      dropchance: 50
+      toolItemType: 5
   - name: DirtBG
     blockID: 8
     tile: {fileID: 11400000, guid: 30439b9c5e3b02142848ef927c278843, type: 2}
@@ -169,17 +196,29 @@ MonoBehaviour:
     blockID: 10
     tile: {fileID: 11400000, guid: 368f8ab243ec2b24bb4dd5751cbf20f6, type: 2}
     removeDuration: 8
-    blockDrops: []
+    blockDrops:
+    - itemID: 5002
+      dropchance: 100
+      toolItemType: 4
   - name: Opal
     blockID: 11
     tile: {fileID: 11400000, guid: 69dd537b464e3f142b42eca477a96bc2, type: 2}
     removeDuration: 8
-    blockDrops: []
+    blockDrops:
+    - itemID: 5001
+      dropchance: 100
+      toolItemType: 4
   - name: Stone
     blockID: 12
     tile: {fileID: 11400000, guid: 4cd28115759dee2499f06013f9211b55, type: 2}
     removeDuration: 7
-    blockDrops: []
+    blockDrops:
+    - itemID: 2
+      dropchance: 50
+      toolItemType: 5
+    - itemID: 2
+      dropchance: 100
+      toolItemType: 4
   - name: SandBG
     blockID: 13
     tile: {fileID: 11400000, guid: 6a63c0c826cab3f4ea878397525659ce, type: 2}
