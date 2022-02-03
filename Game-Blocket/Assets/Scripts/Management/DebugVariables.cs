@@ -9,7 +9,7 @@
 	public static bool ShowMultipleTasksOrExecution => true;
 	public static bool ShowGameStateEvent => false;
 	public static bool BlockInteractionInfo => false;
-	public static bool BlockInteractionCR => false;
+	public static bool BlockInteractionCR => true;
 	public static bool ShowlobbyButtons => true;
 	public static bool ShowChunkHandle => false;
 }

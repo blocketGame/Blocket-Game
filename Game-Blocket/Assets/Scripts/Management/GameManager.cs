@@ -28,10 +28,9 @@ public class GameManager : NetworkBehaviour
 	public static bool isMultiplayer = true;
 	public static List<NetworkObject> Players { get; } = new List<NetworkObject>();
 
-	//TODO not static
-	public static PlayerProfile playerProfileNow;
-	public static WorldProfile worldProfileNow;
-	public static SettingsProfile SPNow { get; private set; } = new SettingsProfile("local", null);
+	public static PlayerProfile PlayerProfileNow { get; set; }
+	public static WorldProfile WorldProfileNow { get; set; }
+	public static SettingsProfile SettingsProfile { get; private set; } = new SettingsProfile("local", null);
 
 	public UNetTransport uNetTransport;
 	//TODO: Coroutines, Ticks....
@@ -162,9 +161,9 @@ public class GameManager : NetworkBehaviour
 		if (State != GameState.INGAME && State != GameState.PAUSED)
 			return;
 		PlayerProfile.SavePlayerProfile();
-		ProfileHandler.ExportProfile(playerProfileNow, true);
+		ProfileHandler.ExportProfile(PlayerProfileNow, true);
 		WorldProfile.SaveComponentsInWorldProfile();
-		WorldProfile.SaveWorld(worldProfileNow);
+		WorldProfile.SaveWorld(WorldProfileNow);
 	}
 
 }

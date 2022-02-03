@@ -37,7 +37,7 @@ public class PlayerProfile : Profile {
 
 	#region PlayerProfiles
 	public static void SavePlayerProfile() {
-		SaveComponentsInPlayerProfile(GameManager.playerProfileNow);
+		SaveComponentsInPlayerProfile(GameManager.PlayerProfileNow);
 	}
 
 	/// <summary>
@@ -75,9 +75,9 @@ public class PlayerProfile : Profile {
 	/// </summary>
 	/// <param name="profile"></param>
 	public static void LoadComponentsFromPlayerProfile(PlayerProfile profile) {
-		if (profile != null && GameManager.playerProfileNow == null)
-			GameManager.playerProfileNow = profile;
-		if (GameManager.playerProfileNow == null)
+		if (profile != null && GameManager.PlayerProfileNow == null)
+			GameManager.PlayerProfileNow = profile;
+		if (GameManager.PlayerProfileNow == null)
 			throw new NullReferenceException("PlayerProfile is null!");
 		Inventory inventory = GlobalVariables.Inventory;
 		if (inventory != null) {

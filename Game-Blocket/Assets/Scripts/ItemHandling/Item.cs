@@ -13,6 +13,13 @@ public abstract class Item{
 	public ItemType itemType;
 	public Sprite itemImage;
 
+	protected Action onMainInteractionKey;
+	protected Action onSideInteractionKey;
+	protected Action on2SideInteractionKey;
+
+	public Action OnMainInteractionKey => onMainInteractionKey ?? GlobalVariables.DoNothing;
+	public Action OnSideInteractionKey => onSideInteractionKey ?? GlobalVariables.DoNothing;
+
 	/// <summary>How much of the Item can be hold.</summary>
 	public enum ItemType {
 		SINGLE, STACKABLE
@@ -29,15 +36,15 @@ public abstract class Item{
 				return true;
 		return false;
 	}
-
-	public override int GetHashCode() {
-		return base.GetHashCode();
-	}
 }
 
 [Serializable]
 public class BlockItem : Item {
 	public byte blockId;
+
+	public BlockItem(){
+		onSideInteractionKey = () => GlobalVariables.Interaction.BlockPlace();
+	}
 }
 
 [Serializable]
@@ -49,6 +56,11 @@ public class ToolItem : Item {
 	public enum ToolType {
 		MEELE, RANGE, SHOVEL, AXE, PICKAXE, DEFAULT
 	}
+}
+
+[System.Serializable]
+public class MeeleItem : ToolItem{
+	
 }
 
 [Serializable]

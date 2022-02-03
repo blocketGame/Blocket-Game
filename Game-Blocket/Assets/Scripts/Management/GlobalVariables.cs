@@ -27,7 +27,6 @@ public static class GlobalVariables {
 	#endregion
 
 	#region World Scripts
-	
 	public static WorldData WorldData { get; set; }
 	public static TerrainGeneration TerrainGeneration { get; set; }
 	public static TerrainHandler TerrainHandler { get; set;}
@@ -50,7 +49,7 @@ public static class GlobalVariables {
 	public static PlayerVariables PlayerVariables { get => _playerVariables; }
 	private static PlayerVariables _playerVariables;
 	public static Vector3 LocalPlayerPos { get => LocalPlayer.transform.position; }
-
+	public static PlayerInteraction Interaction { get; set; }
 	public static Movement Movement { get; set; }
 
 	public static GameObject LocalPlayer
@@ -65,4 +64,10 @@ public static class GlobalVariables {
     private static GameObject _localPlayer;
 
 	#endregion
+
+	/// <summary>Does the nothing</summary>
+	public static void DoNothing(){
+		//Nothing
+		//DO NOT DELETE!
+    }
 }

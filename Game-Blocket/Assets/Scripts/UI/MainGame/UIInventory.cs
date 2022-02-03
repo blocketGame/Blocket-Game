@@ -194,7 +194,7 @@ public class UIInventory : MonoBehaviour {
 		if (GameManager.State != GameState.INGAME)
 			return;
 
-		if (Input.GetKeyDown(GameManager.SPNow.Keys["InventoryKey"])) {
+		if (Input.GetKeyDown(GameManager.SettingsProfile.Keys["InventoryKey"])) {
 			InventoryOpened = !InventoryOpened;
 			if (!InventoryOpened)
 				SynchronizeToHotbar();

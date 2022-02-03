@@ -62,8 +62,8 @@ public class UIProfileSite : MonoBehaviour {
 			CharacterSelectionOpen = false;
 			createInput.text = string.Empty;
 		}else if(((ListContentUI.selectedBtnNameCharacter?.Trim() == string.Empty ) != NetworkManager.Singleton.IsClient) && ((ListContentUI.selectedBtnNameWorld?.Trim() == string.Empty) != NetworkManager.Singleton.IsServer)) {
-		GameManager.playerProfileNow = ProfileHandler.ImportProfile(ListContentUI.selectedBtnNameCharacter, true) as PlayerProfile;
-		GameManager.worldProfileNow = new WorldProfile(ListContentUI.selectedBtnNameWorld, null);
+		GameManager.PlayerProfileNow = ProfileHandler.ImportProfile(ListContentUI.selectedBtnNameCharacter, true) as PlayerProfile;
+		GameManager.WorldProfileNow = new WorldProfile(ListContentUI.selectedBtnNameWorld, null);
 		GlobalVariables.UILobby.SiteIndexOpen = 1;
 		}
 					
@@ -92,12 +92,12 @@ public class UIProfileSite : MonoBehaviour {
 			if (CharacterSelectionOpen) { 
 				PlayerProfile p = new PlayerProfile(createInput.text, null);
 				ProfileHandler.ExportProfile(p, true);
-				GameManager.playerProfileNow = p;
+				GameManager.PlayerProfileNow = p;
 				ListContentUI.selectedBtnNameCharacter = createInput.text;
 			} else {
 				WorldProfile p = new WorldProfile(createInput.text, null);
 				ProfileHandler.ExportProfile(p, false);
-				GameManager.worldProfileNow = p;
+				GameManager.WorldProfileNow = p;
 				ListContentUI.selectedBtnNameWorld = createInput.text;
 			}
 			FindAllProfiles();

@@ -43,7 +43,7 @@ public class WorldProfile : Profile {
 	}
 	public static string WorldProfileParent => @$"{ProfileHandler.ProfileParent}\Worlds";
 	public static readonly string chunkLocation = "chunks";
-	public static string GetWorldDirFromName => $@"{WorldProfileParent}\{GameManager.worldProfileNow?.name ?? throw new ArgumentNullException()}";
+	public static string GetWorldDirFromName => $@"{WorldProfileParent}\{GameManager.WorldProfileNow?.name ?? throw new ArgumentNullException()}";
 	public static string GetChunkLocationFromMainDir => $@"{GetWorldDirFromName}\{chunkLocation}";
 	public static List<string> FindAllWorldDirectories() => new List<string>(Directory.GetDirectories(WorldProfileParent));
 	
@@ -72,7 +72,7 @@ public class WorldProfile : Profile {
 		foreach (TerrainChunk tc in TerrainHandler.Chunks.Values) {
 			if (tc == null)
 				throw new ArgumentNullException();
-			GameManager.worldProfileNow.chunks.Add(tc);
+			GameManager.WorldProfileNow.chunks.Add(tc);
 		}
 	}
 
@@ -80,7 +80,7 @@ public class WorldProfile : Profile {
 	/// 
 	/// </summary>
 	public static void LoadComponentsFromWorldProfile(WorldProfile worldProfile) {
-		GameManager.worldProfileNow = worldProfile;
+		GameManager.WorldProfileNow = worldProfile;
 
 		foreach (ChunkData chunkNow in worldProfile.chunks) {
 			if (TerrainHandler.Chunks.ContainsKey(chunkNow.ChunkPositionInt)) {

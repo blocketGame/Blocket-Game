@@ -60,7 +60,7 @@ public class Movement : MonoBehaviour
 
 		GlobalVariables.LocalPlayer.GetComponentInChildren<Camera>().orthographicSize = camZoom;
 
-		if (Input.GetKey(GameManager.SPNow.Keys["CrawlKey"]))
+		if (Input.GetKey(GameManager.SettingsProfile.Keys["CrawlKey"]))
 			Crawl();
 
 		VelocityUpdate();
@@ -147,7 +147,7 @@ public class Movement : MonoBehaviour
 
 		if (playerRigidbody.velocity.y != 0)
 			//Walljump 
-			if (Input.GetKeyDown(GameManager.SPNow.Keys["JumpKey"]))
+			if (Input.GetKeyDown(GameManager.SettingsProfile.Keys["JumpKey"]))
 			{
 				if (GlobalVariables.TerrainHandler.GetBlockFormCoordinate(
 				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + (-0.5f), playerRigidbody.position.y, 0)).x,
@@ -167,7 +167,7 @@ public class Movement : MonoBehaviour
 				}
 			}
 			//Wall kick
-			else if (lockvar && Input.GetKeyDown(GameManager.SPNow.Keys["RollKey"]))
+			else if (lockvar && Input.GetKeyDown(GameManager.SettingsProfile.Keys["RollKey"]))
 				Wallkick();
 			else
 				movement = Input.GetAxis("Horizontal");
@@ -176,10 +176,10 @@ public class Movement : MonoBehaviour
 		{
 			animator.SetBool("IsJumping", false);
 			//Jump
-			if (Input.GetKey(GameManager.SPNow.Keys["JumpKey"] ))
+			if (Input.GetKey(GameManager.SettingsProfile.Keys["JumpKey"] ))
 				Jump();
 			//Roll
-			else if (!lockvar && Input.GetKeyDown(GameManager.SPNow.Keys["RollKey"]))
+			else if (!lockvar && Input.GetKeyDown(GameManager.SettingsProfile.Keys["RollKey"]))
 				Roll();
 			//Move  
 			else

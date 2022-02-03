@@ -6,8 +6,8 @@ using UnityEngine;
 /// <summary>
 /// Used for Interacten per Mouse with Tilemap<br></br>
 /// </summary>
-public class Interaction : MonoBehaviour {
-	
+public class PlayerInteraction : MonoBehaviour {
+
 	public GameObject deleteSprite;
 	public Sprite crackTile;
 
@@ -28,27 +28,34 @@ public class Interaction : MonoBehaviour {
 	}
 	public TerrainChunk ThisChunk => GlobalVariables.TerrainHandler.GetChunkFromCoordinate(BlockHoverdAbsolute.x, BlockHoverdAbsolute.y);
 
+	public byte TargetBlockID => ThisChunk?.blocks[BlockInchunkCoord.x, BlockInchunkCoord.y] ?? 0;
+
 	/// <summary>Used for the Mouse Offset<br></br>Due to not perfect input</summary>
 	public readonly float mouseOfsetX = -0.5f, mouseOfsetY = -0.5f;
 
 	#region UnityMethods
+	public void Awake() => GlobalVariables.Interaction = this;
+
 	public void Update() {
 		if (GameManager.State != GameState.INGAME || (GlobalVariables.UIInventory?.InventoryOpened ?? false))
 			return;
-		//Blockinteraction
-		if (BreakCoroutine != null && !Input.GetKey(GameManager.SPNow.Keys["MainInteractionKey"])) {
-			if (DebugVariables.BlockInteractionCR)
-				Debug.Log("Stopped");
-			StopCoroutine(BreakCoroutine);
-			BreakCoroutine = null;
-		}
-		if (GlobalVariables.Inventory.SelectedItemObj is ToolItem t)
-			if (t.toolType == ToolItem.ToolType.MEELE)
-				if (Input.GetKey(GameManager.SPNow.Keys["MainInteractionKey"]))
-					Debug.Log("");
-
-		//Default
 		HandleBlockInteraction();
+		KeyCode main = GameManager.SettingsProfile.Keys["MainInteractionKey"];
+		KeyCode side = GameManager.SettingsProfile.Keys["SideInteractionKey"];
+
+		if (GlobalVariables.Inventory.SelectedItemObj is BlockItem bI) { 
+			if (Input.GetKey(side))
+				bI.OnSideInteractionKey();
+			if (Input.GetKey(main))
+				bI.OnMainInteractionKey();
+		}
+		if (GlobalVariables.Inventory.SelectedItemObj is ToolItem tI)
+        {
+			if (Input.GetKey(side))
+				tI.OnSideInteractionKey();
+			if (Input.GetKey(side))
+				tI.OnMainInteractionKey();
+		}
 	}
 
 	//TODO: Remove
@@ -66,39 +73,42 @@ public class Interaction : MonoBehaviour {
 
     #region ToolInteraction
 
-    //TODO:
-    public void HandleWeaponInteraction(){
-		
-    }
-
     #endregion
 
     #region BlockInteraction
-    public void HandleBlockInteraction(){
+	public void BlockPlace(){
 		if (!GlobalVariables.TerrainHandler.CurrentChunkReady)
 			return;
-		byte targetBlockID = ThisChunk?.blocks[BlockInchunkCoord.x, BlockInchunkCoord.y] ?? 0;
-		SetFocusGO(BlockHoverdAbsolute, targetBlockID != 0);
+		
+		if (DebugVariables.BlockInteractionInfo)
+			Debug.Log($"{BlockHoverdAbsolute}, {BlockInchunkCoord}, {ThisChunk.ChunkPositionInt}");
+		///UNDONE
+		Item selectedItem = GlobalVariables.ItemAssets.GetItemFromItemID(GlobalVariables.Inventory.SelectedItemId);
+		if (selectedItem is BlockItem)
+			ThisChunk.PlaceBlock(new Vector3Int(BlockInchunkCoord.x, BlockInchunkCoord.y, 0), GlobalVariables.Inventory.SelectedItemId);
+		
+	}
 
-		if (Input.GetKeyDown(GameManager.SPNow.Keys["MainInteractionKey"])) {
-			if (DebugVariables.BlockInteractionInfo)
-				Debug.Log(ThisChunk.blocks[BlockInchunkCoord.x, BlockInchunkCoord.y]);
-
-			if (BreakCoroutine == null && targetBlockID != 0) {
-				byte targetRemoveDuration = GlobalVariables.WorldData.Blocks[targetBlockID].removeDuration;
-				BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int>(targetRemoveDuration, targetBlockID, ThisChunk, BlockInchunkCoord));
-				if (DebugVariables.BlockInteractionCR)
-					Debug.Log("Started!");
-			}
+    public void HandleBlockInteraction(){
+		SetFocusGO(BlockHoverdAbsolute, TargetBlockID != 0);
+		//Blockinteraction
+		if (BreakCoroutine != null && !Input.GetKey(GameManager.SettingsProfile.Keys["MainInteractionKey"]))
+		{
+			if (DebugVariables.BlockInteractionCR)
+				Debug.Log("Stopped");
+			StopCoroutine(BreakCoroutine);
+			BreakCoroutine = null;
 		}
+		if (DebugVariables.BlockInteractionInfo)
+			Debug.Log(ThisChunk.blocks[BlockInchunkCoord.x, BlockInchunkCoord.y]);
 
-		if (Input.GetKey(GameManager.SPNow.Keys["SideInteractionKey"])) {
-			if (DebugVariables.BlockInteractionInfo)
-				Debug.Log($"{BlockHoverdAbsolute}, {BlockInchunkCoord}, {ThisChunk.ChunkPositionInt}");
-			///UNDONE
-			Item selectedItem = GlobalVariables.ItemAssets.GetItemFromItemID(GlobalVariables.Inventory.SelectedItemId);
-			if (selectedItem is BlockItem)
-				ThisChunk.PlaceBlock(new Vector3Int(BlockInchunkCoord.x, BlockInchunkCoord.y, 0), GlobalVariables.Inventory.SelectedItemId);
+		if (BreakCoroutine == null && TargetBlockID != 0){
+
+
+			byte targetRemoveDuration = GlobalVariables.WorldData.Blocks[TargetBlockID].removeDuration;
+			BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int>(targetRemoveDuration, TargetBlockID, ThisChunk, BlockInchunkCoord));
+			if (DebugVariables.BlockInteractionCR)
+				Debug.Log("Started!");
 		}
 	}
 

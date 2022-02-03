@@ -84,11 +84,11 @@ public class PlayerVariables : MonoBehaviour
 	}
 
 	public void Init(){
-		MaxHealth = GameManager.playerProfileNow.maxHealth;
-		Health = GameManager.playerProfileNow.health != 0 ? GameManager.playerProfileNow.health : MaxHealth;
-		Armor = GameManager.playerProfileNow.armor;
-		healthGained = GameManager.playerProfileNow.healthGained;
-		healthLost = GameManager.playerProfileNow.healthLost;
+		MaxHealth = GameManager.PlayerProfileNow.maxHealth;
+		Health = GameManager.PlayerProfileNow.health != 0 ? GameManager.PlayerProfileNow.health : MaxHealth;
+		Armor = GameManager.PlayerProfileNow.armor;
+		healthGained = GameManager.PlayerProfileNow.healthGained;
+		healthLost = GameManager.PlayerProfileNow.healthLost;
 
 		Physics2D.IgnoreLayerCollision(GlobalVariables.LocalPlayer.layer, LayerMask.NameToLayer("Drops"), true);
 		Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Drops"), LayerMask.NameToLayer("Drops"));
