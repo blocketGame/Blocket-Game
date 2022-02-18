@@ -63,120 +63,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37cca21d59776b4592cdf22f7d5ad04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  biom:
-  - {fileID: 11400000, guid: 29b0f6e63e160294face5a7539aa68dc, type: 2}
-  - {fileID: 11400000, guid: 6679dc32c099c0d40967d40357bebee9, type: 2}
-  blocks:
-  - name: Air
-    blockID: 0
-    tile: {fileID: 0}
-    removeDuration: 0
-    blockDrops: []
-  - name: Collision
-    blockID: 1
-    tile: {fileID: 11400000, guid: 0bcc34212cd215a4584d42c3c4ba8f29, type: 2}
-    removeDuration: 0
-    blockDrops: []
-  - name: Grasblock
-    blockID: 2
-    tile: {fileID: 11400000, guid: 02761f359227ea640b301f8ed4704793, type: 2}
-    removeDuration: 5
-    blockDrops:
-    - itemID: 1
-      dropchance: 100
-      toolItemType: 5
-  - name: Dirtblock
-    blockID: 3
-    tile: {fileID: 11400000, guid: 0bcc34212cd215a4584d42c3c4ba8f29, type: 2}
-    removeDuration: 3
-    blockDrops:
-    - itemID: 1
-      dropchance: 100
-      toolItemType: 5
-  - name: Sandblock (Top)
-    blockID: 4
-    tile: {fileID: 11400000, guid: 6db0c34d3b5fc7b49a67163528b99ce5, type: 2}
-    removeDuration: 2
-    blockDrops: []
-  - name: Sandblock
-    blockID: 5
-    tile: {fileID: 11400000, guid: 240b651a1bc670d4793c99d2d9d9748e, type: 2}
-    removeDuration: 2
-    blockDrops: []
-  - name: Snowblock
-    blockID: 0
-    tile: {fileID: 11400000, guid: cf38a69b1c9243a4a98ca4aca2367547, type: 2}
-    removeDuration: 0
-    blockDrops: []
-  - name: SnowedDirtblock
-    blockID: 7
-    tile: {fileID: 11400000, guid: 0230af7654f2e154f8a8cfe6ab61bdd1, type: 2}
-    removeDuration: 2
-    blockDrops: []
-  - name: DirtBG
-    blockID: 8
-    tile: {fileID: 11400000, guid: 30439b9c5e3b02142848ef927c278843, type: 2}
-    removeDuration: 0
-    blockDrops: []
-  - name: DirtBG (Top)
-    blockID: 9
-    tile: {fileID: 11400000, guid: 7aa42f6081c4f8a498d228fa119ea557, type: 2}
-    removeDuration: 0
-    blockDrops: []
-  - name: Bernstein
-    blockID: 10
-    tile: {fileID: 11400000, guid: 368f8ab243ec2b24bb4dd5751cbf20f6, type: 2}
-    removeDuration: 8
-    blockDrops: []
-  - name: Opal
-    blockID: 11
-    tile: {fileID: 11400000, guid: 69dd537b464e3f142b42eca477a96bc2, type: 2}
-    removeDuration: 8
-    blockDrops: []
-  - name: Stone
-    blockID: 12
-    tile: {fileID: 11400000, guid: 4cd28115759dee2499f06013f9211b55, type: 2}
-    removeDuration: 7
-    blockDrops: []
-  - name: SandBG
-    blockID: 13
-    tile: {fileID: 11400000, guid: 6a63c0c826cab3f4ea878397525659ce, type: 2}
-    removeDuration: 2
-    blockDrops: []
-  - name: SandBG (Top)
-    blockID: 14
-    tile: {fileID: 11400000, guid: c20608446e77f9c44a3819cef2944b0f, type: 2}
-    removeDuration: 2
-    blockDrops: []
-  - name: Perl
-    blockID: 15
-    tile: {fileID: 11400000, guid: bc76d9a08eedba04888f09f100db4f02, type: 2}
-    removeDuration: 4
-    blockDrops: []
-  - name: Trunk
-    blockID: 16
-    tile: {fileID: 11400000, guid: a2b039ad21dbea343a3af1d7a3f3e9c2, type: 2}
-    removeDuration: 4
-    blockDrops: []
-  - name: Leaf
-    blockID: 17
-    tile: {fileID: 11400000, guid: 0d94620a8cdce1e4694bd8d615d2101c, type: 2}
-    removeDuration: 4
-    blockDrops: []
-  - name: CactusFlower
-    blockID: 18
-    tile: {fileID: 11400000, guid: d6ff0195f0b383e408cde8a71dca16e7, type: 2}
-    removeDuration: 4
-    blockDrops: []
-  - name: Cactus
-    blockID: 19
-    tile: {fileID: 11400000, guid: 6ce94ed2ae6b5c7448c1717aac7342ec, type: 2}
-    removeDuration: 4
-    blockDrops: []
-  chunkWidth: 32
-  chunkHeight: 32
   chunkDistance: 4
-  seed: 0
+  seed: 1
   scale: 80
   octives: 5
   persistance: 0.5
@@ -208,7 +96,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  grid: {fileID: 0}
   groupdistance: 1.5
   pickUpDistance: 1.5
   initCaveSize: 0

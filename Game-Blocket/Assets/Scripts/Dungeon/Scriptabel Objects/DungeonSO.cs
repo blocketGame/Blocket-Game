@@ -18,8 +18,8 @@ public class DungeonSO : ScriptableObject
     public bool randomWalkRooms = false;
 
     //Tilemapvisulizer
-    public RuleTile backgroundTile;
-    public RuleTile wallTile;
+    public TileBase backgroundTile;
+    public TileBase wallTile;
     public TileBase collisionTile;
 
 }

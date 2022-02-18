@@ -26,20 +26,19 @@ public  class TerrainHandler : MonoBehaviour
 	public WorldData WD => GlobalVariables.WorldData;
 
 	//Not multiplayer save
-	public Vector2Int CurrentChunkCoord => new Vector2Int(Mathf.RoundToInt(PlPosNow.x / WD.ChunkWidth), Mathf.RoundToInt(PlPosNow.y / WD.ChunkHeight));
+	public Vector2Int CurrentChunkCoord => new Vector2Int((int)(PlPosNow.x / WD.ChunkWidth), (int)(PlPosNow.y / WD.ChunkHeight));
 
-	public TerrainChunk CurrentChunk => Chunks[CurrentChunkCoord];
+	public TerrainChunk CurrentChunk => Chunks.ContainsKey(CurrentChunkCoord) == true ? Chunks[CurrentChunkCoord] : null;
 	public bool CurrentChunkReady => !(CurrentChunk == null || !CurrentChunk.IsImported || !CurrentChunk.Visible);
 
 	public static Vector3 PlPosNow { get; private set; }
-	public static Vector3 PlPosLastUpdateV { get; private set; } = new Vector3();
-	public static Vector3 PlPosLastUpdateL { get; private set; } = new Vector3();
+
+	public TerrainChunk lastChunk;//=> Chunks[new Vector2Int((int)(PlPosLastUpdateL.x / WD.ChunkWidth), (int)(PlPosLastUpdateL.y / WD.ChunkHeight))];
 
 	#region Unity Scripts
 	public void Awake() => GlobalVariables.TerrainHandler = this;
 
 	public void FixedUpdate() {
-		IterateChunksAroundPlayerStatic();
 		if (GameManager.State != GameState.INGAME)
 			return;
 		CheckDrops();
@@ -51,7 +50,7 @@ public  class TerrainHandler : MonoBehaviour
 	/// </summary>
 	private void CheckDrops()
 	{
-		TerrainChunk tc = GetChunkFromCoordinate(GlobalVariables.LocalPlayerPos.x, GlobalVariables.LocalPlayerPos.y) ?? throw new NullReferenceException($"Chunk not found!");;
+		TerrainChunk tc = GetChunkFromCoordinate(GlobalVariables.LocalPlayerPos.x, GlobalVariables.LocalPlayerPos.y) ?? throw new NullReferenceException($"Chunk not found!");
 
 		foreach(Drop drop in tc.Drops){
 			if (Vector3.Distance(drop.GameObject.transform.position, GlobalVariables.LocalPlayerPos) < _pickUpDist)
@@ -63,6 +62,7 @@ public  class TerrainHandler : MonoBehaviour
 	}
 
 	public void Update(){
+		PlPosNow = GlobalVariables.LocalPlayerPos;
 		//Init Queue
 		lock (ChunkTileInitializationQueue) {
 			if (ChunkTileInitializationQueue.Count > 0)
@@ -72,30 +72,32 @@ public  class TerrainHandler : MonoBehaviour
 						tc.ImportChunk(ChunkParent);
 					else
 						if (DebugVariables.ShowMultipleTasksOrExecution)
-						Debug.LogWarning($"Already Imported: {tc.chunkPosition}");
+							Debug.LogWarning($"Already Imported: {tc.chunkPosition}");
 				}
 		}
 	}
 
 	public void LateUpdate() {
-		//Visible
-		PlPosNow = GlobalVariables.LocalPlayerPos;
+		if (GameManager.State == GameState.LOADING || lastChunk?.chunkPosition != CurrentChunk?.chunkPosition)
+		{
+			IterateChunksAroundPlayerStatic();
+		}
+		
 		if (GameManager.State != GameState.INGAME)
 			return;
-		if (Vector3.Distance(PlPosLastUpdateV, PlPosNow) > 5) {
+
+
+		if (lastChunk?.chunkPosition != CurrentChunk?.chunkPosition)
+        {
 			List<TerrainChunk> chunksVisibleNow = UpdateVisible();
 			foreach (TerrainChunk tc in chunksVisibleNow)
 				if (ChunksLastUpdate.Contains(tc))
 					ChunksLastUpdate.Remove(tc);
-			DisableChunk(ChunksLastUpdate);
-			ChunksLastUpdate = chunksVisibleNow;
-			PlPosLastUpdateV = PlPosNow;
-		}
-		if (Vector3.Distance(PlPosLastUpdateL, PlPosNow) > WorldAssets.ChunkLength * GlobalVariables.WorldData.ChunkDistance * 1.5) {
-			Debug.Log("Update Loaded");
-			UpdateLoaded();
-			PlPosLastUpdateL = PlPosNow;
-		}
+				DisableChunk(ChunksLastUpdate);
+				ChunksLastUpdate = chunksVisibleNow;
+				UpdateLoaded();
+        }
+		lastChunk = CurrentChunk;
 	}
 	private List<TerrainChunk> ChunksLastUpdate { get; set; } = new List<TerrainChunk>();
 
@@ -136,7 +138,7 @@ public  class TerrainHandler : MonoBehaviour
 	}
 
 	private void DisableChunk(List<TerrainChunk> chunksToDisable) {
-		foreach(TerrainChunk tc  in chunksToDisable)
+		foreach(TerrainChunk tc in chunksToDisable)
 			tc.Visible = false;
 	}
 
@@ -172,34 +174,35 @@ public  class TerrainHandler : MonoBehaviour
 	}
 
 	public void IterateChunksAroundPlayerStatic() {
-		if (PlPosNow == GlobalVariables.LocalPlayerPos && GameManager.State == GameState.INGAME)
-			return;
 		bool noUpdates = true;
 		
 		for (int x = -WD.ChunkDistance; x <= WD.ChunkDistance; x++) {
 			for (int y = -WD.ChunkDistance; y <= WD.ChunkDistance; y++) {
 				bool needsWork = CheckChunk(new Vector2Int(CurrentChunkCoord.x + x, CurrentChunkCoord.y + y));
-				if (needsWork && DebugVariables.ShowMultipleTasksOrExecution)
-					Debug.Log($"{x}, {y}");
+				//if (needsWork && DebugVariables.ShowMultipleTasksOrExecution)
+					//Debug.Log($"{x}, {y}");
 				if (needsWork && noUpdates)
+                {
 					noUpdates = false;
+                }
 			}
 		}
 
-		if (GameManager.State == GameState.LOADING && noUpdates) { 
-			if (TerrainGeneration.TerrainGenerationTaskNames.Count != 0) {
-				///TODO: Try with locking
-				string names = "Unfinished Tasks!: ";
-				lock(TerrainGeneration.TerrainGenerationTaskNames)
-					foreach (string s in TerrainGeneration.TerrainGenerationTaskNames)
-						if(!string.IsNullOrEmpty(s))
-							names += $";";
-				if (DebugVariables.ShowMultipleTasksOrExecution)
-					Debug.LogWarning(names);
-				if (DebugVariables.ShowGameStateEvent)
-					Debug.LogWarning("Switching to Playmode!");
-			}
-			GameManager.State = GameState.INGAME;
+		if (GameManager.State == GameState.LOADING && noUpdates) {
+            if (TerrainGeneration.TerrainGenerationTaskNames.Count != 0)
+            {
+                ///TODO: Try with locking
+                string names = "Unfinished Tasks!: ";
+                lock (TerrainGeneration.TerrainGenerationTaskNames)
+                    foreach (string s in TerrainGeneration.TerrainGenerationTaskNames)
+                        if (!string.IsNullOrEmpty(s))
+                            names += $";";
+                if (DebugVariables.ShowMultipleTasksOrExecution)
+                    Debug.LogWarning(names);
+                if (DebugVariables.ShowGameStateEvent)
+                    Debug.LogWarning("Switching to Playmode!");
+            }
+            GameManager.State = GameState.INGAME;
 		}
 	}
 

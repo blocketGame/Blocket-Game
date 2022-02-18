@@ -23,6 +23,6 @@ MonoBehaviour:
   dungeonHeight: 80
   offset: 3
   randomWalkRooms: 0
-  backgroundTile: {fileID: 11400000, guid: 7934ecc6a6ce2ef428d2e231b058a3c0, type: 2}
-  wallTile: {fileID: 11400000, guid: 7934ecc6a6ce2ef428d2e231b058a3c0, type: 2}
-  collisionTile: {fileID: 11400000, guid: 7934ecc6a6ce2ef428d2e231b058a3c0, type: 2}
+  backgroundTile: {fileID: 11400000, guid: a2b039ad21dbea343a3af1d7a3f3e9c2, type: 2}
+  wallTile: {fileID: 11400000, guid: 0d94620a8cdce1e4694bd8d615d2101c, type: 2}
+  collisionTile: {fileID: 11400000, guid: 0bcc34212cd215a4584d42c3c4ba8f29, type: 2}

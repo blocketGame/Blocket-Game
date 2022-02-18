@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-
 using UnityEngine;
 
 ///<summary>Author: Cse19455 / Thomas Boigner
@@ -140,6 +139,7 @@ public class TerrainGeneration {
 		//lock (TerrainHandler.ChunkCollisionQueue) {
 		//	TerrainHandler.ChunkCollisionQueue.Enqueue(tc);
 		//}
+
 		lock (TerrainHandler.ChunkTileInitializationQueue) {
 			TerrainHandler.ChunkTileInitializationQueue.Enqueue(tc);
 		}
