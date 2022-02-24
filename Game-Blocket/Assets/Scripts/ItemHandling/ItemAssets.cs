@@ -15,9 +15,12 @@ public class ItemAssets : MonoBehaviour
 	public List<UseAbleItem> UseableItemsInGame = new List<UseAbleItem>();
 	public List<CommonItem> CommonItems = new List<CommonItem>();
 
+	[SerializeField]
+	public List<CraftingStation> CraftingStations = new List<CraftingStation>();
 	public List<EnemySO> Enemies = new List<EnemySO>();
 	public List<Structure> Structures = new List<Structure>();
-	
+	public List<CraftingRecipe> Recipes = new List<CraftingRecipe>();
+
 	private void Awake() => GlobalVariables.ItemAssets = this;
 
 	/// <summary>

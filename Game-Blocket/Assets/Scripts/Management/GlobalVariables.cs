@@ -10,6 +10,8 @@ public static class GlobalVariables {
 	public static readonly ushort maxItemCountForMultiple = 128;
 	public static string chunkTag = "Chunk";
 
+	public static GameObject activatedCraftingInterface;
+
 	public static GameManager GameManager { get; set; }
 	
 	#region UIScripts

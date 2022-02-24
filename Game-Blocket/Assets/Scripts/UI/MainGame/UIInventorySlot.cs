@@ -26,6 +26,12 @@ public class UIInventorySlot : MonoBehaviour {
 	#endregion
 
 	public readonly bool useOldPointerhandling = true;
+	
+	/// <summary>
+	/// If Null => Is not component of the crafting interface
+	/// If Content => Is used to create a listener to renew crafting Recommendations
+	/// </summary>
+	public CraftingStation CraftingStation { get; set; }
 
 	public bool IsSelected { get => _isSelected; set {
 			_isSelected = value;
@@ -55,6 +61,9 @@ public class UIInventorySlot : MonoBehaviour {
 	}
 	private ushort _itemCount = 0;
 
+	/// <summary>
+	/// Self contained Item
+	/// </summary>
 	private Item ItemObject { get; set; }
 
 	/// <summary>Reloads the Itemslot<br></br><b>Be carfull when deleting!</b></summary>
@@ -95,16 +104,40 @@ public class UIInventorySlot : MonoBehaviour {
 			button.onClick.AddListener(() => {
 				Debug.Log("Pressed!");
 				GlobalVariables.Inventory.PressedSlot(this); 
+				if(CraftingStation!=null)
+                {
+					int x=0;
+					int y=0;
+					uint[,] array = new uint[CraftingStation.Slotwidth, CraftingStation.Slotheight] ; 
+					Debug.Log("Renew");
+					foreach(UIInventorySlot uislot in gameObject.GetComponentsInChildren<UIInventorySlot>())
+                    {
+						if (x < CraftingStation.Slotwidth)
+							x++;
+                        else
+                        {
+							y++;
+							x = 0;
+                        }
+						array[x, y] = uislot.ItemID;
+                    }
+					CraftingStation.RenewRecommendations(array);
+                }
 			});
         else
         {
 			button.gameObject.AddComponent<SlotOptionsScript>();
 			button.gameObject.GetComponent<SlotOptionsScript>().invSlot = this;
+
+			///Sending a RecipeUpdateRequest
 			if (UIInventory != null)
 				button.gameObject.GetComponent<SlotOptionsScript>().SlotOptions = UIInventory._slotOptions;
         }
 	}
 
+	/// <summary>
+	/// [TODO]
+	/// </summary>
 	public void OnMouseOver() {
 		Debug.Log("A");
 	}

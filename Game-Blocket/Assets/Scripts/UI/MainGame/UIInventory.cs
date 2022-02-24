@@ -9,7 +9,8 @@ using UnityEngine.XR;
 /// <summary>
 /// Sets the Changable Settings for the Main-Game UI
 /// </summary>
-public class UIInventory : MonoBehaviour {
+public class UIInventory : MonoBehaviour
+{
 	#region General Settings
 	[Header("Settings: Changable - Backgrounds")]
 	public Color inventoryBackground;
@@ -61,19 +62,26 @@ public class UIInventory : MonoBehaviour {
 	public Image inventoryBackgroundImage;
 	/// <summary>Prefab from Inspector</summary>
 	public GameObject prefabItemSlot;
-	
-	public GameObject _slotOptions;
-    #endregion
 
-    /// <summary><see cref="global::Inventory"/></summary>
-    private Inventory Inventory => GlobalVariables.Inventory;
+	public GameObject craftingInterfacePlaceholder;
+	/// <summary>
+	/// Original position of the Inventory
+	/// </summary>
+	private Vector2 uiParentPosition;
+
+	public GameObject _slotOptions;
+	#endregion
+
+	/// <summary><see cref="global::Inventory"/></summary>
+	private Inventory Inventory => GlobalVariables.Inventory;
 
 	#region Initzializement
 
 	/// <summary>
 	/// Initzialize the Inventory;
 	/// </summary>
-	private void InitUI() {
+	private void InitUI()
+	{
 		InitSlots();
 		InitHudSlots();
 		//InitPlayerInfo();
@@ -83,7 +91,8 @@ public class UIInventory : MonoBehaviour {
 	/// <summary>
 	/// Initzialize the AtHand<see cref="UIInventorySlot"/>
 	/// </summary>
-	private void InitAtHand() {
+	private void InitAtHand()
+	{
 		atHandSlot = Instantiate(prefabItemSlot, GameObject.Find("Inventory").transform);
 		atHandSlot.name = "SlotAtHand";
 		atHandSlot.SetActive(false);
@@ -103,7 +112,8 @@ public class UIInventory : MonoBehaviour {
 	/// Initzialize the PlayerInfoUI
 	/// <br></br>Not used!
 	/// </summary>
-	private void InitPlayerInfo() {
+	private void InitPlayerInfo()
+	{
 		//TODO: Make dynamic
 		///ArmorSlots
 		//foreach(GameObject go1 in armorSlots)
@@ -112,7 +122,8 @@ public class UIInventory : MonoBehaviour {
 		///AccessoiresSlot
 		if (!accessoiresParent)
 			Debug.LogError("AccessoiresParent not Initzialized");
-		for (int i = 0; i < countAccessoireSlots; i++) {
+		for (int i = 0; i < countAccessoireSlots; i++)
+		{
 			float height = prefabItemSlot.GetComponent<RectTransform>().rect.height * scaleIndicator / 100;
 			float accSlotY = accessoiresParent.transform.position.y + (height * i + rowspacingPlayerInfo * i);
 			Vector3 posSlotNow = new Vector3(accessoiresParent.transform.position.x, accSlotY, 1);
@@ -127,13 +138,16 @@ public class UIInventory : MonoBehaviour {
 	/// <summary>
 	/// Initzialize the ItemSlotField
 	/// </summary>
-	private void InitSlots() {
+	private void InitSlots()
+	{
 		//Get With and height from the Prefab
 		float prefW = prefabItemSlot.GetComponent<RectTransform>().rect.width,
 			prefH = prefabItemSlot.GetComponent<RectTransform>().rect.height;
 		//Go through every Slot
-		for (byte a = 0; a < rows; a++) {
-			for (byte b = 0; b < coloums; b++) {
+		for (byte a = 0; a < rows; a++)
+		{
+			for (byte b = 0; b < coloums; b++)
+			{
 				//Calc the !absolute Pos
 				float itemSlotX = slotField.transform.position.x + prefW * b + spaceToBorderX + colspacingInvSlot * b;
 				float itemSlotY = slotField.transform.position.y - (prefH * a + spaceToBorderY + rowspacingInvSlot * a);
@@ -150,11 +164,13 @@ public class UIInventory : MonoBehaviour {
 	}
 
 	/// <summary></summary>
-	private void InitHudSlots() {
+	private void InitHudSlots()
+	{
 		//Get With and height from the Prefab
 		float prefW = prefabItemSlot.GetComponent<RectTransform>().rect.width;
 		//Go through every Slot
-		for (byte a = 0; a < coloums; a++) {
+		for (byte a = 0; a < coloums; a++)
+		{
 			//Calc the !absolute Pos
 			float itemSlotX = hudslotfieldParent.transform.position.x + prefW * a + 50 + colspacingInvSlot * 0.2f * a;
 			float itemSlotY = hudslotfieldParent.transform.position.y - 15;
@@ -171,7 +187,8 @@ public class UIInventory : MonoBehaviour {
 		}
 	}
 
-	public void Init(){
+	public void Init()
+	{
 		if (Inventory == null)
 			Debug.LogError("Inventory not found!");
 		ReloadSettings();
@@ -181,44 +198,77 @@ public class UIInventory : MonoBehaviour {
 		InventoryOpened = false;
 		Inventory.SelectedSlot = 0;
 	}
-	#endregion
+    #endregion
 
-	#region UnityMethods
-	/// <summary>"Reload" at the beginning</summary>
-	public void Awake() {
+    #region UnityMethods
+    private void Start()
+    {
+		craftingInterfacePlaceholder.SetActive(false);
+	}
+
+    /// <summary>"Reload" at the beginning</summary>
+    public void Awake()
+	{
 		GlobalVariables.UIInventory = this;
 		name = "UI";
 	}
 
-	public void Update() {
+	public void Update()
+	{
 		if (GameManager.State != GameState.INGAME)
 			return;
 
-		if (Input.GetKeyDown(GameManager.SettingsProfile.Keys["InventoryKey"])) {
+		if (Input.GetKeyDown(GameManager.SettingsProfile.Keys["InventoryKey"]))
+		{
 			InventoryOpened = !InventoryOpened;
 			if (!InventoryOpened)
 				SynchronizeToHotbar();
-			uiHud.SetActive(!InventoryOpened);
+			if (InventoryOpened)
+			{
+				if (GlobalVariables.activatedCraftingInterface != null)
+				{
+					craftingInterfacePlaceholder.SetActive(true);
+					GlobalVariables.activatedCraftingInterface.SetActive(false);
+					uiParentPosition = uiParent.transform.position;
+					uiParent.transform.position = new Vector2(uiParent.transform.position.x + 900, uiParent.transform.position.y);
+					craftingInterfacePlaceholder.GetComponent<Image>().sprite = GlobalVariables.activatedCraftingInterface.GetComponent<Image>().sprite;
+					CraftingStation.InstatiateSlots(prefabItemSlot, craftingInterfacePlaceholder, GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)), GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)).Slotwidth, GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)).Slotheight);
+				}
+			}
+			else
+			{
+				//TODO: Optional things to do...
+				//uiParent.SetActive(false);
+				if (GlobalVariables.activatedCraftingInterface != null)
+				{
+					GlobalVariables.activatedCraftingInterface.SetActive(true);
+					uiParent.transform.position = uiParentPosition;
+					craftingInterfacePlaceholder.SetActive(false);
+				}
+				//uiHud.SetActive(!InventoryOpened);
 
+			}
 		}
-		if (Input.mouseScrollDelta.y != 0) {
+		if (Input.mouseScrollDelta.y != 0)
+		{
 			float val = Input.mouseScrollDelta.y;
 			if (val < 0)
-				if(Inventory.SelectedSlot == Inventory.HudSlots.Count - 1)
+				if (Inventory.SelectedSlot == Inventory.HudSlots.Count - 1)
 					Inventory.SelectedSlot = 0;
 				else
 					Inventory.SelectedSlot += 1;
 			else
 				if (Inventory.SelectedSlot == 0)
-					Inventory.SelectedSlot = (byte)(Inventory.HudSlots.Count - 1);
-				else
-					Inventory.SelectedSlot -= 1;
+				Inventory.SelectedSlot = (byte)(Inventory.HudSlots.Count - 1);
+			else
+				Inventory.SelectedSlot -= 1;
 		}
 	}
 	#endregion
 
 	/// <summary>Reloads all UI Settings</summary>
-	public void ReloadSettings() {
+	public void ReloadSettings()
+	{
 		if (!uiParent)
 			Debug.LogError("Parent from UI is NULL!");
 		//Set the Backgroung from the UI-Inventory
@@ -226,16 +276,22 @@ public class UIInventory : MonoBehaviour {
 	}
 
 	/// <summary>Returns and sets if the inventory should open</summary>
-	public bool InventoryOpened {
-		get {
+	public bool InventoryOpened
+	{
+		get
+		{
 			return inventoryOpened;
 		}
-		set {
+		set
+		{
 			inventoryOpened = value;
-			if (value) {
+			if (value)
+			{
 				//TODO: Optional things to do... Example: Lock Mouseplace or break
 				uiParent.SetActive(true);
-			} else {
+			}
+			else
+			{
 				//TODO: Optional things to do...
 				uiParent.SetActive(false);
 			}
@@ -244,12 +300,14 @@ public class UIInventory : MonoBehaviour {
 	}
 	private static bool inventoryOpened;
 
-	public string DescriptionText {
+	public string DescriptionText
+	{
 		get { return descriptonText.text; }
 		set { descriptonText.text = value; }
 	}
 
-	public string TitleText {
+	public string TitleText
+	{
 		get { return titleText.text; }
 		set { titleText.text = value; }
 	}
@@ -263,11 +321,13 @@ public class UIInventory : MonoBehaviour {
 	/// <summary>
 	/// Synchronizes Inventory State of Slots Row 1
 	/// </summary>
-	public void SynchronizeToHotbar() {
-		for(int i = 0; i < Inventory.HudSlots.Count; i++){ 
-				Inventory.HudSlots[i].ItemID = Inventory.InvSlots[i].ItemID;
-				Inventory.HudSlots[i].ItemCount = Inventory.InvSlots[i].ItemCount;	
-			}
+	public void SynchronizeToHotbar()
+	{
+		for (int i = 0; i < Inventory.HudSlots.Count; i++)
+		{
+			Inventory.HudSlots[i].ItemID = Inventory.InvSlots[i].ItemID;
+			Inventory.HudSlots[i].ItemCount = Inventory.InvSlots[i].ItemCount;
+		}
 		GlobalVariables.PlayerVariables.ReloadItemInHand();
 	}
 	#endregion

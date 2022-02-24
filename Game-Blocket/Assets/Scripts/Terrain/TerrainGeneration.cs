@@ -103,6 +103,10 @@ public class TerrainGeneration {
 							foreach (RegionData region in biom.Regions) {
 								if (region.RegionRange <= positionHeight - (y + tc.ChunkPositionInt.y * GlobalVariables.WorldData.ChunkHeight)) {
 									tc.blocks[x, y] = region.BlockID;
+                                    if (y == 0 && x == 0)
+                                    {
+										tc.blocks[x, y] = 20;
+                                    }
 								}
 							}
 
