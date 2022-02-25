@@ -9,8 +9,6 @@ public class TilemapVisualizer : MonoBehaviour
     private Tilemap backgroundTilemap;
     [SerializeField]
     private Tilemap wallTilemap;
-    [SerializeField]
-    private Tilemap collisionTilemap;
 
     public void PaintBackgroundTiles(IEnumerable<Vector2Int> floorPositions)
     {
@@ -20,7 +18,6 @@ public class TilemapVisualizer : MonoBehaviour
     internal void PaintSingleBasicWall(Vector2Int position)
     {
         PaintSingelTile(wallTilemap, Parameters.wallTile, position);
-        PaintSingelTile(collisionTilemap, Parameters.collisionTile, position);
     }
 
     private void PaintTiles(IEnumerable<Vector2Int> positions, Tilemap tilemap, TileBase tile)
@@ -41,6 +38,5 @@ public class TilemapVisualizer : MonoBehaviour
     {
         backgroundTilemap.ClearAllTiles();
         wallTilemap.ClearAllTiles();
-        collisionTilemap.ClearAllTiles();
     }
 }

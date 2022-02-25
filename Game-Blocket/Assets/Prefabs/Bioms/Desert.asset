@@ -16,18 +16,21 @@ MonoBehaviour:
   biomName: Desert
   ores: []
   regions:
-  - regionRange: 1
+  - description: 
+    regionRange: 1
     blockID: 4
-  - regionRange: 2
+  - description: 
+    regionRange: 2
     blockID: 5
   bgRegions:
-  - regionRange: 1
-    blockID: 9
-  - regionRange: 2
-    blockID: 8
-  structures: 00
-  treeSpawnChance: 10
-  treeSpawnDistance: 5
+  - description: 
+    regionRange: 1
+    blockID: 14
+  - description: 
+    regionRange: 2
+    blockID: 13
+  structures: 01020405
+  enemies: 
   stoneBlockId: 5
   size: 1000
   heightCurve:

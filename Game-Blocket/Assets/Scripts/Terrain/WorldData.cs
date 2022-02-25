@@ -72,8 +72,11 @@ public class WorldData : NetworkBehaviour
 	#endregion
 
 	/// <summary>Stores this class to <see cref="GlobalVariables"/></summary>
-	public void Awake() => GlobalVariables.WorldData = this;
-
+	public void Awake()
+	{
+		GlobalVariables.WorldData = this;
+		GlobalVariables.Structures.ReadAllStructures();
+	}
 }
 
 #region WorldDataAssets

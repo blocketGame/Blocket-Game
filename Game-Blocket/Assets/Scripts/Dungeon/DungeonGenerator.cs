@@ -9,7 +9,7 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField]
     private DungeonSO parameters;
     [SerializeField]
-    private TilemapVisualizer tilemapVisualizer = null;
+    private TilemapVisualizer tilemapVisualizer;
 
     /// <summary>
     /// Starting point of the dungeongenertation
@@ -41,7 +41,7 @@ public class DungeonGenerator : MonoBehaviour
         floor.UnionWith(corridors);
 
         tilemapVisualizer.PaintBackgroundTiles(floor);
-        WalllGenerator.CreateWalls(floor, tilemapVisualizer);
+        WallGenerator.CreateWalls(floor, tilemapVisualizer);
     }
 
     /// <summary>
