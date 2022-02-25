@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,23 +15,26 @@ public class CraftingRecipe : ScriptableObject, ISerializationCallbackReceiver
     /// <summary>
     /// Crafting station entity , needed for specification were it can be crafted
     /// </summary>
-    [SerializeField]
+    [SerializeField][Tooltip("Refers to the saved items in @ItemAssets")]
     private uint station;
     /// <summary>
-    /// Crafting Recipe (Representative Items => byte ID)
+    /// Each count refers to the Item of the same Id
     /// </summary>
-    [SerializeField]
-    public byte[] recipe;
+    [SerializeField][Tooltip("Items that are needed for crafting this Recipe (Needs to be in the right order to be recognized by the system)")]
+    public Craftable[] recipe;
+    public uint GetCountOfItem(uint itemId) => recipe[itemId].count;
+
     /// <summary>
     /// Item that is created by using this recipe
     /// </summary>
-    [SerializeField]
-    public Item Output { get; set; }
+    [SerializeField][Tooltip("Crafting this recipe results in that item")]
+    public uint output;
     #endregion
 
     #region Properties
-    public byte[] Recipe { get => recipe; set => recipe = value; }
+    public Craftable[] Recipe { get => recipe; set => recipe = value; }
     public uint Station { get => station; set => station = value; }
+    public Item Output { get => GlobalVariables.ItemAssets.GetItemFromItemID(output); }
     #endregion
 
     /// <summary>
@@ -39,7 +43,7 @@ public class CraftingRecipe : ScriptableObject, ISerializationCallbackReceiver
     /// <param name="station"></param>
     public CraftingRecipe(uint station)
     {
-        Recipe = new byte[GlobalVariables.ItemAssets.CraftingStations.Find(x => x.blockId == station).Slotwidth*GlobalVariables.ItemAssets.CraftingStations.Find(x => x.blockId == station).Slotheight];
+        Recipe = new Craftable[GlobalVariables.ItemAssets.CraftingStations.Find(x => x.blockId == station).Slotwidth*GlobalVariables.ItemAssets.CraftingStations.Find(x => x.blockId == station).Slotheight];
     }
 
     /// <summary>
@@ -56,6 +60,7 @@ public class CraftingRecipe : ScriptableObject, ISerializationCallbackReceiver
         return null;
     }
 
+
     #region ScriptableObjectMethods
     public void OnBeforeSerialize()
     {
@@ -67,4 +72,11 @@ public class CraftingRecipe : ScriptableObject, ISerializationCallbackReceiver
         //throw new System.NotImplementedException();
     }
     #endregion
+}
+[Serializable]
+public struct Craftable
+{
+    public uint item;
+    public uint count;
+
 }

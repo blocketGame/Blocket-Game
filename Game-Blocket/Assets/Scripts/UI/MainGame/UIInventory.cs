@@ -232,7 +232,7 @@ public class UIInventory : MonoBehaviour
 					uiParentPosition = uiParent.transform.position;
 					uiParent.transform.position = new Vector2(uiParent.transform.position.x + 900, uiParent.transform.position.y);
 					craftingInterfacePlaceholder.GetComponent<Image>().sprite = GlobalVariables.activatedCraftingInterface.GetComponent<Image>().sprite;
-					CraftingStation.InstatiateSlots(prefabItemSlot, craftingInterfacePlaceholder, GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)), GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)).Slotwidth, GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)).Slotheight);
+					CraftingStation.InstatiateCraftingInterface(prefabItemSlot, craftingInterfacePlaceholder, GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)), GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)).Slotwidth, GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)).Slotheight);
 				}
 			}
 			else
@@ -242,6 +242,8 @@ public class UIInventory : MonoBehaviour
 				if (GlobalVariables.activatedCraftingInterface != null)
 				{
 					GlobalVariables.activatedCraftingInterface.SetActive(true);
+					foreach(UIInventorySlot uis in craftingInterfacePlaceholder.GetComponentsInChildren<UIInventorySlot>())
+					GameObject.Destroy(uis.gameObject);
 					uiParent.transform.position = uiParentPosition;
 					craftingInterfacePlaceholder.SetActive(false);
 				}

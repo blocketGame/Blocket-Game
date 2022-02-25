@@ -32,6 +32,7 @@ public class UIInventorySlot : MonoBehaviour {
 	/// If Content => Is used to create a listener to renew crafting Recommendations
 	/// </summary>
 	public CraftingStation CraftingStation { get; set; }
+	public GameObject parentCraftingInterface;
 
 	public bool IsSelected { get => _isSelected; set {
 			_isSelected = value;
@@ -107,20 +108,16 @@ public class UIInventorySlot : MonoBehaviour {
 				if(CraftingStation!=null)
                 {
 					int x=0;
-					int y=0;
-					uint[,] array = new uint[CraftingStation.Slotwidth, CraftingStation.Slotheight] ; 
-					Debug.Log("Renew");
-					foreach(UIInventorySlot uislot in gameObject.GetComponentsInChildren<UIInventorySlot>())
+					uint[] array = new uint[CraftingStation.Slotwidth*CraftingStation.Slotheight] ;
+					Debug.Log(CraftingStation.Slotwidth + " " + CraftingStation.Slotheight);
+					Debug.Log(parentCraftingInterface.GetComponentsInChildren<UIInventorySlot>().Length);
+					foreach(UIInventorySlot uislot in parentCraftingInterface.GetComponentsInChildren<UIInventorySlot>())
                     {
-						if (x < CraftingStation.Slotwidth)
-							x++;
-                        else
-                        {
-							y++;
-							x = 0;
-                        }
-						array[x, y] = uislot.ItemID;
+						array[x] = uislot.ItemID;
+						x++;
                     }
+					
+
 					CraftingStation.RenewRecommendations(array);
                 }
 			});

@@ -88,14 +88,18 @@ MonoBehaviour:
   CraftingStations:
   - slotwidth: 2
     slotheight: 2
-    craftingInterfaceSprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+    craftingInterfaceSprite: {fileID: 21300000, guid: b96c6220787da4b4b9b3d5af1cf05f3f, type: 3}
+    craftingSlotSprite: {fileID: 21300000, guid: b4a1fce7afb32db48be3fd7e4c44e4c1, type: 3}
+    listViewColor: {r: 0.4308473, g: 0.67793274, b: 0.8867924, a: 0.7019608}
+    buttonColor: {r: 0.17702031, g: 0.50209856, b: 0.9622642, a: 1}
     blockId: 255
-    activatedCraftingInterface: 0
   - slotwidth: 3
     slotheight: 3
     craftingInterfaceSprite: {fileID: 21300000, guid: 5ab8e7b7520828b45b64868fa575475b, type: 3}
+    craftingSlotSprite: {fileID: 21300000, guid: 223263893184d0f4cad2120a59508291, type: 3}
+    listViewColor: {r: 0.6981132, g: 0.43682104, b: 0.21404415, a: 0.65882355}
+    buttonColor: {r: 0.5471698, g: 0.2829105, b: 0.04903879, a: 1}
     blockId: 20
-    activatedCraftingInterface: 0
   Enemies:
   - {fileID: 11400000, guid: 5fa23f42fd79765418b7e844d5d84e6b, type: 2}
   Structures:
@@ -118,6 +122,7 @@ MonoBehaviour:
   world: {fileID: 1085889088375208448, guid: 6f8afa7ba4b1ace43a1488e9989f22f5, type: 3}
   playerNetPrefab: {fileID: 2794137725677328093, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
   loadingScreen: {fileID: 1659422467158985314, guid: bf0b35f4090f7fc409bc4e6c5154ffcf, type: 3}
+  craftingUIListView: {fileID: 4598717845645267834, guid: 077d80e5b7fb538469ff0d37d19e178b, type: 3}
 --- !u!114 &-448414925542145110
 MonoBehaviour:
   m_ObjectHideFlags: 0

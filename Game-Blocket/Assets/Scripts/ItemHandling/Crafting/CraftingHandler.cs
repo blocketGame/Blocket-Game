@@ -27,13 +27,50 @@ public static class CraftingHandler
     /// </summary>
     /// <param name="items"></param>
     /// <returns></returns>
-    public static List<CraftingRecipe> GetRecipesByItems(uint[,] items)
+    public static IEnumerable<CraftingRecipe> GetRecipesByItems(uint[] items)
     {
         //[TODO]
         CraftingStation cs =GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(GlobalVariables.activatedCraftingInterface.GetComponent<Image>().sprite));
         ///Filtering Logic
-        Debug.Log(GlobalVariables.ItemAssets.Recipes.FindAll(x => x.Station.Equals(cs)));
-        return GlobalVariables.ItemAssets.Recipes.FindAll(x => x.Station.Equals(cs));
+        foreach(CraftingRecipe cr in GlobalVariables.ItemAssets.Recipes.FindAll(x => x.Station.Equals(cs.blockId)))
+        {
+            int stelle=0; 
+            foreach (Craftable i in cr.Recipe)
+            {
+                if(items[stelle]==i.item && i.item != 0)
+                {
+                    Debug.Log("Recommendation Should be created!!");
+                    yield return cr;
+                }
+                
+                stelle++;
+            }
+        } 
+    }
+
+    public static Item GetExactItem(uint[] items)
+    {
+        //[TODO]
+        CraftingStation cs = GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(GlobalVariables.activatedCraftingInterface.GetComponent<Image>().sprite));
+        ///Filtering Logic
+        foreach (CraftingRecipe cr in GlobalVariables.ItemAssets.Recipes.FindAll(x => x.Station.Equals(cs.blockId)))
+        {
+            int stelle = 0;
+            bool correct=true;
+            foreach (Craftable i in cr.Recipe)
+            {
+                if (items[stelle] != i.item && i.item != 0)
+                {
+                    correct=false;
+                }
+
+                stelle++;
+            }
+            if (correct)
+                return cr.Output;
+        }
+        return null;
+
     }
 
     //SORT METHODS INCOMING [TODO]

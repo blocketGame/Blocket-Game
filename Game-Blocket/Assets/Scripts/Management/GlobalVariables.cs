@@ -26,6 +26,8 @@ public static class GlobalVariables {
 		}
 	}
 	private static GameObject _localUI;
+
+	public static GameObject CraftingUIListContent { get; set; }
 	#endregion
 
 	#region World Scripts
