@@ -103,7 +103,6 @@ public class UIInventorySlot : MonoBehaviour {
 
 		if (useOldPointerhandling)
 			button.onClick.AddListener(() => {
-				Debug.Log("Pressed!");
 				GlobalVariables.Inventory.PressedSlot(this); 
 				if(CraftingStation!=null)
                 {
@@ -116,9 +115,8 @@ public class UIInventorySlot : MonoBehaviour {
 						array[x] = uislot.ItemID;
 						x++;
                     }
-					
 
-					CraftingStation.RenewRecommendations(array);
+					CraftingStation.RenewRecommendations(array,GlobalVariables.UIInventory.craftingInterfacePlaceholder);
                 }
 			});
         else

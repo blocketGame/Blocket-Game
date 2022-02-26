@@ -10,6 +10,11 @@ using UnityEngine.UI;
 [System.Serializable]
 public class CraftingStation
 {
+
+    [SerializeField]
+    [Tooltip("Refered Crafting Station Block")]
+    public byte blockId;
+
     #region Slot Specifications
     [Header("Slot Specifications")]
     /// <summary>
@@ -41,8 +46,6 @@ public class CraftingStation
     public Color buttonColor;
     #endregion
 
-    [SerializeField][Tooltip("Refered Crafting Station Block")]
-    public byte blockId;
 
     public bool activatedCraftingInterface { get; set; }
     public GameObject outBtn { get; set; }
@@ -51,6 +54,8 @@ public class CraftingStation
     public byte Slotwidth { get => slotwidth; set => slotwidth = value; }
     public byte Slotheight { get => slotheight; set => slotheight = value; }
     public Sprite CraftingInterfaceSprite { get => craftingInterfaceSprite; set => craftingInterfaceSprite = value; }
+
+    private static List<BlockItem> Blockitems { get => GlobalVariables.ItemAssets.BlockItemsInGame; }
     #endregion
 
     /// <summary>
@@ -149,43 +154,52 @@ public class CraftingStation
     /// <param name="craftingStation"></param>
     private static void CraftEvent(GameObject CraftingInterfacePlaceholder, CraftingStation craftingStation)
     {
-        Debug.Log("Crafting Confirmed");
         int x = 0;
         uint[] array = new uint[craftingStation.Slotwidth * craftingStation.Slotheight];
         foreach (UIInventorySlot uislot in CraftingInterfacePlaceholder.GetComponentsInChildren<UIInventorySlot>())
         {
-            array[x] = uislot.ItemID;
-            Debug.Log(x + " " + " Item - " + uislot.ItemID);
-            x++;
+            array[x] = uislot.ItemID; x++;
         }
-        Item i = CraftingHandler.GetExactItem(array);
-        if (i != null)
-            GlobalVariables.Inventory.AddItem(i);
-        else Debug.LogError("Naughty Naughty , you can't craft something that doesn't exist!");
+        Craftable i = CraftingHandler.GetExactItem(array);
+        if (i.item != 0)     GlobalVariables.Inventory.AddItem(i.item,i.count,out ushort item);
+        else                 Debug.LogError("Naughty Naughty , you can't craft something that doesn't exist!");
+
         ///[TODO - Remove Items that have been used to craft the new one]
     }
 
     /// <summary>
     /// Reacts to the ItemInsertEvent -> Renews crafting Recommendations
     /// </summary>
-    public void RenewRecommendations(uint[] items)
+    public void RenewRecommendations(uint[] items, GameObject CraftingInterfacePlaceholder)
     {
-        //[TODO]
-        ///=> RecipeRequest (CraftingHandler)
-        ///<= RecipeResponse
-        ///
-        //GlobalVariables.activatedCraftingInterface.GetComponentInChildren<ListContentUI>().
-
-        ///RecipeRequest
         IEnumerable<CraftingRecipe> recipes = CraftingHandler.GetRecipesByItems(items); //RecipeResponse
+        CraftingInterfacePlaceholder.GetComponentInChildren<ScrollRect>().GetComponentInChildren<Mask>().GetComponentInChildren<RecipeRecommendationList>().PruneRecommendations();
 
-        ///Insert into Graphical View
-
-        ///Spawning Recommendations
-        try { GameObject g = GameObject.Instantiate(GlobalVariables.PrefabAssets.craftingUIListView, GlobalVariables.activatedCraftingInterface.GetComponentInChildren<ScrollRect>().gameObject.transform); }
-        catch
+        Item i = GlobalVariables.ItemAssets.BlockItemsInGame.Find(x => x.id.Equals(CraftingHandler.GetExactItem(items).item));
+        if (i != null)
         {
-            Debug.LogError("Recommendation Spawns but is not completed");
+            CraftingInterfacePlaceholder.GetComponentInChildren<CraftingButtonRecognition>().itemName.text = i.name;
+            CraftingInterfacePlaceholder.GetComponentInChildren<CraftingButtonRecognition>().itemImage.sprite = i.itemImage;
+        }else
+        {
+            CraftingInterfacePlaceholder.GetComponentInChildren<CraftingButtonRecognition>().itemName.text = "Click me to craft!";
+            CraftingInterfacePlaceholder.GetComponentInChildren<CraftingButtonRecognition>().itemImage.sprite = null;
         }
-    }
+
+        int offSetY=0;
+        ///Insert into Graphical View
+        foreach (CraftingRecipe cr in recipes)
+        {
+            GameObject g = GameObject.Instantiate(GlobalVariables.PrefabAssets.craftingUIListView, CraftingInterfacePlaceholder.GetComponentInChildren<ScrollRect>().GetComponentInChildren<Mask>().GetComponentInChildren<RecipeRecommendationList>().transform);
+            CraftingInterfacePlaceholder.GetComponentInChildren<ScrollRect>().GetComponentInChildren<Mask>().GetComponentInChildren<RecipeRecommendationList>().currentRecommendations.Add(g);
+            g.transform.localPosition.Set(g.transform.localPosition.x, g.transform.localPosition.y + offSetY, g.transform.localPosition.z);
+            RecipeShowCase rcs = g.GetComponentInChildren<RecipeShowCase>();
+            rcs.Name.text = Blockitems.Find(x => x.id.Equals(cr.output.item)).name.Length < 10? GlobalVariables.ItemAssets.BlockItemsInGame.Find(x => x.id.Equals(cr.output.item)).name: GlobalVariables.ItemAssets.BlockItemsInGame.Find(x => x.id.Equals(cr.output.item)).name.Substring(0,9);
+            rcs.Description.text = Blockitems.Find(x => x.id.Equals(cr.output.item)).description;
+            rcs.imagePreview.sprite = Blockitems.Find(x => x.id.Equals(cr.output.item)).itemImage;
+            offSetY += 100;
+        }
+        ///Spawning Recommendations
+        Debug.Log(GlobalVariables.activatedCraftingInterface.name);
+        }
 }

@@ -10,18 +10,7 @@ using UnityEngine.UI;
 /// </summary>
 public static class CraftingHandler 
 {
-    /// <summary>
-    /// Returns all the Recipes that Contain this specific Item
-    /// </summary>
-    /// <param name="item"></param>
-    /// <returns></returns>
-    public static List<CraftingRecipe> GetRecipesByItem(byte item)
-    {
-        //[TODO]
-        return new List<CraftingRecipe>();
-    }
-
-
+    
     /// <summary>
     /// Returns all the Recipes that contain these specific Items (Order Doesn't matter)
     /// </summary>
@@ -48,7 +37,12 @@ public static class CraftingHandler
         } 
     }
 
-    public static Item GetExactItem(uint[] items)
+    /// <summary>
+    /// Returns all the Recipes that Contain this specific Item
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    public static Craftable GetExactItem(uint[] items)
     {
         //[TODO]
         CraftingStation cs = GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(GlobalVariables.activatedCraftingInterface.GetComponent<Image>().sprite));
@@ -59,7 +53,7 @@ public static class CraftingHandler
             bool correct=true;
             foreach (Craftable i in cr.Recipe)
             {
-                if (items[stelle] != i.item && i.item != 0)
+                if ((items[stelle] != i.item) && i.item != 0)
                 {
                     correct=false;
                 }
@@ -67,9 +61,9 @@ public static class CraftingHandler
                 stelle++;
             }
             if (correct)
-                return cr.Output;
+                return cr.output;
         }
-        return null;
+        return new Craftable();
 
     }
 

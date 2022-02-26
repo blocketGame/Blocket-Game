@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// Generates the Crafting view for the previews
-/// </summary>
-public class RecipeShowCase : MonoBehaviour
+public class CraftingButtonRecognition : MonoBehaviour
 {
-    public Image imagePreview;
-    public Text Name;
-    public Text Description;
     // Start is called before the first frame update
+    public Text itemName;
+    public Image itemImage;
     void Start()
     {
         

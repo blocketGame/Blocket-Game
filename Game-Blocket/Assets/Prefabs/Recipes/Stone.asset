@@ -10,12 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b849f401b9246c41804f744118f2441, type: 3}
-  m_Name: craftingTable
+  m_Name: Stone
   m_EditorClassIdentifier: 
   station: 255
   recipe:
   - item: 1
     count: 1
+  - item: 1
+    count: 1
   output:
-    item: 5
+    item: 2
     count: 1

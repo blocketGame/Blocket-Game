@@ -28,13 +28,14 @@ public class CraftingRecipe : ScriptableObject, ISerializationCallbackReceiver
     /// Item that is created by using this recipe
     /// </summary>
     [SerializeField][Tooltip("Crafting this recipe results in that item")]
-    public uint output;
+    public Craftable output;
     #endregion
 
     #region Properties
     public Craftable[] Recipe { get => recipe; set => recipe = value; }
     public uint Station { get => station; set => station = value; }
-    public Item Output { get => GlobalVariables.ItemAssets.GetItemFromItemID(output); }
+    public Item Output { get => GlobalVariables.ItemAssets.GetItemFromItemID(output.item); }
+    public uint OutputCount { get => output.count; }
     #endregion
 
     /// <summary>
@@ -77,6 +78,6 @@ public class CraftingRecipe : ScriptableObject, ISerializationCallbackReceiver
 public struct Craftable
 {
     public uint item;
-    public uint count;
+    public ushort count;
 
 }

@@ -71,6 +71,12 @@ MonoBehaviour:
     itemType: 1
     itemImage: {fileID: 21300000, guid: ef8a05a4ebd504240914473cda9b6542, type: 3}
     blockId: 6
+  - name: Crafting station
+    id: 5
+    description: craft-Attack!
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: ea06fd92e0aab0a42b237a81d22c9a29, type: 3}
+    blockId: 20
   ToolItemsInGame: []
   EquipableItemsInGame: []
   UseableItemsInGame: []
@@ -86,26 +92,28 @@ MonoBehaviour:
     itemType: 1
     itemImage: {fileID: 21300000, guid: 35aabff55aa791248b87d99dde69c0d1, type: 3}
   CraftingStations:
-  - slotwidth: 2
+  - blockId: 255
+    slotwidth: 2
     slotheight: 2
     craftingInterfaceSprite: {fileID: 21300000, guid: b96c6220787da4b4b9b3d5af1cf05f3f, type: 3}
     craftingSlotSprite: {fileID: 21300000, guid: b4a1fce7afb32db48be3fd7e4c44e4c1, type: 3}
     listViewColor: {r: 0.4308473, g: 0.67793274, b: 0.8867924, a: 0.7019608}
     buttonColor: {r: 0.17702031, g: 0.50209856, b: 0.9622642, a: 1}
-    blockId: 255
-  - slotwidth: 3
+  - blockId: 20
+    slotwidth: 3
     slotheight: 3
     craftingInterfaceSprite: {fileID: 21300000, guid: 5ab8e7b7520828b45b64868fa575475b, type: 3}
     craftingSlotSprite: {fileID: 21300000, guid: 223263893184d0f4cad2120a59508291, type: 3}
     listViewColor: {r: 0.6981132, g: 0.43682104, b: 0.21404415, a: 0.65882355}
     buttonColor: {r: 0.5471698, g: 0.2829105, b: 0.04903879, a: 1}
-    blockId: 20
   Enemies:
   - {fileID: 11400000, guid: 5fa23f42fd79765418b7e844d5d84e6b, type: 2}
   Structures:
   - {fileID: 7804717356263989844}
   Recipes:
   - {fileID: 11400000, guid: a82579b4eace29f409f932e7cf1ad59e, type: 2}
+  - {fileID: 11400000, guid: 2cbe51554b22dfe41baf7afb307f9e26, type: 2}
+  craftingRect: {fileID: 0}
 --- !u!114 &1909828132783296647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,7 +130,7 @@ MonoBehaviour:
   world: {fileID: 1085889088375208448, guid: 6f8afa7ba4b1ace43a1488e9989f22f5, type: 3}
   playerNetPrefab: {fileID: 2794137725677328093, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
   loadingScreen: {fileID: 1659422467158985314, guid: bf0b35f4090f7fc409bc4e6c5154ffcf, type: 3}
-  craftingUIListView: {fileID: 4598717845645267834, guid: 077d80e5b7fb538469ff0d37d19e178b, type: 3}
+  craftingUIListView: {fileID: 4904731259523108657, guid: 29f3864126b1a234f96e83dc5e192912, type: 3}
 --- !u!114 &-448414925542145110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -276,7 +284,10 @@ MonoBehaviour:
     blockID: 20
     tile: {fileID: 11400000, guid: d4b4d018197cc9741b00f272edd60338, type: 2}
     removeDuration: 5
-    blockDrops: []
+    blockDrops:
+    - itemID: 5
+      dropchance: 1
+      toolItemType: 5
 --- !u!1 &5550657725122004391
 GameObject:
   m_ObjectHideFlags: 0
