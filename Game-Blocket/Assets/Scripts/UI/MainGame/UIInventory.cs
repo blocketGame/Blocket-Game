@@ -60,17 +60,18 @@ public class UIInventory : MonoBehaviour
 	public GameObject uiParent, slotField, uiHud, hudslotfieldParent;
 	/// <summary>Image from Inspector</summary>
 	public Image inventoryBackgroundImage;
-	/// <summary>Prefab from Inspector</summary>
-	public GameObject prefabItemSlot;
 
-	public GameObject craftingInterfacePlaceholder;
+	[Header("Other Prefabs")]
+	public RectTransform chatParent;
+	public InputField chatInput;
+	public ScrollViewHandler chatHistoryView;
+	/// <summary>Prefab from Inspector</summary>
+	public GameObject prefabItemSlot, _slotOptions, loadingScreen, craftingInterfacePlaceholder;
 	/// <summary>
 	/// Original position of the Inventory
 	/// </summary>
 	private Vector2 uiParentPosition;
-
-	public GameObject _slotOptions;
-    #endregion
+	#endregion
 
 	/// <summary><see cref="global::Inventory"/></summary>
 	private Inventory Inventory => GlobalVariables.Inventory;
@@ -93,7 +94,7 @@ public class UIInventory : MonoBehaviour
 	/// </summary>
 	private void InitAtHand()
 	{
-		atHandSlot = Instantiate(prefabItemSlot, GameObject.Find("Inventory").transform);
+		atHandSlot = Instantiate(prefabItemSlot, GlobalVariables.UIInventory.transform);
 		atHandSlot.name = "SlotAtHand";
 		atHandSlot.SetActive(false);
 		Destroy(atHandSlot.GetComponentInChildren<Image>());
@@ -197,16 +198,16 @@ public class UIInventory : MonoBehaviour
 		InventoryOpened = false;
 		Inventory.SelectedSlot = 0;
 	}
-    #endregion
+	#endregion
 
-    #region UnityMethods
-    private void Start()
-    {
+	#region UnityMethods
+	private void Start()
+	{
 		craftingInterfacePlaceholder.SetActive(false);
 	}
 
-    /// <summary>"Reload" at the beginning</summary>
-    public void Awake()
+	/// <summary>"Reload" at the beginning</summary>
+	public void Awake()
 	{
 		GlobalVariables.UIInventory = this;
 		name = "UI";
@@ -217,13 +218,17 @@ public class UIInventory : MonoBehaviour
 		if (GameManager.State != GameState.INGAME)
 			return;
 
-		if (Input.GetKeyDown(GameManager.SettingsProfile.Keys["InventoryKey"]))
+		if (Input.GetKeyDown(GameManager.SettingsProfile.GetKeyCode("InventoryKey")))
 		{
+
+			//Inv
 			InventoryOpened = !InventoryOpened;
 			if (!InventoryOpened)
 				SynchronizeToHotbar();
-			if (InventoryOpened)
-			{
+
+			//Carfting?
+			///TODO: CLEANUP
+			if (InventoryOpened){
 				if (GlobalVariables.activatedCraftingInterface != null)
 				{
 					craftingInterfacePlaceholder.SetActive(true);
@@ -234,9 +239,7 @@ public class UIInventory : MonoBehaviour
 					CraftingStation.InstatiateCraftingInterface(prefabItemSlot, craftingInterfacePlaceholder, GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)), GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)).Slotwidth, GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)).Slotheight);
 					CraftingStation.RenewRecommendations(new Craftable[2],craftingInterfacePlaceholder);
 				}
-			}
-			else
-			{
+			}else{
 				//TODO: Optional things to do...
 				//uiParent.SetActive(false);
 				if (GlobalVariables.activatedCraftingInterface != null)
@@ -244,10 +247,10 @@ public class UIInventory : MonoBehaviour
 					GlobalVariables.activatedCraftingInterface.SetActive(true);
 					foreach(UIInventorySlot uis in craftingInterfacePlaceholder.GetComponentsInChildren<UIInventorySlot>())
 					{
-                        if (uis.ItemID != 0)
-                        {
+						if (uis.ItemID != 0)
+						{
 							Inventory.AddItem(uis.ItemID, uis.ItemCount, out ushort itemCountNotAdded);
-                        }
+						}
 						GameObject.Destroy(uis.gameObject);
 					}
 					uiParent.transform.position = uiParentPosition;
@@ -257,7 +260,21 @@ public class UIInventory : MonoBehaviour
 
 			}
 		}
-		if (Input.mouseScrollDelta.y != 0)
+
+		//Chat
+		if (Input.GetKeyDown(GameManager.SettingsProfile.GetKeyCode("ChatKey")) && !ChatOpened)
+			ChatOpened = true;
+		if (ChatOpened){
+			if (Input.GetKeyDown(KeyCode.Escape))
+				ChatOpened = false;
+			if (Input.GetKeyDown(KeyCode.Return)){ //Return = Enter
+				ChatOpened = false;
+				ConsoleHandler.Handle(chatInput.text);
+			}
+		}
+
+		//Scroll
+		if (Input.mouseScrollDelta.y != 0 && !ChatOpened)
 		{
 			float val = Input.mouseScrollDelta.y;
 			if (val < 0)
@@ -287,17 +304,16 @@ public class UIInventory : MonoBehaviour
 	/// <summary>Returns and sets if the inventory should open</summary>
 	public bool InventoryOpened
 	{
-		get
-		{
-			return inventoryOpened;
-		}
+		get => inventoryOpened;
 		set
 		{
 			inventoryOpened = value;
+			ChatOpened = false;
 			if (value)
 			{
 				//TODO: Optional things to do... Example: Lock Mouseplace or break
 				uiParent.SetActive(true);
+				
 			}
 			else
 			{
@@ -308,6 +324,31 @@ public class UIInventory : MonoBehaviour
 		}
 	}
 	private static bool inventoryOpened;
+
+	public bool ChatOpened
+	{
+		get => chatOpened;
+
+		set
+		{
+			if (InventoryOpened)
+				return;
+			chatOpened = value;
+			if (value)
+			{
+				chatParent.gameObject.SetActive(true);
+				chatInput.Select();
+				chatInput.text = "";
+			}
+			else
+			{
+				//TODO: Optional things to do...
+				chatParent.gameObject.SetActive(false);
+			}
+
+		}
+	}
+	private static bool chatOpened;
 
 	public string DescriptionText
 	{
