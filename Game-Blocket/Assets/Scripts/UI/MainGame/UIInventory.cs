@@ -72,9 +72,6 @@ public class UIInventory : MonoBehaviour
 	public GameObject _slotOptions;
     #endregion
 
-    /// <summary><see cref="global::Inventory"/></summary>
-    private Inventory Inventory => GlobalVariables.Inventory;
-
 	/// <summary><see cref="global::Inventory"/></summary>
 	private Inventory Inventory => GlobalVariables.Inventory;
 
