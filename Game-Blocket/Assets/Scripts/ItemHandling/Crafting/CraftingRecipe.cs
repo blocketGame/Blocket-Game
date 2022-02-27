@@ -80,4 +80,10 @@ public struct Craftable
     public uint item;
     public ushort count;
 
+    public Craftable(uint item,ushort count)
+    {
+        this.item = item;
+        this.count = count;
+    }
+
 }

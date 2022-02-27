@@ -16,7 +16,7 @@ public static class CraftingHandler
     /// </summary>
     /// <param name="items"></param>
     /// <returns></returns>
-    public static IEnumerable<CraftingRecipe> GetRecipesByItems(uint[] items)
+    public static IEnumerable<CraftingRecipe> GetRecipesByItems(Craftable[] items)
     {
         //[TODO]
         CraftingStation cs =GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(GlobalVariables.activatedCraftingInterface.GetComponent<Image>().sprite));
@@ -26,7 +26,7 @@ public static class CraftingHandler
             int stelle=0; 
             foreach (Craftable i in cr.Recipe)
             {
-                if(items[stelle]==i.item && i.item != 0)
+                if(items[stelle].item==i.item && i.item != 0)
                 {
                     Debug.Log("Recommendation Should be created!!");
                     yield return cr;
@@ -42,7 +42,7 @@ public static class CraftingHandler
     /// </summary>
     /// <param name="item"></param>
     /// <returns></returns>
-    public static Craftable GetExactItem(uint[] items)
+    public static Craftable GetExactItem(Craftable[] items,out CraftingRecipe usedCraftingRecipe)
     {
         //[TODO]
         CraftingStation cs = GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(GlobalVariables.activatedCraftingInterface.GetComponent<Image>().sprite));
@@ -53,7 +53,7 @@ public static class CraftingHandler
             bool correct=true;
             foreach (Craftable i in cr.Recipe)
             {
-                if ((items[stelle] != i.item) && i.item != 0)
+                if ((items[stelle].item != i.item || items[stelle].count < i.count) && i.item != 0)
                 {
                     correct=false;
                 }
@@ -61,8 +61,12 @@ public static class CraftingHandler
                 stelle++;
             }
             if (correct)
+            {
+                usedCraftingRecipe = cr;
                 return cr.output;
+            }
         }
+        usedCraftingRecipe = null;
         return new Craftable();
 
     }

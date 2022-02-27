@@ -233,6 +233,7 @@ public class UIInventory : MonoBehaviour
 					uiParent.transform.position = new Vector2(uiParent.transform.position.x + 900, uiParent.transform.position.y);
 					craftingInterfacePlaceholder.GetComponent<Image>().sprite = GlobalVariables.activatedCraftingInterface.GetComponent<Image>().sprite;
 					CraftingStation.InstatiateCraftingInterface(prefabItemSlot, craftingInterfacePlaceholder, GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)), GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)).Slotwidth, GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)).Slotheight);
+					CraftingStation.RenewRecommendations(new Craftable[2],craftingInterfacePlaceholder);
 				}
 			}
 			else
@@ -243,7 +244,13 @@ public class UIInventory : MonoBehaviour
 				{
 					GlobalVariables.activatedCraftingInterface.SetActive(true);
 					foreach(UIInventorySlot uis in craftingInterfacePlaceholder.GetComponentsInChildren<UIInventorySlot>())
-					GameObject.Destroy(uis.gameObject);
+					{
+                        if (uis.ItemID != 0)
+                        {
+							Inventory.AddItem(uis.ItemID, uis.ItemCount, out ushort itemCountNotAdded);
+                        }
+						GameObject.Destroy(uis.gameObject);
+					}
 					uiParent.transform.position = uiParentPosition;
 					craftingInterfacePlaceholder.SetActive(false);
 				}

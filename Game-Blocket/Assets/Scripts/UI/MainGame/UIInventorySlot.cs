@@ -107,12 +107,12 @@ public class UIInventorySlot : MonoBehaviour {
 				if(CraftingStation!=null)
                 {
 					int x=0;
-					uint[] array = new uint[CraftingStation.Slotwidth*CraftingStation.Slotheight] ;
+					Craftable[] array = new Craftable[CraftingStation.Slotwidth*CraftingStation.Slotheight] ;
 					Debug.Log(CraftingStation.Slotwidth + " " + CraftingStation.Slotheight);
 					Debug.Log(parentCraftingInterface.GetComponentsInChildren<UIInventorySlot>().Length);
 					foreach(UIInventorySlot uislot in parentCraftingInterface.GetComponentsInChildren<UIInventorySlot>())
                     {
-						array[x] = uislot.ItemID;
+						array[x] = new Craftable(uislot.ItemID,uislot.ItemCount);
 						x++;
                     }
 

@@ -155,14 +155,29 @@ public class CraftingStation
     private static void CraftEvent(GameObject CraftingInterfacePlaceholder, CraftingStation craftingStation)
     {
         int x = 0;
-        uint[] array = new uint[craftingStation.Slotwidth * craftingStation.Slotheight];
+        Craftable[] array = new Craftable[craftingStation.Slotwidth * craftingStation.Slotheight];
         foreach (UIInventorySlot uislot in CraftingInterfacePlaceholder.GetComponentsInChildren<UIInventorySlot>())
         {
-            array[x] = uislot.ItemID; x++;
+            array[x] = new Craftable(uislot.ItemID, uislot.ItemCount); x++;
         }
-        Craftable i = CraftingHandler.GetExactItem(array);
-        if (i.item != 0)     GlobalVariables.Inventory.AddItem(i.item,i.count,out ushort item);
-        else                 Debug.LogError("Naughty Naughty , you can't craft something that doesn't exist!");
+        Craftable i = CraftingHandler.GetExactItem(array,out CraftingRecipe craftingRecipe);
+        if (i.item != 0)
+        {
+            GlobalVariables.Inventory.AddItem(i.item, i.count, out ushort item);
+            foreach(UIInventorySlot uIInventorySlot in CraftingInterfacePlaceholder.GetComponentsInChildren<UIInventorySlot>())
+            {
+                if(uIInventorySlot.ItemCount!=0)
+                    foreach(Craftable c in craftingRecipe.Recipe)
+                        if(c.item.Equals(uIInventorySlot.ItemID))
+                            uIInventorySlot.ItemCount-= c.count;
+                if(uIInventorySlot.ItemCount == 0)
+                {
+                    uIInventorySlot.ItemID = 0;
+                    uIInventorySlot.itemImage = null;
+                }
+            }
+        }
+        else Debug.LogError("Naughty Naughty , you can't craft something that doesn't exist!");
 
         ///[TODO - Remove Items that have been used to craft the new one]
     }
@@ -170,12 +185,12 @@ public class CraftingStation
     /// <summary>
     /// Reacts to the ItemInsertEvent -> Renews crafting Recommendations
     /// </summary>
-    public void RenewRecommendations(uint[] items, GameObject CraftingInterfacePlaceholder)
+    public static void RenewRecommendations(Craftable[] items, GameObject CraftingInterfacePlaceholder)
     {
         IEnumerable<CraftingRecipe> recipes = CraftingHandler.GetRecipesByItems(items); //RecipeResponse
         CraftingInterfacePlaceholder.GetComponentInChildren<ScrollRect>().GetComponentInChildren<Mask>().GetComponentInChildren<RecipeRecommendationList>().PruneRecommendations();
 
-        Item i = GlobalVariables.ItemAssets.BlockItemsInGame.Find(x => x.id.Equals(CraftingHandler.GetExactItem(items).item));
+        Item i = GlobalVariables.ItemAssets.BlockItemsInGame.Find(x => x.id.Equals(CraftingHandler.GetExactItem(items,out CraftingRecipe cr).item));
         if (i != null)
         {
             CraftingInterfacePlaceholder.GetComponentInChildren<CraftingButtonRecognition>().itemName.text = i.name;
