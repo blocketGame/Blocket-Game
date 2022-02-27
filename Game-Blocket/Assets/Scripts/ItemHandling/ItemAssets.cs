@@ -1,5 +1,3 @@
-
-using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -23,6 +21,7 @@ public class ItemAssets : MonoBehaviour
 	public List<CraftingRecipe> Recipes = new List<CraftingRecipe>();
 
 	private void Awake() => GlobalVariables.ItemAssets = this;
+
 
 	/// <summary>
 	/// Returns a Sprite from Item-ID

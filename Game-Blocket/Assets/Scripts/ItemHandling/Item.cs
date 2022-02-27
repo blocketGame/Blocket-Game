@@ -36,6 +36,9 @@ public abstract class Item{
 				return true;
 		return false;
 	}
+
+	public override int GetHashCode() => base.GetHashCode();
+	
 }
 
 [Serializable]

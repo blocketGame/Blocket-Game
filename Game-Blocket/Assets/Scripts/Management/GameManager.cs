@@ -32,6 +32,8 @@ public class GameManager : NetworkBehaviour
 	public static WorldProfile WorldProfileNow { get; set; }
 	public static SettingsProfile SettingsProfile { get; private set; } = new SettingsProfile("local", null);
 
+	public static GameObject LoadinScreenNow { get; set; }
+
 	public UNetTransport uNetTransport;
 	//TODO: Coroutines, Ticks....
 
@@ -39,9 +41,14 @@ public class GameManager : NetworkBehaviour
 		if (DebugVariables.ShowGameStateEvent)
 			Debug.Log($"GameState Switched to: {state}");
 		switch (state) {
-			case GameState.MENU: break;
-			case GameState.LOBBY: break;
-			case GameState.LOADING: 
+			case GameState.MENU: 
+
+				break;
+			case GameState.LOBBY: 
+
+				break;
+			case GameState.LOADING:
+				GlobalVariables.UIInventory?.loadingScreen?.SetActive(true);
 				break;
 			case GameState.INGAME:
 				///TODO: Clean
@@ -49,6 +56,8 @@ public class GameManager : NetworkBehaviour
 					throw new NullReferenceException("Rigidbody is Null!");
 				rig.simulated = true;
 				rig.gravityScale = 1;
+
+				GlobalVariables.UIInventory.loadingScreen.SetActive(false);
 			break;
 			case GameState.PAUSED: break;
 			case GameState.NEVER: throw new ArgumentException();

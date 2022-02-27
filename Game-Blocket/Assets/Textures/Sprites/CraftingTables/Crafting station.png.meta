@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Game-Blocket/Assets/Textures/Sprites/CraftingTables/Crafting station.png.meta
 guid: ea06fd92e0aab0a42b237a81d22c9a29
+=======
+guid: e21b90499ba6591478b16be00622e14c
+>>>>>>> b9e20d9 (World generation bug fixes):Game-Blocket/Assets/Textures/Sprites/UI/Lobby/RenameIcon.png.meta
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -46,11 +50,15 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
+<<<<<<< HEAD:Game-Blocket/Assets/Textures/Sprites/CraftingTables/Crafting station.png.meta
   spritePixelsToUnits: 1000
+=======
+  spritePixelsToUnits: 100
+>>>>>>> b9e20d9 (World generation bug fixes):Game-Blocket/Assets/Textures/Sprites/UI/Lobby/RenameIcon.png.meta
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 1
+  alphaIsTransparency: 0
   spriteTessellationDetail: -1
   textureType: 8
   textureShape: 1
@@ -60,7 +68,7 @@ TextureImporter:
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
-  ignorePngGamma: 0
+  ignorePngGamma: 1
   applyGammaDecoding: 0
   platformSettings:
   - serializedVersion: 3
