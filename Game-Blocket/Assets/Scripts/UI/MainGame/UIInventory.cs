@@ -70,7 +70,10 @@ public class UIInventory : MonoBehaviour
 	private Vector2 uiParentPosition;
 
 	public GameObject _slotOptions;
-	#endregion
+    #endregion
+
+    /// <summary><see cref="global::Inventory"/></summary>
+    private Inventory Inventory => GlobalVariables.Inventory;
 
 	/// <summary><see cref="global::Inventory"/></summary>
 	private Inventory Inventory => GlobalVariables.Inventory;
@@ -164,8 +167,8 @@ public class UIInventory : MonoBehaviour
 	}
 
 	/// <summary></summary>
-	private void InitHudSlots()
-	{
+
+	private void InitHudSlots() {
 		//Get With and height from the Prefab
 		float prefW = prefabItemSlot.GetComponent<RectTransform>().rect.width;
 		//Go through every Slot
@@ -187,8 +190,7 @@ public class UIInventory : MonoBehaviour
 		}
 	}
 
-	public void Init()
-	{
+	public void Init(){
 		if (Inventory == null)
 			Debug.LogError("Inventory not found!");
 		ReloadSettings();
@@ -263,6 +265,7 @@ public class UIInventory : MonoBehaviour
 			float val = Input.mouseScrollDelta.y;
 			if (val < 0)
 				if (Inventory.SelectedSlot == Inventory.HudSlots.Count - 1)
+
 					Inventory.SelectedSlot = 0;
 				else
 					Inventory.SelectedSlot += 1;
@@ -330,13 +333,12 @@ public class UIInventory : MonoBehaviour
 	/// <summary>
 	/// Synchronizes Inventory State of Slots Row 1
 	/// </summary>
-	public void SynchronizeToHotbar()
-	{
-		for (int i = 0; i < Inventory.HudSlots.Count; i++)
-		{
-			Inventory.HudSlots[i].ItemID = Inventory.InvSlots[i].ItemID;
-			Inventory.HudSlots[i].ItemCount = Inventory.InvSlots[i].ItemCount;
-		}
+
+	public void SynchronizeToHotbar() {
+		for(int i = 0; i < Inventory.HudSlots.Count; i++){ 
+				Inventory.HudSlots[i].ItemID = Inventory.InvSlots[i].ItemID;
+				Inventory.HudSlots[i].ItemCount = Inventory.InvSlots[i].ItemCount;	
+			}
 		GlobalVariables.PlayerVariables.ReloadItemInHand();
 	}
 	#endregion
