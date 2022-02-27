@@ -42,6 +42,17 @@ public class PlayerInteraction : MonoBehaviour {
 		HandleBlockInteraction();
 		KeyCode main = GameManager.SettingsProfile.Keys["MainInteractionKey"];
 		KeyCode side = GameManager.SettingsProfile.Keys["SideInteractionKey"];
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+			CraftingStation.HandleCraftingInterface(BlockHoverdAbsolute, GlobalVariables.ItemAssets.CraftingStations.Find(x => x.blockId.Equals(255)));
+		}
+
+		if (Input.GetKeyDown(side) && GlobalVariables.ItemAssets.CraftingStations.Find(x => x.blockId.Equals(TargetBlockID))!=null)
+		{
+			//Open Menu
+			//Crafting System
+			CraftingStation.HandleCraftingInterface( new Vector2Int((int)GlobalVariables.LocalPlayerPos.x, (int)GlobalVariables.LocalPlayerPos.y), GlobalVariables.ItemAssets.CraftingStations.Find(x => x.blockId.Equals(TargetBlockID)));
+		}
 
 		if (GlobalVariables.Inventory.SelectedItemObj is BlockItem bI) { 
 			if (Input.GetKey(side))

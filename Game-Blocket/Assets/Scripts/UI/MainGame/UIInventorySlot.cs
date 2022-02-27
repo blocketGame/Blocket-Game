@@ -26,6 +26,13 @@ public class UIInventorySlot : MonoBehaviour {
 	#endregion
 
 	public readonly bool useOldPointerhandling = true;
+	
+	/// <summary>
+	/// If Null => Is not component of the crafting interface
+	/// If Content => Is used to create a listener to renew crafting Recommendations
+	/// </summary>
+	public CraftingStation CraftingStation { get; set; }
+	public GameObject parentCraftingInterface;
 
 	public bool IsSelected { get => _isSelected; set {
 			_isSelected = value;
@@ -55,6 +62,9 @@ public class UIInventorySlot : MonoBehaviour {
 	}
 	private ushort _itemCount = 0;
 
+	/// <summary>
+	/// Self contained Item
+	/// </summary>
 	private Item ItemObject { get; set; }
 
 	/// <summary>Reloads the Itemslot<br></br><b>Be carfull when deleting!</b></summary>
@@ -93,18 +103,36 @@ public class UIInventorySlot : MonoBehaviour {
 
 		if (useOldPointerhandling)
 			button.onClick.AddListener(() => {
-				Debug.Log("Pressed!");
 				GlobalVariables.Inventory.PressedSlot(this); 
+				if(CraftingStation!=null)
+                {
+					int x=0;
+					Craftable[] array = new Craftable[CraftingStation.Slotwidth*CraftingStation.Slotheight] ;
+					Debug.Log(CraftingStation.Slotwidth + " " + CraftingStation.Slotheight);
+					Debug.Log(parentCraftingInterface.GetComponentsInChildren<UIInventorySlot>().Length);
+					foreach(UIInventorySlot uislot in parentCraftingInterface.GetComponentsInChildren<UIInventorySlot>())
+                    {
+						array[x] = new Craftable(uislot.ItemID,uislot.ItemCount);
+						x++;
+                    }
+
+					CraftingStation.RenewRecommendations(array,GlobalVariables.UIInventory.craftingInterfacePlaceholder);
+                }
 			});
         else
         {
 			button.gameObject.AddComponent<SlotOptionsScript>();
 			button.gameObject.GetComponent<SlotOptionsScript>().invSlot = this;
+
+			///Sending a RecipeUpdateRequest
 			if (UIInventory != null)
 				button.gameObject.GetComponent<SlotOptionsScript>().SlotOptions = UIInventory._slotOptions;
         }
 	}
 
+	/// <summary>
+	/// [TODO]
+	/// </summary>
 	public void OnMouseOver() {
 		Debug.Log("A");
 	}

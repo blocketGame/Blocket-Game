@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Used for Global (Unique) Variables/Settings
@@ -9,6 +10,8 @@ public static class GlobalVariables {
 
 	public static readonly ushort maxItemCountForMultiple = 128;
 	public static string chunkTag = "Chunk";
+
+	public static GameObject activatedCraftingInterface;
 
 	public static GameManager GameManager { get; set; }
 	
@@ -24,6 +27,8 @@ public static class GlobalVariables {
 		}
 	}
 	private static GameObject _localUI;
+
+	public static GameObject CraftingUIListContent { get; set; }
 	#endregion
 
 	#region World Scripts
