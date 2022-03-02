@@ -15,9 +15,7 @@ public class AssetIO : MonoBehaviour {
 	}
 
 	public void CheckAssets() {
-		if (!gameObject.TryGetComponent(out ItemAssets ia))
-			Debug.LogError("A");
-		foreach(Structure so in ia.Structures)
+		foreach(Structure so in GlobalVariables.Structures.structures)
 			Debug.Log(EditorJsonUtility.ToJson(so));
 	}
 }

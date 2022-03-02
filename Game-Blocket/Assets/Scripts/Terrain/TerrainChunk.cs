@@ -95,8 +95,6 @@ public sealed class TerrainChunk : ChunkData{
 	public void PlaceAllTiles() {
 		for (int x = 0; x < GlobalVariables.WorldData.ChunkWidth; x++) {
 			for (int y = 0; y < GlobalVariables.WorldData.ChunkHeight; y++) {
-				if (BlockIDs[x, y] == 8)
-					Debug.Log("a");
 				PlaceTile(x, y, GlobalVariables.WorldData.Blocks[BlockIDs[x, y]].tile, false);
 				PlaceTile(x, y, GlobalVariables.WorldData.Blocks[BlockIDsBG[x, y]].tile, true);
 			}
@@ -327,6 +325,7 @@ public class ChunkData {
 	public byte[,] blocks, bgBlocks;
 	public Drop[] drops;
 	public Vector2 chunkPosition;
+	public Dictionary<byte, List<Vector2Int>> structureCoordinates = new Dictionary<byte, List<Vector2Int>>();
 
 	public Vector2Int ChunkPositionInt => TerrainHandler.CastVector2ToInt(chunkPosition);
 	public Vector3 ChunkPostionWorldSpace => new Vector3(chunkPosition.x, chunkPosition.y);

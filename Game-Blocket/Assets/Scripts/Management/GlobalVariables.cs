@@ -35,6 +35,7 @@ public static class GlobalVariables {
 	public static WorldData WorldData { get; set; }
 	public static TerrainGeneration TerrainGeneration { get; set; }
 	public static TerrainHandler TerrainHandler { get; set;}
+	public static Structures Structures { get; set; }
 	public static GameObject World { get => _world; set { 
 			_world = value;
 		} 

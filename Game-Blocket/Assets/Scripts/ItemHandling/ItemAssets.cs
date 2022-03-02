@@ -17,7 +17,6 @@ public class ItemAssets : MonoBehaviour
 	[SerializeField]
 	public List<CraftingStation> CraftingStations = new List<CraftingStation>();
 	public List<EnemySO> Enemies = new List<EnemySO>();
-	public List<Structure> Structures = new List<Structure>();
 	public List<CraftingRecipe> Recipes = new List<CraftingRecipe>();
 
 	private void Awake() => GlobalVariables.ItemAssets = this;

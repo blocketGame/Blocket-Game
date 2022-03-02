@@ -20,6 +20,4 @@ public class DungeonSO : ScriptableObject
     //Tilemapvisulizer
     public TileBase backgroundTile;
     public TileBase wallTile;
-    public TileBase collisionTile;
-
 }

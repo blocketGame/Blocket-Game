@@ -24,10 +24,6 @@ public class Biom : ScriptableObject, ISerializationCallbackReceiver {
 	[SerializeField]
 	private byte[] enemies;
 	[SerializeField]
-	private int treeSpawnChance;
-	[SerializeField]
-	private int treeSpawnDistance;
-	[SerializeField]
 	private byte stoneBlockId;
 	#endregion
 
@@ -51,8 +47,6 @@ public class Biom : ScriptableObject, ISerializationCallbackReceiver {
 	public RegionData[] BgRegions { get => bgRegions; set => bgRegions = value; }
 	public List<Biomtype> Biomtype { get => biomtype; set => biomtype = value; }
     public byte[] Structures { get => structures; set => structures = value; }
-    public int TreeSpawnChance { get => treeSpawnChance; set => treeSpawnChance = value; }
-    public int TreeSpawnDistance { get => treeSpawnDistance; set => treeSpawnDistance = value; }
 	public byte StoneBlockId { get => stoneBlockId; set => stoneBlockId = value; }
 	#endregion
 

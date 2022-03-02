@@ -95,7 +95,7 @@ public  class TerrainHandler : MonoBehaviour
 					ChunksLastUpdate.Remove(tc);
 				DisableChunk(ChunksLastUpdate);
 				ChunksLastUpdate = chunksVisibleNow;
-				UpdateLoaded();
+				//UpdateLoaded();
         }
 		lastChunk = CurrentChunk;
 	}
@@ -143,7 +143,7 @@ public  class TerrainHandler : MonoBehaviour
 	}
 
 	private void OrderChunk(Vector2Int chunkPosInt) {
-		TerrainChunk tc = WorldProfile.LoadChunk(chunkPosInt);
+		TerrainChunk tc = null;//WorldProfile.LoadChunk(chunkPosInt);
 		if (tc == null)
 			TerrainGeneration.BuildChunk(chunkPosInt, ChunkParent);
 		else

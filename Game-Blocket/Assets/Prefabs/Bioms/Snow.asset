@@ -10,21 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e47b045bfe515ff45afe88645f743998, type: 3}
-  m_Name: Default - biom
+  m_Name: Snow
   m_EditorClassIdentifier: 
-  index: 0
-  biomName: Default Biom
-  ores:
-  - name: Bernstein
-    noiseValueFrom: 0.7
-    noiseValueTo: 0.701
-    blockID: 10
+  index: 2
+  biomName: Snow
+  ores: []
   regions:
-  - description: Grass
+  - description: Snow
     regionRange: 1
-    blockID: 2
-  - description: Dirt
+    blockID: 6
+  - description: SnowDirtblock
     regionRange: 2
+    blockID: 7
+  - description: Dirt
+    regionRange: 3
     blockID: 3
   bgRegions:
   - description: DIrtBG (Top)
@@ -33,10 +32,8 @@ MonoBehaviour:
   - description: DirtBG
     regionRange: 2
     blockID: 8
-  structures: 0001
+  structures: 010203
   enemies: 
-  treeSpawnChance: 5
-  treeSpawnDistance: 5
   stoneBlockId: 12
   size: 1000
   heightCurve:
@@ -63,4 +60,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  biomtype: 0100000000000000
+  biomtype: 00000000
