@@ -5,9 +5,14 @@ using UnityEngine.UI;
 
 public class ShowTimer : MonoBehaviour
 {
+    public Clock clock;
+    public Text text;
 
-    void Update()
+    public void FixedUpdate()
     {
-        GetComponent<Text>().text = DayNightCycle.hours + ":" + DayNightCycle.minutes + ":" + Mathf.RoundToInt(DayNightCycle.seconds);
+        if (GameManager.State != GameState.INGAME)
+            return;
+        //clock.CalcTime();
+        text.text = clock.hours + ":" + clock.minutes;
     }
 }
