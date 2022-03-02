@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 1
   biomName: Desert
-  ores: []
+  ores:
+  - name: Perl
+    blockID: 15
   regions:
   - description: 
     regionRange: 1

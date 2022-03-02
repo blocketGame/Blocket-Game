@@ -86,16 +86,11 @@ public struct OreData
 {
 	[SerializeField]
 	private string name;
-	[SerializeField]
-	private float noiseValueFrom;
-	[SerializeField]
-	private float noiseValueTo;
+
 	[SerializeField]
 	private byte blockID;
 
 	public string Name { get => name; set => name = value; }
-	public float NoiseValueFrom { get => noiseValueFrom; set => noiseValueFrom = value; }
-	public float NoiseValueTo { get => noiseValueTo; set => noiseValueTo = value; }
 	public byte BlockID { get => blockID; set => blockID = value; }
 }
 

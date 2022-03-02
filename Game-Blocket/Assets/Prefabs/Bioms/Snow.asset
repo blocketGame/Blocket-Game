@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 2
   biomName: Snow
-  ores: []
+  ores:
+  - name: Opal
+    blockID: 11
   regions:
   - description: Snow
     regionRange: 1

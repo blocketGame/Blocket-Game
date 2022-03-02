@@ -13,7 +13,7 @@ public static class GlobalVariables {
 
 	public static GameObject activatedCraftingInterface;
 
-	public static GameManager GameManager { get; set; }
+    public static GameManager GameManager { get; set; }
 	
 	#region UIScripts
 	public static UILobby UILobby { get; set; }
@@ -47,6 +47,7 @@ public static class GlobalVariables {
 	public static PrefabAssets PrefabAssets { get; set; }
 	public static ItemAssets ItemAssets { get; set; }
 	public static WorldAssets WorldAssets { get; set; }
+	public static MobAssets MobAssets { get; internal set; }
 	#endregion
 
 	#region LocalPlayer
@@ -67,12 +68,17 @@ public static class GlobalVariables {
 			_inventory = value.GetComponentInChildren<Inventory>();
 		}
 	}
+
     private static GameObject _localPlayer;
 
-	#endregion
+    #endregion
 
-	/// <summary>Does the nothing</summary>
-	public static void DoNothing(){
+    #region Mobs
+    public static MobHandler MobHandler { get; internal set; }
+    #endregion
+
+    /// <summary>Does the nothing</summary>
+    public static void DoNothing(){
 		//Nothing
 		//DO NOT DELETE!
     }

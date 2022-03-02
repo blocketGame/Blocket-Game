@@ -1605,6 +1605,7 @@ MonoBehaviour:
   loadingScreenPrefab: {fileID: 1659422467158985314, guid: bf0b35f4090f7fc409bc4e6c5154ffcf, type: 3}
   consoleText: {fileID: 8550470931165025056, guid: 1cc895b1a9eb24540bc01a2b54a9ecfa, type: 3}
   craftingUIListView: {fileID: 4904731259523108657, guid: 29f3864126b1a234f96e83dc5e192912, type: 3}
+  mobEntity: {fileID: 0}
 --- !u!114 &-448414925542145110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1843,6 +1844,21 @@ MonoBehaviour:
   - name: Cloud8
     blockID: 37
     tile: {fileID: 11400000, guid: 6dd88a1aa984b7e438ee5beaa71f6fc2, type: 2}
+    removeDuration: 3
+    blockDrops: []
+  - name: Palm-Tree
+    blockID: 38
+    tile: {fileID: 11400000, guid: c236d67cf2f44954f9e78a7d5fecdf68, type: 2}
+    removeDuration: 3
+    blockDrops: []
+  - name: Palm-Tree-Leaf
+    blockID: 39
+    tile: {fileID: 11400000, guid: ac3b45caf45f24a48a3f9a085d356b48, type: 2}
+    removeDuration: 3
+    blockDrops: []
+  - name: Sandstone
+    blockID: 40
+    tile: {fileID: 11400000, guid: 6dd55900983680643a5a4c0608fa8567, type: 2}
     removeDuration: 3
     blockDrops: []
 --- !u!114 &3502781153725182728
@@ -5083,10 +5099,10 @@ Tilemap:
   m_AnimatedTiles: {}
   m_TileAssetArray:
   - m_RefCount: 8
-    m_Data: {fileID: 11400000, guid: a2b039ad21dbea343a3af1d7a3f3e9c2, type: 2}
+    m_Data: {fileID: 11400000, guid: c236d67cf2f44954f9e78a7d5fecdf68, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 8
-    m_Data: {fileID: 21300000, guid: 4318a7de18532f2409f3a2dd127ba0b8, type: 3}
+    m_Data: {fileID: 21300000, guid: 2f1fece0cfd6cd84bb94590a46cfe13f, type: 3}
   m_TileMatrixArray:
   - m_RefCount: 8
     m_Data:
@@ -5476,10 +5492,10 @@ Tilemap:
   m_AnimatedTiles: {}
   m_TileAssetArray:
   - m_RefCount: 25
-    m_Data: {fileID: 11400000, guid: 0d94620a8cdce1e4694bd8d615d2101c, type: 2}
+    m_Data: {fileID: 11400000, guid: ac3b45caf45f24a48a3f9a085d356b48, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 25
-    m_Data: {fileID: 21300000, guid: fbe6e8a4ae870e3478c904052e30f1d8, type: 3}
+    m_Data: {fileID: 21300000, guid: f206c93e6f1ddcf48a8289403be00834, type: 3}
   m_TileMatrixArray:
   - m_RefCount: 25
     m_Data:
@@ -5632,9 +5648,9 @@ MonoBehaviour:
   replaceForeground: 0
   replaceBackground: 0
   removeForeground: 0
-  disableFromTo: 1
-  from: 0
-  to: 0
+  disableFromTo: 0
+  from: 10000
+  to: 32
   structureSize: {x: 0, y: 0, z: 0}
   structurePostionInEditor: {x: 0, y: 0, z: 0}
   structureSizeForeground:
