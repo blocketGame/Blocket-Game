@@ -20,7 +20,7 @@ public class MobHandler : MonoBehaviour
 
 	public void Awake() {
 		GlobalVariables.MobHandler = this;
-		Random = new System.Random(GlobalVariables.WorldData.Seed);
+		Random = new System.Random(GlobalVariables.WorldData?.Seed ?? 0);
 	}
 
 	public void FixedUpdate() {
@@ -123,10 +123,10 @@ public class MobHandler : MonoBehaviour
 
 	private void SpawnMob(Mob mob, Vector3? position)
 	{
-		if (position == null)
+		if (position == null && mobsNow.Count>=maxMobs)
 			return;
-		Vector3 pos = position ?? throw null;
-
+		Vector3 pos = position ?? Vector3.zero;
+		if (pos == Vector3.zero) return;
 		GameObject mgo = Instantiate(GlobalVariables.PrefabAssets.mobEntity, pos, Quaternion.identity);
 		FlyingEnemyBehaviour fb =mgo.AddComponent<FlyingEnemyBehaviour>();
 		fb.currentchunk = GetTerrainChunkFromPos(new Vector2Int((int)position?.x, (int)position?.y));

@@ -28,7 +28,7 @@ public class Movement : MonoBehaviour
 	public Rigidbody2D playerRigidbody;
 	public ParticleSystem dust;
 	public ParticleSystem wallDust;
-	public Animator animator;
+	///public Animator animator;
 
 	public Transform PlayerModelT => GlobalVariables.PlayerVariables.playerModel.transform != null ? GlobalVariables.PlayerVariables.playerModel.transform : throw new NullReferenceException();
 	#endregion
@@ -70,12 +70,17 @@ public class Movement : MonoBehaviour
 	public void Update(){
 		if (GameManager.State != GameState.INGAME)
 			return;
-		TurnAnim();
 
-		GlobalVariables.LocalPlayer.GetComponentInChildren<Camera>().orthographicSize = camZoom;
+		Camera.main.orthographicSize = camZoom;
 
 		if (Input.GetKey(GameManager.SettingsProfile.GetKeyCode("CrawlKey")))
 			Crawl();
+
+		///LULLLLLLLLLLLLLLLLL
+		float x = Input.GetAxis("Horizontal");
+		float y = Input.GetAxis("Vertical");
+		Vector2 dir = new Vector2(x, y);
+		playerRigidbody.velocity = (new Vector2(dir.x * MovementSpeed, dir.y * MovementSpeed));
 
 		VelocityUpdate();
 		/// Input Freeze Countdown
@@ -88,28 +93,29 @@ public class Movement : MonoBehaviour
 		///turn
 		if (movement > 0)
 		{
-			animator.SetBool("IsRunning", true);
+			//animator.SetBool("IsRunning", true);
 			if (side != 1)
 			{
 				if (playerRigidbody.velocity.y == 0)
 					CreateDust();
-				side = 1;
-				PlayerModelT.localScale = new Vector3(side, 1, 0);
+				Debug.Log(side);
+				side = (int)PlayerModelT.transform.localScale.x;
+				PlayerModelT.localScale = new Vector3(side, (int)PlayerModelT.transform.localScale.y, 0);
 			}
 		}
 		else if (movement < 0)
 		{
-			animator.SetBool("IsRunning", true);
+			//animator.SetBool("IsRunning", true);
 			if (side != -1)
 			{
 				if (playerRigidbody.velocity.y == 0)
 					CreateDust();
-				side = -1;
-				PlayerModelT.localScale = new Vector3(side, 1, 0);
+				side = -(int)PlayerModelT.transform.localScale.x;
+				PlayerModelT.localScale = new Vector3(side, (int)PlayerModelT.transform.localScale.y, 0);
 			}
 		}
 		else
-			animator.SetBool("IsRunning", false);
+			//animator.SetBool("IsRunning", false);
 
 		///Horizontal Movement
 		if (!lockvar)
@@ -167,7 +173,7 @@ public class Movement : MonoBehaviour
 			{
 				if (GlobalVariables.TerrainHandler.GetBlockFormCoordinate(
 				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + (-0.5f), playerRigidbody.position.y, 0)).x,
-				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + side, playerRigidbody.position.y - 1, 0)).y)
+				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + side, playerRigidbody.position.y - 2, 0)).y)
 				!= 0)
 				{
 					side = -1;
@@ -175,7 +181,7 @@ public class Movement : MonoBehaviour
 				}
 				else if (GlobalVariables.TerrainHandler.GetBlockFormCoordinate(
 				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + (0.5f), playerRigidbody.position.y, 0)).x,
-				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + side, playerRigidbody.position.y - 1, 0)).y)
+				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + side, playerRigidbody.position.y - 2, 0)).y)
 				!= 0)
 				{
 					side = 1;
@@ -189,7 +195,7 @@ public class Movement : MonoBehaviour
 				SetHorizontalMovement();
 		///Player is Grounded
 		}else{
-			animator.SetBool("IsJumping", false);
+			//animator.SetBool("IsJumping", false);
 			//Jump
 			if (Input.GetKey(GameManager.SettingsProfile.GetKeyCode("JumpKey")))
 				Jump();
@@ -235,7 +241,7 @@ public class Movement : MonoBehaviour
 	/// </summary>
 	private void Jump()
 	{
-		animator.SetBool("IsJumping", true);
+		//animator.SetBool("IsJumping", true);
 		CreateDust();
 		playerRigidbody.AddRelativeForce(new Vector2(0, JumpForce), ForceMode2D.Impulse);
 	}
@@ -272,7 +278,7 @@ public class Movement : MonoBehaviour
 
 	private void Crawl()
 	{
-		animator.SetBool("IsCrawling", true);
+		//animator.SetBool("IsCrawling", true);
 	}
 
 }

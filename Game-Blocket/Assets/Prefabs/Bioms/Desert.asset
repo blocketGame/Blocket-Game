@@ -31,7 +31,7 @@ MonoBehaviour:
   - description: 
     regionRange: 2
     blockID: 13
-  structures: 01020405
+  structures: 0102040506
   enemies: 
   stoneBlockId: 5
   size: 1000

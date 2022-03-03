@@ -11,7 +11,12 @@ public class PlayerInteraction : MonoBehaviour {
 	public GameObject deleteSprite;
 	public Sprite crackTile;
 
-	public Coroutine BreakCoroutine { get; set; }
+    #region CursorSettings
+    private CursorMode cursorMode = CursorMode.Auto;
+	private Vector2 hotSpot = Vector2.zero;
+    #endregion
+
+    public Coroutine BreakCoroutine { get; set; }
 
 	Vector3 MousePosInWorld => Camera.main.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
 	Vector2Int BlockHoverdAbsolute => new Vector2Int(Mathf.RoundToInt(MousePosInWorld.x + mouseOfsetX), Mathf.RoundToInt(MousePosInWorld.y + mouseOfsetY));
@@ -38,7 +43,10 @@ public class PlayerInteraction : MonoBehaviour {
 
 	public void Update() {
 		if (GameManager.State != GameState.INGAME || (GlobalVariables.UIInventory?.InventoryOpened ?? false))
+        {
+			Cursor.SetCursor(GlobalVariables.ItemAssets.InventoryCursor.texture,hotSpot, cursorMode);
 			return;
+		}
 		HandleBlockInteraction();
 
 		KeyCode main = GameManager.SettingsProfile.GetKeyCode("MainInteractionKey");
@@ -118,7 +126,6 @@ public class PlayerInteraction : MonoBehaviour {
 
 		if (BreakCoroutine == null && TargetBlockID != 0){
 
-
 			byte targetRemoveDuration = GlobalVariables.WorldData.Blocks[TargetBlockID].removeDuration;
 			BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int>(targetRemoveDuration, TargetBlockID, ThisChunk, BlockInchunkCoord));
 			if (DebugVariables.BlockInteractionCR)
@@ -128,8 +135,12 @@ public class PlayerInteraction : MonoBehaviour {
 
 	/// <summary>Set the Position of the FocusGO</summary>
 	/// <param name="mouseWorldPos">Position of the Mouse</param>
-	private void SetFocusGO(Vector2Int mouseWorldPos, bool activate) { 
-		deleteSprite.transform.position = new Vector3(mouseWorldPos.x + 0.5f, mouseWorldPos.y + 0.5f, -10);
+	private void SetFocusGO(Vector2Int mouseWorldPos, bool activate) {
+		if(activate)
+			Cursor.SetCursor(GlobalVariables.ItemAssets.MiningCursor.texture, hotSpot, cursorMode);
+		else
+			Cursor.SetCursor(GlobalVariables.ItemAssets.AttackingCursor.texture, hotSpot, cursorMode);
+		deleteSprite.transform.position = new Vector3(mouseWorldPos.x + 0.5f, mouseWorldPos.y + 0.5f, deleteSprite.transform.position.z);
 		deleteSprite.SetActive(activate);
 	}
 

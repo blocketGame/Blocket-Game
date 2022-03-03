@@ -16,8 +16,6 @@ MonoBehaviour:
   biomName: Default Biom
   ores:
   - name: Bernstein
-    noiseValueFrom: 0.7
-    noiseValueTo: 0.701
     blockID: 10
   regions:
   - description: Grass
@@ -33,10 +31,8 @@ MonoBehaviour:
   - description: DirtBG
     regionRange: 2
     blockID: 8
-  structures: 000102
+  structures: 00010206
   enemies: 
-  treeSpawnChance: 5
-  treeSpawnDistance: 5
   stoneBlockId: 12
   size: 1000
   heightCurve:

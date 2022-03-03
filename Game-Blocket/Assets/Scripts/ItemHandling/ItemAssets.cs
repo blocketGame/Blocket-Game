@@ -18,6 +18,9 @@ public class ItemAssets : MonoBehaviour
 	public List<CraftingStation> CraftingStations = new List<CraftingStation>();
 	public List<EnemySO> Enemies = new List<EnemySO>();
 	public List<CraftingRecipe> Recipes = new List<CraftingRecipe>();
+	public Sprite InventoryCursor;
+	public Sprite MiningCursor;
+	public Sprite AttackingCursor;
 
 	private void Awake() => GlobalVariables.ItemAssets = this;
 

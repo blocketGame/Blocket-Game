@@ -34,7 +34,7 @@ MonoBehaviour:
   - description: DirtBG
     regionRange: 2
     blockID: 8
-  structures: 010203
+  structures: 01020306
   enemies: 
   stoneBlockId: 12
   size: 1000
