@@ -1625,10 +1625,16 @@ MonoBehaviour:
     blockId: 6
   - name: Crafting bench
     id: 5
-    description: Craft attacvk!
+    description: Craft attack!
     itemType: 1
-    itemImage: {fileID: 21300000, guid: 22c6e149cbc69bd4d8600301b11d4fe3, type: 3}
-    blockId: 28
+    itemImage: {fileID: 21300000, guid: 941aa281ca582eb4aa7a3348acefc603, type: 3}
+    blockId: 43
+  - name: Wood
+    id: 6
+    description: Dead tree
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: 4318a7de18532f2409f3a2dd127ba0b8, type: 3}
+    blockId: 16
   ToolItemsInGame: []
   EquipableItemsInGame: []
   UseableItemsInGame: []
@@ -1651,6 +1657,13 @@ MonoBehaviour:
     craftingSlotSprite: {fileID: 21300000, guid: b4a1fce7afb32db48be3fd7e4c44e4c1, type: 3}
     listViewColor: {r: 0, g: 0.13418102, b: 1, a: 0.47058824}
     buttonColor: {r: 0.025752544, g: 0, b: 1, a: 1}
+  - blockId: 43
+    slotwidth: 2
+    slotheight: 2
+    craftingInterfaceSprite: {fileID: 21300000, guid: 5ab8e7b7520828b45b64868fa575475b, type: 3}
+    craftingSlotSprite: {fileID: 21300000, guid: 223263893184d0f4cad2120a59508291, type: 3}
+    listViewColor: {r: 0.6320754, g: 0.35096744, b: 0.020870427, a: 0.47058824}
+    buttonColor: {r: 0.5471698, g: 0.30152208, b: 0.038714837, a: 1}
   Enemies:
   - {fileID: 11400000, guid: 5fa23f42fd79765418b7e844d5d84e6b, type: 2}
   Recipes:
@@ -1817,7 +1830,10 @@ MonoBehaviour:
     blockID: 17
     tile: {fileID: 11400000, guid: c706feebda529404a87185c490a5575f, type: 2}
     removeDuration: 4
-    blockDrops: []
+    blockDrops:
+    - itemID: 6
+      dropchance: 50
+      toolItemType: 5
   - name: CactusFlower
     blockID: 18
     tile: {fileID: 11400000, guid: d6ff0195f0b383e408cde8a71dca16e7, type: 2}
@@ -1942,6 +1958,11 @@ MonoBehaviour:
     blockID: 42
     tile: {fileID: 11400000, guid: bdd91a2e0afeb7b4cb764f41c0a61d43, type: 2}
     removeDuration: 10
+    blockDrops: []
+  - name: crafting station
+    blockID: 43
+    tile: {fileID: 11400000, guid: 12922adde41d67e4d8074abfbe1674ef, type: 2}
+    removeDuration: 3
     blockDrops: []
 --- !u!114 &3502781153725182728
 MonoBehaviour:

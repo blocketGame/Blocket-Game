@@ -77,10 +77,13 @@ public class Movement : MonoBehaviour
 			Crawl();
 
 		///LULLLLLLLLLLLLLLLLL
-		float x = Input.GetAxis("Horizontal");
-		float y = Input.GetAxis("Vertical");
-		Vector2 dir = new Vector2(x, y);
-		playerRigidbody.velocity = (new Vector2(dir.x * MovementSpeed, dir.y * MovementSpeed));
+		if (!PlayerLocked)
+		{
+			float x = Input.GetAxis("Horizontal");
+			float y = Input.GetAxis("Vertical");
+			Vector2 dir = new Vector2(x, y);
+			playerRigidbody.velocity = (new Vector2(dir.x * MovementSpeed, dir.y * MovementSpeed));
+		}
 
 		VelocityUpdate();
 		/// Input Freeze Countdown

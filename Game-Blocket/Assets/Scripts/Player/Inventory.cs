@@ -37,7 +37,7 @@ public class Inventory : MonoBehaviour {
 	/// <summary>Last slot active pressed</summary>
 	[HideInInspector]
 	public UIInventorySlot atHand;
-	[HideInInspector]
+	//[HideInInspector]
 	public Vector2 atHandVector;
 
 	/// <summary>

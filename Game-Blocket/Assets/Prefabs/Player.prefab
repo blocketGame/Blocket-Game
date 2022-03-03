@@ -1109,7 +1109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   atHand: {fileID: 0}
-  atHandVector: {x: 0, y: 0}
+  atHandVector: {x: -10, y: 5}
 --- !u!114 &552804439049964413
 MonoBehaviour:
   m_ObjectHideFlags: 0
