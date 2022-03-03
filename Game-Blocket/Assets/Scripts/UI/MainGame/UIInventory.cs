@@ -106,7 +106,7 @@ public class UIInventory : MonoBehaviour
 
 		RectTransform atHandT = atHandSlot.GetComponent<RectTransform>();
 		atHandT.localScale = new Vector3(0.8f, 0.8f, 1);
-		Inventory.atHandVector = new Vector2(-atHandT.rect.width / 2, atHandT.rect.height / 2);
+		//Inventory.atHandVector = new Vector2(-atHandT.rect.width / 2, atHandT.rect.height / 2);
 	}
 
 	/// <summary>

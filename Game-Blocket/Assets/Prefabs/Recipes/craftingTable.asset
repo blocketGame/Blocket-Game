@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   station: 255
   recipe:
-  - item: 1
+  - item: 6
     count: 2
   output:
     item: 5

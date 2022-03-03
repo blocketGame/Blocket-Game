@@ -98,7 +98,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   groupdistance: 1.5
   pickUpDistance: 1.5
-  initCaveSize: 0
+  initCaveSize: -0.5
   stoneSize: 0.25
 --- !u!1 &1651735029580647344
 GameObject:
@@ -144,6 +144,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ChunkParent: {fileID: 2868377673276327341}
+  lastChunk:
+    chunkPosition: {x: 0, y: 0}
+    dropParent: {fileID: 0}
 --- !u!1 &2868377673276327341
 GameObject:
   m_ObjectHideFlags: 0
