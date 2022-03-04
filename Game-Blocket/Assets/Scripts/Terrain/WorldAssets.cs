@@ -13,14 +13,18 @@ public class WorldAssets : MonoBehaviour
 	public List<Biom> bioms = new List<Biom>();
 	public List<BlockData> blocks = new List<BlockData> ();
 
-    public void Awake() => GlobalVariables.WorldAssets = this;
+	public void Awake()
+    {
+        GlobalVariables.WorldAssets = this;
+		GlobalVariables.Structures.ReadAllStructures();
+    }
 
-	/// <summary>
-	/// returns the BlockData object of the index
-	/// </summary>
-	/// <param name="id">index of the block</param>
-	/// <returns></returns>
-	public BlockData GetBlockbyId(byte id) {
+    /// <summary>
+    /// returns the BlockData object of the index
+    /// </summary>
+    /// <param name="id">index of the block</param>
+    /// <returns></returns>
+    public BlockData GetBlockbyId(byte id) {
 		foreach (BlockData bd in blocks) {
 			if (bd.blockID == id) {
 				return bd;

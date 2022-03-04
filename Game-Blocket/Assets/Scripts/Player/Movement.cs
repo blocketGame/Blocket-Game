@@ -101,7 +101,6 @@ public class Movement : MonoBehaviour
 			{
 				if (playerRigidbody.velocity.y == 0)
 					CreateDust();
-				Debug.Log(side);
 				side = (int)PlayerModelT.transform.localScale.x;
 				PlayerModelT.localScale = new Vector3(side, (int)PlayerModelT.transform.localScale.y, 0);
 			}

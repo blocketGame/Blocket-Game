@@ -75,7 +75,6 @@ public class WorldData : NetworkBehaviour
 	public void Awake()
 	{
 		GlobalVariables.WorldData = this;
-		GlobalVariables.Structures.ReadAllStructures();
 	}
 }
 

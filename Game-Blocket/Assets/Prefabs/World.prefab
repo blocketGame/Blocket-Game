@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 350946bae6fb25544a46682e49232714, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tick: 3600
+  tick: 60
   seconds: 0
   minutes: 0
   hours: 12
