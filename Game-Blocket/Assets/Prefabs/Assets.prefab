@@ -1829,7 +1829,10 @@ MonoBehaviour:
     blockID: 16
     tile: {fileID: 11400000, guid: a2b039ad21dbea343a3af1d7a3f3e9c2, type: 2}
     removeDuration: 4
-    blockDrops: []
+    blockDrops:
+    - itemID: 6
+      dropchance: 100
+      toolItemType: 5
   - name: Leaf
     blockID: 17
     tile: {fileID: 11400000, guid: c706feebda529404a87185c490a5575f, type: 2}

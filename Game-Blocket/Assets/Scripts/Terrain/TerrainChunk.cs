@@ -213,6 +213,25 @@ public sealed class TerrainChunk : ChunkData{
 			InstantiateDrop(coordinate, 1, itemId);
 	}
 
+	/// <summary>Removes the block out of the bg-tilemap </summary>
+	/// <param name="coordinate">Coordinate in the Chunk</param>
+	public void DeleteBlockBG(Vector3Int coordinate)
+	{
+		//if (BlockIDs[(coordinate.x - GlobalVariables.WorldData.ChunkWidth * ChunkPositionInt.x), (coordinate.y - GlobalVariables.WorldData.ChunkHeight * ChunkPositionInt.y)] == 0) return;
+		byte blockId = BlockIDsBG[coordinate.x, coordinate.y];
+		if (blockId == 0)
+		{
+			Debug.LogWarning("Destoryed Air!");
+			return;
+		}
+
+		BlockIDsBG[coordinate.x, coordinate.y] = 0;
+		BackgroundTilemap.SetTile(coordinate, GlobalVariables.WorldData.Blocks[0].tile);
+
+		foreach (uint itemId in GetDroppedIDs(blockId))
+			InstantiateDrop(coordinate, 1, itemId);
+	}
+
 	public List<uint> GetDroppedIDs(byte blockId){
 		List<uint> ids = new List<uint>();
 		System.Random rand = new System.Random();
