@@ -12,7 +12,8 @@ public class ShowTimer : MonoBehaviour
     {
         if (GameManager.State != GameState.INGAME)
             return;
-        //clock.CalcTime();
+        clock.CalcTime();
+        Debug.Log(clock.hours + ":" + clock.minutes);
         text.text = clock.hours + ":" + clock.minutes;
     }
 }
