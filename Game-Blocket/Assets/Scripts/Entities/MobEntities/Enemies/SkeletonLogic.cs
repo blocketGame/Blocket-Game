@@ -75,7 +75,7 @@ public class SkeletonBrain : MonoBehaviour
                 Jump();
             }*/
 
-            if (GlobalVariables.TerrainHandler.GetBlockFormCoordinate(
+            if (GlobalVariables.ClientTerrainHandler.GetBlockFormCoordinate(
                 GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(gameObject.transform.position.x + (0.5f) * side, gameObject.transform.position.y, 0)).x,
                 GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(gameObject.transform.position.x + side, gameObject.transform.position.y - 1, 0)).y)
                 != 0)

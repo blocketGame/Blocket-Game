@@ -33,9 +33,12 @@ public static class GlobalVariables {
 
 	#region World Scripts
 	public static WorldData WorldData { get; set; }
-	public static TerrainGeneration TerrainGeneration { get; set; }
-	public static TerrainHandler TerrainHandler { get; set;}
-	public static Structures Structures { get; set; }
+
+	public static ServerTerrainHandler ServerTerrainHandler{ get; set; }
+	public static TerrainHandler TerrainHandler => ServerTerrainHandler as TerrainHandler ?? ClientTerrainHandler as TerrainHandler ?? null;
+
+	public static ClientTerrainHandler ClientTerrainHandler{ get; set; }
+
 	public static GameObject World { get => _world; set { 
 			_world = value;
 		} 
@@ -47,7 +50,8 @@ public static class GlobalVariables {
 	public static PrefabAssets PrefabAssets { get; set; }
 	public static ItemAssets ItemAssets { get; set; }
 	public static WorldAssets WorldAssets { get; set; }
-	public static MobAssets MobAssets { get; internal set; }
+	public static MobAssets MobAssets { get; set; }
+	public static StructureAssets StructureAssets { get; set; }
 	#endregion
 
 	#region LocalPlayer

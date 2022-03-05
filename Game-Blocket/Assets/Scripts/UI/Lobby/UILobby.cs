@@ -2,8 +2,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Net;
 
-using MLAPI;
-using MLAPI.SceneManagement;
+using Unity.Netcode;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,7 +11,7 @@ using UnityEngine.UI;
 /// <summary>
 /// LobbyUI-Handling
 /// </summary>
-public class UILobby : NetworkBehaviour {
+public class UILobby : MonoBehaviour {
 	#region UIResources
 	[Header("Static: General")]
 	public NetworkObject playPrefab;
@@ -26,8 +25,6 @@ public class UILobby : NetworkBehaviour {
 	[Header("Static: Lobby Site")]
 	public Button startGame;
 	public Button goBackBtn, testBtn;
-
-	public static readonly bool useProfiles = true;
 	#endregion
 
 	private byte _siteIndexOpen;
@@ -36,6 +33,8 @@ public class UILobby : NetworkBehaviour {
 			ManageSites(value);
 		}
 	}
+
+	public static byte role = 0;
 
 	/// <summary>
 	/// Manages the sides
@@ -72,20 +71,26 @@ public class UILobby : NetworkBehaviour {
 			CheckAndSetInputs();
 			if (NetworkVariables.ipAddress != "127.0.0.1")
 				NetworkVariables.ipAddress = GetLocalIPAddress();
-			SiteIndexOpen = useProfiles ? (byte)2 : (byte)1;
+			SiteIndexOpen = 2;
 			SetNetworkAddress();
-			NetworkManager.Singleton.StartHost(null, null, false, playPrefab.PrefabHash);
+			NetworkManager.Singleton.StartHost();
 		});
 		clientBtn.onClick.AddListener(() => {
 			CheckAndSetInputs();
-			SiteIndexOpen = useProfiles ? (byte)2 : (byte)1;
-			startGame.gameObject.SetActive(false);
+			SiteIndexOpen = 2;
+			//startGame.gameObject.SetActive(false);
 			SetNetworkAddress();
-			NetworkManager.Singleton.StartClient();
+			role = 1;
 		});
 
 		startGame.onClick.AddListener(() => {
-			NetworkSceneManager.SwitchScene("MainGame");
+			if(role == 1) {
+				NetworkManager.Singleton.StartClient();
+			}
+			if(NetworkManager.Singleton.IsServer)
+				NetworkManager.Singleton.SceneManager.LoadScene("MainGame", LoadSceneMode.Single);
+			if(NetworkManager.Singleton.IsClient && !NetworkManager.Singleton.IsServer)
+				SceneManager.LoadScene("MainGame", LoadSceneMode.Single);
 		});
 
 		goBackBtn.onClick.AddListener(() => {

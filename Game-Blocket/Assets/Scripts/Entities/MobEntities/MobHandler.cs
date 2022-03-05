@@ -34,7 +34,6 @@ public class MobHandler : MonoBehaviour
 				if (MobCache >= maxMobs)
 					continue;
 				HandleRandomSpawning();
-				Debug.Log("a");
 				try
 			{
 			}
@@ -65,7 +64,7 @@ public class MobHandler : MonoBehaviour
 	private TerrainChunk GetTerrainChunkFromPos(Vector2Int posI) => GlobalVariables.TerrainHandler.GetChunkFromCoordinate(posI.x, posI.y);
 
 	private Vector3? CheckSpaceAround(Vector2Int pos, Vector2Int mobSize){
-		Debug.Log(pos);
+		//Debug.Log(pos);
 		//If blockId is 0
 		if (GetTerrainChunkFromPos(pos)?.blocks[Math.Abs(pos.x % WorldAssets.ChunkLength), Math.Abs(pos.y % WorldAssets.ChunkLength)] == 0)//If Block in terrain equals Air
 		{
@@ -82,7 +81,6 @@ public class MobHandler : MonoBehaviour
 			if (GetLentgthOfSide(new Vector2Int(pos.x + i, pos.y), Vector2Int.up) < mobSize.y)
 				return null;
 		}
-		Debug.Log("Here");
 		//return new Vector3(pos.x/ (mobSize.x%2 == 0 ? 1 : 2), pos.y / (mobSize.y % 2 == 0 ? 1 : 2));
 		return new Vector3(pos.x , pos.y );
 	}

@@ -8,8 +8,7 @@ using UnityEngine.UI;
 /// Crafting station Class 
 /// </summary>
 [System.Serializable]
-public class CraftingStation
-{
+public class CraftingStation{
 
     [SerializeField]
     [Tooltip("Refered Crafting Station Block")]
@@ -56,6 +55,8 @@ public class CraftingStation
     public Sprite CraftingInterfaceSprite { get => craftingInterfaceSprite; set => craftingInterfaceSprite = value; }
 
     private static List<BlockItem> Blockitems { get => GlobalVariables.ItemAssets.BlockItemsInGame; }
+    private static List<ToolItem> ToolItems { get => GlobalVariables.ItemAssets.ToolItemsInGame; }
+
     #endregion
 
     /// <summary>
@@ -161,14 +162,14 @@ public class CraftingStation
             array[x] = new Craftable(uislot.ItemID, uislot.ItemCount); x++;
         }
         Craftable i = CraftingHandler.GetExactItem(array,out CraftingRecipe craftingRecipe);
-        if (i.item != 0)
+        if (i.Item.id != 0)
         {
-            GlobalVariables.Inventory.AddItem(i.item, i.count, out ushort item);
+            GlobalVariables.Inventory.AddItem(i.Item.id, i.count, out ushort item);
             foreach(UIInventorySlot uIInventorySlot in CraftingInterfacePlaceholder.GetComponentsInChildren<UIInventorySlot>())
             {
                 if(uIInventorySlot.ItemCount!=0)
                     foreach(Craftable c in craftingRecipe.Recipe)
-                        if(c.item.Equals(uIInventorySlot.ItemID))
+                        if(c.Item.id.Equals(uIInventorySlot.ItemID))
                             uIInventorySlot.ItemCount-= c.count;
                 if(uIInventorySlot.ItemCount == 0)
                 {
@@ -190,7 +191,7 @@ public class CraftingStation
         IEnumerable<CraftingRecipe> recipes = CraftingHandler.GetRecipesByItems(items); //RecipeResponse
         CraftingInterfacePlaceholder.GetComponentInChildren<ScrollRect>().GetComponentInChildren<Mask>().GetComponentInChildren<RecipeRecommendationList>().PruneRecommendations();
 
-        Item i = GlobalVariables.ItemAssets.BlockItemsInGame.Find(x => x.id.Equals(CraftingHandler.GetExactItem(items,out CraftingRecipe cr).item));
+        Item i = CraftingHandler.GetExactItem(items,out CraftingRecipe c).Item;
         if (i != null)
         {
             CraftingInterfacePlaceholder.GetComponentInChildren<CraftingButtonRecognition>().itemName.text = i.name;
@@ -209,9 +210,9 @@ public class CraftingStation
             CraftingInterfacePlaceholder.GetComponentInChildren<ScrollRect>().GetComponentInChildren<Mask>().GetComponentInChildren<RecipeRecommendationList>().currentRecommendations.Add(g);
             g.transform.localPosition.Set(g.transform.localPosition.x, g.transform.localPosition.y + offSetY, g.transform.localPosition.z);
             RecipeShowCase rcs = g.GetComponentInChildren<RecipeShowCase>();
-            rcs.Name.text = Blockitems.Find(x => x.id.Equals(cr.output.item)).name.Length < 10? GlobalVariables.ItemAssets.BlockItemsInGame.Find(x => x.id.Equals(cr.output.item)).name: GlobalVariables.ItemAssets.BlockItemsInGame.Find(x => x.id.Equals(cr.output.item)).name.Substring(0,9);
-            rcs.Description.text = Blockitems.Find(x => x.id.Equals(cr.output.item)).description;
-            rcs.imagePreview.sprite = Blockitems.Find(x => x.id.Equals(cr.output.item)).itemImage;
+            rcs.Name.text = cr.Output.Item.name.Length < 10? cr.Output.Item.name: cr.Output.Item.name.Substring(0,9);
+            rcs.Description.text = cr.Output.Item.description;
+            rcs.imagePreview.sprite = cr.Output.Item.itemImage;
             offSetY += 100;
         }
         ///Spawning Recommendations

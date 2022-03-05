@@ -884,6 +884,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc5d0ec43c9c58149ac8626f1bde4a62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clock: {fileID: 4328621274414171882, guid: 6f8afa7ba4b1ace43a1488e9989f22f5, type: 3}
+  text: {fileID: 1900294033393983003}
 --- !u!1 &3772000648908713424
 GameObject:
   m_ObjectHideFlags: 0
@@ -2344,7 +2346,7 @@ MonoBehaviour:
   uiHud: {fileID: 7667816537676564849}
   hudslotfieldParent: {fileID: 7667816537649767022}
   inventoryBackgroundImage: {fileID: 7667816537842617125}
-  chatParent: {fileID: 5689048498088412957}
+  chatParent: {fileID: 3557795801225912381}
   chatInput: {fileID: 8982947181889361180}
   chatHistoryView: {fileID: 8053675759263590720}
   prefabItemSlot: {fileID: 3032319131892145362, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}

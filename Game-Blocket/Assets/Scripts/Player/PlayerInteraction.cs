@@ -6,6 +6,7 @@ using UnityEngine;
 /// <summary>
 /// Used for Interacten per Mouse with Tilemap<br></br>
 /// </summary>
+//Client
 public class PlayerInteraction : MonoBehaviour {
 
 	public GameObject deleteSprite;
@@ -31,9 +32,10 @@ public class PlayerInteraction : MonoBehaviour {
 			return blockInchunkCoord;
 		}
 	}
-	public TerrainChunk ThisChunk => GlobalVariables.TerrainHandler.GetChunkFromCoordinate(BlockHoverdAbsolute.x, BlockHoverdAbsolute.y);
+	public TerrainChunk ThisChunk => GlobalVariables.ClientTerrainHandler.GetChunkFromCoordinate(BlockHoverdAbsolute.x, BlockHoverdAbsolute.y);
 
 	public byte TargetBlockID => ThisChunk?.blocks[BlockInchunkCoord.x, BlockInchunkCoord.y] ?? 0;
+	public byte TargetBlockIDBG => ThisChunk?.bgBlocks[BlockInchunkCoord.x, BlockInchunkCoord.y] ?? 0;
 
 	/// <summary>Used for the Mouse Offset<br></br>Due to not perfect input</summary>
 	public readonly float mouseOfsetX = -0.5f, mouseOfsetY = -0.5f;
@@ -98,7 +100,7 @@ public class PlayerInteraction : MonoBehaviour {
 
     #region BlockInteraction
 	public void BlockPlace(){
-		if (!GlobalVariables.TerrainHandler.CurrentChunkReady)
+		if (!GlobalVariables.ClientTerrainHandler.CurrentChunkReady)
 			return;
 		
 		if (DebugVariables.BlockInteractionInfo)
@@ -130,6 +132,13 @@ public class PlayerInteraction : MonoBehaviour {
 			BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int>(targetRemoveDuration, TargetBlockID, ThisChunk, BlockInchunkCoord));
 			if (DebugVariables.BlockInteractionCR)
 				Debug.Log("Started!");
+		}else if (BreakCoroutine == null && TargetBlockIDBG != 0)
+		{
+
+			byte targetRemoveDuration = GlobalVariables.WorldData.Blocks[TargetBlockIDBG].removeDuration;
+			BreakCoroutine = StartCoroutine(nameof(BreakBlockBG), new Tuple<byte, byte, TerrainChunk, Vector2Int>(targetRemoveDuration, TargetBlockIDBG, ThisChunk, BlockInchunkCoord));
+			if (DebugVariables.BlockInteractionCR)
+				Debug.Log("Started!");
 		}
 	}
 
@@ -156,10 +165,27 @@ public class PlayerInteraction : MonoBehaviour {
 		BlockBreaked(values.Item2, values.Item3, values.Item4);
 	}
 
+	public IEnumerator BreakBlockBG(object obj)
+	{
+		Tuple<byte, byte, TerrainChunk, Vector2Int> values = obj as Tuple<byte, byte, TerrainChunk, Vector2Int> ?? throw new ArgumentException();
+		yield return new WaitForSecondsRealtime(values.Item1);
+		if (DebugVariables.BlockInteractionCR)
+			Debug.Log("Finished");
+		StopCoroutine(BreakCoroutine);
+		BlockBreakedBG(values.Item2, values.Item3, values.Item4);
+	}
+
 	private void BlockBreaked(byte blockID, TerrainChunk thisChunk, Vector2Int blockInChunk) {
 		if (DebugVariables.BlockInteractionCR)
 			Debug.Log($"Block breaked: {blockID}");
 		thisChunk.DeleteBlock(new Vector3Int(blockInChunk.x, blockInChunk.y, 0));
 	}
-    #endregion
+
+	private void BlockBreakedBG(byte blockID, TerrainChunk thisChunk, Vector2Int blockInChunk)
+	{
+		if (DebugVariables.BlockInteractionCR)
+			Debug.Log($"Block breaked: {blockID}");
+		thisChunk.DeleteBlockBG(new Vector3Int(blockInChunk.x, blockInChunk.y, 0));
+	}
+	#endregion
 }

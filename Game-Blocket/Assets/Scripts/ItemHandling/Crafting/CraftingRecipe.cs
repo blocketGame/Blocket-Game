@@ -28,14 +28,15 @@ public class CraftingRecipe : ScriptableObject, ISerializationCallbackReceiver
     /// Item that is created by using this recipe
     /// </summary>
     [SerializeField][Tooltip("Crafting this recipe results in that item")]
-    public Craftable output;
+    private Craftable output;
     #endregion
 
     #region Properties
     public Craftable[] Recipe { get => recipe; set => recipe = value; }
     public uint Station { get => station; set => station = value; }
-    public Item Output { get => GlobalVariables.ItemAssets.GetItemFromItemID(output.item); }
+    public Craftable Output { get => output; }
     public uint OutputCount { get => output.count; }
+    public ToolType OutputType { get => output.type; }
     #endregion
 
     /// <summary>
@@ -77,13 +78,32 @@ public class CraftingRecipe : ScriptableObject, ISerializationCallbackReceiver
 [Serializable]
 public struct Craftable
 {
-    public uint item;
+    [SerializeField]
+    private uint item;
     public ushort count;
+    public ToolType type;
 
-    public Craftable(uint item,ushort count)
+    public Item Item { get => GlobalVariables.ItemAssets.GetItemFromItemID(item); }
+    public uint ItemID { get => item; }
+
+    public Craftable(uint item,ushort count,ToolType type)
     {
         this.item = item;
         this.count = count;
+        this.type = type;
+    }
+    public Craftable(uint item, ushort count)
+    {
+        this.item = item;
+        this.count = count;
+        this.type = ToolType.BLOCK;
     }
 
+}
+
+public enum ToolType
+{
+    BLOCK,
+    WEAPON,
+    TOOL
 }

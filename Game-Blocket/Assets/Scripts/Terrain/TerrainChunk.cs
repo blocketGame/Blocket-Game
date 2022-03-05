@@ -23,6 +23,8 @@ public sealed class TerrainChunk : ChunkData{
 	public GameObject BackgroundGO { get; set; }
 	public Tilemap BackgroundTilemap { get; set; }
 
+
+	//Client
 	#region Chunkbuilding Components
 	/// <summary>Instantiates the Gameobbjects and Components</summary>
 	public void ImportChunk(GameObject parent) {
@@ -110,6 +112,7 @@ public sealed class TerrainChunk : ChunkData{
 
 	#endregion
 
+	//Both
 	#region Contsructors
 
 	/// <summary>Used from Terraingeneration</summary>
@@ -118,6 +121,7 @@ public sealed class TerrainChunk : ChunkData{
 	}
 	#endregion
 
+	//Both
 	#region Utilmethods
 	private static string ChunkName(Vector2 pos, byte kind) {
 		return kind switch {
@@ -152,8 +156,8 @@ public sealed class TerrainChunk : ChunkData{
 		//False if is not Importet => Import it and log warning
 		if (!IsImported) {
 			Debug.LogWarning($"Hard Importing: {ChunkPositionInt}");
-			lock (TerrainHandler.ChunkTileInitializationQueue)
-				TerrainHandler.ChunkTileInitializationQueue.Enqueue(this);
+			lock (ClientTerrainHandler.ChunkTileInitializationQueue)
+				ClientTerrainHandler.ChunkTileInitializationQueue.Enqueue(this);
 			InImportQueue = true;
 			return true;
 		}
@@ -165,12 +169,14 @@ public sealed class TerrainChunk : ChunkData{
 	public bool IsImported => ParentGO != null && BackgroundGO != null && CollisionGO != null;
 	#endregion
 
+	//Both
 	#region Shortcuts
 	private byte[,] BlockIDs => blocks;
 	private byte[,] BlockIDsBG => bgBlocks;
 	public List<Drop> Drops { get; } = new List<Drop>();
 	#endregion
 
+	//Client
 	#region PlayerInteration
 	public void PlaceBlock(Vector3Int coordinate, uint itemID) {
 		if (itemID == 0) {
@@ -213,6 +219,25 @@ public sealed class TerrainChunk : ChunkData{
 			InstantiateDrop(coordinate, 1, itemId);
 	}
 
+	/// <summary>Removes the block out of the bg-tilemap </summary>
+	/// <param name="coordinate">Coordinate in the Chunk</param>
+	public void DeleteBlockBG(Vector3Int coordinate)
+	{
+		//if (BlockIDs[(coordinate.x - GlobalVariables.WorldData.ChunkWidth * ChunkPositionInt.x), (coordinate.y - GlobalVariables.WorldData.ChunkHeight * ChunkPositionInt.y)] == 0) return;
+		byte blockId = BlockIDsBG[coordinate.x, coordinate.y];
+		if (blockId == 0)
+		{
+			Debug.LogWarning("Destoryed Air!");
+			return;
+		}
+
+		BlockIDsBG[coordinate.x, coordinate.y] = 0;
+		BackgroundTilemap.SetTile(coordinate, GlobalVariables.WorldData.Blocks[0].tile);
+
+		foreach (uint itemId in GetDroppedIDs(blockId))
+			InstantiateDrop(coordinate, 1, itemId);
+	}
+
 	public List<uint> GetDroppedIDs(byte blockId){
 		List<uint> ids = new List<uint>();
 		System.Random rand = new System.Random();
@@ -224,6 +249,7 @@ public sealed class TerrainChunk : ChunkData{
     }
 	#endregion
 
+	//(Server) not sure
 	#region Dropinteraction
 
 	/// <summary>
@@ -259,9 +285,7 @@ public sealed class TerrainChunk : ChunkData{
 
 		BoxCollider2D dropCollider = drop.GameObject.AddComponent<BoxCollider2D>();
 
-		Physics2D.IgnoreCollision(TileMapCollider, dropCollider, false);
-
-		drop.GameObject.AddComponent<SpriteRenderer>().sprite = GlobalVariables.ItemAssets.GetSpriteFromItemID(itemID);
+		
 
 		lock (Drops)
 			Drops.Add(drop);

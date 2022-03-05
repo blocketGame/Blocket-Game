@@ -20,7 +20,7 @@ public class PlayerProfile : Profile {
 	public uint healthGained, healthLost;
 	#endregion
 
-	public PlayerProfile(string name, int? profileHash) : base(name, profileHash) {
+	public PlayerProfile(string name, int? profileHash = null) : base(name, profileHash) {
 
 	}
 

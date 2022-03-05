@@ -21,8 +21,11 @@ public class TerrainGeneration {
 	/// </summary>
 	/// <param name="position"></param>
 	/// <param name="parent"></param>
-	public static void BuildChunk(Vector2Int position, GameObject parent) {
+	public static void BuildChunk(Vector2Int position) {
 		Task t = null;
+		lock(TerrainHandler.Chunks)
+			if(TerrainHandler.Chunks.ContainsKey(position))
+				return;
 		lock (TerrainGenerationTaskNames) { 
 			if (TerrainGenerationTaskNames.Contains(ThreadName(position))){
 				if(DebugVariables.ShowMultipleTasksOrExecution)
@@ -30,7 +33,7 @@ public class TerrainGeneration {
 				return;
 			}
 			
-			t = new Task(BuildChunk, new Tuple<Vector2Int, GameObject>(position, parent));
+			t = new Task(BuildChunk, position);
 			TerrainGenerationTaskNames.Add(ThreadName(position));
 		}
 		t?.Start();
@@ -38,10 +41,11 @@ public class TerrainGeneration {
 
 	/// <summary>Generates Chunk From Noisemap without any extra consideration</summary>
 	private static void BuildChunk(object obj) {
-			Tuple<Vector2Int, GameObject> tuple = obj as Tuple<Vector2Int, GameObject> ?? throw new ArgumentException("Tuple wrong!");
-			Vector2Int position = tuple.Item1;
-			GameObject parent = tuple.Item2;
-
+		try{
+			Vector2Int position = (Vector2Int)obj;
+			lock(TerrainHandler.Chunks)
+				if(TerrainHandler.Chunks.ContainsKey(position))
+					return;
 			Thread.CurrentThread.Name = ThreadName(position);
 
 			TerrainChunk chunk = new TerrainChunk(position);
@@ -66,25 +70,22 @@ public class TerrainGeneration {
 			int[,] biomNoiseMap = NoiseGenerator.GenerateBiom(WD.ChunkWidth, WD.ChunkHeight, WD.Seed, WD.Octives, WD.Persistance, WD.Lacurinarity, new Vector2(WD.OffsetX + position.x * WD.ChunkWidth, WD.OffsetY + position.y * WD.ChunkHeight), bioms);
 
 			GenerateChunk(chunk, noisemap,caveNoiseMap,oreNoiseMap,biomNoiseMap);
-			QueueChunkForImport(chunk, position);
+			lock(TerrainHandler.Chunks)
+				if(!TerrainHandler.Chunks.ContainsKey(position))
+					TerrainHandler.Chunks.Add(position, chunk);
 			lock(TerrainGenerationTaskNames)
 				TerrainGenerationTaskNames.Remove(ThreadName(position));
+		} catch(Exception e){
+			Debug.LogError(e);
+        }
 	}
 
 	/// <summary>Add the ids of the blocks to the blockIDs array</summary>
 	/// <param name="noisemap">Noisemap that determines the hight of hills and mountains</param>
 	/// <param name="biomindex">Index of the biom of the chunk</param>
 	public static void GenerateChunk(TerrainChunk tc, float[] noisemap, float[,] caveNoisepmap, byte[,] oreNoiseMap, int[,] biomNoiseMap) {
-        try
-        {
-			GenerateStructureCoordinates(tc);
-        }
-		catch(Exception e)
-		{
-			Debug.Log(e.Message);
-		}
+		GenerateStructureCoordinates(tc);
 		
-
 		float caveSize = GlobalVariables.WorldData.InitCaveSize;
 		if (tc.chunkPosition.y < 0) {
 			caveSize = GlobalVariables.WorldData.InitCaveSize - tc.ChunkPositionInt.y * GlobalVariables.WorldData.ChunkHeight * 0.001f;
@@ -126,21 +127,14 @@ public class TerrainGeneration {
 						}
 					}
 				}
-				try
-				{
-					GenerateStructures(x, y, tc);
-				}
-				catch (Exception e)
-				{
-					Debug.Log(e.Message);
-				}
+				GenerateStructures(x, y, tc);
 			}
 		}
 	}
 
 	public static void GenerateStructureCoordinates(TerrainChunk tc)
 	{
-		foreach (Structure structure in GlobalVariables.Structures.structures)
+		foreach (Structure structure in GlobalVariables.StructureAssets.Structures)
 		{
 			if (structure.onSurface && tc.chunkPosition.y == 0)
 			{
@@ -207,7 +201,7 @@ public class TerrainGeneration {
 	}
 	public static void GenerateStructures(int x, int y, TerrainChunk tc)
 	{
-		foreach (Structure structure in GlobalVariables.Structures.structures)
+		foreach (Structure structure in GlobalVariables.StructureAssets.Structures)
 		{
 			if (tc.structureCoordinates.ContainsKey(structure.id))
 			{
@@ -234,22 +228,6 @@ public class TerrainGeneration {
 					}
 				}
 			}
-		}
-	}
-
-	public static void QueueChunkForImport(TerrainChunk tc, Vector2Int position) {
-		if (position != null)
-			lock (TerrainHandler.Chunks) {
-				TerrainHandler.Chunks[position] = tc;
-			}
-		else
-			throw new ArgumentException();
-		//lock (TerrainHandler.ChunkCollisionQueue) {
-		//	TerrainHandler.ChunkCollisionQueue.Enqueue(tc);
-		//}
-
-		lock (TerrainHandler.ChunkTileInitializationQueue) {
-			TerrainHandler.ChunkTileInitializationQueue.Enqueue(tc);
 		}
 	}
 }

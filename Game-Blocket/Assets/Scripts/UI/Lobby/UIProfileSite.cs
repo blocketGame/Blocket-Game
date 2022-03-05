@@ -1,4 +1,4 @@
-using MLAPI;
+using Unity.Netcode;
 
 using System.Collections.Generic;
 
@@ -74,27 +74,24 @@ public class UIProfileSite : MonoBehaviour
 		}
 	}
 
-	public void SelectedItem()
-	{
-		//UI
-		if (CharacterSelectionOpen && NetworkManager.Singleton.IsClient)
-		{
+	public void SelectedItem(bool lightweightClient = false) {
+		if(CharacterSelectionOpen && !lightweightClient){ 
 			CharacterSelectionOpen = false;
-			createInput.text = string.Empty;
-		}
-		else if (((ListContentUI.selectedBtnNameCharacter?.Trim() == string.Empty) != NetworkManager.Singleton.IsClient) && ((ListContentUI.selectedBtnNameWorld?.Trim() == string.Empty) != NetworkManager.Singleton.IsServer))
-		{
-			GameManager.PlayerProfileNow = ProfileHandler.ImportProfile(ListContentUI.selectedBtnNameCharacter, true) as PlayerProfile;
-			GameManager.WorldProfileNow = new WorldProfile(ListContentUI.selectedBtnNameWorld, null);
+			return;
+		} else
 			GlobalVariables.UILobby.SiteIndexOpen = 1;
-		}
+		if(NetworkManager.Singleton.IsClient || lightweightClient)
+			GameManager.PlayerProfileNow = ProfileHandler.ImportProfile(ListContentUI.selectedBtnNameCharacter, true) as PlayerProfile;
+		if(NetworkManager.Singleton.IsServer)
+		GameManager.WorldProfileNow = new WorldProfile(ListContentUI.selectedBtnNameWorld, null);
 
 	}
 
-	private void InitButtons()
-	{
-		if (NetworkVariables.muliplayer)
-			if (NetworkManager.Singleton.IsClient)
+	private bool UserHasSelected(bool character) => (character ? ListContentUI.selectedBtnNameCharacter?.Trim() : ListContentUI.selectedBtnNameWorld?.Trim()) != string.Empty;
+
+	private void InitButtons(){
+		if(NetworkVariables.muliplayer)
+			if(NetworkManager.Singleton.IsClient)
 				worldSelectBtn.interactable = false;
 
 		backBtn.onClick.AddListener(() => {

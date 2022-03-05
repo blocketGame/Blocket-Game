@@ -1,18 +1,17 @@
 using System.Collections.Generic;
-using System.IO;
-
-using MLAPI;
 
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 /// <summary>
 /// Class that is used to store running variables of an world
 /// TODO: Move to TerrainGeneeration
 /// <b>Author : Cse19455 / Thomas Boigner</b>
 /// </summary>
-public class WorldData : NetworkBehaviour
-{
+public class WorldData : MonoBehaviour {
+	
+	public GameObject ChunkParent => Grid.gameObject;
+	public Grid Grid { get; private set; }
+
 	#region Fields
 	[SerializeField]
 	private int chunkDistance; //Settings
@@ -61,9 +60,6 @@ public class WorldData : NetworkBehaviour
 	public int ChunkHeight => WorldAssets.ChunkLength;
 	public int ChunkWidth => WorldAssets.ChunkLength;
 	public BlockData[] Blocks => GlobalVariables.WorldAssets.blocks.ToArray();
-
-	public Grid Grid { get; set; }
-
 	public float Groupdistance { get => groupdistance; set => groupdistance = value; }
 	public float PickUpDistance { get => pickUpDistance; set => pickUpDistance = value; }
 	public Dictionary<int, float[]> Noisemaps { get; set; } = new Dictionary<int, float[]>();
@@ -72,11 +68,12 @@ public class WorldData : NetworkBehaviour
 	#endregion
 
 	/// <summary>Stores this class to <see cref="GlobalVariables"/></summary>
-	public void Awake()
-	{
+
+	public void Awake(){
 		GlobalVariables.WorldData = this;
-		GlobalVariables.Structures.ReadAllStructures();
+		Grid = GetComponentInChildren<Grid>();
 	}
+
 }
 
 #region WorldDataAssets
