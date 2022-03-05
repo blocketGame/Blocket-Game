@@ -75,16 +75,8 @@ public class TerrainGeneration {
 	/// <param name="noisemap">Noisemap that determines the hight of hills and mountains</param>
 	/// <param name="biomindex">Index of the biom of the chunk</param>
 	public static void GenerateChunk(TerrainChunk tc, float[] noisemap, float[,] caveNoisepmap, byte[,] oreNoiseMap, int[,] biomNoiseMap) {
-        try
-        {
-			GenerateStructureCoordinates(tc);
-        }
-		catch(Exception e)
-		{
-			Debug.Log(e.Message);
-		}
+		GenerateStructureCoordinates(tc);
 		
-
 		float caveSize = GlobalVariables.WorldData.InitCaveSize;
 		if (tc.chunkPosition.y < 0) {
 			caveSize = GlobalVariables.WorldData.InitCaveSize - tc.ChunkPositionInt.y * GlobalVariables.WorldData.ChunkHeight * 0.001f;
@@ -126,14 +118,7 @@ public class TerrainGeneration {
 						}
 					}
 				}
-				try
-				{
-					GenerateStructures(x, y, tc);
-				}
-				catch (Exception e)
-				{
-					Debug.Log(e.Message);
-				}
+				GenerateStructures(x, y, tc);
 			}
 		}
 	}

@@ -46,26 +46,26 @@ public class Movement : MonoBehaviour
 	private bool _playerLocked;
 
 	#region UnityMethods
-	protected void FixedUpdate()
-	{
-		if (GameManager.State != GameState.INGAME)
-			return;
-		if (CheckChunk())
-			return;
-		if(PlayerVariables.Gamemode == Gamemode.SURVIVAL)
-			Clipping();
+	//protected void FixedUpdate()
+	//{
+	//	if (GameManager.State != GameState.INGAME)
+	//		return;
+	//	if (CheckChunk())
+	//		return;
+	//	if(PlayerVariables.Gamemode == Gamemode.SURVIVAL)
+	//		Clipping();
 
-		//float speed = 0;
-		//if (Input.GetKey(KeyCode.A))
-		//    speed -= 30;
-		//if (Input.GetKey(KeyCode.D))
-		//    speed += 30;
-		//if(speed < 0 && playerRigidbody.velocity.x > 0)
-		//    playerRigidbody.angularVelocity = 0;
-		//if(speed > 0 && playerRigidbody.velocity.x < 0)
-		//    playerRigidbody.angularVelocity = 0;
-		//playerRigidbody.AddForce(new Vector2(speed, 0));
-	}
+	//	//float speed = 0;
+	//	//if (Input.GetKey(KeyCode.A))
+	//	//    speed -= 30;
+	//	//if (Input.GetKey(KeyCode.D))
+	//	//    speed += 30;
+	//	//if(speed < 0 && playerRigidbody.velocity.x > 0)
+	//	//    playerRigidbody.angularVelocity = 0;
+	//	//if(speed > 0 && playerRigidbody.velocity.x < 0)
+	//	//    playerRigidbody.angularVelocity = 0;
+	//	//playerRigidbody.AddForce(new Vector2(speed, 0));
+	//}
 
 	public void Update(){
 		if (GameManager.State != GameState.INGAME)
@@ -101,7 +101,6 @@ public class Movement : MonoBehaviour
 			{
 				if (playerRigidbody.velocity.y == 0)
 					CreateDust();
-				Debug.Log(side);
 				side = (int)PlayerModelT.transform.localScale.x;
 				PlayerModelT.localScale = new Vector3(side, (int)PlayerModelT.transform.localScale.y, 0);
 			}
@@ -134,7 +133,12 @@ public class Movement : MonoBehaviour
 			if (playerRigidbody.velocity.y > -15)
 				playerRigidbody.gameObject.transform.position += Time.deltaTime * new Vector3(movement, (playerRigidbody.velocity.y) * fallMulti, 0);
 
-
+		if (GameManager.State != GameState.INGAME)
+			return;
+		if (CheckChunk())
+			return;
+		if (PlayerVariables.Gamemode == Gamemode.SURVIVAL)
+			Clipping();
 	}
 
 	public void Awake() => GlobalVariables.Movement = this;

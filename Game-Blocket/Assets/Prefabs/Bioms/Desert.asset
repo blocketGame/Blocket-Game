@@ -33,7 +33,7 @@ MonoBehaviour:
     blockID: 13
   structures: 0102040506
   enemies: 
-  stoneBlockId: 5
+  stoneBlockId: 40
   size: 1000
   heightCurve:
     serializedVersion: 2
