@@ -26,7 +26,7 @@ public static class CraftingHandler
             int stelle=0; 
             foreach (Craftable i in cr.Recipe)
             {
-                if(items[stelle].item==i.item && i.item != 0)
+                if(items[stelle].Item.id==i.Item.id && i.Item.id != 0)
                 {
                     Debug.Log("Recommendation Should be created!!");
                     yield return cr;
@@ -53,7 +53,7 @@ public static class CraftingHandler
             bool correct=true;
             foreach (Craftable i in cr.Recipe)
             {
-                if ((items[stelle].item != i.item || items[stelle].count < i.count) && i.item != 0)
+                if ((items[stelle].ItemID != i.ItemID || items[stelle].count < i.count) && i.ItemID != 0)
                 {
                     correct=false;
                 }
@@ -63,7 +63,7 @@ public static class CraftingHandler
             if (correct)
             {
                 usedCraftingRecipe = cr;
-                return cr.output;
+                return cr.Output;
             }
         }
         usedCraftingRecipe = null;

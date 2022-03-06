@@ -1641,7 +1641,12 @@ MonoBehaviour:
     blockId: 16
   ToolItemsInGame: []
   EquipableItemsInGame: []
-  UseableItemsInGame: []
+  UseableItemsInGame:
+  - name: Wooden Sword
+    id: 1
+    description: This sword can cut through enything!!!!
+    itemType: 0
+    itemImage: {fileID: 21300000, guid: d8e214a5decc71d4c899ab4f76048ab6, type: 3}
   CommonItems:
   - name: Opal
     id: 5001
@@ -1662,8 +1667,8 @@ MonoBehaviour:
     listViewColor: {r: 0, g: 0.13418102, b: 1, a: 0.47058824}
     buttonColor: {r: 0.025752544, g: 0, b: 1, a: 1}
   - blockId: 43
-    slotwidth: 2
-    slotheight: 2
+    slotwidth: 3
+    slotheight: 3
     craftingInterfaceSprite: {fileID: 21300000, guid: 5ab8e7b7520828b45b64868fa575475b, type: 3}
     craftingSlotSprite: {fileID: 21300000, guid: 223263893184d0f4cad2120a59508291, type: 3}
     listViewColor: {r: 0.6320754, g: 0.35096744, b: 0.020870427, a: 0.47058824}
@@ -1829,7 +1834,10 @@ MonoBehaviour:
     blockID: 16
     tile: {fileID: 11400000, guid: a2b039ad21dbea343a3af1d7a3f3e9c2, type: 2}
     removeDuration: 4
-    blockDrops: []
+    blockDrops:
+    - itemID: 6
+      dropchance: 100
+      toolItemType: 5
   - name: Leaf
     blockID: 17
     tile: {fileID: 11400000, guid: c706feebda529404a87185c490a5575f, type: 2}
