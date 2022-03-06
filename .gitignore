@@ -3,6 +3,7 @@
 [Oo]bj/
 [Bb]uild/
 [Bb]uilds/
+Game-Blocket/Profiles/*
 Assets/AssetStoreTools*
 
 # Visual Studio cache directory
@@ -500,3 +501,5 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # End of https://www.toptal.com/developers/gitignore/api/unity,csharp
+*.tmp.driveupload
+*.mat

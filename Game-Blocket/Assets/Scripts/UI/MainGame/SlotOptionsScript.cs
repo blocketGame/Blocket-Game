@@ -1,8 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// Unkown class WTF is this?
+/// </summary>
 public class SlotOptionsScript : MonoBehaviour, IPointerClickHandler {
 
     #region StoredObjects
@@ -20,7 +21,7 @@ public class SlotOptionsScript : MonoBehaviour, IPointerClickHandler {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             GameObject.FindWithTag("Player").GetComponent<Inventory>().PressedSlot(invSlot);
-            if (GlobalVariables.itemSlotButtonPressedLog)
+            if (DebugVariables.ItemSlotButtonPressedLog)
                 Debug.Log("Button Pressed");
 
             SlotOptions = GameObject.FindWithTag("SlotOptions");

@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
@@ -12,11 +7,10 @@ using UnityEngine.UI;
 /// Handles the <see cref="Button"/>-Click-Events
 /// 
 /// </summary>
-public class UIInventorySlot : MonoBehaviour
-{
-	#region Static Resources
-	/// <summary><see cref="UIInventory"/> </summary>
-	public UIInventory _uIInventory;
+public class UIInventorySlot : MonoBehaviour {
+    #region Static Resources
+    /// <summary><see cref="global::UIInventory"/> </summary>
+    public UIInventory UIInventory => GlobalVariables.UIInventory;
 	/// <summary><see cref="Text"/></summary>
 	public Text textDown;
 	/// <summary><see cref="Button"/>-Button</summary>
@@ -31,18 +25,33 @@ public class UIInventorySlot : MonoBehaviour
 	public UIInventorySlot parent;
 	#endregion
 
-	/// <summary><see cref="Item"/></summary>
-	private Item _item;
+	public readonly bool useOldPointerhandling = true;
+	
+	/// <summary>
+	/// If Null => Is not component of the crafting interface
+	/// If Content => Is used to create a listener to renew crafting Recommendations
+	/// </summary>
+	public CraftingStation CraftingStation { get; set; }
+	public GameObject parentCraftingInterface;
 
-	private ushort _itemCount = 0;
+	public bool IsSelected { get => _isSelected; set {
+			_isSelected = value;
+			backgroundImage.color = value ? new Color(0.5f, 0.5f, 0.5f) : Color.white;
+		} }
+	private bool _isSelected;
 
-	public Item Item { 
-		get => _item;
+	/// <summary><see cref="ItemID"/></summary>
+	public uint ItemID {
+		get => _itemId;
 		set {
-			_item = value;
+			_itemId = value;
+			ItemObject = GlobalVariables.ItemAssets?.GetItemFromItemID(value);
+			if (value == 0)
+				ItemCount = 0;
 			ReloadSlot();
 		}
 	}
+	private uint _itemId;
 
 	public ushort ItemCount {
 		get => _itemCount;
@@ -51,52 +60,80 @@ public class UIInventorySlot : MonoBehaviour
 			ReloadSlot();
 		}
 	}
+	private ushort _itemCount = 0;
+
+	/// <summary>
+	/// Self contained Item
+	/// </summary>
+	private Item ItemObject { get; set; }
 
 	/// <summary>Reloads the Itemslot<br></br><b>Be carfull when deleting!</b></summary>
 	public void ReloadSlot() {
-		itemImage.sprite = _item?.itemImage;
+		
+		itemImage.sprite = ItemObject?.itemImage;
 		itemImage.sprite ??= defaultSprite;
 		//Hide counttext if item is Single type
-		if(_item != null) {
-			textDown.gameObject.SetActive(_item.itemType == Item.ItemType.STACKABLE);
+		if (ItemObject != null) {
+			textDown.gameObject.SetActive(ItemObject.itemType == Item.ItemType.STACKABLE);
 			//Write itemCount into the texfield
 			textDown.color = Color.white;
 			//textDown.gameObject.transform.position.Set(textDown.gameObject.transform.position.x,textDown.gameObject.transform.position.y + 100, textDown.gameObject.transform.position.z);
-			textDown.text = string.Empty+_itemCount;
+			textDown.text = string.Empty + _itemCount;
 		}
-		itemImage.gameObject.SetActive(_item != null);
-		textDown.gameObject.SetActive(_item != null);
+		itemImage.gameObject.SetActive(ItemObject != null);
+		textDown.gameObject.SetActive(ItemObject != null);
 	}
 
 	private bool _active;
 	public bool Active {
 		get { return _active; }
 		set {
-			if(value) {
-				_uIInventory.DescriptionText = _item?.description ?? string.Empty;
-				_uIInventory.TitleText = _item?.name ?? string.Empty;
+			if (value) {
+
+				UIInventory.DescriptionText = ItemObject?.description ?? string.Empty;
+				UIInventory.TitleText = ItemObject?.name ?? string.Empty;
 			}
 			_active = value;
 		}
 	}
 
-    public void Awake() {
-		button.gameObject.AddComponent<SlotOptionsScript>();
-		button.gameObject.GetComponent<SlotOptionsScript>().invSlot = this;
-		if(_uIInventory!=null)
-		button.gameObject.GetComponent<SlotOptionsScript>().SlotOptions = _uIInventory._slotOptions; 
-		
-	}
+	public void Awake() {
 
-	public void OnMouseOver() {
-		Debug.Log("A");
+		button ??= GetComponentInChildren<Button>();
+
+		if (useOldPointerhandling)
+			button.onClick.AddListener(() => {
+				GlobalVariables.Inventory.PressedSlot(this); 
+				if(CraftingStation!=null)
+                {
+					int x=0;
+					Craftable[] array = new Craftable[CraftingStation.Slotwidth*CraftingStation.Slotheight] ;
+					Debug.Log(CraftingStation.Slotwidth + " " + CraftingStation.Slotheight);
+					Debug.Log(parentCraftingInterface.GetComponentsInChildren<UIInventorySlot>().Length);
+					foreach(UIInventorySlot uislot in parentCraftingInterface.GetComponentsInChildren<UIInventorySlot>())
+                    {
+						array[x] = new Craftable(uislot.ItemID,uislot.ItemCount);
+						x++;
+                    }
+
+					CraftingStation.RenewRecommendations(array,GlobalVariables.UIInventory.craftingInterfacePlaceholder);
+                }
+			});
+        else
+        {
+			button.gameObject.AddComponent<SlotOptionsScript>();
+			button.gameObject.GetComponent<SlotOptionsScript>().invSlot = this;
+
+			///Sending a RecipeUpdateRequest
+			if (UIInventory != null)
+				button.gameObject.GetComponent<SlotOptionsScript>().SlotOptions = UIInventory._slotOptions;
+        }
 	}
 
 	/// <summary>
-	/// Asign <see cref="EventHandler"/> (Listeners) for Button-Presses Event
+	/// [TODO]
 	/// </summary>
-	public void Start() {
-		_uIInventory = GameObject.Find("UI").GetComponent<UIInventory>();
-		
+	public void OnMouseOver() {
+		Debug.Log("A");
 	}
 }

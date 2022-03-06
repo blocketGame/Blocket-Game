@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 using UnityEngine;
 
@@ -15,6 +12,13 @@ public abstract class Item{
 	public string description;
 	public ItemType itemType;
 	public Sprite itemImage;
+
+	protected Action onMainInteractionKey;
+	protected Action onSideInteractionKey;
+	protected Action on2SideInteractionKey;
+
+	public Action OnMainInteractionKey => onMainInteractionKey ?? GlobalVariables.DoNothing;
+	public Action OnSideInteractionKey => onSideInteractionKey ?? GlobalVariables.DoNothing;
 
 	/// <summary>How much of the Item can be hold.</summary>
 	public enum ItemType {
@@ -33,24 +37,33 @@ public abstract class Item{
 		return false;
 	}
 
-	public override int GetHashCode() {
-		return base.GetHashCode();
-	}
+
+	public override int GetHashCode() => base.GetHashCode();
 }
 
 [Serializable]
 public class BlockItem : Item {
-	public uint blockId;
+	public byte blockId;
+
+	public BlockItem(){
+		onSideInteractionKey = () => GlobalVariables.Interaction.BlockPlace();
+	}
 }
 
 [Serializable]
 public class ToolItem : Item {
 	public ushort durability, damage;
+	public byte toolHardness;
 	public ToolType toolType;
 
 	public enum ToolType {
-		SWORD, SHOVEL, AXE, BOW, PICKAXE
+		MEELE, RANGE, SHOVEL, AXE, PICKAXE, DEFAULT
 	}
+}
+
+[System.Serializable]
+public class MeeleItem : ToolItem{
+	
 }
 
 [Serializable]
@@ -61,5 +74,10 @@ public class EquipableItem : Item {
 
 [Serializable]
 public class UseAbleItem : Item{
+
+}
+
+[Serializable]
+public class CommonItem : Item{
 
 }

@@ -72,11 +72,42 @@
       "source": "builtin",
       "dependencies": {}
     },
+    "com.unity.2d.tilemap.extras": {
+      "version": "https://github.com/Unity-Technologies/2d-extras.git#master",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.modules.tilemap": "1.0.0",
+        "com.unity.2d.tilemap": "1.0.0",
+        "com.unity.ugui": "1.0.0",
+        "com.unity.modules.jsonserialize": "1.0.0"
+      },
+      "hash": "5e0d066441376fd81fff13330a32cbfbf466f0c1"
+    },
+    "com.unity.burst": {
+      "version": "1.5.6",
+      "depth": 2,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.mathematics": "1.2.1"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.collab-proxy": {
       "version": "1.9.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.collections": {
+      "version": "1.1.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.burst": "1.5.4",
+        "com.unity.test-framework": "1.1.29"
+      },
       "url": "https://packages.unity.com"
     },
     "com.unity.ext.nunit": {
@@ -96,7 +127,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.11",
+      "version": "2.0.12",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -118,19 +149,30 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
-    "com.unity.multiplayer.mlapi": {
-      "version": "https://github.com/Unity-Technologies/com.unity.multiplayer.mlapi.git?path=/com.unity.multiplayer.mlapi#release/0.1.0",
+    "com.unity.multiplayer.tools": {
+      "version": "1.0.0-pre.2",
       "depth": 0,
-      "source": "git",
+      "source": "registry",
       "dependencies": {
-        "com.unity.modules.ai": "1.0.0",
-        "com.unity.modules.animation": "1.0.0",
-        "com.unity.nuget.mono-cecil": "1.10.1-preview.1"
+        "com.unity.profiling.core": "1.0.0-pre.1"
       },
-      "hash": "3e3aef6aa02c2a25359898319e5bd49d3518b57b"
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.netcode.gameobjects": {
+      "version": "1.0.0-pre.5",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.animation": "1.0.0",
+        "com.unity.modules.physics": "1.0.0",
+        "com.unity.modules.physics2d": "1.0.0",
+        "com.unity.nuget.mono-cecil": "1.10.1",
+        "com.unity.collections": "1.1.0"
+      },
+      "url": "https://packages.unity.com"
     },
     "com.unity.nuget.mono-cecil": {
-      "version": "1.10.1-preview.1",
+      "version": "1.10.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
@@ -143,6 +185,13 @@
       "dependencies": {
         "com.unity.modules.physics": "1.0.0"
       },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.profiling.core": {
+      "version": "1.0.0-pre.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.render-pipelines.core": {
@@ -191,7 +240,7 @@
       }
     },
     "com.unity.test-framework": {
-      "version": "1.1.29",
+      "version": "1.1.30",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -211,7 +260,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.timeline": {
-      "version": "1.5.6",
+      "version": "1.5.7",
       "depth": 0,
       "source": "registry",
       "dependencies": {

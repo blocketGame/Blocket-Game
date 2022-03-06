@@ -9,6 +9,9 @@ TagManager:
   - SlotOptions
   - Hotbar
   - Inventory
+  - Chunk
+  - Terrain
+  - World
   layers:
   - Default
   - TransparentFX
@@ -19,8 +22,8 @@ TagManager:
   - Collision
   - Player
   - Drops
-  - 
-  - 
+  - PostProcessing
+  - Mobs
   - 
   - 
   - 
@@ -45,4 +48,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Particles
+    uniqueID: 478643419
+    locked: 0
+  - name: Player
+    uniqueID: 599914731
     locked: 0

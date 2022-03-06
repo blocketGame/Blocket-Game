@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+<<<<<<< HEAD:Game-Blocket/Assets/Prefabs/Recipes/Stone.asset.meta
+guid: 2cbe51554b22dfe41baf7afb307f9e26
+=======
+guid: 7fe3847257cf40a498d6c4fc134fdca2
+>>>>>>> b9e20d9 (World generation bug fixes):Game-Blocket/Assets/Render/UniversalRenderPipelineAsset 1.asset.meta
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+<<<<<<< HEAD:Game-Blocket/Assets/Prefabs/Recipes/craftingTable.asset.meta
+guid: a82579b4eace29f409f932e7cf1ad59e
+=======
+guid: 29622f526ca46b0458f4372bec954104
+>>>>>>> b9e20d9 (World generation bug fixes):Game-Blocket/Assets/Scripts/Dungeon/Scriptabel Objects/Dungeon Test.asset.meta
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46feb60d4b15ffb49a4956ca374a22b9, type: 3}
+  m_Name: Dungeon Test
+  m_EditorClassIdentifier: 
+  startPosition: {x: 0, y: 0}
+  seed: -1
+  iterations: 100
+  walkLength: 20
+  startRandomlyEachIteration: 1
+  minRoomWidth: 20
+  minRoomHeight: 20
+  dungeonWidth: 200
+  dungeonHeight: 80
+  offset: 3
+  randomWalkRooms: 0
+  backgroundTile: {fileID: 11400000, guid: 62eff008b736d734bbe7b4ebd8e43060, type: 2}
+  wallTile: {fileID: 11400000, guid: 4ad18dca405397e43ae9a938fdb634b0, type: 2}
+  collisionTile: {fileID: 11400000, guid: 0bcc34212cd215a4584d42c3c4ba8f29, type: 2}

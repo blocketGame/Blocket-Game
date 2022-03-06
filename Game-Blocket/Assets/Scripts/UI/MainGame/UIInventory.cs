@@ -57,70 +57,74 @@ public class UIInventory : MonoBehaviour
 	#region Static Resources !DO NOT TOUCH!
 	[Header("Static: General")]
 	///<summary>Gameobject from Inspector</summary>
-	public GameObject uiParent, slotField, uiHud , hudslotfieldParent;
+	public GameObject uiParent, slotField, uiHud, hudslotfieldParent;
 	/// <summary>Image from Inspector</summary>
 	public Image inventoryBackgroundImage;
+
+	[Header("Other Prefabs")]
+	public RectTransform chatParent;
+	public InputField chatInput;
+	public ScrollViewHandler chatHistoryView;
 	/// <summary>Prefab from Inspector</summary>
-	public GameObject prefabItemSlot;
-	/// <summary>ItemAssets - Prefab </summary>
-	public ItemAssets itemAssets;
-	/// <summary><see cref="Inventory"/></summary>
-	private Inventory _inventory;
-	public GameObject _slotOptions;
+	public GameObject prefabItemSlot, _slotOptions, loadingScreen, craftingInterfacePlaceholder;
+	/// <summary>
+	/// Original position of the Inventory
+	/// </summary>
+	private Vector2 uiParentPosition;
 	#endregion
+
+	/// <summary><see cref="global::Inventory"/></summary>
+	private Inventory Inventory => GlobalVariables.Inventory;
 
 	#region Initzializement
 
 	/// <summary>
 	/// Initzialize the Inventory;
 	/// </summary>
-	private void InitUI() {
+	private void InitUI()
+	{
 		InitSlots();
 		InitHudSlots();
 		//InitPlayerInfo();
 		InitAtHand();
-		///Initzialize the Inventory class
-		itemAssets = GameObject.Find("Assets").GetComponent<ItemAssets>();
-		if(!itemAssets)
-			Debug.LogException(new NullReferenceException("Item Assets not found!"));
-		/*if(GlobalVariables.itemTest)
-			foreach(Item i in itemAssets.BlockItemsInGame)
-				_inventory.AddItem(i);*/
 	}
 
 	/// <summary>
 	/// Initzialize the AtHand<see cref="UIInventorySlot"/>
 	/// </summary>
-	private void InitAtHand() {
-		atHandSlot = Instantiate(prefabItemSlot, GameObject.Find("Inventory").transform);
+	private void InitAtHand()
+	{
+		atHandSlot = Instantiate(prefabItemSlot, GlobalVariables.UIInventory.transform);
 		atHandSlot.name = "SlotAtHand";
 		atHandSlot.SetActive(false);
 		Destroy(atHandSlot.GetComponentInChildren<Image>());
 		Destroy(atHandSlot.GetComponentInChildren<Button>());
 
 		UIInventorySlot atHandUISlot = atHandSlot.GetComponent<UIInventorySlot>();
-		_inventory.atHand = atHandUISlot;
+		Inventory.atHand = atHandUISlot;
 		atHandUISlot.itemImage.raycastTarget = false;
 
 		RectTransform atHandT = atHandSlot.GetComponent<RectTransform>();
 		atHandT.localScale = new Vector3(0.8f, 0.8f, 1);
-		_inventory.atHandVector = new Vector2(-atHandT.rect.width / 2, atHandT.rect.height / 2);
+		//Inventory.atHandVector = new Vector2(-atHandT.rect.width / 2, atHandT.rect.height / 2);
 	}
 
 	/// <summary>
 	/// Initzialize the PlayerInfoUI
 	/// <br></br>Not used!
 	/// </summary>
-	private void InitPlayerInfo() {
+	private void InitPlayerInfo()
+	{
 		//TODO: Make dynamic
 		///ArmorSlots
 		//foreach(GameObject go1 in armorSlots)
 		//	go1.transform.localPosition = new Vector3Int(spaceToBorderX + (int)go1.transform.localPosition.x, (int)go1.transform.localPosition.y, 1);
 
 		///AccessoiresSlot
-		if(!accessoiresParent)
+		if (!accessoiresParent)
 			Debug.LogError("AccessoiresParent not Initzialized");
-		for(int i = 0; i < countAccessoireSlots; i++) {
+		for (int i = 0; i < countAccessoireSlots; i++)
+		{
 			float height = prefabItemSlot.GetComponent<RectTransform>().rect.height * scaleIndicator / 100;
 			float accSlotY = accessoiresParent.transform.position.y + (height * i + rowspacingPlayerInfo * i);
 			Vector3 posSlotNow = new Vector3(accessoiresParent.transform.position.x, accSlotY, 1);
@@ -135,96 +139,184 @@ public class UIInventory : MonoBehaviour
 	/// <summary>
 	/// Initzialize the ItemSlotField
 	/// </summary>
-	private void InitSlots() {
+	private void InitSlots()
+	{
 		//Get With and height from the Prefab
 		float prefW = prefabItemSlot.GetComponent<RectTransform>().rect.width,
 			prefH = prefabItemSlot.GetComponent<RectTransform>().rect.height;
 		//Go through every Slot
-		for(byte a = 0; a < rows; a++) {
-			for(byte b = 0; b < coloums; b++) {
+		for (byte a = 0; a < rows; a++)
+		{
+			for (byte b = 0; b < coloums; b++)
+			{
 				//Calc the !absolute Pos
 				float itemSlotX = slotField.transform.position.x + prefW * b + spaceToBorderX + colspacingInvSlot * b;
 				float itemSlotY = slotField.transform.position.y - (prefH * a + spaceToBorderY + rowspacingInvSlot * a);
 				//Instantiate the Gameobject
 				GameObject itemSlot = Instantiate(prefabItemSlot, new Vector3Int((int)(itemSlotX), (int)(itemSlotY), 1), Quaternion.identity, slotField.transform);
+				if (a == 0)
+					itemSlot.GetComponent<UIInventorySlot>().isHotBarSlot = true;
 				//Name it
 				itemSlot.name = $"Slot {a} - {b}";
 				//Add to Inventory Logic
-				_inventory.InvSlots.Add(itemSlot.GetComponent<UIInventorySlot>());
+				Inventory.InvSlots.Add(itemSlot.GetComponent<UIInventorySlot>());
 			}
 		}
 	}
-	
-	private void InitHudSlots()
-	{
+
+	/// <summary></summary>
+
+	private void InitHudSlots() {
 		//Get With and height from the Prefab
-		float prefW = prefabItemSlot.GetComponent<RectTransform>().rect.width,
-		prefH = prefabItemSlot.GetComponent<RectTransform>().rect.height;
+		float prefW = prefabItemSlot.GetComponent<RectTransform>().rect.width;
 		//Go through every Slot
 		for (byte a = 0; a < coloums; a++)
 		{
-				//Calc the !absolute Pos
-				float itemSlotX = hudslotfieldParent.transform.position.x + prefW * a + 50 + colspacingInvSlot*0.2f * a;
-				float itemSlotY = hudslotfieldParent.transform.position.y - 15;
-				//Instantiate the Gameobject
-				GameObject itemSlot = Instantiate(prefabItemSlot, new Vector3Int((int)(itemSlotX), (int)(itemSlotY), 1), Quaternion.identity, hudslotfieldParent.transform);
-				itemSlot.gameObject.transform.localScale = new Vector3(0.8f,0.8f,1);
-				//Name it
-				itemSlot.name = $"HudSlot {a}";
-				//Specify that it is a HotbarSlot
-				itemSlot.GetComponent<UIInventorySlot>().isHotBarSlot = true;
-				itemSlot.GetComponent<UIInventorySlot>().parent = _inventory.InvSlots[a];
-				//Add to Inventory Logic
-				_inventory.InvSlots.Add(itemSlot.GetComponent<UIInventorySlot>());
-			
+			//Calc the !absolute Pos
+			float itemSlotX = hudslotfieldParent.transform.position.x + prefW * a + 50 + colspacingInvSlot * 0.2f * a;
+			float itemSlotY = hudslotfieldParent.transform.position.y - 15;
+			//Instantiate the Gameobject
+			GameObject itemSlot = Instantiate(prefabItemSlot, new Vector3Int((int)(itemSlotX), (int)(itemSlotY), 1), Quaternion.identity, hudslotfieldParent.transform);
+			itemSlot.gameObject.transform.localScale = new Vector3(0.8f, 0.8f, 1);
+			//Name it
+			itemSlot.name = $"HudSlot {a}";
+			//Specify that it is a HotbarSlot
+			itemSlot.GetComponent<UIInventorySlot>().isHotBarSlot = true;
+			itemSlot.GetComponent<UIInventorySlot>().parent = Inventory.InvSlots[a];
+			//Add to Inventory Logic
+			Inventory.HudSlots.Add(itemSlot.GetComponent<UIInventorySlot>());
+		}
+	}
+
+	public void Init(){
+		if (Inventory == null)
+			Debug.LogError("Inventory not found!");
+		ReloadSettings();
+		InitUI();
+		Inventory.ArmorSlots = armorSlots;
+		Inventory.AccessoiresSlots = accessoiresSlots;
+		InventoryOpened = false;
+		Inventory.SelectedSlot = 0;
+	}
+	#endregion
+
+	#region UnityMethods
+	private void Start()
+	{
+		craftingInterfacePlaceholder.SetActive(false);
+	}
+
+	/// <summary>"Reload" at the beginning</summary>
+	public void Awake()
+	{
+		GlobalVariables.UIInventory = this;
+		name = "UI";
+	}
+
+	public void Update()
+	{
+		if (GameManager.State != GameState.INGAME)
+			return;
+
+		if (Input.GetKeyDown(GameManager.SettingsProfile.GetKeyCode("InventoryKey")))
+		{
+
+			//Inv
+			InventoryOpened = !InventoryOpened;
+			if (!InventoryOpened)
+				SynchronizeToHotbar();
+
+			//Carfting?
+			///TODO: CLEANUP
+			if (InventoryOpened){
+				if (GlobalVariables.activatedCraftingInterface != null)
+				{
+					craftingInterfacePlaceholder.SetActive(true);
+					GlobalVariables.activatedCraftingInterface.SetActive(false);
+					uiParentPosition = uiParent.transform.position;
+					uiParent.transform.position = new Vector2(uiParent.transform.position.x + 900, uiParent.transform.position.y);
+					craftingInterfacePlaceholder.GetComponent<Image>().sprite = GlobalVariables.activatedCraftingInterface.GetComponent<Image>().sprite;
+					CraftingStation.InstatiateCraftingInterface(prefabItemSlot, craftingInterfacePlaceholder, GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)), GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)).Slotwidth, GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)).Slotheight);
+					CraftingStation.RenewRecommendations(new Craftable[2],craftingInterfacePlaceholder);
+				}
+			}else{
+				//TODO: Optional things to do...
+				//uiParent.SetActive(false);
+				if (GlobalVariables.activatedCraftingInterface != null)
+				{
+					GlobalVariables.activatedCraftingInterface.SetActive(true);
+					foreach(UIInventorySlot uis in craftingInterfacePlaceholder.GetComponentsInChildren<UIInventorySlot>())
+					{
+						if (uis.ItemID != 0)
+						{
+							Inventory.AddItem(uis.ItemID, uis.ItemCount, out ushort itemCountNotAdded);
+						}
+						GameObject.Destroy(uis.gameObject);
+					}
+					uiParent.transform.position = uiParentPosition;
+					craftingInterfacePlaceholder.SetActive(false);
+				}
+				//uiHud.SetActive(!InventoryOpened);
+
+			}
+		}
+
+		//Chat
+		if (Input.GetKeyDown(GameManager.SettingsProfile.GetKeyCode("ChatKey")) && !ChatOpened)
+			ChatOpened = true;
+		if (ChatOpened){
+			if (Input.GetKeyDown(KeyCode.Escape))
+				ChatOpened = false;
+			if (Input.GetKeyDown(KeyCode.Return)){ //Return = Enter
+				ConsoleHandler.Handle(chatInput.text);
+				ChatOpened = false;
+			}
+		}
+
+		//Scroll
+		if (Input.mouseScrollDelta.y != 0 && !ChatOpened)
+		{
+			float val = Input.mouseScrollDelta.y;
+			if (val < 0)
+				if (Inventory.SelectedSlot == Inventory.HudSlots.Count - 1)
+
+					Inventory.SelectedSlot = 0;
+				else
+					Inventory.SelectedSlot += 1;
+			else
+				if (Inventory.SelectedSlot == 0)
+				Inventory.SelectedSlot = (byte)(Inventory.HudSlots.Count - 1);
+			else
+				Inventory.SelectedSlot -= 1;
 		}
 	}
 	#endregion
 
-	/// <summary>"Reload" at the beginning</summary>
-	public void Awake() {
-		_inventory = GameObject.Find("Player").GetComponent<Inventory>();
-		ReloadSettings();
-		InitUI();
-		_inventory.ArmorSlots = armorSlots;
-		_inventory.AccessoiresSlots = accessoiresSlots;
-		InventoryOpened = false;
-	}
-
-
-	public void Update() {
-		if(Input.anyKeyDown)
-			if(Input.GetKeyDown(GlobalVariables.openInventoryKey)) {
-				
-				InventoryOpened = !InventoryOpened;
-				if (!InventoryOpened)
-					SynchronizeToHotbar();
-				else
-					SynchronizeToInv();
-				uiHud.SetActive(!InventoryOpened);
-				
-			}
-	}
-
 	/// <summary>Reloads all UI Settings</summary>
-	public void ReloadSettings() {
-		if(!uiParent)
+	public void ReloadSettings()
+	{
+		if (!uiParent)
 			Debug.LogError("Parent from UI is NULL!");
 		//Set the Backgroung from the UI-Inventory
 		inventoryBackgroundImage.color = inventoryBackground;
 	}
 
 	/// <summary>Returns and sets if the inventory should open</summary>
-	public bool InventoryOpened {
-		get {
-			return inventoryOpened;
-		}
-		set {
+	public bool InventoryOpened
+	{
+		get => inventoryOpened;
+		set
+		{
 			inventoryOpened = value;
-			if(value) {
+			ChatOpened = false;
+			if (value)
+			{
 				//TODO: Optional things to do... Example: Lock Mouseplace or break
 				uiParent.SetActive(true);
-			} else {
+				
+			}
+			else
+			{
 				//TODO: Optional things to do...
 				uiParent.SetActive(false);
 			}
@@ -233,60 +325,56 @@ public class UIInventory : MonoBehaviour
 	}
 	private static bool inventoryOpened;
 
-	public string DescriptionText { 
-		get { return descriptonText.text; } 
-		set { descriptonText.text = value; } 
+	public bool ChatOpened
+	{
+		get => chatOpened;
+
+		set{
+			if (InventoryOpened)
+				return;
+			chatOpened = value;
+			if (value){
+				chatInput.text = "";
+				chatParent.gameObject.SetActive(true);
+				chatInput.Select();
+			}else{
+				//TODO: Optional things to do...
+				chatParent.gameObject.SetActive(false);
+			}
+
+		}
+	}
+	private static bool chatOpened;
+
+	public string DescriptionText
+	{
+		get { return descriptonText.text; }
+		set { descriptonText.text = value; }
 	}
 
-	public string TitleText {
+	public string TitleText
+	{
 		get { return titleText.text; }
 		set { titleText.text = value; }
 	}
 
-    #region Bidirectional Sync
+	#region Bidirectional Sync
 
-    /// <summary>
-    /// Synchronizes Hotbar State of Slots Row 1
-    /// </summary>
-    public void SynchronizeToInv()
-	{
-        foreach (UIInventorySlot sl in _inventory.InvSlots)
-        {
-			if (sl.isHotBarSlot)
-			{
-				///[TODO]
-				foreach (UIInventorySlot sl1 in _inventory.InvSlots)
-				{
-					if (!sl1.isHotBarSlot && sl.parent.name.Equals(sl1.name))
-					{
-						sl1.Item = sl.Item;
-						sl1.ItemCount = sl.ItemCount;
-					}
-				}
-			}
-		}
-	}
+	/// <summary>
+	/// Synchronizes Hotbar State of Slots Row 1
+	/// </summary>
+
 	/// <summary>
 	/// Synchronizes Inventory State of Slots Row 1
 	/// </summary>
-	public void SynchronizeToHotbar()
-	{
-		foreach (UIInventorySlot sl in _inventory.InvSlots)
-		{
-			if (sl.isHotBarSlot)
-			{
-				///[TODO]
-				foreach (UIInventorySlot sl1 in _inventory.InvSlots)
-				{
-					if (!sl1.isHotBarSlot&&sl.parent.name.Equals(sl1.name))
-					{
-						sl.Item = sl1.Item;
-						sl.ItemCount = sl1.ItemCount;
-					}
-				}
+
+	public void SynchronizeToHotbar() {
+		for(int i = 0; i < Inventory.HudSlots.Count; i++){ 
+				Inventory.HudSlots[i].ItemID = Inventory.InvSlots[i].ItemID;
+				Inventory.HudSlots[i].ItemCount = Inventory.InvSlots[i].ItemCount;	
 			}
-		}
+		GlobalVariables.PlayerVariables.ReloadItemInHand();
 	}
-    #endregion
+	#endregion
 
 }

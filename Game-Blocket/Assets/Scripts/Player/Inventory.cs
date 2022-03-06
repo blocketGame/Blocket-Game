@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 
 using UnityEngine;
-using UnityEngine.XR;
+
+using static UnityEngine.Rendering.DebugUI;
 
 /// <summary>
 /// <b>Inventory Logic</b><br></br>
 /// Feel free  to use it!
 /// </summary>
-public class Inventory : MonoBehaviour{
+public class Inventory : MonoBehaviour {
 	/// <summary>List of ArmorSlots in the inventory => <seealso cref="UIInventorySlot"/><br></br>[0]->Head,</summary>
 	public List<UIInventorySlot> ArmorSlots { get; set; }
 	/// <summary>List of acessoiresslots in the inventory => <seealso cref="UIInventorySlot"/></summary>
@@ -16,10 +17,27 @@ public class Inventory : MonoBehaviour{
 	/// <summary>List of the inventory Slots => <seealso cref="UIInventorySlot"/></summary>
 	public List<UIInventorySlot> InvSlots { get; } = new List<UIInventorySlot>();
 
+	/// <summary>List of the Hud Slots</summary>
+	public List<UIInventorySlot> HudSlots { get; } = new List<UIInventorySlot>();
+
+	public uint SelectedItemId => InvSlots[SelectedSlot].ItemID;
+	public Item SelectedItemObj => GlobalVariables.ItemAssets.GetItemFromItemID(SelectedItemId);
+
+	public byte SelectedSlot { get => _selectedSlot; set {
+			if (value >= HudSlots.Count || value < 0)
+				throw new ArgumentException($"Hud-Slot Nr.: {value} not found!");
+			HudSlots[_selectedSlot].IsSelected = false;
+			_selectedSlot = value;
+			HudSlots[_selectedSlot].IsSelected = true;
+			GlobalVariables.PlayerVariables.ReloadItemInHand();
+		}
+	}
+	private byte _selectedSlot = 0;
+
 	/// <summary>Last slot active pressed</summary>
 	[HideInInspector]
 	public UIInventorySlot atHand;
-	[HideInInspector]
+	//[HideInInspector]
 	public Vector2 atHandVector;
 
 	/// <summary>
@@ -27,22 +45,23 @@ public class Inventory : MonoBehaviour{
 	/// </summary>
 	/// <param name="slotPressed">Slot that was pressed by the local user</param>
 	public void PressedSlot(UIInventorySlot slotPressed) {
-		Item temp = atHand.Item;
+		uint temp = atHand.ItemID;
 		ushort iCT = atHand.ItemCount;
 
-		atHand.Item = slotPressed.Item;
+		atHand.ItemID = slotPressed.ItemID;
 		atHand.ItemCount = slotPressed.ItemCount;
 
 		slotPressed.ItemCount = iCT;
-		slotPressed.Item = temp;
+		slotPressed.ItemID = temp;
 
-		atHand.gameObject.SetActive(atHand.Item != null);
+		atHand.gameObject.SetActive(atHand.ItemID != 0);
+		GlobalVariables.UIInventory.SynchronizeToHotbar();
 	}
 
 	public void Update() {
-		if(atHand.Item != null)
+		if (atHand?.ItemID != null)
 			atHand.transform.position = atHandVector + new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-			
+
 	}
 
 	/// <summary>
@@ -50,9 +69,21 @@ public class Inventory : MonoBehaviour{
 	/// </summary>
 	/// <param name="itemToAdd">The Item Object</param>
 	/// <returns>True if the Item </returns>
-	public bool AddItem(Item itemToAdd) {
-		bool succeed = AddItem(itemToAdd, 1, out _);
-		return succeed;
+	[Obsolete]
+	public bool AddItem(Item itemToAdd) => AddItem(itemToAdd, 1, out _);
+
+	public bool AddItem(uint itemIDToAdd, ushort itemCount, out ushort itemCountNotAdded) {
+		Item item = GlobalVariables.ItemAssets.GetItemFromItemID(itemIDToAdd) ?? throw new ArgumentException($"No Item found! ID:{itemIDToAdd}");
+		bool x = AddItem(item, itemCount, out ushort i);
+		itemCountNotAdded = i;
+		return x;
+	}
+
+	public bool AddItem(Item itemToAdd, ushort itemCount, out ushort itemCountNotAdded){
+		bool x = AddItemInnerMethod(itemToAdd, itemCount, out ushort i);
+		itemCountNotAdded = i;
+		GlobalVariables.UIInventory.SynchronizeToHotbar();
+		return x;
 	}
 
 	/// <summary
@@ -62,56 +93,63 @@ public class Inventory : MonoBehaviour{
 	/// <param name="itemCount">Number of Item`s</param>
 	/// <param name="itemCountNotAdded"></param>
 	/// <returns><see langword="true"/> if the <see cref="Item"/> has been added</returns>
-	public bool AddItem(Item itemToAdd, ushort itemCount, out ushort itemCountNotAdded) {
+	/// 
+	private bool AddItemInnerMethod(Item itemToAdd, ushort itemCount, out ushort itemCountNotAdded) {
 		UIInventorySlot wannaAddThere = null;
 
 		///If item has ItemType: <see cref="Item.ItemType.SINGLE"/>
-		if(itemToAdd.itemType == Item.ItemType.SINGLE) {
+		if (itemToAdd.itemType == Item.ItemType.SINGLE) {
 			wannaAddThere = GetNextFreeSlot();
-			if(wannaAddThere) {
-				wannaAddThere.Item = itemToAdd;
+			if (wannaAddThere) {
+				wannaAddThere.ItemID = itemToAdd.id;
 				itemCountNotAdded = 0;
 				return true;
 			}
-			itemCountNotAdded = 1;
+			itemCountNotAdded = itemCount;
 			return false;
 		}
 
 		///If item has ItemType: <see cref="Item.ItemType.STACKABLE"/>
 		ushort toAddNow = itemCount;
-		while(toAddNow > 0) {
+		while (toAddNow > 0) {
 			//Try to find a slot with the same Item
-			foreach(UIInventorySlot inventorySlotNow in FindItem(itemToAdd))
-				if(inventorySlotNow.ItemCount <= GlobalVariables.maxItemCountForMultiple) {
+			foreach (UIInventorySlot inventorySlotNow in FindItem(itemToAdd))
+				if (inventorySlotNow.ItemCount <= GlobalVariables.maxItemCountForMultiple) {
 					wannaAddThere = inventorySlotNow;
 					break;
 				}
 			//If no slot with this item is found => get a new one
-			if(!wannaAddThere)
+			if (!wannaAddThere)
 				wannaAddThere = GetNextFreeSlot();
 
 			//Add the Item if a slot has been found
-			if(wannaAddThere) {
-				if(wannaAddThere.Item == null) {
-					wannaAddThere.Item = itemToAdd;
+			if (wannaAddThere)
+			{
+				if (wannaAddThere.ItemID == 0)
+				{
+					wannaAddThere.ItemID = itemToAdd.id;
 					wannaAddThere.ItemCount = toAddNow;
 					toAddNow = 0;
-				} else {
+				}else{
 					ushort iCBefore = wannaAddThere.ItemCount;
-					if(iCBefore + toAddNow > GlobalVariables.maxItemCountForMultiple) { 
+					if (iCBefore + toAddNow > GlobalVariables.maxItemCountForMultiple)
+					{
 						ushort iCAddable = (ushort)(GlobalVariables.maxItemCountForMultiple - iCBefore);
 						toAddNow -= iCAddable;
 						wannaAddThere.ItemCount = GlobalVariables.maxItemCountForMultiple;
-					} else {
+					}
+					else
+					{
 						wannaAddThere.ItemCount += toAddNow;
 						toAddNow = 0;
 					}
 				}
 			}
+			else
+				break;
 		}
 		itemCountNotAdded = toAddNow;
-		return toAddNow == 0;
-
+		return toAddNow != itemCount;
 	}
 
 	/// <summary>
@@ -121,8 +159,8 @@ public class Inventory : MonoBehaviour{
 	/// <returns>List off all Slots with a specific Item</returns>
 	public List<UIInventorySlot> FindItem(Item itemToFind) {
 		List<UIInventorySlot> itemSlotsFound = new List<UIInventorySlot>();
-		foreach(UIInventorySlot invSlotNow in InvSlots)
-			if(invSlotNow.Item == itemToFind)
+		foreach (UIInventorySlot invSlotNow in InvSlots)
+			if (invSlotNow.ItemID == itemToFind.id)
 				itemSlotsFound.Add(invSlotNow);
 		return itemSlotsFound;
 	}
@@ -134,8 +172,8 @@ public class Inventory : MonoBehaviour{
 	/// </summary>
 	/// <returns>First free slot<br></br>Null if no slot is free</returns>
 	public UIInventorySlot GetNextFreeSlot() {
-		foreach(UIInventorySlot invSlotNow in InvSlots)
-			if(invSlotNow.Item == null)
+		foreach (UIInventorySlot invSlotNow in InvSlots)
+			if (invSlotNow.ItemID == 0)
 				return invSlotNow;
 		return null;
 	}
@@ -146,8 +184,8 @@ public class Inventory : MonoBehaviour{
 	/// <param name="itemtToFind">Item that has to be found</param>
 	/// <returns>Null if no Item has been found<br></br>An <see cref="UIInventorySlot"/> with the Item to find</returns>
 	public UIInventorySlot FindFirstItem(Item itemtToFind) {
-		foreach(UIInventorySlot invSlotNow in InvSlots)
-			if(invSlotNow.Item == itemtToFind)
+		foreach (UIInventorySlot invSlotNow in InvSlots)
+			if (invSlotNow.ItemID == itemtToFind.id)
 				return invSlotNow;
 		return null;
 	}
@@ -159,28 +197,29 @@ public class Inventory : MonoBehaviour{
 	/// <param name="countToRemove">Number of the Item to be removed</param>
 	/// <returns>True if the Inventory has enough of the specific item</returns>
 	public bool CanBeRemoved(Item itemToRemove, ushort countToRemove) {
-		return GetItemCountFromType(itemToRemove) > countToRemove;
+		return GetItemCountFromType(itemToRemove) >= countToRemove;
 	}
 
 	/// <summary>
 	/// Removes an Amount of Items<br></br>
-	/// Bevore it checks if it can be removed
+	/// Before it checks if it can be removed
 	/// </summary>
 	/// <param name="itemToRemove">The <see cref="Item"/> to remove</param>
 	/// <param name="countToRemove">Number of items</param>
 	/// <returns>True if has been removed; false if it cannot be removed due to <see cref="NullReferenceException"/> or more count than items available</returns>
 	public bool RemoveItem(Item itemToRemove, ushort countToRemove) {
-		if(!(itemToRemove != null && CanBeRemoved(itemToRemove, countToRemove)))
+		if (!(itemToRemove != null && CanBeRemoved(itemToRemove, countToRemove)))
 			return false;
 		UIInventorySlot slotToRemove = FindFirstItem(itemToRemove);
-		if(slotToRemove.ItemCount < countToRemove) {
+		if (slotToRemove.ItemCount < countToRemove) {
 			int toRemoveAfter = countToRemove - slotToRemove.ItemCount;
-			slotToRemove.Item = null;
+			slotToRemove.ItemID = 0;
 			RemoveItem(itemToRemove, (ushort)toRemoveAfter);
-		} else if(slotToRemove.ItemCount == countToRemove)
-			slotToRemove.Item = null;
+		} else if (slotToRemove.ItemCount == countToRemove)
+			slotToRemove.ItemID = 0;
 		else
 			slotToRemove.ItemCount -= countToRemove;
+		GlobalVariables.UIInventory.SynchronizeToHotbar();
 		return true;
 	}
 	/// <summary>
@@ -190,7 +229,7 @@ public class Inventory : MonoBehaviour{
 	/// <returns>the numver of items</returns>
 	public ushort GetItemCountFromType(Item itemToFind) {
 		ushort sum = 0;
-		foreach(UIInventorySlot slot in FindItem(itemToFind))
+		foreach (UIInventorySlot slot in FindItem(itemToFind))
 			sum += slot.ItemCount;
 		return sum;
 	}
