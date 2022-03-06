@@ -1,9 +1,11 @@
-using MLAPI;
 
+using Unity.Netcode;
+
+using UnityEngine;
 /// <summary>
 /// This class should be alsways synced
 /// </summary>
-public class NetworkVariables : NetworkBehaviour
+public class NetworkVariables : MonoBehaviour
 {
 
 	#region Multiplayer

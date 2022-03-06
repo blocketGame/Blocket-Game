@@ -4,6 +4,7 @@ using System.Collections;
 
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor.Experimental.GraphView;
 
 /// <summary>
 /// Handlers the Chat
@@ -20,8 +21,8 @@ public static class ConsoleHandler{
         if (string.IsNullOrEmpty(str))
             return;
         if (isCommand){
-            Command? command = Command.GetCommand(str.Substring(1));
-            if(command != null)
+            Command command = Command.GetCommand(str.Substring(1));
+            if(command == null)
                 PrintToChat($"Command: \"{str}\" not found");
             command?.action(str);
         }
@@ -66,14 +67,14 @@ public static class ConsoleHandler{
     }
 
 
-    public struct Command{
+    private class Command{
 
         public static List<Command> Commands { get; } = new List<Command>()
         {
-            new Command(){ prefix = "ping", action = (str) => PrintToChat("Pong")},
-            new Command(){ prefix = "summon", action = (str) => { 
+            new Command("ping"){ action = (str) => PrintToChat("Pong")},
+            new Command("summon"){ action = (str) => { 
                 // /summon 1 ~ ~ ~
-                string[] arguments = Commands[1].CutCmd(str).Split(' ');
+                string[] arguments = CutCmd(str).Split(' ');
                 try{
                     //Enemy id
                     int enemyId = int.Parse(arguments[0]);
@@ -87,32 +88,58 @@ public static class ConsoleHandler{
                     //Forget enemyhandler lol
                 }catch(Exception e){
                     PrintToChat(str: e.ToString());
-                }
-            } },
-            new Command(){ prefix = "kill", action = (x) => {
+}
+} },
+            new Command("kill"){ action = (x) => {
                 GlobalVariables.LocalPlayer.transform.position = new Vector3(0, 10);
-            } }
+            } },
+            new Command("gamemode"){ action = (x) => {
+                sbyte str = (sbyte.TryParse(x.Split(' ')[1], out sbyte res) ? res : (sbyte)-1) ;
+                if(str == -1){
+                    PrintToChat($"\"{str}\" not a number! Use 0 for survival and 1 for creative!");
+                    return;
+                }
+                switch(str){
+                    case 0: PlayerVariables.Gamemode = Gamemode.SURVIVAL;
+                    break;
+                    case 1: PlayerVariables.Gamemode = Gamemode.CREATIVE;
+                    break;
+                    default:PrintToChat($"Gamemode {str} not found!");
+                    break;
+                }
+                 
+            }, Synms = { "gm", "gamem" } }
         };
 
         //Returns only the value after
-        public string CutCmd(string cmd){
+        public static string CutCmd(string cmd){
             if (cmd.StartsWith(@"/"))
                 cmd = cmd.Substring(1);
-            cmd = cmd.Substring(prefix.Length);
             return cmd.Trim();
         }
 
-        public static Command? GetCommand(string fullCommand){
-            foreach(Command command in Commands)
-                if(fullCommand.StartsWith(command.prefix))  
-                    return command;
+        public static Command GetCommand(string fullCommand){
+            string cmdName = CutCmd(fullCommand.Split(' ')[0]);
+            foreach(Command com in Commands)
+                if(com.name == cmdName || com.Synms.Contains(cmdName))
+                    return com;
             return null;
         }
     
-        public string prefix;
+        public List<string> Synms { get; set; } = new List<string>();
+
+        public string name;
 
         public Action<string> action;
-
+        
+        public Command(List<string> prefix){
+            name = prefix[0];
+            Synms.AddRange(prefix);
+        }
+        public Command(string prefix) {
+            name = prefix;
+        }
+        public Command(){}
     }
 
 }

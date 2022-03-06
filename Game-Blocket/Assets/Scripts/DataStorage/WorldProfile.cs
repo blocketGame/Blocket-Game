@@ -10,7 +10,7 @@ using UnityEngine;
 public class WorldProfile : Profile {
 	public List<ChunkData> chunks = new List<ChunkData>();
 
-	public WorldProfile(string name, int? profileHash) : base(name, profileHash) { }
+	public WorldProfile(string name, int? profileHash = null) : base(name, profileHash) { }
 
 	public static ChunkData CastSAChunkToChunk(SaveAbleChunk s) => new ChunkData(s.blockIDs, s.blockIDsBG, null, s.chunkPosition);
 	public static SaveAbleChunk CastSAChunkToChunk(ChunkData s) => new SaveAbleChunk(TerrainHandler.CastVector2ToInt(s.chunkPosition), s.blocks, s.bgBlocks, null);
@@ -128,9 +128,9 @@ public class WorldProfile : Profile {
 	/// </summary>
 	/// <param name="sc"><see cref="SaveAbleChunk"/></param>
 	/// <returns>the string which will directly be writeable</returns>
-	private static string ConvertChunkDataToString(ChunkData cd) {
+	public static string ConvertChunkDataToString(ChunkData cd) {
 		string data = string.Empty;
-		data += "Chunks:\n";
+		data += $"{cd.ChunkPositionInt.x}|{cd.ChunkPositionInt.y}\n";
 		data += ConvertChunkArrToString(cd.blocks);
 		data += "ChunksBG:\n";
 		data += ConvertChunkArrToString(cd.bgBlocks);
@@ -152,8 +152,6 @@ public class WorldProfile : Profile {
 	/// <param name="mainDirName">Worlddirectory (NOT Parent)</param>
 	/// <param name="worldToSave">WorldProfile</param>
 	private static void SaveWorldProfile(string mainDirName, WorldProfile worldToSave) {
-			
-
 		CheckWorldDirectory(mainDirName);
 		foreach (ChunkData cd in worldToSave.chunks)
 			SaveChunk(cd);
@@ -183,17 +181,20 @@ public class WorldProfile : Profile {
 	/// </summary>
 	/// <param name="path"></param>
 	/// <returns></returns>
-	public static ChunkData GetChunkFromFile(string path) {
-		List<string> dataLines = new List<string>(File.ReadAllLines(path));
+	public static ChunkData GetChunkFromFile(string path) => ReadFromString(new List<string>(File.ReadAllLines(path)), ParseChunkPosition(path));
 
+	public static ChunkData ReadFromString(List<string> dataLines, Vector2Int? posA)
+	{
+		string[] posStr = dataLines[0].Split('|');
+		Vector2Int pos = posA ?? new Vector2Int(int.Parse(posStr[0]), int.Parse(posStr[1].TrimEnd()));
+		
 		//Static Number bc of heading in File
 		byte[,] blockIDs = ConvertStringLinesToByteArr(dataLines.GetRange(1, WorldAssets.ChunkLength).ToArray());
 		byte[,] blockIDBGs = ConvertStringLinesToByteArr(dataLines.GetRange(2 + WorldAssets.ChunkLength, WorldAssets.ChunkLength).ToArray());
 
 		//Drops: 3 + GlobalVariables.WorldData.ChunkWidth
 		List<Drop> drops = new List<Drop>();
-
-		return new ChunkData(blockIDs, blockIDBGs, drops.ToArray(), ParseChunkPosition(path));
+		return new ChunkData(blockIDs, blockIDBGs, drops.ToArray(), pos);
 	}
 
 	public static Vector2Int ParseChunkPosition(string path) {

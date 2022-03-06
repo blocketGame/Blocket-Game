@@ -268,8 +268,8 @@ public class UIInventory : MonoBehaviour
 			if (Input.GetKeyDown(KeyCode.Escape))
 				ChatOpened = false;
 			if (Input.GetKeyDown(KeyCode.Return)){ //Return = Enter
-				ChatOpened = false;
 				ConsoleHandler.Handle(chatInput.text);
+				ChatOpened = false;
 			}
 		}
 
@@ -329,19 +329,15 @@ public class UIInventory : MonoBehaviour
 	{
 		get => chatOpened;
 
-		set
-		{
+		set{
 			if (InventoryOpened)
 				return;
 			chatOpened = value;
-			if (value)
-			{
+			if (value){
+				chatInput.text = "";
 				chatParent.gameObject.SetActive(true);
 				chatInput.Select();
-				chatInput.text = "";
-			}
-			else
-			{
+			}else{
 				//TODO: Optional things to do...
 				chatParent.gameObject.SetActive(false);
 			}

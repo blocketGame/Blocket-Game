@@ -16,7 +16,6 @@ public class WorldAssets : MonoBehaviour
 	public void Awake()
     {
         GlobalVariables.WorldAssets = this;
-		GlobalVariables.Structures.ReadAllStructures();
     }
 
     /// <summary>

@@ -7,8 +7,8 @@ using UnityEngine;
 /// Real Player Controller<br></br>
 /// TODO: Move animations to own class, Cleanup
 /// </summary>
-public class Movement : MonoBehaviour
-{
+//Client
+public class Movement : MonoBehaviour {
 	#region Properties + Atributes
 	#region Player-Settings
 	public float MovementSpeed = 300f;
@@ -19,7 +19,15 @@ public class Movement : MonoBehaviour
 
 	#region State-variables
 	//TODO change to boolean lookinng left/right
-	private int side;
+	private bool LookingRight{ get => lookingRight; set {
+			if(value == lookingRight)
+				return;
+			lookingRight = value;
+			PlayerModelT.localScale = value ? Vector3.right : Vector3.left;
+		}
+	}
+	private bool lookingRight;
+
 	private bool lockvar = false;
 	private float countdown;
 	private float movement;
@@ -46,26 +54,6 @@ public class Movement : MonoBehaviour
 	private bool _playerLocked;
 
 	#region UnityMethods
-	//protected void FixedUpdate()
-	//{
-	//	if (GameManager.State != GameState.INGAME)
-	//		return;
-	//	if (CheckChunk())
-	//		return;
-	//	if(PlayerVariables.Gamemode == Gamemode.SURVIVAL)
-	//		Clipping();
-
-	//	//float speed = 0;
-	//	//if (Input.GetKey(KeyCode.A))
-	//	//    speed -= 30;
-	//	//if (Input.GetKey(KeyCode.D))
-	//	//    speed += 30;
-	//	//if(speed < 0 && playerRigidbody.velocity.x > 0)
-	//	//    playerRigidbody.angularVelocity = 0;
-	//	//if(speed > 0 && playerRigidbody.velocity.x < 0)
-	//	//    playerRigidbody.angularVelocity = 0;
-	//	//playerRigidbody.AddForce(new Vector2(speed, 0));
-	//}
 
 	public void Update(){
 		if (GameManager.State != GameState.INGAME)
@@ -76,7 +64,7 @@ public class Movement : MonoBehaviour
 		if (Input.GetKey(GameManager.SettingsProfile.GetKeyCode("CrawlKey")))
 			Crawl();
 
-		///LULLLLLLLLLLLLLLLLL
+		
 		if (!PlayerLocked)
 		{
 			float x = Input.GetAxis("Horizontal");
@@ -86,38 +74,6 @@ public class Movement : MonoBehaviour
 		}
 
 		VelocityUpdate();
-		/// Input Freeze Countdown
-		if (countdown > 0)
-		{
-			countdown -= Time.deltaTime;
-			return;
-		}
-
-		///turn
-		if (movement > 0)
-		{
-			//animator.SetBool("IsRunning", true);
-			if (side != 1)
-			{
-				if (playerRigidbody.velocity.y == 0)
-					CreateDust();
-				side = (int)PlayerModelT.transform.localScale.x;
-				PlayerModelT.localScale = new Vector3(side, (int)PlayerModelT.transform.localScale.y, 0);
-			}
-		}
-		else if (movement < 0)
-		{
-			//animator.SetBool("IsRunning", true);
-			if (side != -1)
-			{
-				if (playerRigidbody.velocity.y == 0)
-					CreateDust();
-				side = -(int)PlayerModelT.transform.localScale.x;
-				PlayerModelT.localScale = new Vector3(side, (int)PlayerModelT.transform.localScale.y, 0);
-			}
-		}
-		else
-			//animator.SetBool("IsRunning", false);
 
 		///Horizontal Movement
 		if (!lockvar)
@@ -148,7 +104,7 @@ public class Movement : MonoBehaviour
 	/// <returns><see langword="true"/> if player is locked</returns>
 	public bool CheckChunk()
 	{
-		bool locked = !GlobalVariables.TerrainHandler.CurrentChunkReady;
+		bool locked = !GlobalVariables.ClientTerrainHandler.CurrentChunkReady;
 		if (locked != PlayerLocked)
 			PlayerLocked = locked;
 		return locked;
@@ -158,7 +114,7 @@ public class Movement : MonoBehaviour
 
 	private void CreateWallDust()
 	{
-		wallDust.transform.position = new Vector3(GlobalVariables.LocalPlayerPos.x + wallDust.shape.position.x + 0.3f * side, GlobalVariables.LocalPlayerPos.y + wallDust.shape.position.y, GlobalVariables.LocalPlayerPos.z + wallDust.shape.position.z);
+		wallDust.transform.position = new Vector3(GlobalVariables.LocalPlayerPos.x + wallDust.shape.position.x + 0.3f, GlobalVariables.LocalPlayerPos.y + wallDust.shape.position.y, GlobalVariables.LocalPlayerPos.z + wallDust.shape.position.z);
 		wallDust.Play();
 	}
 
@@ -180,18 +136,17 @@ public class Movement : MonoBehaviour
 			{
 				if (GlobalVariables.TerrainHandler.GetBlockFormCoordinate(
 				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + (-0.5f), playerRigidbody.position.y, 0)).x,
-				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + side, playerRigidbody.position.y - 2, 0)).y)
+				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x, playerRigidbody.position.y - 2, 0)).y)
 				!= 0)
 				{
-					side = -1;
+					
 					Walljump();
 				}
 				else if (GlobalVariables.TerrainHandler.GetBlockFormCoordinate(
 				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + (0.5f), playerRigidbody.position.y, 0)).x,
-				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + side, playerRigidbody.position.y - 2, 0)).y)
+				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x, playerRigidbody.position.y - 2, 0)).y)
 				!= 0)
 				{
-					side = 1;
 					Walljump();
 				}
 			}
@@ -224,15 +179,15 @@ public class Movement : MonoBehaviour
 	/// <summary>
 	/// Creates an invisible Wall for the player (Collider)
 	/// </summary>
-	private void Clipping()
-	{
-		if (GlobalVariables.TerrainHandler.GetBlockFormCoordinate(
-			GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + (side * 0.5f), playerRigidbody.position.y, 0)).x,
-			GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + side, playerRigidbody.position.y - 0.1f, 0)).y)
-			!= 0)
-			lockvar = true;
-		else
-			lockvar = false;
+	private void Clipping(){
+		return;
+		//if (GlobalVariables.TerrainHandler.GetBlockFormCoordinate(
+		//	GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + (side * 0.5f), playerRigidbody.position.y, 0)).x,
+		//	GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + side, playerRigidbody.position.y - 0.1f, 0)).y)
+		//	!= 0)
+		//	lockvar = true;
+		//else
+		//	lockvar = false;
 	}
 
 	/// <summary>
@@ -240,7 +195,7 @@ public class Movement : MonoBehaviour
 	/// </summary>
 	private void Roll()
 	{
-		playerRigidbody.AddRelativeForce(new Vector2(MovementSpeed * 1.2f * side, JumpForce / 1.5f), ForceMode2D.Impulse);
+		playerRigidbody.AddRelativeForce(new Vector2(MovementSpeed * 1.2f * (LookingRight ? 1 : -1), JumpForce / 1.5f), ForceMode2D.Impulse);
 	}
 
 	/// <summary>
@@ -260,7 +215,7 @@ public class Movement : MonoBehaviour
 	{
 		CreateWallDust();
 		playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, 0);
-		playerRigidbody.AddRelativeForce(new Vector2(side * -1 * 7, fallMulti * 1.5f), ForceMode2D.Impulse);
+		playerRigidbody.AddRelativeForce(new Vector2((LookingRight ? 1 : -1) * -1 * 7, fallMulti * 1.5f), ForceMode2D.Impulse);
 		countdown = 0.4f;
 	}
 
@@ -271,7 +226,7 @@ public class Movement : MonoBehaviour
 	{
 		CreateWallDust();
 		playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, 0);
-		playerRigidbody.AddRelativeForce(new Vector2(side * -1 * 4, fallMulti * 4f), ForceMode2D.Impulse);
+		playerRigidbody.AddRelativeForce(new Vector2((LookingRight ? 1 : -1) * -1 * 4, fallMulti * 4f), ForceMode2D.Impulse);
 		countdown = 0.4f;
 	}
 

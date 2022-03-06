@@ -11,7 +11,7 @@ public abstract class Profile{
 	public int profileHash;
 	public string name;
 
-	public Profile(string name, int? profileHash)
+	public Profile(string name, int? profileHash = null)
     {
 		this.name = name;
 		this.profileHash = profileHash ?? new System.Random().Next();
@@ -50,5 +50,6 @@ public class SettingsProfile : Profile{
     }
 
 	public SettingsProfile(string name, int? profileHash) : base(name, profileHash) { }
+
 }
 

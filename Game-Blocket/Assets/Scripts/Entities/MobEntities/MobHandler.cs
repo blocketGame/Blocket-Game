@@ -81,7 +81,6 @@ public class MobHandler : MonoBehaviour
 			if (GetLentgthOfSide(new Vector2Int(pos.x + i, pos.y), Vector2Int.up) < mobSize.y)
 				return null;
 		}
-		//Debug.Log("Here");
 		//return new Vector3(pos.x/ (mobSize.x%2 == 0 ? 1 : 2), pos.y / (mobSize.y % 2 == 0 ? 1 : 2));
 		return new Vector3(pos.x , pos.y );
 	}

@@ -1,3 +1,4 @@
+#if(UNITY_EDITOR)
 using System.Collections;
 using System.Collections.Generic;
 
@@ -32,3 +33,4 @@ public class AssetIOEditor : Editor
 		base.OnInspectorGUI();
 	}
 }
+#endif

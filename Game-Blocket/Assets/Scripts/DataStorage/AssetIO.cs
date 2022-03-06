@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -15,7 +16,10 @@ public class AssetIO : MonoBehaviour {
 	}
 
 	public void CheckAssets() {
-		foreach(Structure so in GlobalVariables.Structures.structures)
-			Debug.Log(EditorJsonUtility.ToJson(so));
+		if (!gameObject.TryGetComponent(out ItemAssets ia))
+			Debug.LogError("A");
+		foreach(Structure so in GlobalVariables.StructureAssets.Structures)
+			Debug.Log( EditorJsonUtility.ToJson(so));
 	}
 }
+#endif

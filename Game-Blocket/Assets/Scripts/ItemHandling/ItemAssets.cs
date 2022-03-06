@@ -13,11 +13,10 @@ public class ItemAssets : MonoBehaviour
 	public List<EquipableItem> EquipableItemsInGame = new List<EquipableItem>();
 	public List<UseAbleItem> UseableItemsInGame = new List<UseAbleItem>();
 	public List<CommonItem> CommonItems = new List<CommonItem>();
-
-	[SerializeField]
+	public List<CraftingRecipe> Recipes = new List<CraftingRecipe>();
 	public List<CraftingStation> CraftingStations = new List<CraftingStation>();
 	public List<EnemySO> Enemies = new List<EnemySO>();
-	public List<CraftingRecipe> Recipes = new List<CraftingRecipe>();
+	
 	public Sprite InventoryCursor;
 	public Sprite MiningCursor;
 	public Sprite AttackingCursor;
@@ -30,9 +29,8 @@ public class ItemAssets : MonoBehaviour
 	/// </summary>
 	/// <param name="itemId"></param>	
 	/// <returns></returns>
-	public Sprite GetSpriteFromItemID(uint itemId) {
-		return GetItemFromItemID(itemId)?.itemImage;
-	}
+	public Sprite GetSpriteFromItemID(uint itemId) => GetItemFromItemID(itemId)?.itemImage;
+	
 
 	public Item GetItemFromItemID(uint itemId) {
 		if (itemId == 0)
@@ -64,8 +62,7 @@ public class ItemAssets : MonoBehaviour
 		return 0;
 	}
 
-	public byte GetBlockIdFromItemID(uint itemId)
-	{
+	public byte GetBlockIdFromItemID(uint itemId){
 		foreach (BlockItem item in BlockItemsInGame)
 			if (item.id == itemId)
 				return item.blockId;

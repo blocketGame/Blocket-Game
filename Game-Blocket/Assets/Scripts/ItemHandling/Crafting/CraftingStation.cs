@@ -8,8 +8,7 @@ using UnityEngine.UI;
 /// Crafting station Class 
 /// </summary>
 [System.Serializable]
-public class CraftingStation
-{
+public class CraftingStation{
 
     [SerializeField]
     [Tooltip("Refered Crafting Station Block")]

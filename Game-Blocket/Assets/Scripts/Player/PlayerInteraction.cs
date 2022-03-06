@@ -6,6 +6,7 @@ using UnityEngine;
 /// <summary>
 /// Used for Interacten per Mouse with Tilemap<br></br>
 /// </summary>
+//Client
 public class PlayerInteraction : MonoBehaviour {
 
 	public GameObject deleteSprite;
@@ -31,7 +32,7 @@ public class PlayerInteraction : MonoBehaviour {
 			return blockInchunkCoord;
 		}
 	}
-	public TerrainChunk ThisChunk => GlobalVariables.TerrainHandler.GetChunkFromCoordinate(BlockHoverdAbsolute.x, BlockHoverdAbsolute.y);
+	public TerrainChunk ThisChunk => GlobalVariables.ClientTerrainHandler.GetChunkFromCoordinate(BlockHoverdAbsolute.x, BlockHoverdAbsolute.y);
 
 	public byte TargetBlockID => ThisChunk?.blocks[BlockInchunkCoord.x, BlockInchunkCoord.y] ?? 0;
 	public byte TargetBlockIDBG => ThisChunk?.bgBlocks[BlockInchunkCoord.x, BlockInchunkCoord.y] ?? 0;
@@ -99,7 +100,7 @@ public class PlayerInteraction : MonoBehaviour {
 
     #region BlockInteraction
 	public void BlockPlace(){
-		if (!GlobalVariables.TerrainHandler.CurrentChunkReady)
+		if (!GlobalVariables.ClientTerrainHandler.CurrentChunkReady)
 			return;
 		
 		if (DebugVariables.BlockInteractionInfo)

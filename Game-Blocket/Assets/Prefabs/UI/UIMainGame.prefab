@@ -2346,7 +2346,7 @@ MonoBehaviour:
   uiHud: {fileID: 7667816537676564849}
   hudslotfieldParent: {fileID: 7667816537649767022}
   inventoryBackgroundImage: {fileID: 7667816537842617125}
-  chatParent: {fileID: 5689048498088412957}
+  chatParent: {fileID: 3557795801225912381}
   chatInput: {fileID: 8982947181889361180}
   chatHistoryView: {fileID: 8053675759263590720}
   prefabItemSlot: {fileID: 3032319131892145362, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}

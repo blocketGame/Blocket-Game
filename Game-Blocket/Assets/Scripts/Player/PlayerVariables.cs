@@ -101,9 +101,6 @@ public class PlayerVariables : MonoBehaviour
 		Armor = GameManager.PlayerProfileNow.armor;
 		healthGained = GameManager.PlayerProfileNow.healthGained;
 		healthLost = GameManager.PlayerProfileNow.healthLost;
-
-		Physics2D.IgnoreLayerCollision(GlobalVariables.LocalPlayer.layer, LayerMask.NameToLayer("Drops"), true);
-		Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Drops"), LayerMask.NameToLayer("Drops"));
 	}
 
 	

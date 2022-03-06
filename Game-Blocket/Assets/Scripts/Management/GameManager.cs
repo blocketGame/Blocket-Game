@@ -1,8 +1,8 @@
-using MLAPI;
-using MLAPI.Transports.UNET;
-
 using System;
 using System.Collections.Generic;
+
+using Unity.Netcode;
+using Unity.Netcode.Transports.UNET;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,8 +11,8 @@ using UnityEngine.SceneManagement;
 /// Used for importend Gameengineparts<br></br>
 /// Coroutines, Threads, Multiplayerstuff...
 /// </summary>
-public class GameManager : NetworkBehaviour
-{
+public class GameManager : MonoBehaviour {
+	//Both
 	public static GameState State { get => _state; 
 		set { 
 			_state = value;
@@ -20,23 +20,19 @@ public class GameManager : NetworkBehaviour
 		} 
 	}
 	private static GameState _state;
-
-	public GameObject playerPrefab, worldPrefab;
-	/// <summary>Is true if the MainGame is online</summary>
-	public static bool severRunning, gameRunning;
-	/// <summary>Not used!</summary>
-	public static bool isMultiplayer = true;
-	public static List<NetworkObject> Players { get; } = new List<NetworkObject>();
-
+	
+	//Client
 	public static PlayerProfile PlayerProfileNow { get; set; }
-	public static WorldProfile WorldProfileNow { get; set; }
 	public static SettingsProfile SettingsProfile { get; private set; } = new SettingsProfile("local", null);
 
 	public static GameObject LoadinScreenNow { get; set; }
 
-	public UNetTransport uNetTransport;
-	//TODO: Coroutines, Ticks....
 
+	public UNetTransport uNetTransport;
+
+	//Server
+	public static Dictionary<ulong, NetworkObject> Players { get; } = new Dictionary<ulong, NetworkObject>();
+	public static WorldProfile WorldProfileNow { get; set; }
 	public static void SateSwitched(GameState state) {
 		if (DebugVariables.ShowGameStateEvent)
 			Debug.Log($"GameState Switched to: {state}");
@@ -65,115 +61,132 @@ public class GameManager : NetworkBehaviour
 		
 	}
 
-	/// <summary>Sets this class into the <see cref="GlobalVariables"/></summary>
-	public void Awake() {
+    #region Unitymethods
+
+    /// <summary>Sets this class into the <see cref="GlobalVariables"/></summary>
+    public void Awake() {
 		GlobalVariables.GameManager = this;
 		State = GameState.LOBBY;
+		NetworkManager.Singleton.OnClientConnectedCallback += (clientId) => {
+			if(!NetworkManager.Singleton.IsServer)
+				return;
+			if(State == GameState.INGAME || State == GameState.LOADING)
+				SpawnPlayer(clientId);
+		};
+		NetworkManager.Singleton.OnClientDisconnectCallback += (id) => {
+			Players[id].Despawn(true);
+			if(NetworkManager.Singleton.ServerClientId == id && NetworkManager.Singleton.IsClient)
+				QuitGame();
+        };
 	}
 
-	public void FixedUpdate()
-	{
-		if (GlobalVariables.LocalPlayer == null && State == GameState.LOADING){
-			InitPlayerComponents();
-			FindAndSetPlayer();
-			InitLocal();
+	public void QuitGame(){
+		SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
+		Camera.main.gameObject.SetActive(false);
+		SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+	}
+
+    public void FixedUpdate(){
+		if(NetworkManager.Singleton.IsClient){
+			//Find and set World
+			if(GlobalVariables.World == null)
+				GlobalVariables.World ??= GameObject.FindGameObjectWithTag("World");
+
+			if(GlobalVariables.World != null)
+				GlobalVariables.ClientTerrainHandler ??= GlobalVariables.World.AddComponent<ClientTerrainHandler>();
+
+			if (GlobalVariables.LocalPlayer == null)
+				FindAndSetPlayer();
+		}
+
+		//Serverstuff
+	}
+
+	public void OnApplicationQuit(){
+		if (State != GameState.INGAME && State != GameState.PAUSED)
+			return;
+		if (GlobalVariables.ClientTerrainHandler != null)
+		{
+			PlayerProfile.SavePlayerProfile();
+			ProfileHandler.ExportProfile(PlayerProfileNow, true);
+		}
+		if (GlobalVariables.ServerTerrainHandler != null)
+		{
+			WorldProfile.SaveComponentsInWorldProfile();
+			WorldProfile.SaveWorld(WorldProfileNow);
 		}
 	}
 
-	/// <summary>
-	/// Not used!<br></br>Use: 
-	/// <seealso cref="GlobalVariables.LocalGameVariables.localPlayer"/>
-	/// </summary>
-	/// <returns>Localplayer-Gameobject</returns>
-	public static GameObject GetLocalPlayer() {
-		foreach(GameObject iGo in GameObject.FindGameObjectsWithTag("Player")) {
-			if(iGo.GetComponent<NetworkObject>()?.IsLocalPlayer ?? false)
-				return iGo;
-		}
-		return null;
-	}
+    #endregion
 
-	/// <summary>
-	/// <b>Only Server/Host</b><br></br>
-	/// Spawns a player for one connected client + self if host
-	/// </summary>
-	public void SpawnPlayers() {
-		foreach(ulong clientNow in NetworkManager.Singleton.ConnectedClients.Keys) {
-			GameObject go = Instantiate(playerPrefab, new Vector3Int(new System.Random().Next(-20, 20), 25, 0), Quaternion.identity);
-			go.name = $"Player: {clientNow}";
-			NetworkObject playerNO = go.GetComponent<NetworkObject>();
-			playerNO.SpawnAsPlayerObject(clientNow);
-			Players.Add(playerNO);
-		}
-	}
+    #region Clientside
 
-	public void InitLocal(){
+    //Client
+    public void InitLocal(){
 		GlobalVariables.UIInventory.Init();
 		GlobalVariables.PlayerVariables.Init();
 	}
 
+	//Client
 	public void FindAndSetPlayer(){
-		foreach (GameObject iGo in GameObject.FindGameObjectsWithTag("Player"))
-		{
-			if (iGo.TryGetComponent(out NetworkObject no) && no.IsLocalPlayer)
-			{
+		foreach (GameObject iGo in GameObject.FindGameObjectsWithTag("Player")){
+			if (iGo.TryGetComponent(out NetworkObject no) && no.IsLocalPlayer){
+				//If Local player
 				GlobalVariables.LocalPlayer = iGo;
 				iGo.name += "(this)";
+				
+				GlobalVariables.LocalUI = Instantiate(GlobalVariables.PrefabAssets.prefabUI);
+				InitLocal();
 			} else {
+				//If not Local player
 				iGo.GetComponent<PlayerVariables>().playerLogic.SetActive(false);
 				if (iGo.TryGetComponent(out Rigidbody2D rig))
 					rig.gravityScale = 0;
 				else
 					Debug.LogWarning($"Rigidody Missing: {no.NetworkObjectId}");
-			
 			}
 				
 		}
 	}
 
-	/// <summary>
-	/// Init the player Components<br></br>
-	/// <see cref="TerrainGeneration"/>, <see cref="UIInventory"/>...
-	/// </summary>
-	public void InitPlayerComponents() {
-		//Inventory
-		GlobalVariables.LocalUI = Instantiate(GlobalVariables.PrefabAssets.prefabUI);
+	#endregion
 
-		//Worldgeneration
-		if (NetworkManager.Singleton.IsHost)
-		{
-			GlobalVariables.World = Instantiate(GlobalVariables.PrefabAssets.world);
-			GlobalVariables.WorldData.Grid = GlobalVariables.World.GetComponentInChildren<Grid>();
-			GlobalVariables.World.GetComponent<NetworkObject>().Spawn();
-		}
+    #region Serverside
 
-		//ProfileHandler.LoadComponentsFromPlayerProfile(playerProfileNow);
-		//ProfileHandler.LoadComponentsFromWorldProfile(worldProfileNow);
-	}
-
-	/// <summary>
-	/// After the Scene switches to the Main Game
-	/// </summary>
-	/// <param name="s1"></param>
-	public void SceneSwitched(Scene s1, LoadSceneMode lsm) {
+    //Both (more server)
+    /// <summary>After the Scene switches to the Main Game</summary>
+    public void SceneSwitched(Scene s1, LoadSceneMode lsm) {
 		if (s1.name != "MainGame")
 			return;
-		if (NetworkManager.Singleton.IsHost) {
+		State = GameState.LOADING;
+		if (NetworkManager.Singleton.IsServer){
 			SpawnPlayers();
-			State = GameState.LOADING;
+			//For Server
+			GlobalVariables.World = Instantiate(GlobalVariables.PrefabAssets.world);
+			//For Clients
+			GlobalVariables.World.GetComponent<NetworkObject>().Spawn();
+			GlobalVariables.ServerTerrainHandler = GlobalVariables.World.AddComponent<ServerTerrainHandler>();
 		}
 	}
 
-	public void OnApplicationQuit() => SaveAll();
-
-	public static void SaveAll() {
-		if (State != GameState.INGAME && State != GameState.PAUSED)
-			return;
-		PlayerProfile.SavePlayerProfile();
-		ProfileHandler.ExportProfile(PlayerProfileNow, true);
-		WorldProfile.SaveComponentsInWorldProfile();
-		WorldProfile.SaveWorld(WorldProfileNow);
+	//Server
+	/// <summary><b>Only Server</b><br></br>Spawns a player for one connected client + self if host</summary>
+	public void SpawnPlayers(){
+		foreach(ulong clientNow in NetworkManager.Singleton.ConnectedClients.Keys)
+			SpawnPlayer(clientNow);
 	}
+
+	private void SpawnPlayer(ulong clientNow) {
+		if(!NetworkManager.Singleton.IsServer)
+			return;
+		GameObject go = Instantiate(GlobalVariables.PrefabAssets.playerNetPrefab, new Vector3Int(new System.Random().Next(-20, 20), 25, 0), Quaternion.identity);//TODO: Serverrole
+		go.name = $"Player: {clientNow}";
+		NetworkObject playerNO = go.GetComponent<NetworkObject>();
+		playerNO.SpawnAsPlayerObject(clientNow);
+		Players.Add(clientNow, playerNO);
+	}
+
+    #endregion
 
 }
 
