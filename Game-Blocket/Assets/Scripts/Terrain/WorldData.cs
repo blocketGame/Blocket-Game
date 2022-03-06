@@ -72,6 +72,7 @@ public class WorldData : MonoBehaviour {
 	public void Awake(){
 		GlobalVariables.WorldData = this;
 		Grid = GetComponentInChildren<Grid>();
+
 	}
 
 }
