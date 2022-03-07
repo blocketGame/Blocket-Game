@@ -56,7 +56,7 @@ public class Movement : MonoBehaviour {
 	#region UnityMethods
 
 	public void Update(){
-		if (GameManager.State != GameState.INGAME)
+		if (GameManager.State != GameState.INGAME && GameManager.State != GameState.DUNGEON)
 			return;
 
 		Camera.main.orthographicSize = camZoom;

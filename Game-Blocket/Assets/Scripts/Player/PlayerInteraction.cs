@@ -1,7 +1,8 @@
 using System;
 using System.Collections;
-
+using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Used for Interacten per Mouse with Tilemap<br></br>
@@ -65,6 +66,17 @@ public class PlayerInteraction : MonoBehaviour {
 			//Crafting System
 			CraftingStation.HandleCraftingInterface(new Vector2Int((int)GlobalVariables.LocalPlayerPos.x, (int)GlobalVariables.LocalPlayerPos.y), GlobalVariables.ItemAssets.CraftingStations.Find(x => x.blockId.Equals(TargetBlockID)));
 		}
+		else
+		if (Input.GetKeyDown(side))
+        {
+			foreach(DungeonData dd in GlobalVariables.WorldAssets.dungeonData)
+            {
+                if (dd.dungeonDoor.Contains(TargetBlockID))
+                {
+					SceneManager.LoadScene("Dungeon", LoadSceneMode.Single);
+				}
+            }
+        }
 
 		if (GlobalVariables.Inventory.SelectedItemObj is BlockItem bI) { 
 			if (Input.GetKey(side))

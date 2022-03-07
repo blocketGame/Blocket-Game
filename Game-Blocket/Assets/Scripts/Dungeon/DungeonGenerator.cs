@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,6 +11,13 @@ public class DungeonGenerator : MonoBehaviour
     private DungeonSO parameters;
     [SerializeField]
     private TilemapVisualizer tilemapVisualizer;
+
+    public void Awake()
+    {
+        GameManager.State = GameState.DUNGEON;
+        //GameObject.Instantiate(GlobalVariables.LocalPlayer);
+        //GameObject.Instantiate(GlobalVariables.LocalUI);
+    }
 
     /// <summary>
     /// Starting point of the dungeongenertation

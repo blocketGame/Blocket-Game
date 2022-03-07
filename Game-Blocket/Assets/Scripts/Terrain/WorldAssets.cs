@@ -11,7 +11,8 @@ public class WorldAssets : MonoBehaviour
     public static byte ChunkLength => 32;
 
 	public List<Biom> bioms = new List<Biom>();
-	public List<BlockData> blocks = new List<BlockData> ();
+	public List<BlockData> blocks = new List<BlockData>();
+	public List<DungeonData> dungeonData = new List<DungeonData>();
 
 	public void Awake()
     {
@@ -120,4 +121,13 @@ public struct BlockData {
 		[Header("The item should drop if that Tooltype is used")]
 		public ToolItem.ToolType toolItemType;
 	}
+}
+
+[System.Serializable]
+public struct DungeonData
+{
+	[Header("Block Ids of the dungeon door")]
+	public List<byte> dungeonDoor;
+	[Header("Parameters to generate the dungeon")]
+	public DungeonSO so;
 }

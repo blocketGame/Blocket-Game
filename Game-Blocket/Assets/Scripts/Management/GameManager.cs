@@ -55,6 +55,7 @@ public class GameManager : MonoBehaviour {
 
 				GlobalVariables.UIInventory.loadingScreen.SetActive(false);
 			break;
+			case GameState.DUNGEON: break;
 			case GameState.PAUSED: break;
 			case GameState.NEVER: throw new ArgumentException();
 		}
@@ -213,6 +214,11 @@ public enum GameState {
 	/// Loading finished and playable
 	/// </summary>
 	INGAME,
+
+	/// <summary>
+	/// Player is currently in a dungeon
+	/// </summary>
+	DUNGEON,
 
 	/// <summary>
 	/// Ingame but the Game is paused; For frontend and singleplayer
