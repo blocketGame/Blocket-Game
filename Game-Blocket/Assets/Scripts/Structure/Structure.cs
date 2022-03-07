@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-[SerializeField]
+[Serializable]
 public class Structure : MonoBehaviour
 {
     public byte id;
