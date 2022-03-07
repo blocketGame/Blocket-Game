@@ -138,7 +138,7 @@ public class Movement : MonoBehaviour {
 	public void VelocityUpdate()
 	{
 		if (playerRigidbody.velocity.y != 0){
-			if (Input.GetKeyDown(GameManager.SettingsProfile.GetKeyCode("JumpKey")))
+			if (Input.GetKeyDown(GameManager.SettingsProfile.JumpKey))
 			{
 				if (GlobalVariables.TerrainHandler.GetBlockFormCoordinate(
 				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(RigidBodyPosition.x + (-0.5f), RigidBodyPosition.y, 0)).x,
@@ -153,17 +153,17 @@ public class Movement : MonoBehaviour {
 					Walljump(); return;
 				}
 			}
-			else if (lockvar && Input.GetKeyDown(GameManager.SettingsProfile.GetKeyCode("RollKey")))
+			else if (lockvar && Input.GetKeyDown(GameManager.SettingsProfile.RollKey))
 			{
 				Wallkick(); return;
 			}
 		}else
-			if (Input.GetKey(GameManager.SettingsProfile.GetKeyCode("JumpKey")))
+			if (Input.GetKey(GameManager.SettingsProfile.JumpKey))
             {
 				Jump();return;
             }
 			//Roll
-			else if (!lockvar && Input.GetKeyDown(GameManager.SettingsProfile.GetKeyCode("RollKey")))
+			else if (!lockvar && Input.GetKeyDown(GameManager.SettingsProfile.RollKey))
             {
 				Roll(); return;
 			}
