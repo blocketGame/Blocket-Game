@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Random = System.Random;
 
 /// <summary>
 /// Class that stores that stores the terraindata with unity-components
@@ -11,17 +12,16 @@ using UnityEngine.Tilemaps;
 [Serializable]
 public sealed class TerrainChunk : ChunkData{
 	public GameObject dropParent;
-
 	public GameObject ParentGO { get; set; }
 	public Tilemap TileMap { get; set; }
 	public TilemapRenderer TileMapRenderer { get; set; }
 
 	public GameObject CollisionGO { get; set; }
-	public Tilemap CollisionTileMap { get; set; }
+	public Tilemap CollisionTM { get; set; }
 	public TilemapCollider2D TileMapCollider { get; set; }
 
 	public GameObject BackgroundGO { get; set; }
-	public Tilemap BackgroundTilemap { get; set; }
+	public Tilemap BGTileMap { get; set; }
 
 
 	//Client
@@ -53,7 +53,7 @@ public sealed class TerrainChunk : ChunkData{
 		BackgroundGO = new GameObject(ChunkName(chunkPosition, 1));
 		BackgroundGO.transform.SetParent(TileMap.transform);
 		BackgroundGO.transform.position = new Vector3(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth, chunkPosition.y * GlobalVariables.WorldData.ChunkHeight, 0.001f);
-		BackgroundTilemap = BackgroundGO.AddComponent<Tilemap>();
+		BGTileMap = BackgroundGO.AddComponent<Tilemap>();
 		BackgroundGO.AddComponent<TilemapRenderer>();
 
 		///Collision GO
@@ -63,9 +63,9 @@ public sealed class TerrainChunk : ChunkData{
 		};
 		CollisionGO.transform.SetParent(TileMap.transform);
 		CollisionGO.transform.position = new Vector3(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth, chunkPosition.y * GlobalVariables.WorldData.ChunkHeight, 0f);
-		CollisionTileMap = CollisionGO.AddComponent<Tilemap>();
+		CollisionTM = CollisionGO.AddComponent<Tilemap>();
 		TileMapCollider = CollisionGO.AddComponent<TilemapCollider2D>();
-		CollisionTileMap.tileAnchor = new Vector3(0.5f, 0.5f, 0f);
+		CollisionTM.tileAnchor = new Vector3(0.5f, 0.5f, 0f);
 
 		///Drop GO
 		dropParent = new GameObject(ChunkName(chunkPosition, 3));
@@ -74,9 +74,9 @@ public sealed class TerrainChunk : ChunkData{
 	}
 
 	public void BuildCollisions() {
-		if (CollisionTileMap == null)
+		if (CollisionTM == null)
 			throw new NullReferenceException($"CollisionTileMap is null! {ChunkPositionInt}");
-		CollisionTileMap.ClearAllTiles();
+		CollisionTM.ClearAllTiles();
 		for (int x = 0; x < GlobalVariables.WorldData.ChunkWidth; x++) {
 			for (int y = 0; y < GlobalVariables.WorldData.ChunkHeight; y++) {
 				int worldX = x + ChunkPositionInt.x * GlobalVariables.WorldData.ChunkWidth;
@@ -87,7 +87,7 @@ public sealed class TerrainChunk : ChunkData{
 					GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX, worldY + 1) == 0 ||
 					GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX - 1, worldY) == 0 ||
 					GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX, worldY - 1) == 0)) {
-					CollisionTileMap.SetTile(new Vector3Int(x, y, 0), GlobalVariables.WorldAssets.GetBlockbyId(1).tile);
+					CollisionTM.SetTile(new Vector3Int(x, y, 0), GlobalVariables.WorldAssets.GetBlockbyId(1).tile);
 				}
 			}
 		}
@@ -105,7 +105,7 @@ public sealed class TerrainChunk : ChunkData{
 	/// <summary>Lambda expression for shortening reasons</summary>
 	private void PlaceTile(int x, int y, TileBase tile, bool background) {
 		if (background)
-			BackgroundTilemap.SetTile(new Vector3Int(x, y, 0), tile);
+			BGTileMap.SetTile(new Vector3Int(x, y, 0), tile);
 		else
 			TileMap.SetTile(new Vector3Int(x, y, 0), tile);
 	}
@@ -200,47 +200,37 @@ public sealed class TerrainChunk : ChunkData{
 
 		BuildCollisions();
 	}
+
 	/// <summary>Removes the block out of the tilemap </summary>
-	/// <param name="coordinate">Coordinate in the Chunk</param>
-	public void DeleteBlock(Vector3Int coordinate) {
+	/// <param name="cord">Coordinate in the Chunk</param>
+	public void DeleteBlock(Vector3Int cord, bool foreGround) {
 		//if (BlockIDs[(coordinate.x - GlobalVariables.WorldData.ChunkWidth * ChunkPositionInt.x), (coordinate.y - GlobalVariables.WorldData.ChunkHeight * ChunkPositionInt.y)] == 0) return;
-		byte blockId = BlockIDs[coordinate.x, coordinate.y];
+		byte blockId = foreGround ? BlockIDs[cord.x, cord.y] : BlockIDsBG[cord.x, cord.y];
 		if (blockId == 0) {
 			Debug.LogWarning("Destoryed Air!");
 			return;
 		}
 
-		BlockIDs[coordinate.x, coordinate.y] = 0;
-		TileMap.SetTile(coordinate, GlobalVariables.WorldData.Blocks[0].tile);
-
-		BuildCollisions();
+		if(foreGround){
+			BlockIDs[cord.x, cord.y] = 0;
+			TileMap.SetTile(cord, GlobalVariables.WorldData.Blocks[0].tile);
+			BuildCollisions();
+		} else{
+			BlockIDsBG[cord.x, cord.y] = 0;
+			BGTileMap.SetTile(cord, GlobalVariables.WorldData.Blocks[0].tile);
+		}
 		
 		foreach(uint itemId in GetDroppedIDs(blockId))
-			InstantiateDrop(coordinate, 1, itemId);
+			InstantiateDrop(cord, 1, itemId);
 	}
 
-	/// <summary>Removes the block out of the bg-tilemap </summary>
-	/// <param name="coordinate">Coordinate in the Chunk</param>
-	public void DeleteBlockBG(Vector3Int coordinate)
-	{
-		//if (BlockIDs[(coordinate.x - GlobalVariables.WorldData.ChunkWidth * ChunkPositionInt.x), (coordinate.y - GlobalVariables.WorldData.ChunkHeight * ChunkPositionInt.y)] == 0) return;
-		byte blockId = BlockIDsBG[coordinate.x, coordinate.y];
-		if (blockId == 0)
-		{
-			Debug.LogWarning("Destoryed Air!");
-			return;
-		}
-
-		BlockIDsBG[coordinate.x, coordinate.y] = 0;
-		BackgroundTilemap.SetTile(coordinate, GlobalVariables.WorldData.Blocks[0].tile);
-
-		foreach (uint itemId in GetDroppedIDs(blockId))
-			InstantiateDrop(coordinate, 1, itemId);
-	}
-
+	/// <summary></summary>
+	/// <param name="blockId"></param>
+	/// <returns></returns>
 	public List<uint> GetDroppedIDs(byte blockId){
 		List<uint> ids = new List<uint>();
-		System.Random rand = new System.Random();
+		Random rand = new Random();
+
 		foreach (BlockData.BlockDropAble blockDropAble in GlobalVariables.WorldAssets.GetBlockbyId(blockId).blockDrops)
 			if(GlobalVariables.Inventory.SelectedItemObj is ToolItem tool && tool.toolType == blockDropAble.toolItemType || blockDropAble.toolItemType == ToolItem.ToolType.DEFAULT)
 				if ((rand.NextDouble() * 100) + 1 < blockDropAble.dropchance)
@@ -293,6 +283,8 @@ public sealed class TerrainChunk : ChunkData{
 		dropRB.simulated = true;
 	}
 
+	/// <summary>Triggers if a drop has been picked up</summary>
+	/// <param name="drop">Drop object</param>
 	public void PickedUpDrop(Drop drop) {
 		GlobalVariables.Inventory.AddItem(GlobalVariables.ItemAssets.GetItemFromItemID(drop.ItemId), drop.Count, out ushort iCNA);
 		drop.Count = iCNA;
@@ -302,7 +294,6 @@ public sealed class TerrainChunk : ChunkData{
 			UnityEngine.Object.Destroy(drop.GameObject);
 		}
 	}
-
 
 	/// <summary>
 	/// Creates the Gameobject out of the Drops list
@@ -316,6 +307,7 @@ public sealed class TerrainChunk : ChunkData{
 			}
 		}
 	}
+
 	/// <summary>
 	/// Saves FPS while removing unessesary gameobjects
 	/// </summary>
