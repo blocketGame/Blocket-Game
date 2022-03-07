@@ -54,7 +54,7 @@ public class PlayerInteraction : MonoBehaviour {
 		KeyCode main = GameManager.SettingsProfile.GetKeyCode("MainInteractionKey");
 		KeyCode side = GameManager.SettingsProfile.GetKeyCode("SideInteractionKey");
 
-		if (Input.GetKeyDown(KeyCode.F))
+		if (Input.GetKeyDown(GameManager.SettingsProfile.GetKeyCode("CraftingInterface")))
 		{
 			CraftingStation.HandleCraftingInterface(BlockHoverdAbsolute, GlobalVariables.ItemAssets.CraftingStations.Find(x => x.blockId.Equals(255)));
 		}

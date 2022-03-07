@@ -1643,9 +1643,9 @@ MonoBehaviour:
   EquipableItemsInGame: []
   UseableItemsInGame:
   - name: Wooden Sword
-    id: 1
+    id: 2000
     description: This sword can cut through enything!!!!
-    itemType: 0
+    itemType: 1
     itemImage: {fileID: 21300000, guid: d8e214a5decc71d4c899ab4f76048ab6, type: 3}
   CommonItems:
   - name: Opal

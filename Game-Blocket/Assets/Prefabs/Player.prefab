@@ -967,6 +967,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2440593946266339296}
   - component: {fileID: 2736179197418371224}
+  - component: {fileID: 2739432025541876482}
   m_Layer: 0
   m_Name: Itemplaceholder
   m_TagString: Untagged
@@ -1029,17 +1030,34 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: d8e214a5decc71d4c899ab4f76048ab6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.16, y: 0.16}
+  m_Size: {x: 1, y: 1.882353}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2739432025541876482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3035105044996964074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c03918195537d2848b40b816c6a5cc50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: {fileID: 4636375221266507942}
+  RotationSpeed: 0.1
+  CircleRadius: 10
+  ElevationOffset: 1
+  lastmouseposition: {x: 0, y: 0, z: 0}
 --- !u!1 &4913946665464429532
 GameObject:
   m_ObjectHideFlags: 0
@@ -1106,7 +1124,6 @@ MonoBehaviour:
   playerRigidbody: {fileID: 2886164251458701588}
   dust: {fileID: 8320444108215976180}
   wallDust: {fileID: 2860485288748685333}
-  jesusMode: 0
 --- !u!114 &7409144473165639398
 MonoBehaviour:
   m_ObjectHideFlags: 0
