@@ -1563,11 +1563,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8512227375263116681}
-  - component: {fileID: 6245959439507821}
-  - component: {fileID: 1909828132783296647}
-  - component: {fileID: -448414925542145110}
-  - component: {fileID: 3818530099253015958}
-  - component: {fileID: 6882411150662291465}
+  - component: {fileID: 5056314862859561374}
+  - component: {fileID: 2183338013668072568}
+  - component: {fileID: 1326004177830918989}
+  - component: {fileID: 5678438528619082108}
+  - component: {fileID: 3762355363224798812}
   m_Layer: 0
   m_Name: Assets
   m_TagString: Assets
@@ -1590,7 +1590,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6245959439507821
+--- !u!114 &5056314862859561374
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1681,7 +1681,7 @@ MonoBehaviour:
   InventoryCursor: {fileID: 21300000, guid: 983843a460c359244887c9a663229125, type: 3}
   MiningCursor: {fileID: 21300000, guid: 42919adbd3d899d4aae5841d0e00a632, type: 3}
   AttackingCursor: {fileID: 21300000, guid: f02ed4b66ab720f46b851139dfc87cbf, type: 3}
---- !u!114 &1909828132783296647
+--- !u!114 &2183338013668072568
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1690,17 +1690,44 @@ MonoBehaviour:
   m_GameObject: {fileID: 2417270971905375398}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 099bed9885470a94786eebc896493957, type: 3}
+  m_Script: {fileID: 11500000, guid: 575aba8065e4ff0418cd99f7a140e825, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabUI: {fileID: 7667816536096445537, guid: bf4126c4be557a040815a7c30aa8e3c3, type: 3}
-  world: {fileID: 1085889088375208448, guid: 6f8afa7ba4b1ace43a1488e9989f22f5, type: 3}
-  playerNetPrefab: {fileID: 2794137725677328093, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
-  loadingScreenPrefab: {fileID: 1659422467158985314, guid: bf0b35f4090f7fc409bc4e6c5154ffcf, type: 3}
-  consoleText: {fileID: 8550470931165025056, guid: 1cc895b1a9eb24540bc01a2b54a9ecfa, type: 3}
-  craftingUIListView: {fileID: 4904731259523108657, guid: 29f3864126b1a234f96e83dc5e192912, type: 3}
-  mobEntity: {fileID: 3431033053258429059, guid: 2b092efc1a3a3a04794a42fa7c49a410, type: 3}
---- !u!114 &-448414925542145110
+  Structures:
+  - {fileID: 2617917950899263765}
+  - {fileID: 740992597354638432}
+  - {fileID: 144264936129525883}
+  - {fileID: 5734273157671044349}
+  - {fileID: 5601112080554468985}
+  - {fileID: 8912573475529471442}
+  - {fileID: 5450206033959290040}
+  - {fileID: 5325126017250560565}
+--- !u!114 &1326004177830918989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2417270971905375398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35b11deca7e73774f9ea395328813aed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mobsInGame:
+  - name: ForestGhost
+    entityId: 1
+    sizeX: 2
+    sizeY: 2
+    sprite: {fileID: 21300000, guid: 6a461e6915202cd46b7e85799f94e950, type: 3}
+    spawnChance: 5
+    maxHealth: 100
+    mobKind: 0
+    itemsEquiped: 
+    inBiomSpawning:
+    - {fileID: 11400000, guid: 29b0f6e63e160294face5a7539aa68dc, type: 2}
+  bossesInGame: []
+--- !u!114 &5678438528619082108
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1979,7 +2006,7 @@ MonoBehaviour:
     tile: {fileID: 11400000, guid: 12922adde41d67e4d8074abfbe1674ef, type: 2}
     removeDuration: 3
     blockDrops: []
---- !u!114 &3818530099253015958
+--- !u!114 &3762355363224798812
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1988,34 +2015,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 2417270971905375398}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35b11deca7e73774f9ea395328813aed, type: 3}
+  m_Script: {fileID: 11500000, guid: 099bed9885470a94786eebc896493957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mobsInGame:
-  - name: ForestGhost
-    entityId: 1
-    sizeX: 2
-    sizeY: 2
-    sprite: {fileID: 21300000, guid: 6a461e6915202cd46b7e85799f94e950, type: 3}
-    spawnChance: 5
-    maxHealth: 100
-    mobKind: 0
-    itemsEquiped: 
-    inBiomSpawning:
-    - {fileID: 11400000, guid: 29b0f6e63e160294face5a7539aa68dc, type: 2}
-  bossesInGame: []
---- !u!114 &6882411150662291465
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2417270971905375398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 575aba8065e4ff0418cd99f7a140e825, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  prefabUI: {fileID: 7667816536096445537, guid: bf4126c4be557a040815a7c30aa8e3c3, type: 3}
+  world: {fileID: 1085889088375208448, guid: 6f8afa7ba4b1ace43a1488e9989f22f5, type: 3}
+  playerNetPrefab: {fileID: 2794137725677328093, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
+  loadingScreenPrefab: {fileID: 1659422467158985314, guid: bf0b35f4090f7fc409bc4e6c5154ffcf, type: 3}
+  consoleText: {fileID: 8550470931165025056, guid: 1cc895b1a9eb24540bc01a2b54a9ecfa, type: 3}
+  craftingUIListView: {fileID: 4904731259523108657, guid: 29f3864126b1a234f96e83dc5e192912, type: 3}
+  mobEntity: {fileID: 3431033053258429059, guid: 2b092efc1a3a3a04794a42fa7c49a410, type: 3}
 --- !u!1 &3826331872328905470
 GameObject:
   m_ObjectHideFlags: 0

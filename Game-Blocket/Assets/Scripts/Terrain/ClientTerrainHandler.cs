@@ -12,6 +12,9 @@ public class ClientTerrainHandler : TerrainHandler {
 	public TerrainChunk CurrentChunk => Chunks.ContainsKey(CurrentChunkCoord) == true ? Chunks[CurrentChunkCoord] : null;
 	public bool CurrentChunkReady => !(CurrentChunk == null || !CurrentChunk.IsImported || !CurrentChunk.Visible);
 	protected TerrainChunk LastChunk { get; set; }
+
+	public Queue<Transform> DestroyQueue { get; } = new Queue<Transform>();
+
 	public Vector2Int CurrentChunkCoord => new Vector2Int((int)(PlPosNow.x / WD.ChunkWidth), (int)(PlPosNow.y / WD.ChunkHeight));
 	public static Vector3 PlPosNow { get; private set; }
 	private List<Vector2Int> RequestedChunks { get; } = new List<Vector2Int>();
@@ -84,15 +87,15 @@ public class ClientTerrainHandler : TerrainHandler {
 	public void UpdateLoaded() {
 		for(int i = 0; i < WD.ChunkParent.transform.childCount; i++) {//Not clean
 			Transform chunkIGO = WD.ChunkParent.transform.GetChild(i);
-			if(Vector3.Distance(chunkIGO.position, PlPosNow) > WorldAssets.ChunkLength * GlobalVariables.WorldData.ChunkDistance * 2) {
+			if(Vector3.Distance(chunkIGO.position, PlPosNow) > WorldAssets.ChunkLength * GlobalVariables.WorldData.ChunkDistance * 3) {
 				Vector2Int cPosI = new Vector2Int((int)chunkIGO.position.x / WorldAssets.ChunkLength, (int)chunkIGO.position.y / WorldAssets.ChunkLength);
 				if(!Chunks.TryGetValue(cPosI, out TerrainChunk tcToSave)) {
 					Debug.LogWarning($"Destroying unkown TerrainchunkGO: Name: {chunkIGO.name}, Pos: {chunkIGO.position}");
-					Destroy(chunkIGO.gameObject);
+					DestroyQueue.Enqueue(chunkIGO);
 					continue;
 				}
 				Chunks.Remove(cPosI);
-				Destroy(chunkIGO.gameObject);
+				DestroyQueue.Enqueue(chunkIGO);
 				if(NetworkManager.Singleton.IsServer)
 					WorldProfile.SaveChunk(tcToSave);
 				if(DebugVariables.ShowLoadAndSave)
@@ -156,8 +159,8 @@ public class ClientTerrainHandler : TerrainHandler {
 		}
 	}
 
-	public void FixedUpdate() {
-		//Always
+    private void LateUpdate() {
+        //Always
 		PlPosNow = GlobalVariables.LocalPlayerPos;
 		lock(ChunkTileInitializationQueue) {
 			for(int i = 0; i < ChunkTileInitializationQueue.Count && i < _updatePayload; i++) {
@@ -169,7 +172,11 @@ public class ClientTerrainHandler : TerrainHandler {
 					Debug.LogWarning($"Already Imported: {tc.chunkPosition}");
 			}
 		}
+		if(DestroyQueue.Count > 0)
+			Destroy(DestroyQueue.Dequeue()?.gameObject);
+	}
 
+    public void FixedUpdate() {
 		//If game loading or Chunk swiched
 		if(GameManager.State == GameState.LOADING || (LastChunk?.chunkPosition != CurrentChunk?.chunkPosition))
 			IterateChunksAroundPlayer();
