@@ -1567,7 +1567,7 @@ GameObject:
   - component: {fileID: 1909828132783296647}
   - component: {fileID: -448414925542145110}
   - component: {fileID: 3818530099253015958}
-  - component: {fileID: 6222230653463617095}
+  - component: {fileID: 6882411150662291465}
   m_Layer: 0
   m_Name: Assets
   m_TagString: Assets
@@ -1782,7 +1782,10 @@ MonoBehaviour:
     blockID: 8
     tile: {fileID: 11400000, guid: 30439b9c5e3b02142848ef927c278843, type: 2}
     removeDuration: 0
-    blockDrops: []
+    blockDrops:
+    - itemID: 1
+      dropchance: 100
+      toolItemType: 5
   - name: DirtBG (Top)
     blockID: 9
     tile: {fileID: 11400000, guid: 7aa42f6081c4f8a498d228fa119ea557, type: 2}

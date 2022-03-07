@@ -5,10 +5,12 @@ using UnityEngine;
 /// <summary>
 /// @Cse19455
 /// Real Player Controller<br></br>
-/// TODO: Move animations to own class, Cleanup
+/// <CLEANUP> @Cse19455
+/// <MESSAGE FOR HYFABI> Do not touch my baby , otherwise i will kill u :)</MESSAGE>
 /// </summary>
 //Client
 public class Movement : MonoBehaviour {
+
 	#region Properties + Atributes
 	#region Player-Settings
 	public float MovementSpeed = 300f;
@@ -36,11 +38,28 @@ public class Movement : MonoBehaviour {
 	public Rigidbody2D playerRigidbody;
 	public ParticleSystem dust;
 	public ParticleSystem wallDust;
+	public bool CreativeMode => false; //Toogles Flying state
+
+	private void CreateDust() => dust.Play();
+
 	///public Animator animator;
 
 	public Transform PlayerModelT => GlobalVariables.PlayerVariables.playerModel.transform != null ? GlobalVariables.PlayerVariables.playerModel.transform : throw new NullReferenceException();
+
+	/// <summary>
+	/// Player Position
+	/// </summary>
+	private Vector3 RigidBodyPosition
+	{
+		get => playerRigidbody.transform.position;
+		set => playerRigidbody.transform.position = value;
+	}
+
 	#endregion
 
+	/// <summary>
+	/// Locking movement for direction
+	/// </summary>
 	public bool PlayerLocked
 	{
 		get => _playerLocked;
@@ -54,51 +73,40 @@ public class Movement : MonoBehaviour {
 	private bool _playerLocked;
 
 	#region UnityMethods
+	public void Awake() => GlobalVariables.Movement = this;
 
+	/// <summary>
+	/// Most frequent Update used for realtime movement calculations
+	/// </summary>
 	public void Update(){
-		if (GameManager.State != GameState.INGAME)
-			return;
+
+		if (GameManager.State != GameState.INGAME)	return;
 
 		Camera.main.orthographicSize = camZoom;
 
-		if (Input.GetKey(GameManager.SettingsProfile.GetKeyCode("CrawlKey")))
-			Crawl();
+		if (!PlayerLocked && CreativeMode)
+			CreativeModeMovement();
 
-		
-		if (!PlayerLocked)
-		{
-			float x = Input.GetAxis("Horizontal");
-			float y = Input.GetAxis("Vertical");
-			Vector2 dir = new Vector2(x, y);
-			playerRigidbody.velocity = (new Vector2(dir.x * MovementSpeed, dir.y * MovementSpeed));
-		}
-
-		VelocityUpdate();
-
-		///Horizontal Movement
-		if (!lockvar)
-		{
-			if (Input.GetAxis("Horizontal") != 0)
-				playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x * 0.9f, playerRigidbody.velocity.y);
-			playerRigidbody.gameObject.transform.position += Time.deltaTime * MovementSpeed * new Vector3(movement, 0, 0);
-		}
-
-		///Player is in the AIR
-		//Falling Acceleration
-		if (playerRigidbody.velocity.y < 0)
-			if (playerRigidbody.velocity.y > -15)
-				playerRigidbody.gameObject.transform.position += Time.deltaTime * new Vector3(movement, (playerRigidbody.velocity.y) * fallMulti, 0);
+		ExecuteCalculationsAndChecks();
 
 		if (GameManager.State != GameState.INGAME)
 			return;
 		if (CheckChunk())
 			return;
-		if (PlayerVariables.Gamemode == Gamemode.SURVIVAL)
-			Clipping();
 	}
 
-	public void Awake() => GlobalVariables.Movement = this;
 	#endregion
+
+	/// <summary>
+	/// Executes all checks to Move the player correctly
+	/// </summary>
+	private void ExecuteCalculationsAndChecks()
+    {
+		VelocityUpdate();
+		MoveHorizontally();
+		FallAcceleration();
+		PreventFloorGlitch();
+	}
 
 	/// <summary> Let the player be locked if the chunk is not loaded/imported/visible</summary>
 	/// <returns><see langword="true"/> if player is locked</returns>
@@ -110,85 +118,64 @@ public class Movement : MonoBehaviour {
 		return locked;
 	}
 
-	private void CreateDust() => dust.Play();
-
+	/// <summary>
+	/// Creating walldust anim
+	/// </summary>
 	private void CreateWallDust()
 	{
 		wallDust.transform.position = new Vector3(GlobalVariables.LocalPlayerPos.x + wallDust.shape.position.x + 0.3f, GlobalVariables.LocalPlayerPos.y + wallDust.shape.position.y, GlobalVariables.LocalPlayerPos.z + wallDust.shape.position.z);
 		wallDust.Play();
 	}
 
-	private void TurnAnim()
-	{
-		//if (PlayerModelT.localScale.x != side && side != 0 && PlayerModelT.localScale.x < 1 && PlayerModelT.localScale.x > -1)
-		//	PlayerModelT.localScale = new Vector3(PlayerModelT.localScale.x + side * 0.05f, 1, 0);
-	}
-
 	/// <summary>
+	/// Updating Players Velocity (Vel checks => Moves like Wallkick - Walljump usw.)
 	/// 
+	/// <IMPORTANT>If you want to add unique movement style , pls do this here in this class , otherwise you could destroy the structural integrety of the Playermovement 
 	/// </summary>
 	public void VelocityUpdate()
 	{
-
 		if (playerRigidbody.velocity.y != 0){
-			//Walljump 
 			if (Input.GetKeyDown(GameManager.SettingsProfile.GetKeyCode("JumpKey")))
 			{
 				if (GlobalVariables.TerrainHandler.GetBlockFormCoordinate(
-				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + (-0.5f), playerRigidbody.position.y, 0)).x,
-				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x, playerRigidbody.position.y - 2, 0)).y)
+				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(RigidBodyPosition.x + (-0.5f), RigidBodyPosition.y, 0)).x,
+				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(RigidBodyPosition.x, RigidBodyPosition.y - 2, 0)).y)
+				!= 0 
+				||
+				GlobalVariables.TerrainHandler.GetBlockFormCoordinate(
+				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(RigidBodyPosition.x + (0.5f), RigidBodyPosition.y, 0)).x,
+				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(RigidBodyPosition.x, RigidBodyPosition.y - 2, 0)).y)
 				!= 0)
 				{
-					
-					Walljump();
-				}
-				else if (GlobalVariables.TerrainHandler.GetBlockFormCoordinate(
-				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + (0.5f), playerRigidbody.position.y, 0)).x,
-				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x, playerRigidbody.position.y - 2, 0)).y)
-				!= 0)
-				{
-					Walljump();
+					Walljump(); return;
 				}
 			}
-			//Wall kick
 			else if (lockvar && Input.GetKeyDown(GameManager.SettingsProfile.GetKeyCode("RollKey")))
-				Wallkick();
-			else
-				SetHorizontalMovement();
-		///Player is Grounded
-		}else{
-			//animator.SetBool("IsJumping", false);
-			//Jump
+			{
+				Wallkick(); return;
+			}
+		}else
 			if (Input.GetKey(GameManager.SettingsProfile.GetKeyCode("JumpKey")))
-				Jump();
+            {
+				Jump();return;
+            }
 			//Roll
 			else if (!lockvar && Input.GetKeyDown(GameManager.SettingsProfile.GetKeyCode("RollKey")))
-				Roll();
-			//Move  
-			else
-				SetHorizontalMovement();
-		}
+            {
+				Roll(); return;
+			}
+		SetHorizontalMovement();
 
 	}
 
+	/// <summary>
+	/// Set Horizontal Movement
+	/// </summary>
 	private void SetHorizontalMovement(){
 		if(!GlobalVariables.UIInventory.ChatOpened)
 			movement = Input.GetAxis("Horizontal");
 	}
 
-	/// <summary>
-	/// Creates an invisible Wall for the player (Collider)
-	/// </summary>
-	private void Clipping(){
-		return;
-		//if (GlobalVariables.TerrainHandler.GetBlockFormCoordinate(
-		//	GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + (side * 0.5f), playerRigidbody.position.y, 0)).x,
-		//	GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(playerRigidbody.position.x + side, playerRigidbody.position.y - 0.1f, 0)).y)
-		//	!= 0)
-		//	lockvar = true;
-		//else
-		//	lockvar = false;
-	}
 
 	/// <summary>
 	/// More or less a Long jump
@@ -231,16 +218,61 @@ public class Movement : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Motion Sickness Incoming
+	/// Movement for JESUS Mode
 	/// </summary>
-	private void ISpinMyHeadRightRoundRightRoundWhenYouGoDown()
-	{
-		gameObject.transform.rotation = Quaternion.Euler(new Vector3(gameObject.transform.rotation.eulerAngles.x, gameObject.transform.rotation.eulerAngles.y, gameObject.transform.rotation.eulerAngles.z + 0.1f));
+	private void CreativeModeMovement()
+    {
+		float x = Input.GetAxis("Horizontal");
+		float y = Input.GetAxis("Vertical");
+		Vector2 dir = new Vector2(x, y);
+		playerRigidbody.velocity = (new Vector2(dir.x * MovementSpeed, dir.y * MovementSpeed));
 	}
 
-	private void Crawl()
-	{
-		//animator.SetBool("IsCrawling", true);
+	/// <summary>
+	/// Horizontal player Movement
+	/// </summary>
+	private void MoveHorizontally()
+    {
+		if (!lockvar)
+		{
+			Vector3Int playerCell = GlobalVariables.WorldData.Grid.WorldToCell(RigidBodyPosition);
+
+			sbyte direction = 0;
+			if (movement > 0)
+				direction = 1;
+			else if (movement < 0)
+				direction = -1;
+
+			if (!(GlobalVariables.TerrainHandler.GetBlockFormCoordinate(playerCell.x+(int)direction, playerCell.y) != 0 
+				|| GlobalVariables.TerrainHandler.GetBlockFormCoordinate(playerCell.x + (int)direction, playerCell.y-1) != 0))
+            {
+				Vector3 destination = RigidBodyPosition + MovementSpeed * new Vector3(movement, 0, 0);
+				RigidBodyPosition = Vector3.Lerp(RigidBodyPosition, destination, Time.deltaTime);
+			}
+		}
 	}
+
+	/// <summary>
+	/// Calculate Players Falling Accelation of Player figure
+	/// </summary>
+	private void FallAcceleration()
+    {
+		if (playerRigidbody.velocity.y < 0)
+			if (playerRigidbody.velocity.y > -15)
+				RigidBodyPosition += Time.deltaTime * new Vector3(movement, (playerRigidbody.velocity.y) * fallMulti, 0);
+	}
+
+	/// <summary>
+	/// Is just used when chunks are unable to load (Player doesn't stay in Wall)
+	/// </summary>
+	private void PreventFloorGlitch()
+    {
+		Vector3Int playerCell = GlobalVariables.WorldData.Grid.WorldToCell(RigidBodyPosition);
+		if (GlobalVariables.TerrainHandler.GetBlockFormCoordinate(playerCell.x, playerCell.y) != 0)
+        {
+			Debug.LogWarning("UWU - WALL_GLITCH_HANDLED");
+			RigidBodyPosition = RigidBodyPosition + Vector3.up ;
+        }
+    }
 
 }
