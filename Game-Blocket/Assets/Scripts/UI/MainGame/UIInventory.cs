@@ -218,7 +218,7 @@ public class UIInventory : MonoBehaviour
 		if (GameManager.State != GameState.INGAME)
 			return;
 
-		if (Input.GetKeyDown(GameManager.SettingsProfile.GetKeyCode("InventoryKey")))
+		if (Input.GetKeyDown(GameManager.SettingsProfile.InventoryKey))
 		{
 
 			//Inv
@@ -262,7 +262,7 @@ public class UIInventory : MonoBehaviour
 		}
 
 		//Chat
-		if (Input.GetKeyDown(GameManager.SettingsProfile.GetKeyCode("ChatKey")) && !ChatOpened)
+		if (Input.GetKeyDown(GameManager.SettingsProfile.ChatKey) && !ChatOpened)
 			ChatOpened = true;
 		if (ChatOpened){
 			if (Input.GetKeyDown(KeyCode.Escape))

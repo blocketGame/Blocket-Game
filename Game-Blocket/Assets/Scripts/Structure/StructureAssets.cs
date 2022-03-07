@@ -2,11 +2,10 @@
 using UnityEngine;
 
 public class StructureAssets : MonoBehaviour{
-	public List<Structure> Structures { get; } = new List<Structure>();
+	public List<Structure> Structures = new List<Structure>();
 
 	private void Awake() { 
 		GlobalVariables.StructureAssets = this;
-		Structures.AddRange(GetComponentsInChildren<Structure>(true));
 	}
 
 

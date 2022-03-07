@@ -51,10 +51,10 @@ public class PlayerInteraction : MonoBehaviour {
 		}
 		HandleBlockInteraction();
 
-		KeyCode main = GameManager.SettingsProfile.GetKeyCode("MainInteractionKey");
-		KeyCode side = GameManager.SettingsProfile.GetKeyCode("SideInteractionKey");
+		KeyCode main = GameManager.SettingsProfile.MainInteractionKey;
+		KeyCode side = GameManager.SettingsProfile.SideInteractionKey;
 
-		if (Input.GetKeyDown(KeyCode.F))
+		if (Input.GetKeyDown(GameManager.SettingsProfile.CraftingInterface))
 		{
 			CraftingStation.HandleCraftingInterface(BlockHoverdAbsolute, GlobalVariables.ItemAssets.CraftingStations.Find(x => x.blockId.Equals(255)));
 		}
@@ -116,7 +116,7 @@ public class PlayerInteraction : MonoBehaviour {
 		SetFocusGO(BlockHoverdAbsolute, TargetBlockID != 0);
 		//Blockinteraction
 
-		if (BreakCoroutine != null && !Input.GetKey(GameManager.SettingsProfile.GetKeyCode("MainInteractionKey")))
+		if (BreakCoroutine != null && !Input.GetKey(GameManager.SettingsProfile.MainInteractionKey))
 		{
 			if (DebugVariables.BlockInteractionCR)
 				Debug.Log("Stopped");
