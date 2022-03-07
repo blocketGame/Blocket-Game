@@ -16,6 +16,5 @@
 	public static bool ShowScrollViewInfo => true;
 	public static bool MobHandling => false;
 	public static bool WorldNetworking => false;
-    public static bool ShowTime => false;
 }
 
