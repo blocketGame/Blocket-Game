@@ -35,7 +35,8 @@ public class SettingsProfile : Profile{
 		{"SideInteractionKey", KeyCode.Mouse1 },
 		{"JumpKey", KeyCode.Space },
 		{"RollKey", KeyCode.LeftControl },
-		{"CrawlKey", KeyCode.LeftShift }
+		{"CrawlKey", KeyCode.LeftShift } ,
+		{"CraftingInterface", KeyCode.F }
 	};
 
 	/// <summary>

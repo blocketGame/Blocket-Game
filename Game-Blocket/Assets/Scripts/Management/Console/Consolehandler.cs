@@ -95,20 +95,58 @@ public static class ConsoleHandler{
             } },
             new Command("gamemode"){ action = (x) => {
                 sbyte str = (sbyte.TryParse(x.Split(' ')[1], out sbyte res) ? res : (sbyte)-1) ;
-                if(str == -1){
-                    PrintToChat($"\"{str}\" not a number! Use 0 for survival and 1 for creative!");
-                    return;
-                }
                 switch(str){
                     case 0: PlayerVariables.Gamemode = Gamemode.SURVIVAL;
                     break;
                     case 1: PlayerVariables.Gamemode = Gamemode.CREATIVE;
                     break;
+                    case -1:
+                        string s = x.Split(' ')[1];
+                        switch (s.ToUpper()) {
+                            case "CREATIVE":
+                                PlayerVariables.Gamemode = Gamemode.CREATIVE;
+                                break;
+                            case "SURVIVAL":
+                                PlayerVariables.Gamemode = Gamemode.SURVIVAL;
+                                break;
+                        }
+                    break;
                     default:PrintToChat($"Gamemode {str} not found!");
                     break;
                 }
-                 
             }, Synms = { "gm", "gamem" } }
+            ,new Command("give"){ action = (x) => {
+                uint id = (uint.TryParse(x.Split(' ')[1], out uint res) ? res : 0) ;
+                if(id ==0){ PrintToChat($"Item {x.Split(' ')[1]} does not exist!"); return; }
+                ushort count = ushort.TryParse(x.Split(' ')[2], out ushort countres) ? countres : (ushort)0 ;
+                if(count ==0){ PrintToChat($"Item {id} could not be added with the Count - {count} !"); return; }
+                Item i =GlobalVariables.ItemAssets.GetItemFromItemID(id) ?? null;
+                if(i==null)
+                    PrintToChat($"Item {x.Split(' ')[1]} does not exist!");
+                else
+                    GlobalVariables.Inventory.AddItem(i,count,out ushort itemCountNotAdded);
+            }
+            },new Command("collision")
+            {
+                action = (x) => {
+                string s = x.Split(' ')[1];
+                    switch (s)
+                    {
+                        case "true":
+                            GlobalVariables.LocalPlayer.GetComponentInChildren<BoxCollider2D>().enabled = true;
+                            break;
+                        case "false":
+                            GlobalVariables.LocalPlayer.GetComponentInChildren<BoxCollider2D>().enabled = false;
+                            break;
+                        case "t":
+                            GlobalVariables.LocalPlayer.GetComponentInChildren<BoxCollider2D>().enabled = true;
+                            break;
+                        case "f":
+                            GlobalVariables.LocalPlayer.GetComponentInChildren<BoxCollider2D>().enabled = false;
+                            break;
+                    }
+                }
+            }
         };
 
         //Returns only the value after

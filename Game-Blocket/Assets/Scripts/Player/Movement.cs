@@ -84,7 +84,7 @@ public class Movement : MonoBehaviour {
 
 		Camera.main.orthographicSize = camZoom;
 
-		if (!PlayerLocked && CreativeMode)
+		if (!PlayerLocked && PlayerVariables.Gamemode==Gamemode.CREATIVE)
 			CreativeModeMovement();
 
 		ExecuteCalculationsAndChecks();
@@ -104,8 +104,11 @@ public class Movement : MonoBehaviour {
     {
 		VelocityUpdate();
 		MoveHorizontally();
-		FallAcceleration();
-		PreventFloorGlitch();
+		if (PlayerVariables.Gamemode != Gamemode.CREATIVE)
+		{
+			FallAcceleration();
+			PreventFloorGlitch();
+		}
 	}
 
 	/// <summary> Let the player be locked if the chunk is not loaded/imported/visible</summary>
