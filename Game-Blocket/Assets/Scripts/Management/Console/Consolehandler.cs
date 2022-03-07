@@ -4,7 +4,6 @@ using System.Collections;
 
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor.Experimental.GraphView;
 
 /// <summary>
 /// Handlers the Chat

@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using static UnityEditor.PlayerSettings;
-
 public class MobHandler : MonoBehaviour
 {
 	public byte minSpawnDistance = 20;
