@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Unity.Collections;
 using Unity.Netcode;
@@ -85,23 +86,23 @@ public class ClientTerrainHandler : TerrainHandler {
 
 	
 	public void UpdateLoaded() {
-		for(int i = 0; i < WD.ChunkParent.transform.childCount; i++) {//Not clean
-			Transform chunkIGO = WD.ChunkParent.transform.GetChild(i);
-			if(Vector3.Distance(chunkIGO.position, PlPosNow) > WorldAssets.ChunkLength * GlobalVariables.WorldData.ChunkDistance * 3) {
-				Vector2Int cPosI = new Vector2Int((int)chunkIGO.position.x / WorldAssets.ChunkLength, (int)chunkIGO.position.y / WorldAssets.ChunkLength);
-				if(!Chunks.TryGetValue(cPosI, out TerrainChunk tcToSave)) {
-					Debug.LogWarning($"Destroying unkown TerrainchunkGO: Name: {chunkIGO.name}, Pos: {chunkIGO.position}");
-					DestroyQueue.Enqueue(chunkIGO);
-					continue;
-				}
-				Chunks.Remove(cPosI);
-				DestroyQueue.Enqueue(chunkIGO);
-				if(NetworkManager.Singleton.IsServer)
-					WorldProfile.SaveChunk(tcToSave);
-				if(DebugVariables.ShowLoadAndSave)
-					Debug.Log($"Removed Chunk: {tcToSave.ChunkPositionInt}");
-			}
-		}
+		//for(int i = 0; i < WD.ChunkParent.transform.childCount; i++) {//Not clean
+		//	Transform chunkIGO = WD.ChunkParent.transform.GetChild(i);
+		//	if(Vector3.Distance(chunkIGO.position, PlPosNow) > WorldAssets.ChunkLength * GlobalVariables.WorldData.ChunkDistance * 4) {
+		//		Vector2Int cPosI = new Vector2Int((int)chunkIGO.position.x / WorldAssets.ChunkLength, (int)chunkIGO.position.y / WorldAssets.ChunkLength);
+		//		if(!Chunks.TryGetValue(cPosI, out TerrainChunk tcToSave)) {
+		//			Debug.LogWarning($"Destroying unkown TerrainchunkGO: Name: {chunkIGO.name}, Pos: {chunkIGO.position}");
+		//			DestroyQueue.Enqueue(chunkIGO);
+		//			continue;
+		//		}
+		//		Chunks.Remove(cPosI);
+		//		DestroyQueue.Enqueue(chunkIGO);
+		//		if(NetworkManager.Singleton.IsServer)
+		//			WorldProfile.SaveChunk(tcToSave);
+		//		if(DebugVariables.ShowLoadAndSave)
+		//			Debug.Log($"Removed Chunk: {tcToSave.ChunkPositionInt}");
+		//	}
+		//}
 	}
 
 	public List<TerrainChunk> UpdateVisible() {
@@ -159,7 +160,7 @@ public class ClientTerrainHandler : TerrainHandler {
 		}
 	}
 
-    private void LateUpdate() {
+    private void Update() {
         //Always
 		PlPosNow = GlobalVariables.LocalPlayerPos;
 		lock(ChunkTileInitializationQueue) {
@@ -172,9 +173,9 @@ public class ClientTerrainHandler : TerrainHandler {
 					Debug.LogWarning($"Already Imported: {tc.chunkPosition}");
 			}
 		}
-		if(DestroyQueue.Count > 0)
-			Destroy(DestroyQueue.Dequeue()?.gameObject);
-	}
+        if(DestroyQueue.Count > 0)
+            Destroy(DestroyQueue.Dequeue().gameObject);
+    }
 
     public void FixedUpdate() {
 		//If game loading or Chunk swiched
