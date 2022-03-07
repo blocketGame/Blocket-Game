@@ -96,7 +96,6 @@ public class Inventory : MonoBehaviour {
 	/// 
 	private bool AddItemInnerMethod(Item itemToAdd, ushort itemCount, out ushort itemCountNotAdded) {
 		UIInventorySlot wannaAddThere = null;
-
 		///If item has ItemType: <see cref="Item.ItemType.SINGLE"/>
 		if (itemToAdd.itemType == Item.ItemType.SINGLE) {
 			wannaAddThere = GetNextFreeSlot();
