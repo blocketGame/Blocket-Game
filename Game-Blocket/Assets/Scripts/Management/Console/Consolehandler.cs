@@ -66,7 +66,7 @@ public static class ConsoleHandler{
     }
 
 
-    private class Command{
+    private class Command {
 
         public static List<Command> Commands { get; } = new List<Command>()
         {
@@ -145,7 +145,40 @@ public static class ConsoleHandler{
                             break;
                     }
                 }
-            }
+            },
+            new Command("timeset"){action = (x) => {
+                string str;
+                if(x.Split(' ').Length > 1)
+                {
+                    str = x.Split(' ')[1];
+                }
+                else
+                {
+                    PrintToChat("No daytime defined");
+                    return;
+                }
+                if (str.Equals("day"))
+                {
+                    if(GlobalVariables.clock.hours >= GlobalVariables.dayNightCycle.dawnTo)
+                        GlobalVariables.clock.days++;
+                    GlobalVariables.clock.seconds = 0;
+                    GlobalVariables.clock.minutes = 0;
+                    GlobalVariables.clock.hours = GlobalVariables.dayNightCycle.dawnTo; 
+                }
+                else
+                if (str.Equals("night"))
+                {
+                    if(GlobalVariables.clock.hours >= GlobalVariables.dayNightCycle.duskTo)
+                        GlobalVariables.clock.days++;
+                    GlobalVariables.clock.seconds = 0;
+                    GlobalVariables.clock.minutes = 0;
+                    GlobalVariables.clock.hours = GlobalVariables.dayNightCycle.duskTo;
+                }
+                else
+                {
+                    PrintToChat($"\"{str}\" is not a daytime");
+                }
+            } }
         };
 
         //Returns only the value after

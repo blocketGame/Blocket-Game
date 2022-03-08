@@ -1,6 +1,7 @@
 using System;
 
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
 public class PlayerVariables : MonoBehaviour
 {
@@ -34,9 +35,13 @@ public class PlayerVariables : MonoBehaviour
 	public uint healthGained, healthLost;
 	#endregion
 
-	#region Properties
+	#region References
+	public Light2D playerLight;
+    #endregion
 
-	public ushort Health { get => _health; 
+    #region Properties
+
+    public ushort Health { get => _health; 
 		set 
 		{ 
 			_health = value;

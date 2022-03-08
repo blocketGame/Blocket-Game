@@ -114,6 +114,7 @@ public class Movement : MonoBehaviour {
     {
 		VelocityUpdate();
 		MoveHorizontally();
+
 		if (PlayerVariables.Gamemode != Gamemode.CREATIVE)
 		{
 			FallAcceleration();

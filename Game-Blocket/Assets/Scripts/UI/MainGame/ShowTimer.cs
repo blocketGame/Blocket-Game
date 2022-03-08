@@ -5,16 +5,11 @@ using UnityEngine.UI;
 
 public class ShowTimer : MonoBehaviour
 {
-    public Clock clock;
     public Text text;
 
     public void FixedUpdate()
     {
-        if (GameManager.State != GameState.INGAME)
-            return;
-        clock.CalcTime();
-        if(DebugVariables.ShowTime)
-            Debug.Log(clock.hours + ":" + clock.minutes);
-        text.text = clock.hours + ":" + clock.minutes;
+        //clock.CalcTime();
+        text.text = string.Format("{0:00}:{1:00}", GlobalVariables.clock.hours, GlobalVariables.clock.minutes);
     }
 }
