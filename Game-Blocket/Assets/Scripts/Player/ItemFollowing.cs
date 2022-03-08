@@ -12,13 +12,14 @@ public class ItemFollowing : MonoBehaviour
         if(GlobalVariables.PlayerVariables.Race == CharacterRace.MAGICIAN)
             TurnItemToMouseAngle();
         AnimateWeapon();
+        Physics2D.IgnoreLayerCollision(0,6);
+        
     }
 
     private void TurnItemToMouseAngle()
     {
         transform.rotation = Quaternion.FromToRotation(Vector2.up , NormalizeVector(Camera.main.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono) - transform.position));
         transform.localPosition = Vector2.MoveTowards(transform.localPosition,NormalizeVector(Camera.main.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono) - transform.position)*2,maxDistanceDelta);
-        Vector2 v = Vector3.Normalize(transform.localPosition);
     }
 
     private Vector2 NormalizeVector(Vector3 vector)
@@ -37,5 +38,11 @@ public class ItemFollowing : MonoBehaviour
             string animationname = GlobalVariables.ItemAssets.GetItemFromItemID(GlobalVariables.Inventory.SelectedItemId)?.swingingAnimation;
             anim.Play(animationname== string.Empty ? "Default" : animationname ?? "Default");
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("Collision");
+        collision.gameObject.GetComponent<Rigidbody2D>().AddForce(collision.relativeVelocity*5);
     }
 }
