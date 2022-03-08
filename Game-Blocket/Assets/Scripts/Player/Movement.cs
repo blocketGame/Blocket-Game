@@ -87,12 +87,8 @@ public class Movement : MonoBehaviour {
 		{
 			GlobalVariables.LocalPlayer.transform.rotation = new Quaternion(0, 0, 0, 0);
 		}
-<<<<<<< HEAD
-		else if (movement < 0) 
-=======
 		else if (movement < 0)
 			GlobalVariables.LocalPlayer.transform.rotation = new Quaternion(0, 180, 0, 0);
->>>>>>> 400ad3b (turning - chatfix - design - attackforce (First touch))
 
 		if (!PlayerLocked && PlayerVariables.Gamemode==Gamemode.CREATIVE)
 			CreativeModeMovement();
