@@ -15,6 +15,9 @@ public class FlyingEnemyBehaviour : MonoBehaviour
     void Start()
     {
         counter = 2;
+        Rigidbody2D rb= gameObject.AddComponent<Rigidbody2D>();
+        rb.gravityScale = 0;
+        rb.freezeRotation = true;
         flyingDirection = new Vector2(transform.position.x + flyingmodifyer[0], transform.position.y + flyingmodifyer[1]) * 1.1f;
     }
 

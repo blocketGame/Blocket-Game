@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
@@ -263,13 +263,22 @@ public class UIInventory : MonoBehaviour
 
 		//Chat
 		if (Input.GetKeyDown(GameManager.SettingsProfile.ChatKey) && !ChatOpened)
+		{
 			ChatOpened = true;
+			Debug.Log("Open");
+			GameManager.SettingsProfile.KeyValues = GameManager.SettingsProfile.LockKeysExceptSpecified(GameManager.SettingsProfile.ChatKey).ToList();
+			Debug.Log(GameManager.SettingsProfile.InventoryKey);
+		}
 		if (ChatOpened){
 			if (Input.GetKeyDown(KeyCode.Escape))
+            {
 				ChatOpened = false;
+				GameManager.SettingsProfile.KeyValues = SettingsProfile.FillKeyValues();
+			}
 			if (Input.GetKeyDown(KeyCode.Return)){ //Return = Enter
 				ConsoleHandler.Handle(chatInput.text);
 				ChatOpened = false;
+				GameManager.SettingsProfile.KeyValues = SettingsProfile.FillKeyValues();
 			}
 		}
 

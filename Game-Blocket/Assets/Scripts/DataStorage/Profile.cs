@@ -20,15 +20,19 @@ public abstract class Profile{
 
 public class SettingsProfile : Profile{
 
-
 	/// <summary>
 	/// Default Keys for the whole game
 	/// </summary>
-	public void LockKeysExceptSpecified(KeyCode k)
-    {
-		KeyValues.ForEach(v => 
-		v.MappedKey = (v.MappedKey == k ? k : KeyCode.None));
+	public IEnumerable<KeyTupple> LockKeysExceptSpecified(KeyCode k)
+	{
+		for (int i = 0; i < KeyValues.Count; i++)
+		{
+			KeyTupple kt = KeyValues[i];
+			kt.MappedKey = (KeyValues[i].MappedKey == k ? k : KeyCode.None);
+			yield return kt;
+		}
     }
+
 	public static List<KeyTupple> FillKeyValues()
 	{
 		return new List<KeyTupple> {
@@ -42,7 +46,7 @@ public class SettingsProfile : Profile{
 			new KeyTupple("CraftingInterface", KeyCode.F)
 		};
 	} 
-	public List<KeyTupple> KeyValues { private get; set; } = FillKeyValues();
+	public List<KeyTupple> KeyValues { get; set; } = new List<KeyTupple>();
 
 	public KeyCode InventoryKey => KeyValues[0].MappedKey;
 	public KeyCode ChatKey => KeyValues[1].MappedKey;
@@ -54,7 +58,7 @@ public class SettingsProfile : Profile{
 	public KeyCode CraftingInterface => KeyValues[7].MappedKey;
 
 
-	public SettingsProfile(string name, int? profileHash) : base(name, profileHash) { }
+	public SettingsProfile(string name, int? profileHash) : base(name, profileHash) { KeyValues = FillKeyValues(); }
 
 }
 

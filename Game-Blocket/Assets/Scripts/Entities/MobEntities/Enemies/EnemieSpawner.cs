@@ -21,6 +21,7 @@ using UnityEngine;
     private void Spawn()
     {
         GameObject Enemy = GlobalVariables.ItemAssets.Enemies[0].EnemiePrefab;
+        Enemy.AddComponent<Rigidbody2D>();
         enemiesonScreen.Add(Enemy);
         Enemy.transform.position = GlobalVariables.LocalPlayerPos;
         Instantiate(Enemy);
