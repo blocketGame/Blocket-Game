@@ -10,7 +10,8 @@ public class Clock : MonoBehaviour
     public int hours;
     public int days = 1;
 
-    // Start is called before the first frame update
+    public void Awake() => GlobalVariables.clock = this;
+
     // Update is called once per frame
     private void FixedUpdate()
     {
@@ -19,6 +20,9 @@ public class Clock : MonoBehaviour
         CalcTime();
     }
 
+    /// <summary>
+    /// Updates the clock
+    /// </summary>
     public void CalcTime()
     {
         //Debug.Log(days + ":" + hours + ":" + minutes + ":" + seconds);
@@ -32,7 +36,6 @@ public class Clock : MonoBehaviour
         {
             hours = hours + (int)(minutes/60);
             minutes = minutes%60;
-            
         }
         if (hours >= 24)
         {

@@ -39,11 +39,18 @@ public static class GlobalVariables {
 
 	public static ClientTerrainHandler ClientTerrainHandler{ get; set; }
 
+	
+
 	public static GameObject World { get => _world; set { 
 			_world = value;
 		} 
 	}
 	private static GameObject _world;
+    #endregion
+
+    #region Time Scripts
+	public static Clock clock { get; internal set; }
+	public static DayNightCycle dayNightCycle;
 	#endregion
 
 	#region Assets
