@@ -18,6 +18,7 @@ public class PlayerVariables : MonoBehaviour
 	} }
 	private static Gamemode gamemode;
 
+
 	#region Static Resources
 	public GameObject playerModel, playerLogic;
 	public SpriteRenderer holdingItemPlaceholder;
@@ -71,6 +72,8 @@ public class PlayerVariables : MonoBehaviour
 		get => _maxStrength;
 		set { _maxStrength = value; GlobalVariables.UIInventory.swordStat.text = $"{_strength}/{_maxStrength}"; }
 	}
+	private CharacterRace race = CharacterRace.HUMAN;
+    public CharacterRace Race { get=> race; set => race = value; } 
 	#endregion
 
 	/// <summary>For configuring the health of the player</summary>
@@ -107,4 +110,9 @@ public class PlayerVariables : MonoBehaviour
 }
 public enum Gamemode{
 	SURVIVAL, CREATIVE
+}
+
+public enum CharacterRace
+{
+	MAGICIAN, HUMAN
 }

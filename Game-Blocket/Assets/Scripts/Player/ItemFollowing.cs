@@ -5,10 +5,13 @@ using UnityEngine;
 public class ItemFollowing : MonoBehaviour
 {
     public float maxDistanceDelta = 20;
+    public Animator anim;
 
     private void LateUpdate()
     {
-        TurnItemToMouseAngle();
+        if(GlobalVariables.PlayerVariables.Race == CharacterRace.MAGICIAN)
+            TurnItemToMouseAngle();
+        AnimateWeapon();
     }
 
     private void TurnItemToMouseAngle()
@@ -16,10 +19,6 @@ public class ItemFollowing : MonoBehaviour
         transform.rotation = Quaternion.FromToRotation(Vector2.up , NormalizeVector(Camera.main.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono) - transform.position));
         transform.localPosition = Vector2.MoveTowards(transform.localPosition,NormalizeVector(Camera.main.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono) - transform.position)*2,maxDistanceDelta);
         Vector2 v = Vector3.Normalize(transform.localPosition);
-        if (v.x < 0)
-        {
-            //transform.rotation = Quaternion.FromToRotation(transform.localPosition, NormalizeVector(Camera.main.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono) - transform.position));
-        }
     }
 
     private Vector2 NormalizeVector(Vector3 vector)
@@ -30,5 +29,13 @@ public class ItemFollowing : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
+    }
+
+    private void AnimateWeapon()
+    {
+        if (Input.GetKeyDown(GameManager.SettingsProfile.MainInteractionKey)) {
+            string animationname = GlobalVariables.ItemAssets.GetItemFromItemID(GlobalVariables.Inventory.SelectedItemId)?.swingingAnimation;
+            anim.Play(animationname== string.Empty ? "Default" : animationname ?? "Default");
+        }
     }
 }

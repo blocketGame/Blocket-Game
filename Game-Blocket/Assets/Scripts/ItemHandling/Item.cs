@@ -12,6 +12,7 @@ public abstract class Item{
 	public string description;
 	public ItemType itemType;
 	public Sprite itemImage;
+	public String swingingAnimation;
 
 	protected Action onMainInteractionKey;
 	protected Action onSideInteractionKey;
