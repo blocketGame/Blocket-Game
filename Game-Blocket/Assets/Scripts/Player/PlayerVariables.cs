@@ -77,7 +77,7 @@ public class PlayerVariables : MonoBehaviour
 		get => _maxStrength;
 		set { _maxStrength = value; GlobalVariables.UIInventory.swordStat.text = $"{_strength}/{_maxStrength}"; }
 	}
-	private CharacterRace race = CharacterRace.HUMAN;
+	private CharacterRace race = CharacterRace.MAGICIAN;
     public CharacterRace Race { get=> race; set => race = value; } 
 	#endregion
 
