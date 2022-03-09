@@ -10,6 +10,8 @@ using UnityEngine;
 /// <summary>Handles the <b>clientside</b> for the Worldhandling</summary>
 public class ClientTerrainHandler : TerrainHandler {
 
+	public static ClientTerrainHandler Singleton { get; private set; }
+
 	/// <summary>Static due to <see cref="TerrainGeneration"/></summary>
 	public static Queue<TerrainChunk> ChunkTileInitializationQueue { get; } = new Queue<TerrainChunk>();
 
@@ -190,7 +192,7 @@ public class ClientTerrainHandler : TerrainHandler {
 	#region Unity Scripts
 	/// <summary>Registers the Response-Message</summary>
 	public void Awake() {
-		GlobalVariables.ClientTerrainHandler = this;
+		Singleton = this;
 		NetworkManager.Singleton.CustomMessagingManager.RegisterNamedMessageHandler("ChunkResponse", HandleChunkResponse);
 		if(DebugVariables.WorldNetworking) {
 			Debug.Log("Registered Chunk Response");

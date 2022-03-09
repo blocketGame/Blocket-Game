@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour{
+    public static PlayerHealth Singleton { get; private set; }
+
     #region HealthSettings
     /// <summary>maxHealth of the Player</summary>
     public ushort maxHealth;
@@ -21,7 +23,7 @@ public class PlayerHealth : MonoBehaviour{
     public Sprite emptyHeartSprite, emptyMiddleHeartSprite;
     #endregion
 
-    public void Awake() => GlobalVariables.PlayerHealth = this;
+    public void Awake() => Singleton = this;
 
     public ushort CurrentHealth { get => currentHealth; 
         set{

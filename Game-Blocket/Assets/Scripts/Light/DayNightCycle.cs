@@ -2,8 +2,9 @@ using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine.Rendering;
 
-public class DayNightCycle : MonoBehaviour
-{
+public class DayNightCycle : MonoBehaviour{
+    public static DayNightCycle Singleton { get; private set; }
+
     public UnityEngine.Experimental.Rendering.Universal.Light2D globalLight;
     public Volume volume;
 
@@ -18,7 +19,7 @@ public class DayNightCycle : MonoBehaviour
 
     public Light2D playerLight;
 
-    public void Awake() => GlobalVariables.dayNightCycle = this;
+    public void Awake() => Singleton = this;
 
     private void FixedUpdate()
     {

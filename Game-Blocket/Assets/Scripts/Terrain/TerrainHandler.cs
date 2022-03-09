@@ -8,6 +8,7 @@ using UnityEngine;
 /// Author: HyFabi
 /// </summary>
 public abstract class TerrainHandler : MonoBehaviour {
+
 	protected readonly byte _updatePayload = 2;
 	protected readonly byte _pickUpDist = 2;
 

@@ -11,6 +11,7 @@ using Random = System.Random;
 /// </summary>
 [Serializable]
 public sealed class TerrainChunk : ChunkData{
+
 	public GameObject dropParent;
 	public GameObject ParentGO { get; set; }
 	public Tilemap TileMap { get; set; }

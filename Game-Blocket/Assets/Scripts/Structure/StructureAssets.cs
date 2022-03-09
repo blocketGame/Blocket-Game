@@ -2,11 +2,11 @@
 using UnityEngine;
 
 public class StructureAssets : MonoBehaviour{
+	public static PlayerVariables Singleton { get; private set; }
+
 	public List<Structure> Structures = new List<Structure>();
 
-	private void Awake() { 
-		GlobalVariables.StructureAssets = this;
-	}
+	private void Awake() => Singleton = this;
 
 
 	public void Start() => ReadAllStructures();

@@ -2,12 +2,13 @@ using System;
 using System.Collections;
 
 using UnityEngine;
-
 /// <summary>
 /// Used for Interacten per Mouse with Tilemap<br></br>
 /// </summary>
 //Client
 public class PlayerInteraction : MonoBehaviour {
+	public static PlayerInteraction Singleton { get; private set; }
+
 	public GameObject deleteSprite;
 	public Sprite crackTile;
 
@@ -38,18 +39,23 @@ public class PlayerInteraction : MonoBehaviour {
 			if (blockInchunkCoord.y < 0)
 				blockInchunkCoord.y = WorldAssets.ChunkLength + blockInchunkCoord.y;
 			return blockInchunkCoord;
-		}
-	}
+}
+}
 
-	/// <summary>Target block id</summary>
-	public byte TargetBlockID => ThisChunk?.blocks[BlockInchunkCoord.x, BlockInchunkCoord.y] ?? 0;
-	
-	/// <summary>Target blockId in background</summary>
-	public byte TargetBlockIDBG => ThisChunk?.bgBlocks[BlockInchunkCoord.x, BlockInchunkCoord.y] ?? 0;
+	/// <summary>If Chunk == null => Return 0</summary>
+	/// <param name="foreground">If background array</param>
+	/// <returns>The Id of the mouse-hovered block</returns>
+	public byte TargetBlockID(bool foreground) => foreground ? ThisChunk?.bgBlocks[BlockInchunkCoord.x, BlockInchunkCoord.y] ?? 0: ThisChunk?.blocks[BlockInchunkCoord.x, BlockInchunkCoord.y] ?? 0;
+
+	/// <summary>If foreground == null check if one of both tilemaps has a block</summary>
+	public bool TargetBlockExisting(bool? foreground = null){
+		bool foregroundId = TargetBlockID(true) != 0, backgroundId = TargetBlockID(false) != 0;
+        return foreground == null ? foregroundId || backgroundId : foreground ?? false ? foregroundId : backgroundId;
+    }
     #endregion
 
     #region UnityMethods
-    public void Awake() => GlobalVariables.Interaction = this;
+    public void Awake() => Singleton = this;
 
 	public void Update() {
 		if (GameManager.State != GameState.INGAME || (GlobalVariables.UIInventory?.InventoryOpened ?? false))
@@ -67,11 +73,11 @@ public class PlayerInteraction : MonoBehaviour {
 			CraftingStation.HandleCraftingInterface(BlockHoverdAbsolute, GlobalVariables.ItemAssets.CraftingStations.Find(x => x.blockId.Equals(255)));
 		}
 
-		if (Input.GetKeyDown(side) && GlobalVariables.ItemAssets.CraftingStations.Find(x => x.blockId.Equals(TargetBlockID)) != null)
+		if (Input.GetKeyDown(side) && GlobalVariables.ItemAssets.CraftingStations.Find(x => x.blockId.Equals(TargetBlockID(true))) != null)
 		{
 			//Open Menu
 			//Crafting System
-			CraftingStation.HandleCraftingInterface(new Vector2Int((int)GlobalVariables.LocalPlayerPos.x, (int)GlobalVariables.LocalPlayerPos.y), GlobalVariables.ItemAssets.CraftingStations.Find(x => x.blockId.Equals(TargetBlockID)));
+			CraftingStation.HandleCraftingInterface(new Vector2Int((int)GlobalVariables.LocalPlayerPos.x, (int)GlobalVariables.LocalPlayerPos.y), GlobalVariables.ItemAssets.CraftingStations.Find(x => x.blockId.Equals(TargetBlockID(true))));
 		}
 
 		if (GlobalVariables.Inventory.SelectedItemObj is BlockItem bI) { 
@@ -122,7 +128,7 @@ public class PlayerInteraction : MonoBehaviour {
 
 	/// <summary>Handles the Blockinteraction</summary>
     public void HandleBlockInteraction(){
-		SetFocusGO(BlockHoverdAbsolute, TargetBlockID != 0);
+		SetFocusGO(BlockHoverdAbsolute, TargetBlockExisting());
 		
 		if (BreakCoroutine != null && !Input.GetKey(GameManager.SettingsProfile.MainInteractionKey)){
 			if (DebugVariables.BlockInteractionCR)
@@ -136,17 +142,17 @@ public class PlayerInteraction : MonoBehaviour {
 
 		///Routine
 		if (BreakCoroutine == null)
-			if(TargetBlockID != 0){
-				byte targetRemoveDuration = GlobalVariables.WorldData.Blocks[TargetBlockID].removeDuration;
+			if(TargetBlockExisting(true)) {
+				byte targetRemoveDuration = GlobalVariables.WorldData.Blocks[TargetBlockID(true)].removeDuration;
 				
-				BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int, bool>(targetRemoveDuration, TargetBlockID, ThisChunk, BlockInchunkCoord, true));
+				BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int, bool>(targetRemoveDuration, TargetBlockID(true), ThisChunk, BlockInchunkCoord, true));
 				
 				if (DebugVariables.BlockInteractionCR)
 					Debug.Log("Started!");
-			}else{
-				byte targetRemoveDuration = GlobalVariables.WorldData.Blocks[TargetBlockIDBG].removeDuration;
+			}else if(TargetBlockExisting(false)) {
+				byte targetRemoveDuration = GlobalVariables.WorldData.Blocks[TargetBlockID(false)].removeDuration;
 
-				BreakCoroutine = StartCoroutine(nameof(BreakBlockBG), new Tuple<byte, byte, TerrainChunk, Vector2Int, bool>(targetRemoveDuration, TargetBlockIDBG, ThisChunk, BlockInchunkCoord, false));
+				BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int, bool>(targetRemoveDuration, TargetBlockID(false), ThisChunk, BlockInchunkCoord, false));
 
 				if(DebugVariables.BlockInteractionCR)
 					Debug.Log("Started!");

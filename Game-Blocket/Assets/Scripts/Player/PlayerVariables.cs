@@ -3,8 +3,8 @@ using System;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
-public class PlayerVariables : MonoBehaviour
-{
+public class PlayerVariables : MonoBehaviour{
+	public static PlayerVariables Singleton { get; private set; }
 
 	public static Gamemode Gamemode { get => gamemode; set {	
 		switch(value){
@@ -19,9 +19,10 @@ public class PlayerVariables : MonoBehaviour
 	} }
 	private static Gamemode gamemode;
 
+    private void Awake() => Singleton = this;
 
-	#region Static Resources
-	public GameObject playerModel, playerLogic;
+    #region Static Resources
+    public GameObject playerModel, playerLogic;
 	public SpriteRenderer holdingItemPlaceholder;
 	#endregion
 

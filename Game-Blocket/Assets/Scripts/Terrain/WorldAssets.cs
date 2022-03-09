@@ -5,18 +5,16 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class WorldAssets : MonoBehaviour
-{
-    /// <summary>Needs to be static! Else: BigRip</summary>
-    public static byte ChunkLength => 32;
+public class WorldAssets : MonoBehaviour{
+	public static WorldAssets Singleton { get; protected set; }
+
+	/// <summary>Needs to be static! Else: BigRip</summary>
+	public static byte ChunkLength => 32;
 
 	public List<Biom> bioms = new List<Biom>();
 	public List<BlockData> blocks = new List<BlockData> ();
 
-	public void Awake()
-    {
-        GlobalVariables.WorldAssets = this;
-    }
+	public void Awake()=>Singleton = this;
 
     /// <summary>
     /// returns the BlockData object of the index

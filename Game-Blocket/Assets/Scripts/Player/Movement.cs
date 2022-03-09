@@ -10,6 +10,7 @@ using UnityEngine;
 /// </summary>
 //Client
 public class Movement : MonoBehaviour {
+	public static Movement Singleton { get; private set; }
 
 	#region Properties + Atributes
 	#region Player-Settings
@@ -73,7 +74,7 @@ public class Movement : MonoBehaviour {
 	private bool _playerLocked;
 
 	#region UnityMethods
-	public void Awake() => GlobalVariables.Movement = this;
+	public void Awake() => Singleton = this;
 
 	/// <summary>
 	/// Most frequent Update used for realtime movement calculations

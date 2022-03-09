@@ -11,6 +11,8 @@ using UnityEngine.XR;
 /// </summary>
 public class UIInventory : MonoBehaviour
 {
+	public static UIInventory Singleton { get; private set; }
+
 	#region General Settings
 	[Header("Settings: Changable - Backgrounds")]
 	public Color inventoryBackground;
@@ -209,7 +211,7 @@ public class UIInventory : MonoBehaviour
 	/// <summary>"Reload" at the beginning</summary>
 	public void Awake()
 	{
-		GlobalVariables.UIInventory = this;
+		Singleton = this;
 		name = "UI";
 	}
 

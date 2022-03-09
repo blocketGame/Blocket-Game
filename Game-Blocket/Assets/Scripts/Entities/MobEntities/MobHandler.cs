@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MobHandler : MonoBehaviour
-{
+public class MobHandler : MonoBehaviour{
+	public static MobHandler Singleton { get; private set; }
+
 	public byte minSpawnDistance = 20;
 	
 	public ushort maxMobs;
@@ -17,7 +18,7 @@ public class MobHandler : MonoBehaviour
 	public Coroutine Coroutine { get; set; }
 
 	public void Awake() {
-		GlobalVariables.MobHandler = this;
+		Singleton = this;
 		Random = new System.Random(GlobalVariables.WorldData?.Seed ?? 0);
 	}
 

@@ -12,6 +12,7 @@ using UnityEngine.SceneManagement;
 /// Coroutines, Threads, Multiplayerstuff...
 /// </summary>
 public class GameManager : MonoBehaviour {
+	public static GameManager Singleton { get; private set; }
 	//Both
 	public static GameState State { get => _state; 
 		set { 
@@ -65,7 +66,7 @@ public class GameManager : MonoBehaviour {
 
     /// <summary>Sets this class into the <see cref="GlobalVariables"/></summary>
     public void Awake() {
-		GlobalVariables.GameManager = this;
+		Singleton = this;
 		State = GameState.LOBBY;
 		NetworkManager.Singleton.OnClientConnectedCallback += (clientId) => {
 			if(!NetworkManager.Singleton.IsServer)

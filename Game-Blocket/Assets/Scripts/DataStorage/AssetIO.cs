@@ -6,8 +6,12 @@ using UnityEditor;
 using UnityEngine;
 
 public class AssetIO : MonoBehaviour {
+	public static AssetIO Singleton { get; private set; }
 
-    public void SaveAssets() {
+	private void Awake() => Singleton = this;
+
+
+	public void SaveAssets() {
 
 	}
 

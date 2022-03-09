@@ -10,7 +10,8 @@ using UnityEngine;
 
 /// <summary>Handles the <b>Serverside</b> of the Infrastructure</summary>
 public class ServerTerrainHandler : TerrainHandler {
-	
+	public static ServerTerrainHandler Singleton { get; private set; }
+
 	/// <summary>The payload for handle client requests</summary>
 	public byte UpdatePayload { get{
 			if(GameManager.State == GameState.LOADING)
@@ -127,7 +128,7 @@ public class ServerTerrainHandler : TerrainHandler {
 	/// Sets the Messagehadler
 	/// </summary>
 	public void Awake() {
-		GlobalVariables.ServerTerrainHandler = this;
+		Singleton = this;
 		NetworkManager.Singleton.CustomMessagingManager.RegisterNamedMessageHandler("RequestChunk", HandleChunkRequest);
 		
 		//Debug

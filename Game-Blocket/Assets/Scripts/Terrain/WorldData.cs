@@ -8,7 +8,7 @@ using UnityEngine;
 /// <b>Author : Cse19455 / Thomas Boigner</b>
 /// </summary>
 public class WorldData : MonoBehaviour {
-	
+	public static WorldData Singleton { get; protected set; }
 	public GameObject ChunkParent => Grid.gameObject;
 	public Grid Grid { get; private set; }
 
@@ -70,7 +70,7 @@ public class WorldData : MonoBehaviour {
 	/// <summary>Stores this class to <see cref="GlobalVariables"/></summary>
 
 	public void Awake(){
-		GlobalVariables.WorldData = this;
+		Singleton = this;
 		Grid = GetComponentInChildren<Grid>();
 
 	}

@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemFollowing : MonoBehaviour
-{
+public class ItemFollowing : MonoBehaviour{
+    public static ItemFollowing Singleton { get; private set; }
+
     public float maxDistanceDelta = 20;
     public Animator anim;
+
+    private void Awake() => Singleton = this;
 
     private void LateUpdate()
     {

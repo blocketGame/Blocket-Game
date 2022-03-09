@@ -10,6 +10,8 @@ using static UnityEngine.Rendering.DebugUI;
 /// Feel free  to use it!
 /// </summary>
 public class Inventory : MonoBehaviour {
+	public static Inventory Singleton { get; private set; }
+
 	/// <summary>List of ArmorSlots in the inventory => <seealso cref="UIInventorySlot"/><br></br>[0]->Head,</summary>
 	public List<UIInventorySlot> ArmorSlots { get; set; }
 	/// <summary>List of acessoiresslots in the inventory => <seealso cref="UIInventorySlot"/></summary>
@@ -58,7 +60,9 @@ public class Inventory : MonoBehaviour {
 		GlobalVariables.UIInventory.SynchronizeToHotbar();
 	}
 
-	public void Update() {
+	private void Awake() => Singleton = this;        
+
+    public void Update() {
 		if (atHand?.ItemID != null)
 			atHand.transform.position = atHandVector + new Vector2(Input.mousePosition.x, Input.mousePosition.y);
 

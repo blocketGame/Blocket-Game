@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIProfileSite : MonoBehaviour
-{
+public class UIProfileSite : MonoBehaviour{
+	public static UIProfileSite Singleton { get; private set; }
+
 	[Header("Static Resources")]
 	public Text createInput;
 	public GameObject worldSelectionSite, characterSelectionSite, listContentPrefab;
@@ -149,9 +150,8 @@ public class UIProfileSite : MonoBehaviour
 			Debug.Log($"PlayerProfiles: {FoundPlayerProfiles.Count}, WorldProfiles: {FoundWorldProfiles.Count}");
 	}
 
-	public void Awake()
-	{
-		GlobalVariables.UIProfileSite = this;
+	public void Awake(){
+		Singleton = this;
 		CharacterSelectionOpen = true;
 		InitButtons();
 		_playerContent = playerScrollRect.content;
