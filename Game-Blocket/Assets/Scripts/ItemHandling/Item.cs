@@ -47,7 +47,7 @@ public class BlockItem : Item {
 	public byte blockId;
 
 	public BlockItem(){
-		onSideInteractionKey = () => GlobalVariables.Interaction.BlockPlace();
+		onSideInteractionKey = () => PlayerInteraction.Singleton.BlockPlace();
 	}
 }
 

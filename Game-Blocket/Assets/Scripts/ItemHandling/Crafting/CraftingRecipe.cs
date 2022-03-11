@@ -45,7 +45,7 @@ public class CraftingRecipe : ScriptableObject, ISerializationCallbackReceiver
     /// <param name="station"></param>
     public CraftingRecipe(uint station)
     {
-        Recipe = new Craftable[GlobalVariables.ItemAssets.CraftingStations.Find(x => x.blockId == station).Slotwidth*GlobalVariables.ItemAssets.CraftingStations.Find(x => x.blockId == station).Slotheight];
+        Recipe = new Craftable[ItemAssets.Singleton.CraftingStations.Find(x => x.blockId == station).Slotwidth*ItemAssets.Singleton.CraftingStations.Find(x => x.blockId == station).Slotheight];
     }
 
     /// <summary>
@@ -83,7 +83,7 @@ public struct Craftable
     public ushort count;
     public ToolType type;
 
-    public Item Item { get => GlobalVariables.ItemAssets.GetItemFromItemID(item); }
+    public Item Item { get => ItemAssets.Singleton.GetItemFromItemID(item); }
     public uint ItemID { get => item; }
 
     public Craftable(uint item,ushort count,ToolType type)

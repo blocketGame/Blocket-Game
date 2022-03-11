@@ -4,8 +4,9 @@ using UnityEngine.Experimental.Rendering.Universal;
 /// <summary>
 /// 
 /// </summary>
-public class LightScript : MonoBehaviour
-{
+public class LightScript : MonoBehaviour{
+    public static LightScript Singleton { get; private set; }
+
     //THIS DOESNT WORK
     [SerializeField]
     private LightRegion[] lightRegions;
@@ -18,6 +19,7 @@ public class LightScript : MonoBehaviour
     public LightRegion[] LightRegions { get => lightRegions; set => lightRegions = value; }
     public Light2D[] Lights { get => lights; set => lights = value; }
 
+    private void Awake() => Singleton = this;
 
     // Update is called once per frame
     private void FixedUpdate()

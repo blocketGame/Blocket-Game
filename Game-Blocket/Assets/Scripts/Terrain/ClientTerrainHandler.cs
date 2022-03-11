@@ -7,28 +7,59 @@ using Unity.Netcode;
 
 using UnityEngine;
 
+/// <summary>Handles the <b>clientside</b> for the Worldhandling</summary>
 public class ClientTerrainHandler : TerrainHandler {
+
+	public static new ClientTerrainHandler Singleton { get; private set; }
+
+	/// <summary>Static due to <see cref="TerrainGeneration"/></summary>
 	public static Queue<TerrainChunk> ChunkTileInitializationQueue { get; } = new Queue<TerrainChunk>();
-	protected static List<TerrainChunk> ChunksLastUpdate { get; set; } = new List<TerrainChunk>();
-	public TerrainChunk CurrentChunk => Chunks.ContainsKey(CurrentChunkCoord) == true ? Chunks[CurrentChunkCoord] : null;
-	public bool CurrentChunkReady => !(CurrentChunk == null || !CurrentChunk.IsImported || !CurrentChunk.Visible);
-	protected TerrainChunk LastChunk { get; set; }
 
-	public Queue<Transform> DestroyQueue { get; } = new Queue<Transform>();
+	/// <summary>Queue which stores objects for destory</summary>
+	private  Queue<Transform> DestroyQueue { get; } = new Queue<Transform>();
 
-	public Vector2Int CurrentChunkCoord => new Vector2Int((int)(PlPosNow.x / WD.ChunkWidth), (int)(PlPosNow.y / WD.ChunkHeight));
-	public static Vector3 PlPosNow { get; private set; }
+	/// <summary>Chunks that are Requested from Server</summary>
 	private List<Vector2Int> RequestedChunks { get; } = new List<Vector2Int>();
 
-	#region Client Side
-	public void HandleChunkResponse(ulong clientId, FastBufferReader fbR) {
-		Debug.Log("Got Response");
+    #region Visibility
+    /// <summary>Chunks the were visible the last Update frame</summary>
+    private List<TerrainChunk> ChunksLastUpdate { get; set; } = new List<TerrainChunk>();
+	/// <summary>Chunk that was the lastChunk the player were in</summary>
+	private TerrainChunk LastChunk { get; set; }
+
+	/// <summary>Chunk where the player stands</summary>
+	public TerrainChunk CurrentChunk => Chunks.ContainsKey(CurrentChunkCoord) == true ? Chunks[CurrentChunkCoord] : null;
+	
+	/// <summary>True if the Chunk is loaded, importet and visible</summary>
+	public bool CurrentChunkReady => !(CurrentChunk == null || !CurrentChunk.IsImported || !CurrentChunk.Visible);
+    #endregion
+
+    #region Util-Methods
+    /// <summary>Calculates the current Chunkcorrdinate (<seealso cref="Vector2Int"/>) where the player stands in</summary>
+    public Vector2Int CurrentChunkCoord => new Vector2Int((int)(PlPosNow.x / WD.ChunkWidth), (int)(PlPosNow.y / WD.ChunkHeight));
+
+	/// <summary>Own variable due to unity: "No plsss noo other thread on gameobject >:("</summary>
+	public static Vector3 PlPosNow { get; private set; }
+    #endregion
+
+    #region Client Side
+
+	/// <summary> Message-Handler that will be called if the Server has sent the chunkdata-string</summary>
+	/// <param name="clientId">Server id</param>
+	/// <param name="fbR">networking stream</param>
+    public void HandleChunkResponse(ulong clientId, FastBufferReader fbR) {
+		if(DebugVariables.WorldNetworking)
+			Debug.Log("Got Response");
 		fbR.ReadValueSafe(out string chunkData);
 		HandleChunkResponse(chunkData);
 	}
 
+	/// <summary>Handles a single hardmade string</summary>
+	/// <param name="msg"></param>
 	public void HandleChunkResponse(string msg) => HandleChunkResponse(WorldProfile.ReadFromString(new List<string>(msg.Split('\n')), null));
 
+	/// <summary>Imports the Chunk Response</summary>
+	/// <param name="cd">Chunkdata struct</param>
 	public void HandleChunkResponse(ChunkData cd){
 		lock(Chunks)
 			Chunks[cd.ChunkPositionInt] = cd as TerrainChunk;
@@ -36,13 +67,17 @@ public class ClientTerrainHandler : TerrainHandler {
 		Debug.Log("Chunk Responded");
 	}
 
+	/// <summary>
+	/// Sends a chunk request to the server
+	/// </summary>
+	/// <param name="chunkCord">Requested chunk coord</param>
 	public void RequestChunk(Vector2Int chunkCord) {
 		if(RequestedChunks.Contains(chunkCord))
 			return;
 		Debug.Log("Send Request");
 		RequestedChunks.Add(chunkCord);
 		if(NetworkManager.Singleton.IsHost){
-			GlobalVariables.ServerTerrainHandler.HandleChunkRequest(NetworkManager.Singleton.LocalClientId, chunkCord);
+			ServerTerrainHandler.Singleton.HandleChunkRequest(NetworkManager.Singleton.LocalClientId, chunkCord);
 			return;
         }
 		
@@ -53,6 +88,7 @@ public class ClientTerrainHandler : TerrainHandler {
 		
 	}
 
+	/// <summary>Method which will Iterate all chunks around the player and requests chunks</summary>
 	public void IterateChunksAroundPlayer() {
 		bool noUpdates = true;
 
@@ -84,7 +120,7 @@ public class ClientTerrainHandler : TerrainHandler {
 		}
 	}
 
-	
+	/// <summary>Unloads loaded chunks that are outside of render distance *4 and requests deleting</summary>
 	public void UpdateLoaded() {
 		//for(int i = 0; i < WD.ChunkParent.transform.childCount; i++) {//Not clean
 		//	Transform chunkIGO = WD.ChunkParent.transform.GetChild(i);
@@ -105,6 +141,8 @@ public class ClientTerrainHandler : TerrainHandler {
 		//}
 	}
 
+	/// <summary>Makes all chunks invisible outside of the renderdistance</summary>
+	/// <returns>The chunks that are visible this frame</returns>
 	public List<TerrainChunk> UpdateVisible() {
 		List<TerrainChunk> chunksVisibleNow = new List<TerrainChunk>();
 		for(int x = -WD.ChunkDistance; x <= WD.ChunkDistance; x++) {
@@ -121,6 +159,8 @@ public class ClientTerrainHandler : TerrainHandler {
 		return chunksVisibleNow;
 	}
 
+	/// <summary>Makes all chunks invisible</summary>
+	/// <param name="chunksToDisable">Chunks that have to be visible</param>
 	private void DisableChunks(List<TerrainChunk> chunksToDisable) {
 		foreach(TerrainChunk tc in chunksToDisable)
 			tc.Visible = false;
@@ -147,12 +187,12 @@ public class ClientTerrainHandler : TerrainHandler {
 		}
 		return false;
 	}
-
 	#endregion
 
 	#region Unity Scripts
+	/// <summary>Registers the Response-Message</summary>
 	public void Awake() {
-		GlobalVariables.ClientTerrainHandler = this;
+		Singleton = this;
 		NetworkManager.Singleton.CustomMessagingManager.RegisterNamedMessageHandler("ChunkResponse", HandleChunkResponse);
 		if(DebugVariables.WorldNetworking) {
 			Debug.Log("Registered Chunk Response");
@@ -160,7 +200,7 @@ public class ClientTerrainHandler : TerrainHandler {
 		}
 	}
 
-    private void Update() {
+    public void Update() {
         //Always
 		PlPosNow = GlobalVariables.LocalPlayerPos;
 		lock(ChunkTileInitializationQueue) {

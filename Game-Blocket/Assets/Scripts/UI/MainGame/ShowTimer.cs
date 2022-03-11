@@ -10,6 +10,6 @@ public class ShowTimer : MonoBehaviour
     public void FixedUpdate()
     {
         //clock.CalcTime();
-        text.text = string.Format("{0:00}:{1:00}", GlobalVariables.clock.hours, GlobalVariables.clock.minutes);
+        text.text = string.Format("{0:00}:{1:00}", ClockHandler.Singleton.hours, ClockHandler.Singleton.minutes);
     }
 }

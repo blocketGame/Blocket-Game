@@ -10,6 +10,8 @@ using static UnityEngine.Rendering.DebugUI;
 /// Feel free  to use it!
 /// </summary>
 public class Inventory : MonoBehaviour {
+	public static Inventory Singleton { get; private set; }
+
 	/// <summary>List of ArmorSlots in the inventory => <seealso cref="UIInventorySlot"/><br></br>[0]->Head,</summary>
 	public List<UIInventorySlot> ArmorSlots { get; set; }
 	/// <summary>List of acessoiresslots in the inventory => <seealso cref="UIInventorySlot"/></summary>
@@ -21,7 +23,7 @@ public class Inventory : MonoBehaviour {
 	public List<UIInventorySlot> HudSlots { get; } = new List<UIInventorySlot>();
 
 	public uint SelectedItemId => InvSlots[SelectedSlot].ItemID;
-	public Item SelectedItemObj => GlobalVariables.ItemAssets.GetItemFromItemID(SelectedItemId);
+	public Item SelectedItemObj => ItemAssets.Singleton.GetItemFromItemID(SelectedItemId);
 
 	public byte SelectedSlot { get => _selectedSlot; set {
 			if (value >= HudSlots.Count || value < 0)
@@ -29,7 +31,7 @@ public class Inventory : MonoBehaviour {
 			HudSlots[_selectedSlot].IsSelected = false;
 			_selectedSlot = value;
 			HudSlots[_selectedSlot].IsSelected = true;
-			GlobalVariables.PlayerVariables.ReloadItemInHand();
+			PlayerVariables.Singleton.ReloadItemInHand();
 		}
 	}
 	private byte _selectedSlot = 0;
@@ -55,10 +57,12 @@ public class Inventory : MonoBehaviour {
 		slotPressed.ItemID = temp;
 
 		atHand.gameObject.SetActive(atHand.ItemID != 0);
-		GlobalVariables.UIInventory.SynchronizeToHotbar();
+		UIInventory.Singleton.SynchronizeToHotbar();
 	}
 
-	public void Update() {
+	private void Awake() => Singleton = this;        
+
+    public void Update() {
 		if (atHand?.ItemID != null)
 			atHand.transform.position = atHandVector + new Vector2(Input.mousePosition.x, Input.mousePosition.y);
 
@@ -73,7 +77,7 @@ public class Inventory : MonoBehaviour {
 	public bool AddItem(Item itemToAdd) => AddItem(itemToAdd, 1, out _);
 
 	public bool AddItem(uint itemIDToAdd, ushort itemCount, out ushort itemCountNotAdded) {
-		Item item = GlobalVariables.ItemAssets.GetItemFromItemID(itemIDToAdd) ?? throw new ArgumentException($"No Item found! ID:{itemIDToAdd}");
+		Item item = ItemAssets.Singleton.GetItemFromItemID(itemIDToAdd) ?? throw new ArgumentException($"No Item found! ID:{itemIDToAdd}");
 		bool x = AddItem(item, itemCount, out ushort i);
 		itemCountNotAdded = i;
 		return x;
@@ -82,7 +86,7 @@ public class Inventory : MonoBehaviour {
 	public bool AddItem(Item itemToAdd, ushort itemCount, out ushort itemCountNotAdded){
 		bool x = AddItemInnerMethod(itemToAdd, itemCount, out ushort i);
 		itemCountNotAdded = i;
-		GlobalVariables.UIInventory.SynchronizeToHotbar();
+		UIInventory.Singleton.SynchronizeToHotbar();
 		return x;
 	}
 
@@ -218,7 +222,7 @@ public class Inventory : MonoBehaviour {
 			slotToRemove.ItemID = 0;
 		else
 			slotToRemove.ItemCount -= countToRemove;
-		GlobalVariables.UIInventory.SynchronizeToHotbar();
+		UIInventory.Singleton.SynchronizeToHotbar();
 		return true;
 	}
 	/// <summary>

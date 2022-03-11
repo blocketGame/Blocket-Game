@@ -1,8 +1,10 @@
-using System;
 using System.Collections.Generic;
+
 using UnityEngine;
 
 public class MobAssets: MonoBehaviour{
+	public static MobAssets Singleton { get; private set; }
+
 	public List<Mob> mobsInGame;
 	public List<Mob> bossesInGame;
 
@@ -21,10 +23,7 @@ public class MobAssets: MonoBehaviour{
 		return null;
 	}
 
-    public void Awake()
-    {
-		GlobalVariables.MobAssets = this;
-    }
+	public void Awake() => Singleton = this;
 
 }
 

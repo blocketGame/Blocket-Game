@@ -20,12 +20,12 @@ public class ConsoleEntry : MonoBehaviour{
 
     public void Start()
     {
-        if(gameObject.transform.parent != GlobalVariables.UIInventory.chatParent.parent){
+        if(gameObject.transform.parent != UIInventory.Singleton.chatParent.parent){
             return;
         }
         VanishCoroutine = StartCoroutine(nameof(Vanish));
-        ChatGO = Instantiate(gameObject, GlobalVariables.UIInventory.chatParent);
-        GlobalVariables.UIInventory.chatHistoryView.Add(ChatGO.GetComponent<RectTransform>());
+        ChatGO = Instantiate(gameObject, UIInventory.Singleton.chatParent);
+        UIInventory.Singleton.chatHistoryView.Add(ChatGO.GetComponent<RectTransform>());
     }
 
     public IEnumerator Vanish(){

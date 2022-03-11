@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// Handles all items in Game
 /// </summary>
-public class ItemAssets : MonoBehaviour
-{
+public class ItemAssets : MonoBehaviour{
+	public static ItemAssets Singleton { get; private set; }
+
 	public List<BlockItem> BlockItemsInGame = new List<BlockItem>();
 	public List<ToolItem> ToolItemsInGame = new List<ToolItem>();
 	public List<EquipableItem> EquipableItemsInGame = new List<EquipableItem>();
@@ -21,7 +21,7 @@ public class ItemAssets : MonoBehaviour
 	public Sprite MiningCursor;
 	public Sprite AttackingCursor;
 
-	private void Awake() => GlobalVariables.ItemAssets = this;
+	private void Awake() => Singleton = this;
 
 
 	/// <summary>

@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class UIInventorySlot : MonoBehaviour {
     #region Static Resources
     /// <summary><see cref="global::UIInventory"/> </summary>
-    public UIInventory UIInventory => GlobalVariables.UIInventory;
+    public UIInventory UIInventory => UIInventory.Singleton;
 	/// <summary><see cref="Text"/></summary>
 	public Text textDown;
 	/// <summary><see cref="Button"/>-Button</summary>
@@ -45,7 +45,7 @@ public class UIInventorySlot : MonoBehaviour {
 		get => _itemId;
 		set {
 			_itemId = value;
-			ItemObject = GlobalVariables.ItemAssets?.GetItemFromItemID(value);
+			ItemObject = ItemAssets.Singleton?.GetItemFromItemID(value);
 			if (value == 0)
 				ItemCount = 0;
 			ReloadSlot();
@@ -103,7 +103,7 @@ public class UIInventorySlot : MonoBehaviour {
 
 		if (useOldPointerhandling)
 			button.onClick.AddListener(() => {
-				GlobalVariables.Inventory.PressedSlot(this); 
+				Inventory.Singleton.PressedSlot(this); 
 				if(CraftingStation!=null)
                 {
 					int x=0;
@@ -116,7 +116,7 @@ public class UIInventorySlot : MonoBehaviour {
 						x++;
                     }
 
-					CraftingStation.RenewRecommendations(array,GlobalVariables.UIInventory.craftingInterfacePlaceholder);
+					CraftingStation.RenewRecommendations(array, UIInventory.Singleton.craftingInterfacePlaceholder);
                 }
 			});
         else

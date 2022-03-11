@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIProfileSite : MonoBehaviour
-{
+public class UIProfileSite : MonoBehaviour{
+	public static UIProfileSite Singleton { get; private set; }
+
 	[Header("Static Resources")]
 	public Text createInput;
 	public GameObject worldSelectionSite, characterSelectionSite, listContentPrefab;
@@ -79,7 +80,7 @@ public class UIProfileSite : MonoBehaviour
 			CharacterSelectionOpen = false;
 			return;
 		} else
-			GlobalVariables.UILobby.SiteIndexOpen = 1;
+			UILobby.Singleton.SiteIndexOpen = 1;
 		if(NetworkManager.Singleton.IsClient || lightweightClient)
 			GameManager.PlayerProfileNow = ProfileHandler.ImportProfile(ListContentUI.selectedBtnNameCharacter, true) as PlayerProfile;
 		if(NetworkManager.Singleton.IsServer)
@@ -95,7 +96,7 @@ public class UIProfileSite : MonoBehaviour
 				worldSelectBtn.interactable = false;
 
 		backBtn.onClick.AddListener(() => {
-			GlobalVariables.UILobby.SiteIndexOpen = 0;
+			UILobby.Singleton.SiteIndexOpen = 0;
 		});
 
 		//nextBtn.onClick.AddListener(SelectedItem);
@@ -149,9 +150,8 @@ public class UIProfileSite : MonoBehaviour
 			Debug.Log($"PlayerProfiles: {FoundPlayerProfiles.Count}, WorldProfiles: {FoundWorldProfiles.Count}");
 	}
 
-	public void Awake()
-	{
-		GlobalVariables.UIProfileSite = this;
+	public void Awake(){
+		Singleton = this;
 		CharacterSelectionOpen = true;
 		InitButtons();
 		_playerContent = playerScrollRect.content;

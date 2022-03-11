@@ -2,14 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemFollowing : MonoBehaviour
-{
+public class ItemFollowing : MonoBehaviour{
+    public static ItemFollowing Singleton { get; private set; }
+
     public float maxDistanceDelta = 20;
     public Animator anim;
 
+    private void Awake() => Singleton = this;
+
     private void LateUpdate()
     {
-        if(GlobalVariables.PlayerVariables.Race == CharacterRace.MAGICIAN)
+        if(PlayerVariables.Singleton.Race == CharacterRace.MAGICIAN)
             TurnItemToMouseAngle();
         AnimateWeapon();
         Physics2D.IgnoreLayerCollision(0,6);
@@ -35,7 +38,7 @@ public class ItemFollowing : MonoBehaviour
     private void AnimateWeapon()
     {
         if (Input.GetKeyDown(GameManager.SettingsProfile.MainInteractionKey)) {
-            string animationname = GlobalVariables.ItemAssets.GetItemFromItemID(GlobalVariables.Inventory.SelectedItemId)?.swingingAnimation;
+            string animationname = ItemAssets.Singleton.GetItemFromItemID(Inventory.Singleton.SelectedItemId)?.swingingAnimation;
             anim.Play(animationname== string.Empty ? "Default" : animationname ?? "Default");
         }
     }

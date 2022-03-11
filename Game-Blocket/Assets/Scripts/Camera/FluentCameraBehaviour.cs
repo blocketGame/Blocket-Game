@@ -4,16 +4,17 @@ using UnityEngine;
 /// @Cse19455
 /// [TODO: Optimize with delegate]
 /// </summary>
-public class FluentCameraBehaviour : MonoBehaviour
-{
+public class FluentCameraBehaviour : MonoBehaviour{
+    public static FluentCameraBehaviour Singleton { get; private set; }
+
     private float OffSetX = 0;
     private float OffSetY = 0;
     private Vector3 originalPos;
 
     private float camZoom = 20f;
     public KeyCode Scroll;
-    private void Awake()
-    {
+    private void Awake(){
+        Singleton = this;
         originalPos = gameObject.transform.localPosition;
     }
 

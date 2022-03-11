@@ -2,65 +2,56 @@ using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine.Rendering;
 
-public class DayNightCycle : MonoBehaviour
-{
-    public UnityEngine.Experimental.Rendering.Universal.Light2D globalLight;
-    public Volume volume;
+public class DayNightCycle : MonoBehaviour{
+	public static DayNightCycle Singleton { get; private set; }
 
-    public int duskFrom;
-    public int duskTo;
+	public UnityEngine.Experimental.Rendering.Universal.Light2D globalLight;
+	public Volume volume;
 
-    public int dawnFrom;
-    public int dawnTo;
+	public int duskFrom;
+	public int duskTo;
 
-    //Intensity of the player light
-    public float maxIntensity; 
+	public int dawnFrom;
+	public int dawnTo;
 
-    public Light2D playerLight;
+	//Intensity of the player light
+	public float maxIntensity; 
 
-    public void Awake() => GlobalVariables.dayNightCycle = this;
+	public Light2D playerLight;
 
-    private void FixedUpdate()
-    {
-        if (GameManager.State != GameState.INGAME)
-            return;
+	public void Awake() => Singleton = this;
 
-        //not a good solution
-        if(GlobalVariables.PlayerVariables != null && playerLight == null)
-        {
-            playerLight = GlobalVariables.PlayerVariables.playerLight;
-        }
+	private void FixedUpdate()
+	{
+		if (GameManager.State != GameState.INGAME)
+			return;
 
-        ControllVolume();
-    }
+		//not a good solution
+		if(PlayerVariables.Singleton != null && playerLight == null)
+		{
+			playerLight = PlayerVariables.Singleton.playerLight;
+		}
 
-    /// <summary>
-    /// Sets the value of the volume to simulate a day night cycle
-    /// </summary>
-    public void ControllVolume()
-    {
-        if (GlobalVariables.clock.hours >= duskFrom && GlobalVariables.clock.hours < duskTo)
-        {
-            volume.weight = (float)GlobalVariables.clock.minutes / ((duskTo - duskFrom) * 60);
-            playerLight.intensity = ((float)GlobalVariables.clock.minutes / ((duskTo - duskFrom) * 60)) * maxIntensity;
-        }
-        else
-        if ((GlobalVariables.clock.hours >= duskTo && GlobalVariables.clock.hours < 24) || GlobalVariables.clock.hours < dawnFrom)
-        {
-            volume.weight = 1;
-            playerLight.intensity = maxIntensity;
-        }
-        else
-        if(GlobalVariables.clock.hours >= dawnFrom && GlobalVariables.clock.hours < dawnTo)
-        {
-            volume.weight = 1 - (float)GlobalVariables.clock.minutes / ((dawnTo - dawnFrom) * 60);
-            playerLight.intensity = maxIntensity - ((float)GlobalVariables.clock.minutes / ((duskTo - duskFrom) * 60)) * maxIntensity;
-        }
-        else
-        if (GlobalVariables.clock.hours >= dawnTo && GlobalVariables.clock.hours < duskFrom)
-        {
-            volume.weight = 0;
-            playerLight.intensity = 0;
-        }
-    }
+		ControllVolume();
+	}
+
+	/// <summary>
+	/// Sets the value of the volume to simulate a day night cycle
+	/// </summary>
+	public void ControllVolume(){
+		ClockHandler clock = ClockHandler.Singleton;
+		if (clock.hours >= duskFrom && clock.hours < duskTo){
+			volume.weight = (float)clock.minutes / ((duskTo - duskFrom) * 60);
+			playerLight.intensity = ((float)clock.minutes / ((duskTo - duskFrom) * 60)) * maxIntensity;
+		}else if ((clock.hours >= duskTo && clock.hours < 24) || clock.hours < dawnFrom){
+			volume.weight = 1;
+			playerLight.intensity = maxIntensity;
+		}else if(clock.hours >= dawnFrom && clock.hours < dawnTo){
+			volume.weight = 1 - (float)clock.minutes / ((dawnTo - dawnFrom) * 60);
+			playerLight.intensity = maxIntensity - ((float)clock.minutes / ((duskTo - duskFrom) * 60)) * maxIntensity;
+		}else if (clock.hours >= dawnTo && clock.hours < duskFrom){
+			volume.weight = 0;
+			playerLight.intensity = 0;
+		}
+	}
 }
