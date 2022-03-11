@@ -83,7 +83,7 @@ public class ServerTerrainHandler : TerrainHandler {
 
 		//If Host (due to Netcode: "mehh not sending to serverId == clientId)
 		if(NetworkManager.Singleton.IsHost) {
-			GlobalVariables.ClientTerrainHandler.HandleChunkResponse(cD);
+			ClientTerrainHandler.Singleton.HandleChunkResponse(cD);
 			return;
 		}
 

@@ -111,7 +111,7 @@ public class UILobby : MonoBehaviour {
 		Singleton = this;
 		uiprofileSitePrefab = Instantiate(uiprofileSitePrefab, gameObject.transform);
 		//NetworkManager.Singleton.OnClientConnectedCallback += ClientConnectCallback;
-		SceneManager.sceneLoaded += GlobalVariables.GameManager.SceneSwitched;
+		SceneManager.sceneLoaded += GameManager.Singleton.SceneSwitched;
 		SiteIndexOpen = 0;
 		ipPlaceHolder.text = NetworkVariables.ipAddress;
 		InitButtons();
@@ -119,8 +119,8 @@ public class UILobby : MonoBehaviour {
 
 	private void SetNetworkAddress()
 	{
-		GlobalVariables.GameManager.uNetTransport.ConnectAddress = NetworkVariables.ipAddress;
-		GlobalVariables.GameManager.uNetTransport.ConnectPort = NetworkVariables.portAddress;
+		GameManager.Singleton.uNetTransport.ConnectAddress = NetworkVariables.ipAddress;
+		GameManager.Singleton.uNetTransport.ConnectPort = NetworkVariables.portAddress;
 	}
 
 	/// <summary>

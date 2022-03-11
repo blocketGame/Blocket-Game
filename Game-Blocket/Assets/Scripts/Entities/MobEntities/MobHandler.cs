@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
 public class MobHandler : MonoBehaviour{
@@ -19,7 +20,7 @@ public class MobHandler : MonoBehaviour{
 
 	public void Awake() {
 		Singleton = this;
-		Random = new System.Random(GlobalVariables.WorldData?.Seed ?? 0);
+		Random = new System.Random();
 	}
 
 	public void FixedUpdate() {
@@ -45,7 +46,7 @@ public class MobHandler : MonoBehaviour{
 
 	public void HandleRandomSpawning(){
 		//UNFINISHED Mobspawnchance
-		Mob mob = GlobalVariables.MobAssets.mobsInGame[Random.Next(0, GlobalVariables.MobAssets.mobsInGame.Count)];
+		Mob mob = MobAssets.Singleton.mobsInGame[Random.Next(0, MobAssets.Singleton.mobsInGame.Count)];
 
 		//Random Position
 		Vector2Int posI = new Vector2Int(
@@ -60,7 +61,7 @@ public class MobHandler : MonoBehaviour{
 		SpawnMob(mob.entityId, posSpawn);
 	}
 
-	private TerrainChunk GetTerrainChunkFromPos(Vector2Int posI) => GlobalVariables.TerrainHandler.GetChunkFromCoordinate(posI.x, posI.y);
+	private TerrainChunk GetTerrainChunkFromPos(Vector2Int posI) => TerrainHandler.Singleton.GetChunkFromCoordinate(posI.x, posI.y);
 
 	private Vector3? CheckSpaceAround(Vector2Int pos, Vector2Int mobSize){
 		//Debug.Log(pos);
@@ -111,10 +112,10 @@ public class MobHandler : MonoBehaviour{
 
 
 
-	private int GetRandomAchsisFromLocalPlayer() => Random.Next(-GlobalVariables.WorldData.ChunkDistance* WorldAssets.ChunkLength, GlobalVariables.WorldData.ChunkDistance* WorldAssets.ChunkLength);
+	private int GetRandomAchsisFromLocalPlayer() => Random.Next(-WorldData.Singleton.ChunkDistance* WorldAssets.ChunkLength, WorldData.Singleton.ChunkDistance* WorldAssets.ChunkLength);
 
 
-	private void SpawnMob(uint entityId, Vector3? position)=>SpawnMob(GlobalVariables.MobAssets.GetMobFromID(entityId, false), position);
+	private void SpawnMob(uint entityId, Vector3? position)=>SpawnMob(MobAssets.Singleton.GetMobFromID(entityId, false), position);
 	
 	
 
@@ -124,7 +125,7 @@ public class MobHandler : MonoBehaviour{
 			return;
 		Vector3 pos = position ?? Vector3.zero;
 		if (pos == Vector3.zero) return;
-		GameObject mgo = Instantiate(GlobalVariables.PrefabAssets.mobEntity, pos, Quaternion.identity);
+		GameObject mgo = Instantiate(PrefabAssets.Singleton.mobEntity, pos, Quaternion.identity);
 		FlyingEnemyBehaviour fb =mgo.AddComponent<FlyingEnemyBehaviour>();
 		fb.currentchunk = GetTerrainChunkFromPos(new Vector2Int((int)position?.x, (int)position?.y));
 		mgo.transform.parent = GetTerrainChunkFromPos(new Vector2Int((int)position?.x, (int)position?.y)).ParentGO.transform;

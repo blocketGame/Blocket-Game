@@ -80,7 +80,7 @@ public class UIProfileSite : MonoBehaviour{
 			CharacterSelectionOpen = false;
 			return;
 		} else
-			GlobalVariables.UILobby.SiteIndexOpen = 1;
+			UILobby.Singleton.SiteIndexOpen = 1;
 		if(NetworkManager.Singleton.IsClient || lightweightClient)
 			GameManager.PlayerProfileNow = ProfileHandler.ImportProfile(ListContentUI.selectedBtnNameCharacter, true) as PlayerProfile;
 		if(NetworkManager.Singleton.IsServer)
@@ -96,7 +96,7 @@ public class UIProfileSite : MonoBehaviour{
 				worldSelectBtn.interactable = false;
 
 		backBtn.onClick.AddListener(() => {
-			GlobalVariables.UILobby.SiteIndexOpen = 0;
+			UILobby.Singleton.SiteIndexOpen = 0;
 		});
 
 		//nextBtn.onClick.AddListener(SelectedItem);

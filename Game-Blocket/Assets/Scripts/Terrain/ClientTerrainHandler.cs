@@ -10,7 +10,7 @@ using UnityEngine;
 /// <summary>Handles the <b>clientside</b> for the Worldhandling</summary>
 public class ClientTerrainHandler : TerrainHandler {
 
-	public static ClientTerrainHandler Singleton { get; private set; }
+	public static new ClientTerrainHandler Singleton { get; private set; }
 
 	/// <summary>Static due to <see cref="TerrainGeneration"/></summary>
 	public static Queue<TerrainChunk> ChunkTileInitializationQueue { get; } = new Queue<TerrainChunk>();
@@ -77,7 +77,7 @@ public class ClientTerrainHandler : TerrainHandler {
 		Debug.Log("Send Request");
 		RequestedChunks.Add(chunkCord);
 		if(NetworkManager.Singleton.IsHost){
-			GlobalVariables.ServerTerrainHandler.HandleChunkRequest(NetworkManager.Singleton.LocalClientId, chunkCord);
+			ServerTerrainHandler.Singleton.HandleChunkRequest(NetworkManager.Singleton.LocalClientId, chunkCord);
 			return;
         }
 		

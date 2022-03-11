@@ -38,7 +38,7 @@ public static class ConsoleHandler{
 
         if (VisibleChatGO != null)
             UnityEngine.Object.Destroy(VisibleChatGO);
-        GameObject textGO = UnityEngine.Object.Instantiate(GlobalVariables.PrefabAssets.consoleText, GlobalVariables.UIInventory.chatParent.parent.position, Quaternion.identity ,GlobalVariables.UIInventory.chatParent.parent);
+        GameObject textGO = UnityEngine.Object.Instantiate(PrefabAssets.Singleton.consoleText, UIInventory.Singleton.chatParent.parent.position, Quaternion.identity ,UIInventory.Singleton.chatParent.parent);
         Text text = textGO.TryGetComponent(out Text t) ? t : throw new NullReferenceException();
         text.text = GetPlayerPrefix() + str;
         VisibleChatGO = textGO;
@@ -119,11 +119,11 @@ public static class ConsoleHandler{
                 if(id ==0){ PrintToChat($"Item {x.Split(' ')[1]} does not exist!"); return; }
                 ushort count = ushort.TryParse(x.Split(' ')[2], out ushort countres) ? countres : (ushort)0 ;
                 if(count ==0){ PrintToChat($"Item {id} could not be added with the Count - {count} !"); return; }
-                Item i =GlobalVariables.ItemAssets.GetItemFromItemID(id) ?? null;
+                Item i = ItemAssets.Singleton.GetItemFromItemID(id) ?? null;
                 if(i==null)
                     PrintToChat($"Item {x.Split(' ')[1]} does not exist!");
                 else
-                    GlobalVariables.Inventory.AddItem(i,count,out ushort itemCountNotAdded);
+                    Inventory.Singleton.AddItem(i,count,out ushort itemCountNotAdded);
             }
             },new Command("collision")
             {
@@ -147,6 +147,7 @@ public static class ConsoleHandler{
                 }
             },
             new Command("timeset"){action = (x) => {
+                ClockHandler clock = ClockHandler.Singleton;
                 string str;
                 if(x.Split(' ').Length > 1)
                 {
@@ -159,20 +160,20 @@ public static class ConsoleHandler{
                 }
                 if (str.Equals("day"))
                 {
-                    if(GlobalVariables.clock.hours >= GlobalVariables.dayNightCycle.dawnTo)
-                        GlobalVariables.clock.days++;
-                    GlobalVariables.clock.seconds = 0;
-                    GlobalVariables.clock.minutes = 0;
-                    GlobalVariables.clock.hours = GlobalVariables.dayNightCycle.dawnTo; 
+                    if(clock.hours >= DayNightCycle.Singleton.dawnTo)
+                        clock.days++;
+                    clock.seconds = 0;
+                    clock.minutes = 0;
+                    clock.hours = DayNightCycle.Singleton.dawnTo; 
                 }
                 else
                 if (str.Equals("night"))
                 {
-                    if(GlobalVariables.clock.hours >= GlobalVariables.dayNightCycle.duskTo)
-                        GlobalVariables.clock.days++;
-                    GlobalVariables.clock.seconds = 0;
-                    GlobalVariables.clock.minutes = 0;
-                    GlobalVariables.clock.hours = GlobalVariables.dayNightCycle.duskTo;
+                    if(clock.hours >= DayNightCycle.Singleton.duskTo)
+                        clock.days++;
+                    clock.seconds = 0;
+                    clock.minutes = 0;
+                    clock.hours = DayNightCycle.Singleton.duskTo;
                 }
                 else
                 {

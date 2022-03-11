@@ -26,7 +26,7 @@ public class ListContentUI : MonoBehaviour
 				selectedBtnNameCharacter = contentName.text;
 			else
 				selectedBtnNameWorld = contentName.text;
-			GlobalVariables.UIProfileSite.SelectedItem();
+			UIProfileSite.Singleton.SelectedItem();
 		});
 
 		deleteBtn.onClick.AddListener(() => {

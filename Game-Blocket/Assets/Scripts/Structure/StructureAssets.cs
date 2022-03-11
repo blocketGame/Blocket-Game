@@ -2,7 +2,7 @@
 using UnityEngine;
 
 public class StructureAssets : MonoBehaviour{
-	public static PlayerVariables Singleton { get; private set; }
+	public static StructureAssets Singleton { get; private set; }
 
 	public List<Structure> Structures = new List<Structure>();
 

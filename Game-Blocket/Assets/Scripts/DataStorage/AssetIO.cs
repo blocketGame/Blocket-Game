@@ -22,7 +22,7 @@ public class AssetIO : MonoBehaviour {
 	public void CheckAssets() {
 		if (!gameObject.TryGetComponent(out ItemAssets ia))
 			Debug.LogError("A");
-		foreach(Structure so in GlobalVariables.StructureAssets.Structures)
+		foreach(Structure so in StructureAssets.Singleton.Structures)
 			Debug.Log( EditorJsonUtility.ToJson(so));
 	}
 }

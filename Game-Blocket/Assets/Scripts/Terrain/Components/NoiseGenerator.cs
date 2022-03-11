@@ -37,7 +37,7 @@ public class NoiseGenerator : MonoBehaviour
 			scale = 0.0001f;
 		}
 
-		float halfWidth = GlobalVariables.WorldData.ChunkWidth / 2f;
+		float halfWidth = WorldAssets.ChunkLength / 2f;
 
 
 		for (int x = 0; x < mapWith; x++)
@@ -83,8 +83,8 @@ public class NoiseGenerator : MonoBehaviour
 			scale = 0.0001f;
 		}
 
-		float halfWidth = GlobalVariables.WorldData.ChunkWidth / 2f;
-		float halfHeight = GlobalVariables.WorldData.ChunkHeight / 2f;
+		float halfWidth = WorldAssets.ChunkLength / 2f;
+		float halfHeight = WorldAssets.ChunkLength / 2f;
 
 		for (int y = 0; y < mapHeight; y++)
 		{

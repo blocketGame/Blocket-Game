@@ -28,7 +28,7 @@ public class PlayerInteraction : MonoBehaviour {
 	Vector2Int BlockHoverdAbsolute => new Vector2Int(Mathf.RoundToInt(MousePosInWorld.x + mouseOfsetX), Mathf.RoundToInt(MousePosInWorld.y + mouseOfsetY));
 
 	/// <summary>Returns the chunk from the hovered block (global)</summary>
-	public TerrainChunk ThisChunk => GlobalVariables.ClientTerrainHandler.GetChunkFromCoordinate(BlockHoverdAbsolute.x, BlockHoverdAbsolute.y);
+	public TerrainChunk ThisChunk => ClientTerrainHandler.Singleton.GetChunkFromCoordinate(BlockHoverdAbsolute.x, BlockHoverdAbsolute.y);
 
 	/// <summary>Returns the block position in the chunk cord (local)</summary>
 	public Vector2Int BlockInchunkCoord {
@@ -58,9 +58,9 @@ public class PlayerInteraction : MonoBehaviour {
     public void Awake() => Singleton = this;
 
 	public void Update() {
-		if (GameManager.State != GameState.INGAME || (GlobalVariables.UIInventory?.InventoryOpened ?? false))
+		if (GameManager.State != GameState.INGAME || (UIInventory.Singleton?.InventoryOpened ?? false))
         {
-			Cursor.SetCursor(GlobalVariables.ItemAssets.InventoryCursor.texture,hotSpot, cursorMode);
+			Cursor.SetCursor(ItemAssets.Singleton.InventoryCursor.texture,hotSpot, cursorMode);
 			return;
 		}
 		HandleBlockInteraction();
@@ -70,23 +70,23 @@ public class PlayerInteraction : MonoBehaviour {
 
 		if (Input.GetKeyDown(GameManager.SettingsProfile.CraftingInterface))
 		{
-			CraftingStation.HandleCraftingInterface(BlockHoverdAbsolute, GlobalVariables.ItemAssets.CraftingStations.Find(x => x.blockId.Equals(255)));
+			CraftingStation.HandleCraftingInterface(BlockHoverdAbsolute, ItemAssets.Singleton.CraftingStations.Find(x => x.blockId.Equals(255)));
 		}
 
-		if (Input.GetKeyDown(side) && GlobalVariables.ItemAssets.CraftingStations.Find(x => x.blockId.Equals(TargetBlockID(true))) != null)
+		if (Input.GetKeyDown(side) && ItemAssets.Singleton.CraftingStations.Find(x => x.blockId.Equals(TargetBlockID(true))) != null)
 		{
 			//Open Menu
 			//Crafting System
-			CraftingStation.HandleCraftingInterface(new Vector2Int((int)GlobalVariables.LocalPlayerPos.x, (int)GlobalVariables.LocalPlayerPos.y), GlobalVariables.ItemAssets.CraftingStations.Find(x => x.blockId.Equals(TargetBlockID(true))));
+			CraftingStation.HandleCraftingInterface(new Vector2Int((int)GlobalVariables.LocalPlayerPos.x, (int)GlobalVariables.LocalPlayerPos.y), ItemAssets.Singleton.CraftingStations.Find(x => x.blockId.Equals(TargetBlockID(true))));
 		}
 
-		if (GlobalVariables.Inventory.SelectedItemObj is BlockItem bI) { 
+		if (Inventory.Singleton.SelectedItemObj is BlockItem bI) { 
 			if (Input.GetKey(side))
 				bI.OnSideInteractionKey();
 			if (Input.GetKey(main))
 				bI.OnMainInteractionKey();
 		}
-		if (GlobalVariables.Inventory.SelectedItemObj is ToolItem tI)
+		if (Inventory.Singleton.SelectedItemObj is ToolItem tI)
         {
 			if (Input.GetKey(side))
 				tI.OnSideInteractionKey();
@@ -98,7 +98,7 @@ public class PlayerInteraction : MonoBehaviour {
 	//TODO: Remove
     public void LateUpdate() {
 		if (Input.GetKeyDown(KeyCode.Z))
-			GlobalVariables.Inventory.AddItem(101, 1, out _);
+			Inventory.Singleton.AddItem(101, 1, out _);
 		if (Input.GetKeyDown(KeyCode.K))
 			Debug.Log(ThisChunk.bgBlocks.Length);
 		if (Input.GetKeyDown(KeyCode.L))
@@ -115,15 +115,15 @@ public class PlayerInteraction : MonoBehaviour {
     #region BlockInteraction
 	/// <summary>Block placement <br></br>TODO: If survival: Timeout of blocksplaced</summary>
 	public void BlockPlace(){
-		if (!GlobalVariables.ClientTerrainHandler.CurrentChunkReady)
+		if (!ClientTerrainHandler.Singleton.CurrentChunkReady)
 			return;
 		
 		if (DebugVariables.BlockInteractionInfo)
 			Debug.Log($"{BlockHoverdAbsolute}, {BlockInchunkCoord}, {ThisChunk.ChunkPositionInt}");
 		///UNDONE
-		Item selectedItem = GlobalVariables.ItemAssets.GetItemFromItemID(GlobalVariables.Inventory.SelectedItemId);
+		Item selectedItem = ItemAssets.Singleton.GetItemFromItemID(Inventory.Singleton.SelectedItemId);
 		if (selectedItem is BlockItem)
-			ThisChunk.PlaceBlock(new Vector3Int(BlockInchunkCoord.x, BlockInchunkCoord.y, 0), GlobalVariables.Inventory.SelectedItemId);
+			ThisChunk.PlaceBlock(new Vector3Int(BlockInchunkCoord.x, BlockInchunkCoord.y, 0), Inventory.Singleton.SelectedItemId);
 	}
 
 	/// <summary>Handles the Blockinteraction</summary>
@@ -143,14 +143,14 @@ public class PlayerInteraction : MonoBehaviour {
 		///Routine
 		if (BreakCoroutine == null)
 			if(TargetBlockExisting(true)) {
-				byte targetRemoveDuration = GlobalVariables.WorldData.Blocks[TargetBlockID(true)].removeDuration;
+				byte targetRemoveDuration = WorldData.Singleton.Blocks[TargetBlockID(true)].removeDuration;
 				
 				BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int, bool>(targetRemoveDuration, TargetBlockID(true), ThisChunk, BlockInchunkCoord, true));
 				
 				if (DebugVariables.BlockInteractionCR)
 					Debug.Log("Started!");
 			}else if(TargetBlockExisting(false)) {
-				byte targetRemoveDuration = GlobalVariables.WorldData.Blocks[TargetBlockID(false)].removeDuration;
+				byte targetRemoveDuration = WorldData.Singleton.Blocks[TargetBlockID(false)].removeDuration;
 
 				BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int, bool>(targetRemoveDuration, TargetBlockID(false), ThisChunk, BlockInchunkCoord, false));
 
@@ -164,9 +164,9 @@ public class PlayerInteraction : MonoBehaviour {
 	/// <param name="mouseWorldPos">Position of the Mouse</param>
 	private void SetFocusGO(Vector2Int mouseWorldPos, bool activate) {
 		if(activate)
-			Cursor.SetCursor(GlobalVariables.ItemAssets.MiningCursor.texture, hotSpot, cursorMode);
+			Cursor.SetCursor(ItemAssets.Singleton.MiningCursor.texture, hotSpot, cursorMode);
 		else
-			Cursor.SetCursor(GlobalVariables.ItemAssets.AttackingCursor.texture, hotSpot, cursorMode);
+			Cursor.SetCursor(ItemAssets.Singleton.AttackingCursor.texture, hotSpot, cursorMode);
 		deleteSprite.transform.position = new Vector3(mouseWorldPos.x + 0.5f, mouseWorldPos.y + 0.5f, deleteSprite.transform.position.z);
 		deleteSprite.SetActive(activate);
 	}

@@ -11,82 +11,12 @@ public static class GlobalVariables {
 	public static readonly ushort maxItemCountForMultiple = 128;
 	public static string chunkTag = "Chunk";
 
-	public static GameObject activatedCraftingInterface;
-
-    public static GameManager GameManager { get; set; }
-	
-	#region UIScripts
-	public static UILobby UILobby { get; set; }
-	public static UIProfileSite UIProfileSite { get; set; }
-	public static UIInventory UIInventory { get; set; }
-	public static PlayerHealth PlayerHealth { get; set; }
-	public static GameObject LocalUI {
-		get => _localUI; set {
-			_localUI = value;
-			UIInventory = value.GetComponentInChildren<UIInventory>();
-		}
-	}
-	private static GameObject _localUI;
-
+	public static GameObject ActivatedCraftingInterface { get; set; }
+	public static GameObject LocalUI { get; set; }
 	public static GameObject CraftingUIListContent { get; set; }
-	#endregion
-
-	#region World Scripts
-	public static WorldData WorldData { get; set; }
-
-	public static ServerTerrainHandler ServerTerrainHandler{ get; set; }
-	public static TerrainHandler TerrainHandler => ServerTerrainHandler as TerrainHandler ?? ClientTerrainHandler as TerrainHandler ?? null;
-
-	public static ClientTerrainHandler ClientTerrainHandler{ get; set; }
-
-	
-
-	public static GameObject World { get => _world; set { 
-			_world = value;
-		} 
-	}
-	private static GameObject _world;
-    #endregion
-
-    #region Time Scripts
-	public static Clock clock { get; internal set; }
-	public static DayNightCycle dayNightCycle;
-	#endregion
-
-	#region Assets
-	public static PrefabAssets PrefabAssets { get; set; }
-	public static ItemAssets ItemAssets { get; set; }
-	public static WorldAssets WorldAssets { get; set; }
-	public static MobAssets MobAssets { get; set; }
-	public static StructureAssets StructureAssets { get; set; }
-	#endregion
-
-	#region LocalPlayer
-	public static Inventory Inventory { get => _inventory; }
-	private static Inventory _inventory; 
-	public static PlayerVariables PlayerVariables { get => _playerVariables; }
-	private static PlayerVariables _playerVariables;
+	public static GameObject World { get; set; }
 	public static Vector3 LocalPlayerPos { get => LocalPlayer.transform.position; }
-	public static PlayerInteraction Interaction { get; set; }
-	public static Movement Movement { get; set; }
-
-	public static GameObject LocalPlayer
-	{
-		get => _localPlayer; set
-		{
-			_localPlayer = value;
-			_playerVariables = value.GetComponent<PlayerVariables>();
-			_inventory = value.GetComponentInChildren<Inventory>();
-		}
-	}
-
-    private static GameObject _localPlayer;
-
-    #endregion
-
-    #region Mobs
-    public static MobHandler MobHandler { get; internal set; }
-    #endregion
+	public static GameObject LocalPlayer { get; set; }
 
     /// <summary>Does the nothing</summary>
     public static void DoNothing(){

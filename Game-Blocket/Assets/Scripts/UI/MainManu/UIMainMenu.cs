@@ -11,7 +11,7 @@ using UnityEngine.UI;
 /// 
 /// </summary>
 public class UIMainMenu : MonoBehaviour{
-	public static UIInventory Singleton { get; private set; }
+	public static UIMainMenu Singleton { get; private set; }
 
 	/// <summary>
 	/// <see cref="Button"/>-Instances from the Scene imported by the Inspector

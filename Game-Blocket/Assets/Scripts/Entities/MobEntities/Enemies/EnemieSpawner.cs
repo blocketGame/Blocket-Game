@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+
 using UnityEngine;
- public class EnemieSpawner : MonoBehaviour
+public class EnemieSpawner : MonoBehaviour
  {
     List<GameObject> enemiesonScreen = new List<GameObject>();
 
@@ -20,7 +17,7 @@ using UnityEngine;
 
     private void Spawn()
     {
-        GameObject Enemy = GlobalVariables.ItemAssets.Enemies[0].EnemiePrefab;
+        GameObject Enemy = ItemAssets.Singleton.Enemies[0].EnemiePrefab;
         Enemy.AddComponent<Rigidbody2D>();
         enemiesonScreen.Add(Enemy);
         Enemy.transform.position = GlobalVariables.LocalPlayerPos;

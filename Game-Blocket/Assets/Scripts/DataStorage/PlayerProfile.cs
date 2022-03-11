@@ -45,7 +45,7 @@ public class PlayerProfile : Profile {
 	/// </summary>
 	/// <returns></returns>
 	public static void SaveComponentsInPlayerProfile(PlayerProfile pfN) {
-		Inventory inv = GlobalVariables.Inventory;
+		Inventory inv = Inventory.Singleton;
 		if (pfN == null)
 			throw new NullReferenceException("Playerprofile is null!");
 		if (inv != null) {
@@ -59,13 +59,13 @@ public class PlayerProfile : Profile {
 			for (int i = 0; i < inv.AccessoiresSlots.Count; i++)
 				pfN.accessoiresItems.Add(new SaveAbleItem(inv.AccessoiresSlots[i].ItemID, inv.AccessoiresSlots[i]?.ItemCount ?? 0));
 		}
-		if (GlobalVariables.PlayerVariables != null) {
+		if (PlayerVariables.Singleton != null) {
 			//PlayerVariables
-			pfN.health = GlobalVariables.PlayerVariables.Health;
-			pfN.armor = GlobalVariables.PlayerVariables.Armor;
-			pfN.healthGained = GlobalVariables.PlayerVariables.healthGained;
-			pfN.healthLost = GlobalVariables.PlayerVariables.healthLost;
-			pfN.maxHealth = GlobalVariables.PlayerVariables.MaxHealth;
+			pfN.health = PlayerVariables.Singleton.Health;
+			pfN.armor = PlayerVariables.Singleton.Armor;
+			pfN.healthGained = PlayerVariables.Singleton.healthGained;
+			pfN.healthLost = PlayerVariables.Singleton.healthLost;
+			pfN.maxHealth = PlayerVariables.Singleton.MaxHealth;
 		} else
 			throw new NullReferenceException();
 	}
@@ -79,7 +79,7 @@ public class PlayerProfile : Profile {
 			GameManager.PlayerProfileNow = profile;
 		if (GameManager.PlayerProfileNow == null)
 			throw new NullReferenceException("PlayerProfile is null!");
-		Inventory inventory = GlobalVariables.Inventory;
+		Inventory inventory = Inventory.Singleton;
 		if (inventory != null) {
 			//Inventory
 			for (int i = 0; i < inventory.InvSlots.Count; i++) {

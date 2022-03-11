@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour {
 
 				break;
 			case GameState.LOADING:
-				GlobalVariables.UIInventory?.loadingScreen?.SetActive(true);
+				UIInventory.Singleton?.loadingScreen?.SetActive(true);
 				break;
 			case GameState.INGAME:
 				///TODO: Clean
@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour {
 				rig.simulated = true;
 				rig.gravityScale = 1;
 
-				GlobalVariables.UIInventory.loadingScreen.SetActive(false);
+				UIInventory.Singleton.loadingScreen.SetActive(false);
 			break;
 			case GameState.PAUSED: break;
 			case GameState.NEVER: throw new ArgumentException();
@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour {
 				GlobalVariables.World ??= GameObject.FindGameObjectWithTag("World");
 
 			if(GlobalVariables.World != null)
-				GlobalVariables.ClientTerrainHandler ??= GlobalVariables.World.AddComponent<ClientTerrainHandler>();
+				GlobalVariables.World.AddComponent<ClientTerrainHandler>();
 
 			if (GlobalVariables.LocalPlayer == null)
 				FindAndSetPlayer();
@@ -106,12 +106,12 @@ public class GameManager : MonoBehaviour {
 	public void OnApplicationQuit(){
 		if (State != GameState.INGAME && State != GameState.PAUSED)
 			return;
-		if (GlobalVariables.ClientTerrainHandler != null)
+		if (ClientTerrainHandler.Singleton != null)
 		{
 			PlayerProfile.SavePlayerProfile();
 			ProfileHandler.ExportProfile(PlayerProfileNow, true);
 		}
-		if (GlobalVariables.ServerTerrainHandler != null)
+		if (ServerTerrainHandler.Singleton != null)
 		{
 			WorldProfile.SaveComponentsInWorldProfile();
 			WorldProfile.SaveWorld(WorldProfileNow);
@@ -124,8 +124,8 @@ public class GameManager : MonoBehaviour {
 
     //Client
     public void InitLocal(){
-		GlobalVariables.UIInventory.Init();
-		GlobalVariables.PlayerVariables.Init();
+		UIInventory.Singleton.Init();
+		PlayerVariables.Singleton.Init();
 	}
 
 	//Client
@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour {
 				GlobalVariables.LocalPlayer = iGo;
 				iGo.name += "(this)";
 				
-				GlobalVariables.LocalUI = Instantiate(GlobalVariables.PrefabAssets.prefabUI);
+				GlobalVariables.LocalUI = Instantiate(PrefabAssets.Singleton.prefabUI);
 				InitLocal();
 			} else {
 				//If not Local player
@@ -163,10 +163,10 @@ public class GameManager : MonoBehaviour {
 		if (NetworkManager.Singleton.IsServer){
 			SpawnPlayers();
 			//For Server
-			GlobalVariables.World = Instantiate(GlobalVariables.PrefabAssets.world);
+			GlobalVariables.World = Instantiate(PrefabAssets.Singleton.world);
 			//For Clients
 			GlobalVariables.World.GetComponent<NetworkObject>().Spawn();
-			GlobalVariables.ServerTerrainHandler = GlobalVariables.World.AddComponent<ServerTerrainHandler>();
+			GlobalVariables.World.AddComponent<ServerTerrainHandler>();
 		}
 	}
 
@@ -180,7 +180,7 @@ public class GameManager : MonoBehaviour {
 	private void SpawnPlayer(ulong clientNow) {
 		if(!NetworkManager.Singleton.IsServer)
 			return;
-		GameObject go = Instantiate(GlobalVariables.PrefabAssets.playerNetPrefab, new Vector3Int(new System.Random().Next(-20, 20), 25, 0), Quaternion.identity);//TODO: Serverrole
+		GameObject go = Instantiate(PrefabAssets.Singleton.playerNetPrefab, new Vector3Int(new System.Random().Next(-20, 20), 25, 0), Quaternion.identity);//TODO: Serverrole
 		go.name = $"Player: {clientNow}";
 		NetworkObject playerNO = go.GetComponent<NetworkObject>();
 		playerNO.SpawnAsPlayerObject(clientNow);
