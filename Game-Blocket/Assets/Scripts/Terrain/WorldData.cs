@@ -11,6 +11,8 @@ using UnityEngine;
 public class WorldData : MonoBehaviour {
 	public static WorldData Singleton { get; protected set; }
 	public GameObject ChunkParent => Grid.gameObject;
+
+	public GameObject mobParent;
 	public Grid Grid { get; private set; }
 
 	#region Fields

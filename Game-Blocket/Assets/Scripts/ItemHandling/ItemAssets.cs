@@ -13,6 +13,8 @@ public class ItemAssets : MonoBehaviour{
 	public List<EquipableItem> EquipableItemsInGame = new List<EquipableItem>();
 	public List<UseAbleItem> UseableItemsInGame = new List<UseAbleItem>();
 	public List<CommonItem> CommonItems = new List<CommonItem>();
+
+	//TODO: Move somewhere else
 	public List<CraftingRecipe> Recipes = new List<CraftingRecipe>();
 	public List<CraftingStation> CraftingStations = new List<CraftingStation>();
 	public List<EnemySO> Enemies = new List<EnemySO>();
@@ -20,6 +22,8 @@ public class ItemAssets : MonoBehaviour{
 	public Sprite InventoryCursor;
 	public Sprite MiningCursor;
 	public Sprite AttackingCursor;
+
+	public Sprite nullSprite;
 
 	private void Awake() => Singleton = this;
 
@@ -29,7 +33,7 @@ public class ItemAssets : MonoBehaviour{
 	/// </summary>
 	/// <param name="itemId"></param>	
 	/// <returns></returns>
-	public Sprite GetSpriteFromItemID(uint itemId) => GetItemFromItemID(itemId)?.itemImage;
+	public Sprite GetSpriteFromItemID(uint itemId) => GetItemFromItemID(itemId)?.itemImage ?? nullSprite;
 	
 
 	public Item GetItemFromItemID(uint itemId) {

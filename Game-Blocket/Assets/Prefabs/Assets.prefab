@@ -1696,6 +1696,7 @@ MonoBehaviour:
   InventoryCursor: {fileID: 21300000, guid: 983843a460c359244887c9a663229125, type: 3}
   MiningCursor: {fileID: 21300000, guid: 42919adbd3d899d4aae5841d0e00a632, type: 3}
   AttackingCursor: {fileID: 21300000, guid: f02ed4b66ab720f46b851139dfc87cbf, type: 3}
+  nullSprite: {fileID: 21300000, guid: 025ef1ca1a408a043b9ad5f1a3ccf1e2, type: 3}
 --- !u!114 &2183338013668072568
 MonoBehaviour:
   m_ObjectHideFlags: 0

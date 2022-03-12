@@ -72,7 +72,6 @@ public sealed class TerrainChunk : ChunkData{
 		///Drop GO
 		dropParent = new GameObject(ChunkName(chunkPosition, 3));
 		dropParent.transform.SetParent(TileMap.transform);
-		InsertDrops();
 	}
 
 	public void BuildCollisions() {
@@ -200,6 +199,16 @@ public sealed class TerrainChunk : ChunkData{
 			TileMap.SetTile(coordinate, WorldAssets.Singleton.blocks[blockId].tile);
 		}
 
+		///Neighb... Collision
+		//Left
+		if(coordinate.x == 0)
+			TerrainHandler.Chunks[new Vector2Int(ChunkPositionInt.x - 1, ChunkPositionInt.y)]?.BuildCollisions();
+		if(coordinate.x == 31)
+			TerrainHandler.Chunks[new Vector2Int(ChunkPositionInt.x + 1, ChunkPositionInt.y)]?.BuildCollisions();
+		if(coordinate.y == 0)
+			TerrainHandler.Chunks[new Vector2Int(ChunkPositionInt.x, ChunkPositionInt.y + 1)]?.BuildCollisions();
+		if(coordinate.y == 32)
+			TerrainHandler.Chunks[new Vector2Int(ChunkPositionInt.x, ChunkPositionInt.y - 1)]?.BuildCollisions();
 		BuildCollisions();
 	}
 
@@ -254,78 +263,20 @@ public sealed class TerrainChunk : ChunkData{
 			coorBevore.y + (ChunkPositionInt.y * WorldAssets.ChunkLength),
 			coorBevore.z);
 
-		///Drop Instance
-		Drop drop = new Drop {
-			ItemId = itemID,
-			Name = "?",
-			Count = count
-		};
+		GameObject dropGO = new GameObject($"Drop ItemID: {itemID}");
+		dropGO.transform.SetParent(dropParent.transform);
 
-		///Drop GO
-		drop.GameObject = new GameObject($"Drop {drop.ItemId}");
-		drop.GameObject.transform.SetParent(dropParent.transform);
-		drop.GameObject.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
-		Vector3 posDrop = new Vector3(coordinate.x + 0.5f, coordinate.y + 0.5f, 0);
-		drop.GameObject.transform.SetPositionAndRotation(posDrop, new Quaternion());
-		drop.GameObject.layer = LayerMask.NameToLayer("Drops");
+		dropGO.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+		dropGO.transform.position = new Vector3(coordinate.x + 0.5f, coordinate.y + 0.5f, 0);
+		dropGO.layer = LayerMask.NameToLayer("Drops");
 
-		///Drop-GO Components
-		Rigidbody2D dropRB = drop.GameObject.AddComponent<Rigidbody2D>();
-		dropRB.simulated = false;
-		dropRB.gravityScale = 20;
-		dropRB.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
-
-		BoxCollider2D dropCollider = drop.GameObject.AddComponent<BoxCollider2D>();
-
-		
-
+		Drop drop = dropGO.AddComponent<Drop>();
+		drop.ItemId = itemID;
+		drop.Count = count;
 		lock (Drops)
 			Drops.Add(drop);
-		InsertDrops();
-		dropRB.simulated = true;
 	}
 
-	/// <summary>Triggers if a drop has been picked up</summary>
-	/// <param name="drop">Drop object</param>
-	public void PickedUpDrop(Drop drop) {
-		Inventory.Singleton.AddItem(ItemAssets.Singleton.GetItemFromItemID(drop.ItemId), drop.Count, out ushort iCNA);
-		drop.Count = iCNA;
-		//TODO: Move lines after somewhere more modular
-		if (drop.Count == 0) {
-			Drops.Remove(drop);
-			UnityEngine.Object.Destroy(drop.GameObject);
-		}
-	}
-
-	/// <summary>
-	/// Creates the Gameobject out of the Drops list
-	/// </summary>
-	public void InsertDrops() {
-		for (int x = 0; x < Drops?.Count; x++) {
-			for (int y = 0; y < Drops?.Count; y++) {
-				if (Drops.Count > 1 && x != y)
-					CheckDropCollision(x, y);
-				//Drops[x].DropObject.transform.SetParent(DropObject.transform);
-			}
-		}
-	}
-
-	/// <summary>
-	/// Saves FPS while removing unessesary gameobjects
-	/// </summary>
-	public void CheckDropCollision(int x, int y) {
-		//float dropgrouprange = GlobalVariables.WorldData.Groupdistance;
-		//if (GlobalVariables.WorldData.Grid.WorldToCell(Drops[x].GameObject.transform.position).x + dropgrouprange > GlobalVariables.WorldData.Grid.WorldToCell(Drops[y].GameObject.transform.position).x &&
-		//	GlobalVariables.WorldData.Grid.WorldToCell(Drops[x].GameObject.transform.position).x - dropgrouprange < GlobalVariables.WorldData.Grid.WorldToCell(Drops[y].GameObject.transform.position).x &&
-		//	GlobalVariables.WorldData.Grid.WorldToCell(Drops[x].GameObject.transform.position).y + dropgrouprange > GlobalVariables.WorldData.Grid.WorldToCell(Drops[y].GameObject.transform.position).y &&
-		//	GlobalVariables.WorldData.Grid.WorldToCell(Drops[x].GameObject.transform.position).y - dropgrouprange < GlobalVariables.WorldData.Grid.WorldToCell(Drops[y].GameObject.transform.position).y &&
-		//	Drops[x].GameObject.GetComponent<SpriteRenderer>().sprite.Equals(Drops[y].GameObject.GetComponent<SpriteRenderer>().sprite))
-		//{
-		//	Drops[x].Count++;
-		//	RemoveDropfromView(Drops[y]);
-		//	dropParent.SetActive(true);
-		//}
-	}
 	#endregion
 
 	/// <summary> Chunks are euqal if they have the same <see cref="ChunkPosition"/> Vector</summary>
@@ -345,7 +296,14 @@ public class ChunkData {
 	public Vector2 chunkPosition;
 	public Dictionary<byte, List<Vector2Int>> structureCoordinates = new Dictionary<byte, List<Vector2Int>>();
 
-	public Vector2Int ChunkPositionInt => TerrainHandler.CastVector2ToInt(chunkPosition);
+	public Vector2Int ChunkPositionInt {
+		get{
+			if(chunkPositionInt == null)
+				chunkPositionInt = TerrainHandler.CastVector2ToInt(chunkPosition);
+			return chunkPositionInt ?? throw new NullReferenceException();
+		} 
+	}
+	private Vector2Int? chunkPositionInt;
 	public Vector3 ChunkPostionWorldSpace => new Vector3(chunkPosition.x, chunkPosition.y);
 
 	public ChunkData(byte[,] blocks, byte[,] bgBlocks, Drop[] drops, Vector2Int chunkPosition) {

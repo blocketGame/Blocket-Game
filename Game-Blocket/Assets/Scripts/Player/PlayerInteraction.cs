@@ -12,14 +12,14 @@ public class PlayerInteraction : MonoBehaviour {
 	public GameObject deleteSprite;
 	public Sprite crackTile;
 
-    private CursorMode cursorMode = CursorMode.Auto;
+	private CursorMode cursorMode = CursorMode.Auto;
 	private Vector2 hotSpot = Vector2.zero;
 
-    public Coroutine BreakCoroutine { get; set; }
+	public Coroutine BreakCoroutine { get; set; }
 
-    #region Util
-    /// <summary>Used for the Mouse Offset<br></br>Due to not perfect input</summary>
-    public readonly float mouseOfsetX = -0.5f, mouseOfsetY = -0.5f;
+	#region Util
+	/// <summary>Used for the Mouse Offset<br></br>Due to not perfect input</summary>
+	public readonly float mouseOfsetX = -0.5f, mouseOfsetY = -0.5f;
 
 	/// <summary>Mouse position in world</summary>
 	Vector3 MousePosInWorld => Camera.main.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
@@ -50,16 +50,16 @@ public class PlayerInteraction : MonoBehaviour {
 	/// <summary>If foreground == null check if one of both tilemaps has a block</summary>
 	public bool TargetBlockExisting(bool? foreground = null){
 		bool foregroundId = TargetBlockID(true) != 0, backgroundId = TargetBlockID(false) != 0;
-        return foreground == null ? foregroundId || backgroundId : foreground ?? false ? foregroundId : backgroundId;
-    }
-    #endregion
+		return foreground == null ? foregroundId || backgroundId : foreground ?? false ? foregroundId : backgroundId;
+	}
+	#endregion
 
-    #region UnityMethods
-    public void Awake() => Singleton = this;
+	#region UnityMethods
+	public void Awake() => Singleton = this;
 
 	public void Update() {
 		if (GameManager.State != GameState.INGAME || (UIInventory.Singleton?.InventoryOpened ?? false))
-        {
+		{
 			Cursor.SetCursor(ItemAssets.Singleton.InventoryCursor.texture,hotSpot, cursorMode);
 			return;
 		}
@@ -87,7 +87,7 @@ public class PlayerInteraction : MonoBehaviour {
 				bI.OnMainInteractionKey();
 		}
 		if (Inventory.Singleton.SelectedItemObj is ToolItem tI)
-        {
+		{
 			if (Input.GetKey(side))
 				tI.OnSideInteractionKey();
 			if (Input.GetKey(side))
@@ -96,7 +96,7 @@ public class PlayerInteraction : MonoBehaviour {
 	}
 
 	//TODO: Remove
-    public void LateUpdate() {
+	public void LateUpdate() {
 		if (Input.GetKeyDown(KeyCode.Z))
 			Inventory.Singleton.AddItem(101, 1, out _);
 		if (Input.GetKeyDown(KeyCode.K))
@@ -106,13 +106,13 @@ public class PlayerInteraction : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.U))
 			ThisChunk.PlaceAllTiles();
 	}
-    #endregion
+	#endregion
 
-    #region ToolInteraction
+	#region ToolInteraction
 
-    #endregion
+	#endregion
 
-    #region BlockInteraction
+	#region BlockInteraction
 	/// <summary>Block placement <br></br>TODO: If survival: Timeout of blocksplaced</summary>
 	public void BlockPlace(){
 		if (!ClientTerrainHandler.Singleton.CurrentChunkReady)
@@ -127,7 +127,7 @@ public class PlayerInteraction : MonoBehaviour {
 	}
 
 	/// <summary>Handles the Blockinteraction</summary>
-    public void HandleBlockInteraction(){
+	public void HandleBlockInteraction(){
 		SetFocusGO(BlockHoverdAbsolute, TargetBlockExisting());
 		
 		if (BreakCoroutine != null && !Input.GetKey(GameManager.SettingsProfile.MainInteractionKey)){
@@ -141,23 +141,22 @@ public class PlayerInteraction : MonoBehaviour {
 			Debug.Log(ThisChunk.blocks[BlockInchunkCoord.x, BlockInchunkCoord.y]);
 
 		///Routine
-		if (BreakCoroutine == null)
-			if(TargetBlockExisting(true)) {
-				byte targetRemoveDuration = WorldData.Singleton.Blocks[TargetBlockID(true)].removeDuration;
-				
-				BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int, bool>(targetRemoveDuration, TargetBlockID(true), ThisChunk, BlockInchunkCoord, true));
-				
-				if (DebugVariables.BlockInteractionCR)
-					Debug.Log("Started!");
-			}else if(TargetBlockExisting(false)) {
-				byte targetRemoveDuration = WorldData.Singleton.Blocks[TargetBlockID(false)].removeDuration;
+		if (BreakCoroutine == null && Input.GetKey(GameManager.SettingsProfile.MainInteractionKey)){
+			bool? foreground = null;
+			if(TargetBlockExisting(true)) 
+				foreground = true;
+			else if(TargetBlockExisting(false))
+				foreground = false;
+			
+			if(foreground != null){
+				byte targetRemoveDuration = WorldAssets.Singleton.blocks[TargetBlockID(false)].removeDuration;
 
-				BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int, bool>(targetRemoveDuration, TargetBlockID(false), ThisChunk, BlockInchunkCoord, false));
+				BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int, bool>(targetRemoveDuration, TargetBlockID(false), ThisChunk, BlockInchunkCoord, foreground ?? throw new NullReferenceException()));
 
 				if(DebugVariables.BlockInteractionCR)
 					Debug.Log("Started!");
 			}
-		
+		}
 	}
 
 	/// <summary>Set the Position of the FocusGO</summary>
@@ -189,5 +188,5 @@ public class PlayerInteraction : MonoBehaviour {
 			Debug.Log($"Block breaked: {blockID}");
 		thisChunk.DeleteBlock(new Vector3Int(blockInChunk.x, blockInChunk.y, 0), foreGround);
 	}
-	#endregion
+    #endregion
 }

@@ -45,6 +45,9 @@ public class ItemFollowing : MonoBehaviour{
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        //I think this is not used for drops ~Fabian
+        if(collision.collider.gameObject.layer == LayerMask.GetMask("Drop"))
+            return;
         Debug.Log("Collision");
         collision.gameObject.GetComponent<Rigidbody2D>().AddForce(collision.relativeVelocity*5);
     }
