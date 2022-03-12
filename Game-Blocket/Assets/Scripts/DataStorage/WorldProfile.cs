@@ -138,7 +138,7 @@ public class WorldProfile : Profile {
 		//Drops
 		string tempDrops = string.Empty;
 		foreach (Drop d in cd.drops)
-			tempDrops += $"{d.ItemId},{d.Count},{d.Position};";
+			tempDrops += d;
 		//Remove last ;
 		data.Remove(data.Length - 1);
 		data += tempDrops;

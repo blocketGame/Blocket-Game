@@ -15,7 +15,7 @@ public class PickRandomItem : MonoBehaviour
 
     public Sprite PickARandomNumber()
     {
-            Sprite? image = null;
+            Sprite image = null;
             switch (Random.Range(0, 2))
             {
                 case 0:

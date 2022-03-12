@@ -1,5 +1,6 @@
+using System;
+
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// Used for Global (Unique) Variables/Settings
@@ -10,6 +11,9 @@ public static class GlobalVariables {
 
 	public static readonly ushort maxItemCountForMultiple = 128;
 	public static string chunkTag = "Chunk";
+
+	[Obsolete]
+	public static WorldData WorldData => WorldData.Singleton;
 
 	public static GameObject ActivatedCraftingInterface { get; set; }
 	public static GameObject LocalUI { get; set; }

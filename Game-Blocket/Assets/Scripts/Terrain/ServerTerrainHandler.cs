@@ -40,19 +40,7 @@ public class ServerTerrainHandler : TerrainHandler {
 	}
 
 	#region Server Side
-	/// <summary>
-	/// TODO: Make Network trhingy
-	/// </summary>
-	protected void CheckDrops() {
-		TerrainChunk tc = GetChunkFromCoordinate(GlobalVariables.LocalPlayerPos.x, GlobalVariables.LocalPlayerPos.y) ?? throw new NullReferenceException($"Chunk not found!");
-
-		foreach(Drop drop in tc.Drops) {
-			if(Vector3.Distance(drop.GameObject.transform.position, GlobalVariables.LocalPlayerPos) < _pickUpDist) {
-				tc.PickedUpDrop(drop);
-				break;
-			}
-		}
-	}
+	
 
 	/// <summary>
 	/// First Method for the chunk-request-arrival
@@ -170,8 +158,6 @@ public class ServerTerrainHandler : TerrainHandler {
 		}
 		if(GameManager.State != GameState.INGAME)
 			return;
-		if(1 == 2)//Temp
-			CheckDrops();
 	}
 	#endregion
 

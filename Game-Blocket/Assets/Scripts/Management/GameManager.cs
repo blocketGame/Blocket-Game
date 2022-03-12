@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour {
 			if(GlobalVariables.World == null)
 				GlobalVariables.World ??= GameObject.FindGameObjectWithTag("World");
 
-			if(GlobalVariables.World != null)
+			if(GlobalVariables.World != null && ClientTerrainHandler.Singleton == null)
 				GlobalVariables.World.AddComponent<ClientTerrainHandler>();
 
 			if (GlobalVariables.LocalPlayer == null)
