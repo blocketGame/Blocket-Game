@@ -2,29 +2,44 @@ using System;
 
 using UnityEngine;
 
+using Random = System.Random;
+
 /// <summary>
 /// TODO Move to <see cref="Item"/>
 /// </summary>
 public class Drop : MonoBehaviour{
 
+	public readonly Vector2 dropSize = new Vector2(1f, 1f);
+	public readonly byte dropForceMultiplikator = 1;
+	private static readonly char seperator = '|';
+
 	public Rigidbody2D DropRigidbody { get; private set; }
 	public SpriteRenderer SpriteRenderer{ get; private set; }
 	public BoxCollider2D BoxCollider2D { get; private set; }
 	
-	public uint itemId;
-	public ushort count;
-
-	public readonly Vector2 dropSize = new Vector2(1f, 1f);
-
-	public bool PhysicIsActivated  { get => physicIsActivated; set {
-			physicIsActivated = value;
-		}
+	public uint ItemId{ get => itemId; set{
+		itemId = value;
+		if(SpriteRenderer != null)
+			SpriteRenderer.sprite = ItemAssets.Singleton.GetSpriteFromItemID(itemId);
+		} 
 	}
-	private bool physicIsActivated;
+	[SerializeField]
+	private uint itemId;
+
+	public ushort Count{ get => count; set{
+		count = value;
+			if(count == 0)
+				Destroy(gameObject);
+		} 
+	}
+	private ushort count = 1;
+
+	
 
 	private void Awake() {
 		SpriteRenderer = gameObject.AddComponent<SpriteRenderer>();
-		SpriteRenderer.sprite = ItemAssets.Singleton.GetSpriteFromItemID(itemId);
+		if(itemId !=0)
+			SpriteRenderer.sprite = ItemAssets.Singleton.GetSpriteFromItemID(itemId);
 		SpriteRenderer.size = dropSize;
 
 		DropRigidbody = gameObject.AddComponent<Rigidbody2D>();
@@ -35,16 +50,35 @@ public class Drop : MonoBehaviour{
 		BoxCollider2D = gameObject.AddComponent<BoxCollider2D>();
 		BoxCollider2D.size = dropSize;
 	}
-    private void Start() => DropRigidbody.gravityScale = 1;
-
-	private void OnCollisionEnter2D(Collision2D collision) {
-		Debug.Log(collision.gameObject.name);
+	private void Start() {
+		DropRigidbody.AddForce(new Vector2(new Random().Next(-5, 5)/10f, 1) * dropForceMultiplikator, ForceMode2D.Impulse);
+		DropRigidbody.gravityScale = 1; 
 	}
 
-	public static readonly char seperator = '|';
+	private void OnCollisionEnter2D(Collision2D collision) {
+		if(collision.transform.CompareTag("Player"))
+			PickUp(collision.gameObject);
+		if(collision.gameObject.layer == gameObject.layer){
+			if(collision.gameObject.TryGetComponent(out Drop other)) {
+				if(other.itemId == itemId) {
+					Count += other.Count;
+					other.Count = 0;
+				}
+			} else
+				Debug.LogWarning($"Drop Object has no Drop.cs! {collision.gameObject.name}");
+		}
+	}
+
+	public void PickUp(GameObject playerGO){
+		playerGO.gameObject.GetComponentInChildren<Inventory>().AddItem(ItemId, Count, out ushort itemCountNotAdded);
+		if(itemCountNotAdded > Count)
+			throw new Exception();
+		Count = itemCountNotAdded;
+    }
+
     public override string ToString() {
 		Vector3 pos = gameObject.transform.position ;
-		return $"{itemId}{seperator}{count}{seperator}{pos.x},{pos.y}";
+		return $"{itemId}{seperator}{Count}{seperator}{pos.x},{pos.y}";
     }
 
 	public static Tuple<uint, ushort, Vector2> ConvertFromString(string s){

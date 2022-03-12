@@ -199,6 +199,16 @@ public sealed class TerrainChunk : ChunkData{
 			TileMap.SetTile(coordinate, WorldAssets.Singleton.blocks[blockId].tile);
 		}
 
+		///Neighb... Collision
+		//Left
+		if(coordinate.x == 0)
+			TerrainHandler.Chunks[new Vector2Int(ChunkPositionInt.x - 1, ChunkPositionInt.y)]?.BuildCollisions();
+		if(coordinate.x == 31)
+			TerrainHandler.Chunks[new Vector2Int(ChunkPositionInt.x + 1, ChunkPositionInt.y)]?.BuildCollisions();
+		if(coordinate.y == 0)
+			TerrainHandler.Chunks[new Vector2Int(ChunkPositionInt.x, ChunkPositionInt.y + 1)]?.BuildCollisions();
+		if(coordinate.y == 32)
+			TerrainHandler.Chunks[new Vector2Int(ChunkPositionInt.x, ChunkPositionInt.y - 1)]?.BuildCollisions();
 		BuildCollisions();
 	}
 
@@ -261,6 +271,8 @@ public sealed class TerrainChunk : ChunkData{
 		dropGO.layer = LayerMask.NameToLayer("Drops");
 
 		Drop drop = dropGO.AddComponent<Drop>();
+		drop.ItemId = itemID;
+		drop.Count = count;
 		lock (Drops)
 			Drops.Add(drop);
 	}
@@ -284,7 +296,14 @@ public class ChunkData {
 	public Vector2 chunkPosition;
 	public Dictionary<byte, List<Vector2Int>> structureCoordinates = new Dictionary<byte, List<Vector2Int>>();
 
-	public Vector2Int ChunkPositionInt => TerrainHandler.CastVector2ToInt(chunkPosition);
+	public Vector2Int ChunkPositionInt {
+		get{
+			if(chunkPositionInt == null)
+				chunkPositionInt = TerrainHandler.CastVector2ToInt(chunkPosition);
+			return chunkPositionInt ?? throw new NullReferenceException();
+		} 
+	}
+	private Vector2Int? chunkPositionInt;
 	public Vector3 ChunkPostionWorldSpace => new Vector3(chunkPosition.x, chunkPosition.y);
 
 	public ChunkData(byte[,] blocks, byte[,] bgBlocks, Drop[] drops, Vector2Int chunkPosition) {

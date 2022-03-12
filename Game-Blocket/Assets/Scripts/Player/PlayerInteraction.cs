@@ -141,23 +141,22 @@ public class PlayerInteraction : MonoBehaviour {
 			Debug.Log(ThisChunk.blocks[BlockInchunkCoord.x, BlockInchunkCoord.y]);
 
 		///Routine
-		if (BreakCoroutine == null)
-			if(TargetBlockExisting(true)) {
-				byte targetRemoveDuration = WorldData.Singleton.Blocks[TargetBlockID(true)].removeDuration;
-				
-				BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int, bool>(targetRemoveDuration, TargetBlockID(true), ThisChunk, BlockInchunkCoord, true));
-				
-				if (DebugVariables.BlockInteractionCR)
-					Debug.Log("Started!");
-			}else if(TargetBlockExisting(false)) {
-				byte targetRemoveDuration = WorldData.Singleton.Blocks[TargetBlockID(false)].removeDuration;
+		if (BreakCoroutine == null && Input.GetKey(GameManager.SettingsProfile.MainInteractionKey)){
+			bool? foreground = null;
+			if(TargetBlockExisting(true)) 
+				foreground = true;
+			else if(TargetBlockExisting(false))
+				foreground = false;
+			
+			if(foreground != null){
+				byte targetRemoveDuration = WorldAssets.Singleton.blocks[TargetBlockID(false)].removeDuration;
 
-				BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int, bool>(targetRemoveDuration, TargetBlockID(false), ThisChunk, BlockInchunkCoord, false));
+				BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int, bool>(targetRemoveDuration, TargetBlockID(false), ThisChunk, BlockInchunkCoord, foreground ?? throw new NullReferenceException()));
 
 				if(DebugVariables.BlockInteractionCR)
 					Debug.Log("Started!");
 			}
-		
+		}
 	}
 
 	/// <summary>Set the Position of the FocusGO</summary>
