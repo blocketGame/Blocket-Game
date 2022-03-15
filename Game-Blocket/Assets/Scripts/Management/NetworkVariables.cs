@@ -7,15 +7,14 @@ using UnityEngine;
 /// </summary>
 public class NetworkVariables : MonoBehaviour
 {
-
+	public static NetworkVariables Singleton { get; private set; }
 	#region Multiplayer
 	public static string ipAddress = UILobby.GetLocalIPAddress();
 	public static int portAddress = 7777;
 	public static bool muliplayer = false;
 	#endregion
 
-	private void Awake(){
-	}
+	private void Awake() => Singleton = this;
 
     public void FixedUpdate()
 	{

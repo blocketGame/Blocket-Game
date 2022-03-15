@@ -1,9 +1,10 @@
 using System;
 
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
-public class PlayerVariables : MonoBehaviour
-{
+public class PlayerVariables : MonoBehaviour{
+	public static PlayerVariables Singleton { get; private set; }
 
 	public static Gamemode Gamemode { get => gamemode; set {	
 		switch(value){
@@ -18,8 +19,10 @@ public class PlayerVariables : MonoBehaviour
 	} }
 	private static Gamemode gamemode;
 
-	#region Static Resources
-	public GameObject playerModel, playerLogic;
+    private void Awake() => Singleton = this;
+
+    #region Static Resources
+    public GameObject playerModel, playerLogic;
 	public SpriteRenderer holdingItemPlaceholder;
 	#endregion
 
@@ -33,15 +36,19 @@ public class PlayerVariables : MonoBehaviour
 	public uint healthGained, healthLost;
 	#endregion
 
-	#region Properties
+	#region References
+	public Light2D playerLight;
+    #endregion
 
-	public ushort Health { get => _health; 
+    #region Properties
+
+    public ushort Health { get => _health; 
 		set 
 		{ 
 			_health = value;
-			if(GlobalVariables.UIInventory?.heartStat != null)
-				GlobalVariables.UIInventory.heartStat.text = $"{_health}/{_maxHealth}";
-			GlobalVariables.PlayerHealth.CurrentHealth = _health;
+			if(UIInventory.Singleton?.heartStat != null)
+				UIInventory.Singleton.heartStat.text = $"{_health}/{_maxHealth}";
+			PlayerHealth.Singleton.CurrentHealth = _health;
 		} 
 	}
 	public ushort MaxHealth {
@@ -49,28 +56,30 @@ public class PlayerVariables : MonoBehaviour
 		set 
 		{ 
 			_maxHealth = value;
-			if (GlobalVariables.UIInventory?.heartStat != null)
-				GlobalVariables.UIInventory.heartStat.text = $"{_health}/{_maxHealth}";
-			GlobalVariables.PlayerHealth.maxHealth = _maxHealth;
-			GlobalVariables.PlayerHealth.InitiateSprites();
+			if (UIInventory.Singleton?.heartStat != null)
+				UIInventory.Singleton.heartStat.text = $"{_health}/{_maxHealth}";
+			PlayerHealth.Singleton.maxHealth = _maxHealth;
+			PlayerHealth.Singleton.InitiateSprites();
 		}
 	}
 	public ushort MaxArmor {
 		get => _maxArmor;
-		set { _maxArmor = value; GlobalVariables.UIInventory.shieldStat.text = $"{_armor}/{_maxArmor}";}
+		set { _maxArmor = value; UIInventory.Singleton.shieldStat.text = $"{_armor}/{_maxArmor}";}
 	}
 	public ushort Armor {
 		get => _armor;
-		set { _armor = value; GlobalVariables.UIInventory.shieldStat.text = $"{_armor}/{_maxArmor}"; }
+		set { _armor = value; UIInventory.Singleton.shieldStat.text = $"{_armor}/{_maxArmor}"; }
 	}
 	public ushort Strength {
 		get => _strength;
-		set { _strength = value; GlobalVariables.UIInventory.swordStat.text = $"{_strength}/{_maxStrength}"; }
+		set { _strength = value; UIInventory.Singleton.swordStat.text = $"{_strength}/{_maxStrength}"; }
 	}
 	public ushort MaxStrength {
 		get => _maxStrength;
-		set { _maxStrength = value; GlobalVariables.UIInventory.swordStat.text = $"{_strength}/{_maxStrength}"; }
+		set { _maxStrength = value; UIInventory.Singleton.swordStat.text = $"{_strength}/{_maxStrength}"; }
 	}
+	private CharacterRace race = CharacterRace.HUMAN;
+    public CharacterRace Race { get=> race; set => race = value; } 
 	#endregion
 
 	/// <summary>For configuring the health of the player</summary>
@@ -92,7 +101,7 @@ public class PlayerVariables : MonoBehaviour
 	}
 
 	public void ReloadItemInHand(){
-		holdingItemPlaceholder.sprite = GlobalVariables.Inventory.SelectedItemObj?.itemImage;
+		holdingItemPlaceholder.sprite = Inventory.Singleton.SelectedItemObj?.itemImage;
 	}
 
 	public void Init(){
@@ -107,4 +116,9 @@ public class PlayerVariables : MonoBehaviour
 }
 public enum Gamemode{
 	SURVIVAL, CREATIVE
+}
+
+public enum CharacterRace
+{
+	MAGICIAN, HUMAN
 }

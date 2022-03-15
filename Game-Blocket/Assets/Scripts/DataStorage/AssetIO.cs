@@ -6,8 +6,12 @@ using UnityEditor;
 using UnityEngine;
 
 public class AssetIO : MonoBehaviour {
+	public static AssetIO Singleton { get; private set; }
 
-    public void SaveAssets() {
+	private void Awake() => Singleton = this;
+
+
+	public void SaveAssets() {
 
 	}
 
@@ -18,7 +22,7 @@ public class AssetIO : MonoBehaviour {
 	public void CheckAssets() {
 		if (!gameObject.TryGetComponent(out ItemAssets ia))
 			Debug.LogError("A");
-		foreach(Structure so in GlobalVariables.StructureAssets.Structures)
+		foreach(Structure so in StructureAssets.Singleton.Structures)
 			Debug.Log( EditorJsonUtility.ToJson(so));
 	}
 }

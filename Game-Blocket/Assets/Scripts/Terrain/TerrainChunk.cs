@@ -2,26 +2,30 @@
 using System;
 using System.Collections.Generic;
 
+using Unity.Collections.LowLevel.Unsafe;
+
 using UnityEngine;
 using UnityEngine.Tilemaps;
+
+using Random = System.Random;
 
 /// <summary>
 /// Class that stores that stores the terraindata with unity-components
 /// </summary>
 [Serializable]
 public sealed class TerrainChunk : ChunkData{
-	public GameObject dropParent;
 
+	public GameObject dropParent;
 	public GameObject ParentGO { get; set; }
 	public Tilemap TileMap { get; set; }
 	public TilemapRenderer TileMapRenderer { get; set; }
 
 	public GameObject CollisionGO { get; set; }
-	public Tilemap CollisionTileMap { get; set; }
+	public Tilemap CollisionTM { get; set; }
 	public TilemapCollider2D TileMapCollider { get; set; }
 
 	public GameObject BackgroundGO { get; set; }
-	public Tilemap BackgroundTilemap { get; set; }
+	public Tilemap BGTileMap { get; set; }
 
 
 	//Client
@@ -32,7 +36,17 @@ public sealed class TerrainChunk : ChunkData{
 		PlaceAllTiles();
 		BuildCollisions();
 		InImportQueue = false;
+		//Import neighbourgh chaunks
+		if(TerrainHandler.Chunks.TryGetValue(new Vector2Int(ChunkPositionInt.x + 1, ChunkPositionInt.y), out TerrainChunk tc1))
+			tc1.BuildCollisions(false, false);
+		if(TerrainHandler.Chunks.TryGetValue(new Vector2Int(ChunkPositionInt.x -1, ChunkPositionInt.y), out TerrainChunk tc2))
+			tc2.BuildCollisions(false, false);
+		if(TerrainHandler.Chunks.TryGetValue(new Vector2Int(ChunkPositionInt.x, ChunkPositionInt.y + 1), out TerrainChunk tc3))
+			tc3.BuildCollisions(false, false);
+		if(TerrainHandler.Chunks.TryGetValue(new Vector2Int(ChunkPositionInt.x, ChunkPositionInt.y - 1), out TerrainChunk tc4))
+			tc4.BuildCollisions(false, false);
 	}
+
 	private void BuildGameObjects(GameObject chunkParent) {
 		if (ParentGO != null) {
 			Debug.LogWarning($"ChunkGO existing!: {ChunkPositionInt}");
@@ -43,7 +57,7 @@ public sealed class TerrainChunk : ChunkData{
 			tag = GlobalVariables.chunkTag
 		};
 		ParentGO.transform.SetParent(chunkParent.transform);
-		ParentGO.transform.position = new Vector3(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth, chunkPosition.y * GlobalVariables.WorldData.ChunkHeight, 0f);
+		ParentGO.transform.position = new Vector3(chunkPosition.x * WorldAssets.ChunkLength, chunkPosition.y * WorldAssets.ChunkLength, 0f);
 
 		TileMap = ParentGO.AddComponent<Tilemap>();
 		TileMapRenderer = ParentGO.AddComponent<TilemapRenderer>();
@@ -52,8 +66,8 @@ public sealed class TerrainChunk : ChunkData{
 		///BGChunk GO
 		BackgroundGO = new GameObject(ChunkName(chunkPosition, 1));
 		BackgroundGO.transform.SetParent(TileMap.transform);
-		BackgroundGO.transform.position = new Vector3(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth, chunkPosition.y * GlobalVariables.WorldData.ChunkHeight, 0.001f);
-		BackgroundTilemap = BackgroundGO.AddComponent<Tilemap>();
+		BackgroundGO.transform.position = new Vector3(chunkPosition.x * WorldAssets.ChunkLength, chunkPosition.y * WorldAssets.ChunkLength, 0.001f);
+		BGTileMap = BackgroundGO.AddComponent<Tilemap>();
 		BackgroundGO.AddComponent<TilemapRenderer>();
 
 		///Collision GO
@@ -62,50 +76,101 @@ public sealed class TerrainChunk : ChunkData{
 			layer = 6
 		};
 		CollisionGO.transform.SetParent(TileMap.transform);
-		CollisionGO.transform.position = new Vector3(chunkPosition.x * GlobalVariables.WorldData.ChunkWidth, chunkPosition.y * GlobalVariables.WorldData.ChunkHeight, 0f);
-		CollisionTileMap = CollisionGO.AddComponent<Tilemap>();
+		CollisionGO.transform.position = new Vector3(chunkPosition.x * WorldAssets.ChunkLength, chunkPosition.y * WorldAssets.ChunkLength, 0f);
+		CollisionTM = CollisionGO.AddComponent<Tilemap>();
 		TileMapCollider = CollisionGO.AddComponent<TilemapCollider2D>();
-		CollisionTileMap.tileAnchor = new Vector3(0.5f, 0.5f, 0f);
+		CollisionTM.tileAnchor = new Vector3(0.5f, 0.5f, 0f);
 
 		///Drop GO
 		dropParent = new GameObject(ChunkName(chunkPosition, 3));
 		dropParent.transform.SetParent(TileMap.transform);
-		InsertDrops();
 	}
 
-	public void BuildCollisions() {
-		if (CollisionTileMap == null)
-			throw new NullReferenceException($"CollisionTileMap is null! {ChunkPositionInt}");
-		CollisionTileMap.ClearAllTiles();
-		for (int x = 0; x < GlobalVariables.WorldData.ChunkWidth; x++) {
-			for (int y = 0; y < GlobalVariables.WorldData.ChunkHeight; y++) {
-				int worldX = x + ChunkPositionInt.x * GlobalVariables.WorldData.ChunkWidth;
-				int worldY = y + ChunkPositionInt.y * GlobalVariables.WorldData.ChunkHeight;
-
-				if (BlockIDs[x, y] != 0 &&
-					(GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX + 1, worldY) == 0 ||
-					GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX, worldY + 1) == 0 ||
-					GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX - 1, worldY) == 0 ||
-					GlobalVariables.TerrainHandler.GetBlockFormCoordinate(worldX, worldY - 1) == 0)) {
-					CollisionTileMap.SetTile(new Vector3Int(x, y, 0), GlobalVariables.WorldAssets.GetBlockbyId(1).tile);
-				}
-			}
-		}
+	/// <summary>
+	/// Bulds Collsions in Collison-TILEMAP
+	/// </summary>
+	/// <param name="borderOnly">If the </param>
+	/// <param name="overwrite"></param>
+	/// <exception cref="NullReferenceException"></exception>
+	public void BuildCollisions(bool borderOnly = false, bool overwrite = true) {
+		if(CollisionTM == null)
+			return;
+		if(overwrite)
+			CollisionTM.ClearAllTiles();
+		if(borderOnly) {
+			for(int i = 0; i < WorldAssets.ChunkLength; i++)
+				BuildCollision(new Vector2Int(0, i), Vector2Int.left);
+			for(int i = 0; i < WorldAssets.ChunkLength; i++)
+				BuildCollision(new Vector2Int(i, 0), Vector2Int.down);
+			for(int i = 0; i < WorldAssets.ChunkLength; i++)
+				BuildCollision(new Vector2Int(31, i), Vector2Int.right);
+			for(int i = 0; i < WorldAssets.ChunkLength; i++)
+				BuildCollision(new Vector2Int(i, 31), Vector2Int.up);
+		} else
+			for(int x = 0; x < WorldAssets.ChunkLength; x++)
+				for(int y = 0; y < WorldAssets.ChunkLength; y++)
+					BuildCollision(new Vector2Int(x, y));
 	}
 
 	/// <summary></summary>
+	/// <param name="inChunk"></param>
+	/// <param name="pivot">The direction where to check collsision</param>
+	/// <returns>true if the block has to be collsions</returns>
+	/// <exception cref="Exception">General Excepteion if c# is not working correctly</exception>
+	/// <exception cref="ArgumentException">If Pivot is not a predefined</exception>
+	public void BuildCollision(Vector2Int inChunk, Vector2Int? pivot = null){
+		if(!BlockHasCollsision(blocks[inChunk.x, inChunk.y]))
+			return;
+		
+		int worldX = inChunk.x + ChunkPositionInt.x * WorldAssets.ChunkLength;
+		int worldY = inChunk.y + ChunkPositionInt.y * WorldAssets.ChunkLength;
+
+		bool build = false;
+
+		if(pivot == null)
+			build = TerrainHandler.Singleton.GetBlockFormCoordinate(worldX + 1, worldY) == 0 ||
+				TerrainHandler.Singleton.GetBlockFormCoordinate(worldX, worldY + 1) == 0 ||
+				TerrainHandler.Singleton.GetBlockFormCoordinate(worldX - 1, worldY) == 0 ||
+				TerrainHandler.Singleton.GetBlockFormCoordinate(worldX, worldY - 1) == 0;
+		else{ 
+			//Pivot NotNull
+			Vector2Int pivotNN = pivot ?? throw new Exception("C# Mistake");
+			if(pivotNN == Vector2Int.left && TerrainHandler.Chunks.ContainsKey(new Vector2Int(ChunkPositionInt.x-1, ChunkPositionInt.y)))
+				build = BlockHasCollsision(TerrainHandler.Singleton.GetBlockFormCoordinate(worldX - 1, worldY));
+			if(pivotNN == Vector2Int.down && TerrainHandler.Chunks.ContainsKey(new Vector2Int(ChunkPositionInt.x, ChunkPositionInt.y -1)))
+				build = BlockHasCollsision(TerrainHandler.Singleton.GetBlockFormCoordinate(worldX, worldY - 1));
+			if(pivotNN == Vector2Int.up && TerrainHandler.Chunks.ContainsKey(new Vector2Int(ChunkPositionInt.x, ChunkPositionInt.y +1)))
+				build = BlockHasCollsision(TerrainHandler.Singleton.GetBlockFormCoordinate(worldX, worldY + 1));
+			if(pivotNN == Vector2Int.right && TerrainHandler.Chunks.ContainsKey(new Vector2Int(ChunkPositionInt.x + 1, ChunkPositionInt.y)))
+				build = BlockHasCollsision(TerrainHandler.Singleton.GetBlockFormCoordinate(worldX + 1, worldY));
+		}
+		//SetTile
+		if(build)
+			CollisionTM.SetTile(new Vector3Int(inChunk.x, inChunk.y, 0), WorldAssets.Singleton.GetBlockbyId(1).tile);
+		else
+			CollisionTM.SetTile(new Vector3Int(inChunk.x, inChunk.y, 0), null);
+	}
+
+	public bool BlockHasCollsision(byte blockId){
+		//TODO: If other Blocks has no Collision
+		if(blockId == 0)
+			return false;
+		return true;
+    }
+
+	/// <summary></summary>
 	public void PlaceAllTiles() {
-		for (int x = 0; x < GlobalVariables.WorldData.ChunkWidth; x++) {
-			for (int y = 0; y < GlobalVariables.WorldData.ChunkHeight; y++) {
-				PlaceTile(x, y, GlobalVariables.WorldData.Blocks[BlockIDs[x, y]].tile, false);
-				PlaceTile(x, y, GlobalVariables.WorldData.Blocks[BlockIDsBG[x, y]].tile, true);
+		for (int x = 0; x < WorldAssets.ChunkLength; x++) {
+			for (int y = 0; y < WorldAssets.ChunkLength; y++) {
+				PlaceTile(x, y, WorldAssets.Singleton.blocks[BlockIDs[x, y]].tile, false);
+				PlaceTile(x, y, WorldAssets.Singleton.blocks[BlockIDsBG[x, y]].tile, true);
 			}
 		}
 	}
 	/// <summary>Lambda expression for shortening reasons</summary>
 	private void PlaceTile(int x, int y, TileBase tile, bool background) {
 		if (background)
-			BackgroundTilemap.SetTile(new Vector3Int(x, y, 0), tile);
+			BGTileMap.SetTile(new Vector3Int(x, y, 0), tile);
 		else
 			TileMap.SetTile(new Vector3Int(x, y, 0), tile);
 	}
@@ -183,7 +248,7 @@ public sealed class TerrainChunk : ChunkData{
 			Debug.LogWarning("ItemId is 0");
 			return;
 		}
-		byte blockId = GlobalVariables.ItemAssets.GetBlockIdFromItemID(itemID);
+		byte blockId = ItemAssets.Singleton.GetBlockIdFromItemID(itemID);
 
 		if (blockId == 0) {
 			Debug.LogWarning($"No BlockId found for ItemId: {itemID}");
@@ -193,60 +258,60 @@ public sealed class TerrainChunk : ChunkData{
 		if (BlockIDs[coordinate.x, coordinate.y] != 0)
 			return;
 		//TODO: Make Inventory to ItemId not Item
-		if (GlobalVariables.Inventory.RemoveItem(GlobalVariables.ItemAssets.GetItemFromItemID(itemID), 1)) {
+		if (Inventory.Singleton.RemoveItem(ItemAssets.Singleton.GetItemFromItemID(itemID), 1)) {
 			BlockIDs[coordinate.x, coordinate.y] = blockId;
-			TileMap.SetTile(coordinate, GlobalVariables.WorldData.Blocks[blockId].tile);
+			TileMap.SetTile(coordinate, WorldAssets.Singleton.blocks[blockId].tile);
 		}
 
+		///Neighb... Collision
+		//Left
+		if(coordinate.x == 0)
+			TerrainHandler.Chunks[new Vector2Int(ChunkPositionInt.x - 1, ChunkPositionInt.y)]?.BuildCollisions();
+		if(coordinate.x == 31)
+			TerrainHandler.Chunks[new Vector2Int(ChunkPositionInt.x + 1, ChunkPositionInt.y)]?.BuildCollisions();
+		if(coordinate.y == 0)
+			TerrainHandler.Chunks[new Vector2Int(ChunkPositionInt.x, ChunkPositionInt.y + 1)]?.BuildCollisions();
+		if(coordinate.y == 32)
+			TerrainHandler.Chunks[new Vector2Int(ChunkPositionInt.x, ChunkPositionInt.y - 1)]?.BuildCollisions();
 		BuildCollisions();
 	}
+
 	/// <summary>Removes the block out of the tilemap </summary>
-	/// <param name="coordinate">Coordinate in the Chunk</param>
-	public void DeleteBlock(Vector3Int coordinate) {
+	/// <param name="cord">Coordinate in the Chunk</param>
+	public void DeleteBlock(Vector3Int cord, bool foreGround) {
 		//if (BlockIDs[(coordinate.x - GlobalVariables.WorldData.ChunkWidth * ChunkPositionInt.x), (coordinate.y - GlobalVariables.WorldData.ChunkHeight * ChunkPositionInt.y)] == 0) return;
-		byte blockId = BlockIDs[coordinate.x, coordinate.y];
+		byte blockId = foreGround ? BlockIDs[cord.x, cord.y] : BlockIDsBG[cord.x, cord.y];
 		if (blockId == 0) {
 			Debug.LogWarning("Destoryed Air!");
 			return;
 		}
 
-		BlockIDs[coordinate.x, coordinate.y] = 0;
-		TileMap.SetTile(coordinate, GlobalVariables.WorldData.Blocks[0].tile);
-
-		BuildCollisions();
+		if(foreGround){
+			BlockIDs[cord.x, cord.y] = 0;
+			TileMap.SetTile(cord, WorldAssets.Singleton.blocks[0].tile);
+			BuildCollisions();
+		} else{
+			BlockIDsBG[cord.x, cord.y] = 0;
+			BGTileMap.SetTile(cord, WorldAssets.Singleton.blocks[0].tile);
+		}
 		
 		foreach(uint itemId in GetDroppedIDs(blockId))
-			InstantiateDrop(coordinate, 1, itemId);
+			InstantiateDrop(cord, 1, itemId);
 	}
 
-	/// <summary>Removes the block out of the bg-tilemap </summary>
-	/// <param name="coordinate">Coordinate in the Chunk</param>
-	public void DeleteBlockBG(Vector3Int coordinate)
-	{
-		//if (BlockIDs[(coordinate.x - GlobalVariables.WorldData.ChunkWidth * ChunkPositionInt.x), (coordinate.y - GlobalVariables.WorldData.ChunkHeight * ChunkPositionInt.y)] == 0) return;
-		byte blockId = BlockIDsBG[coordinate.x, coordinate.y];
-		if (blockId == 0)
-		{
-			Debug.LogWarning("Destoryed Air!");
-			return;
-		}
-
-		BlockIDsBG[coordinate.x, coordinate.y] = 0;
-		BackgroundTilemap.SetTile(coordinate, GlobalVariables.WorldData.Blocks[0].tile);
-
-		foreach (uint itemId in GetDroppedIDs(blockId))
-			InstantiateDrop(coordinate, 1, itemId);
-	}
-
+	/// <summary></summary>
+	/// <param name="blockId"></param>
+	/// <returns></returns>
 	public List<uint> GetDroppedIDs(byte blockId){
 		List<uint> ids = new List<uint>();
-		System.Random rand = new System.Random();
-		foreach (BlockData.BlockDropAble blockDropAble in GlobalVariables.WorldAssets.GetBlockbyId(blockId).blockDrops)
-			if(GlobalVariables.Inventory.SelectedItemObj is ToolItem tool && tool.toolType == blockDropAble.toolItemType || blockDropAble.toolItemType == ToolItem.ToolType.DEFAULT)
+		Random rand = new Random();
+
+		foreach (BlockData.BlockDropAble blockDropAble in WorldAssets.Singleton.GetBlockbyId(blockId).blockDrops)
+			if(Inventory.Singleton.SelectedItemObj is ToolItem tool && tool.toolType == blockDropAble.toolItemType || blockDropAble.toolItemType == ToolItem.ToolType.DEFAULT)
 				if ((rand.NextDouble() * 100) + 1 < blockDropAble.dropchance)
 					ids.Add(blockDropAble.itemID);
 		return ids;
-    }
+	}
 	#endregion
 
 	//(Server) not sure
@@ -258,80 +323,24 @@ public sealed class TerrainChunk : ChunkData{
 	/// </summary>
 	public void InstantiateDrop(Vector3Int coorBevore, byte count, uint itemID) {
 		Vector3Int coordinate = new Vector3Int(
-			coorBevore.x + (ChunkPositionInt.x * GlobalVariables.WorldData.ChunkWidth),
-			coorBevore.y + (ChunkPositionInt.y * GlobalVariables.WorldData.ChunkHeight),
+			coorBevore.x + (ChunkPositionInt.x * WorldAssets.ChunkLength),
+			coorBevore.y + (ChunkPositionInt.y * WorldAssets.ChunkLength),
 			coorBevore.z);
 
-		///Drop Instance
-		Drop drop = new Drop {
-			ItemId = itemID,
-			Name = "?",
-			Count = count
-		};
+		GameObject dropGO = new GameObject($"Drop ItemID: {itemID}");
+		dropGO.transform.SetParent(dropParent.transform);
 
-		///Drop GO
-		drop.GameObject = new GameObject($"Drop {drop.ItemId}");
-		drop.GameObject.transform.SetParent(dropParent.transform);
-		drop.GameObject.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
-		Vector3 posDrop = new Vector3(coordinate.x + 0.5f, coordinate.y + 0.5f, 0);
-		drop.GameObject.transform.SetPositionAndRotation(posDrop, new Quaternion());
-		drop.GameObject.layer = LayerMask.NameToLayer("Drops");
+		dropGO.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+		dropGO.transform.position = new Vector3(coordinate.x + 0.5f, coordinate.y + 0.5f, 0);
+		dropGO.layer = LayerMask.NameToLayer("Drops");
 
-		///Drop-GO Components
-		Rigidbody2D dropRB = drop.GameObject.AddComponent<Rigidbody2D>();
-		dropRB.simulated = false;
-		dropRB.gravityScale = 20;
-		dropRB.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
-
-		BoxCollider2D dropCollider = drop.GameObject.AddComponent<BoxCollider2D>();
-
-		
-
+		Drop drop = dropGO.AddComponent<Drop>();
+		drop.ItemId = itemID;
+		drop.Count = count;
 		lock (Drops)
 			Drops.Add(drop);
-		InsertDrops();
-		dropRB.simulated = true;
 	}
 
-	public void PickedUpDrop(Drop drop) {
-		GlobalVariables.Inventory.AddItem(GlobalVariables.ItemAssets.GetItemFromItemID(drop.ItemId), drop.Count, out ushort iCNA);
-		drop.Count = iCNA;
-		//TODO: Move lines after somewhere more modular
-		if (drop.Count == 0) {
-			Drops.Remove(drop);
-			UnityEngine.Object.Destroy(drop.GameObject);
-		}
-	}
-
-
-	/// <summary>
-	/// Creates the Gameobject out of the Drops list
-	/// </summary>
-	public void InsertDrops() {
-		for (int x = 0; x < Drops?.Count; x++) {
-			for (int y = 0; y < Drops?.Count; y++) {
-				if (Drops.Count > 1 && x != y)
-					CheckDropCollision(x, y);
-				//Drops[x].DropObject.transform.SetParent(DropObject.transform);
-			}
-		}
-	}
-	/// <summary>
-	/// Saves FPS while removing unessesary gameobjects
-	/// </summary>
-	public void CheckDropCollision(int x, int y) {
-		//float dropgrouprange = GlobalVariables.WorldData.Groupdistance;
-		//if (GlobalVariables.WorldData.Grid.WorldToCell(Drops[x].GameObject.transform.position).x + dropgrouprange > GlobalVariables.WorldData.Grid.WorldToCell(Drops[y].GameObject.transform.position).x &&
-		//	GlobalVariables.WorldData.Grid.WorldToCell(Drops[x].GameObject.transform.position).x - dropgrouprange < GlobalVariables.WorldData.Grid.WorldToCell(Drops[y].GameObject.transform.position).x &&
-		//	GlobalVariables.WorldData.Grid.WorldToCell(Drops[x].GameObject.transform.position).y + dropgrouprange > GlobalVariables.WorldData.Grid.WorldToCell(Drops[y].GameObject.transform.position).y &&
-		//	GlobalVariables.WorldData.Grid.WorldToCell(Drops[x].GameObject.transform.position).y - dropgrouprange < GlobalVariables.WorldData.Grid.WorldToCell(Drops[y].GameObject.transform.position).y &&
-		//	Drops[x].GameObject.GetComponent<SpriteRenderer>().sprite.Equals(Drops[y].GameObject.GetComponent<SpriteRenderer>().sprite))
-		//{
-		//	Drops[x].Count++;
-		//	RemoveDropfromView(Drops[y]);
-		//	dropParent.SetActive(true);
-		//}
-	}
 	#endregion
 
 	/// <summary> Chunks are euqal if they have the same <see cref="ChunkPosition"/> Vector</summary>
@@ -351,12 +360,19 @@ public class ChunkData {
 	public Vector2 chunkPosition;
 	public Dictionary<byte, List<Vector2Int>> structureCoordinates = new Dictionary<byte, List<Vector2Int>>();
 
-	public Vector2Int ChunkPositionInt => TerrainHandler.CastVector2ToInt(chunkPosition);
+	public Vector2Int ChunkPositionInt {
+		get{
+			if(chunkPositionInt == null)
+				chunkPositionInt = TerrainHandler.CastVector2ToInt(chunkPosition);
+			return chunkPositionInt ?? throw new NullReferenceException();
+		} 
+	}
+	private Vector2Int? chunkPositionInt;
 	public Vector3 ChunkPostionWorldSpace => new Vector3(chunkPosition.x, chunkPosition.y);
 
 	public ChunkData(byte[,] blocks, byte[,] bgBlocks, Drop[] drops, Vector2Int chunkPosition) {
-		this.blocks = blocks ?? (new byte[GlobalVariables.WorldData.ChunkWidth, GlobalVariables.WorldData.ChunkHeight]);
-		this.bgBlocks = bgBlocks ?? (new byte[GlobalVariables.WorldData.ChunkWidth, GlobalVariables.WorldData.ChunkHeight]);
+		this.blocks = blocks ?? (new byte[WorldData.Singleton.ChunkWidth, WorldData.Singleton.ChunkHeight]);
+		this.bgBlocks = bgBlocks ?? (new byte[WorldData.Singleton.ChunkWidth, WorldData.Singleton.ChunkHeight]);
 		this.drops = drops ?? new Drop[0];
 		if (chunkPosition == null)
 			throw new ArgumentNullException("ChunkPosition is null!");

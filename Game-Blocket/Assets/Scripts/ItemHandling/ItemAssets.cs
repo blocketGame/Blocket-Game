@@ -1,18 +1,20 @@
 using System.Collections.Generic;
 
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// Handles all items in Game
 /// </summary>
-public class ItemAssets : MonoBehaviour
-{
+public class ItemAssets : MonoBehaviour{
+	public static ItemAssets Singleton { get; private set; }
+
 	public List<BlockItem> BlockItemsInGame = new List<BlockItem>();
 	public List<ToolItem> ToolItemsInGame = new List<ToolItem>();
 	public List<EquipableItem> EquipableItemsInGame = new List<EquipableItem>();
 	public List<UseAbleItem> UseableItemsInGame = new List<UseAbleItem>();
 	public List<CommonItem> CommonItems = new List<CommonItem>();
+
+	//TODO: Move somewhere else
 	public List<CraftingRecipe> Recipes = new List<CraftingRecipe>();
 	public List<CraftingStation> CraftingStations = new List<CraftingStation>();
 	public List<EnemySO> Enemies = new List<EnemySO>();
@@ -21,7 +23,9 @@ public class ItemAssets : MonoBehaviour
 	public Sprite MiningCursor;
 	public Sprite AttackingCursor;
 
-	private void Awake() => GlobalVariables.ItemAssets = this;
+	public Sprite nullSprite;
+
+	private void Awake() => Singleton = this;
 
 
 	/// <summary>
@@ -29,7 +33,7 @@ public class ItemAssets : MonoBehaviour
 	/// </summary>
 	/// <param name="itemId"></param>	
 	/// <returns></returns>
-	public Sprite GetSpriteFromItemID(uint itemId) => GetItemFromItemID(itemId)?.itemImage;
+	public Sprite GetSpriteFromItemID(uint itemId) => GetItemFromItemID(itemId)?.itemImage ?? nullSprite;
 	
 
 	public Item GetItemFromItemID(uint itemId) {

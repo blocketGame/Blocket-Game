@@ -54,8 +54,8 @@ public class CraftingStation{
     public byte Slotheight { get => slotheight; set => slotheight = value; }
     public Sprite CraftingInterfaceSprite { get => craftingInterfaceSprite; set => craftingInterfaceSprite = value; }
 
-    private static List<BlockItem> Blockitems { get => GlobalVariables.ItemAssets.BlockItemsInGame; }
-    private static List<ToolItem> ToolItems { get => GlobalVariables.ItemAssets.ToolItemsInGame; }
+    private static List<BlockItem> Blockitems { get => ItemAssets.Singleton.BlockItemsInGame; }
+    private static List<ToolItem> ToolItems { get => ItemAssets.Singleton.ToolItemsInGame; }
 
     #endregion
 
@@ -67,7 +67,7 @@ public class CraftingStation{
     /// <returns></returns>
     public static CraftingStation HandleCraftingInterface(Vector2Int blockHoverdAbsolute, CraftingStation ctStation)
     {
-        if (GlobalVariables.activatedCraftingInterface is null)
+        if (GlobalVariables.ActivatedCraftingInterface is null)
         {
             GameObject gc = new GameObject("Crafting Interface");
             gc.transform.position = new Vector3(blockHoverdAbsolute.x + 0.5f, blockHoverdAbsolute.y + 6.5f, 0);
@@ -76,12 +76,12 @@ public class CraftingStation{
             gc.AddComponent<Canvas>();
             gc.AddComponent<Image>();
             gc.GetComponent<Image>().sprite = ctStation.CraftingInterfaceSprite;
-            GlobalVariables.activatedCraftingInterface = gc;
+            GlobalVariables.ActivatedCraftingInterface = gc;
         }
-        else if (GlobalVariables.activatedCraftingInterface.activeSelf)
+        else if (GlobalVariables.ActivatedCraftingInterface.activeSelf)
         {
-            GameManager.Destroy(GlobalVariables.activatedCraftingInterface);
-            GlobalVariables.activatedCraftingInterface = null;
+            GameManager.Destroy(GlobalVariables.ActivatedCraftingInterface);
+            GlobalVariables.ActivatedCraftingInterface = null;
         }
         return ctStation;
     }
@@ -164,7 +164,7 @@ public class CraftingStation{
         Craftable i = CraftingHandler.GetExactItem(array,out CraftingRecipe craftingRecipe);
         if (i.Item.id != 0)
         {
-            GlobalVariables.Inventory.AddItem(i.Item.id, i.count, out ushort item);
+            Inventory.Singleton.AddItem(i.Item.id, i.count, out ushort item);
             foreach(UIInventorySlot uIInventorySlot in CraftingInterfacePlaceholder.GetComponentsInChildren<UIInventorySlot>())
             {
                 if(uIInventorySlot.ItemCount!=0)
@@ -206,7 +206,7 @@ public class CraftingStation{
         ///Insert into Graphical View
         foreach (CraftingRecipe cr in recipes)
         {
-            GameObject g = GameObject.Instantiate(GlobalVariables.PrefabAssets.craftingUIListView, CraftingInterfacePlaceholder.GetComponentInChildren<ScrollRect>().GetComponentInChildren<Mask>().GetComponentInChildren<RecipeRecommendationList>().transform);
+            GameObject g = GameObject.Instantiate(PrefabAssets.Singleton.craftingUIListView, CraftingInterfacePlaceholder.GetComponentInChildren<ScrollRect>().GetComponentInChildren<Mask>().GetComponentInChildren<RecipeRecommendationList>().transform);
             CraftingInterfacePlaceholder.GetComponentInChildren<ScrollRect>().GetComponentInChildren<Mask>().GetComponentInChildren<RecipeRecommendationList>().currentRecommendations.Add(g);
             g.transform.localPosition.Set(g.transform.localPosition.x, g.transform.localPosition.y + offSetY, g.transform.localPosition.z);
             RecipeShowCase rcs = g.GetComponentInChildren<RecipeShowCase>();
@@ -216,6 +216,6 @@ public class CraftingStation{
             offSetY += 100;
         }
         ///Spawning Recommendations
-        Debug.Log(GlobalVariables.activatedCraftingInterface.name);
+        Debug.Log(GlobalVariables.ActivatedCraftingInterface.name);
         }
 }

@@ -8,6 +8,8 @@ using UnityEngine;
 /// Author: HyFabi
 /// </summary>
 public abstract class TerrainHandler : MonoBehaviour {
+	public static TerrainHandler Singleton => ServerTerrainHandler.Singleton as TerrainHandler ?? ClientTerrainHandler.Singleton as TerrainHandler ?? null;
+
 	protected readonly byte _updatePayload = 2;
 	protected readonly byte _pickUpDist = 2;
 
@@ -18,7 +20,7 @@ public abstract class TerrainHandler : MonoBehaviour {
 
 	public static Dictionary<Vector2Int, TerrainChunk> Chunks { get; } = new Dictionary<Vector2Int, TerrainChunk>();
 	
-	public WorldData WD => GlobalVariables.WorldData;
+	public WorldData WD => WorldData.Singleton;
 
 	#region UtilMethods
 	
@@ -26,7 +28,7 @@ public abstract class TerrainHandler : MonoBehaviour {
 	/// <param name="x">coordinate in a chunk</param>
 	/// <returns></returns>
 	public TerrainChunk GetChunkFromCoordinate(float x, float y){
-		Vector2Int chunkPosition = new Vector2Int(Mathf.FloorToInt(x / GlobalVariables.WorldData.ChunkWidth), Mathf.FloorToInt(y / GlobalVariables.WorldData.ChunkHeight));
+		Vector2Int chunkPosition = new Vector2Int(Mathf.FloorToInt(x / WorldData.Singleton.ChunkWidth), Mathf.FloorToInt(y / WorldData.Singleton.ChunkHeight));
 
 		return Chunks.TryGetValue(chunkPosition, out TerrainChunk chunk) ? chunk : null;
 	}
@@ -42,9 +44,9 @@ public abstract class TerrainHandler : MonoBehaviour {
 		ChunkData chunk = GetChunkFromCoordinate(x, y);
 		if (chunk != null)
 		{
-			int chunkX = x - WD.ChunkWidth * chunk.ChunkPositionInt.x;
-			int chunkY = y - WD.ChunkHeight * chunk.ChunkPositionInt.y;
-			if (chunkX < WD.ChunkWidth && chunkY < WD.ChunkHeight)
+			int chunkX = x - WorldAssets.ChunkLength * chunk.ChunkPositionInt.x;
+			int chunkY = y - WorldAssets.ChunkLength * chunk.ChunkPositionInt.y;
+			if (chunkX < WorldAssets.ChunkLength && chunkY < WorldAssets.ChunkLength)
 			{
 				return chunk.blocks[chunkX, chunkY];
 			}

@@ -12,6 +12,7 @@ public abstract class Item{
 	public string description;
 	public ItemType itemType;
 	public Sprite itemImage;
+	public String swingingAnimation;
 
 	protected Action onMainInteractionKey;
 	protected Action onSideInteractionKey;
@@ -46,7 +47,7 @@ public class BlockItem : Item {
 	public byte blockId;
 
 	public BlockItem(){
-		onSideInteractionKey = () => GlobalVariables.Interaction.BlockPlace();
+		onSideInteractionKey = () => PlayerInteraction.Singleton.BlockPlace();
 	}
 }
 

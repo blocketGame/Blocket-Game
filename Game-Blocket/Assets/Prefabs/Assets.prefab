@@ -1608,36 +1608,42 @@ MonoBehaviour:
     description: Simple Dirtblock
     itemType: 1
     itemImage: {fileID: 21300000, guid: f01308597c751ff40bb35eecf55b550d, type: 3}
+    swingingAnimation: 
     blockId: 3
   - name: Stone
     id: 2
     description: Hard Stone
     itemType: 1
     itemImage: {fileID: 21300000, guid: 74bbea64cb1802a43967b7af1eb4dd03, type: 3}
+    swingingAnimation: 
     blockId: 3
   - name: Sand
     id: 3
     description: I do not know how i can hold that
     itemType: 1
     itemImage: {fileID: 21300000, guid: 2df48377b487aa243b5a6e0e637890bc, type: 3}
+    swingingAnimation: 
     blockId: 5
   - name: Snowblock
     id: 4
     description: It is cold!
     itemType: 1
     itemImage: {fileID: 21300000, guid: ef8a05a4ebd504240914473cda9b6542, type: 3}
+    swingingAnimation: 
     blockId: 6
   - name: Crafting bench
     id: 5
     description: Craft attack!
     itemType: 1
     itemImage: {fileID: 21300000, guid: 941aa281ca582eb4aa7a3348acefc603, type: 3}
+    swingingAnimation: 
     blockId: 43
   - name: Wood
     id: 6
     description: Dead tree
     itemType: 1
     itemImage: {fileID: 21300000, guid: 4318a7de18532f2409f3a2dd127ba0b8, type: 3}
+    swingingAnimation: 
     blockId: 16
   ToolItemsInGame: []
   EquipableItemsInGame: []
@@ -1647,17 +1653,26 @@ MonoBehaviour:
     description: This sword can cut through enything!!!!
     itemType: 1
     itemImage: {fileID: 21300000, guid: d8e214a5decc71d4c899ab4f76048ab6, type: 3}
+    swingingAnimation: Hit
+  - name: Magic Sword
+    id: 2001
+    description: This sword can cut through enything!!!!
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: a32f97802030f604384d04875180b708, type: 3}
+    swingingAnimation: Hit
   CommonItems:
   - name: Opal
     id: 5001
     description: 
     itemType: 1
     itemImage: {fileID: 21300000, guid: 33430ddc929da284ba9d8fbedc2e7b43, type: 3}
+    swingingAnimation: 
   - name: Bernstein
     id: 5002
     description: 
     itemType: 1
     itemImage: {fileID: 21300000, guid: 35aabff55aa791248b87d99dde69c0d1, type: 3}
+    swingingAnimation: 
   Recipes:
   - {fileID: 11400000, guid: a82579b4eace29f409f932e7cf1ad59e, type: 2}
   - {fileID: 11400000, guid: 2cbe51554b22dfe41baf7afb307f9e26, type: 2}
@@ -1681,6 +1696,7 @@ MonoBehaviour:
   InventoryCursor: {fileID: 21300000, guid: 983843a460c359244887c9a663229125, type: 3}
   MiningCursor: {fileID: 21300000, guid: 42919adbd3d899d4aae5841d0e00a632, type: 3}
   AttackingCursor: {fileID: 21300000, guid: f02ed4b66ab720f46b851139dfc87cbf, type: 3}
+  nullSprite: {fileID: 21300000, guid: 025ef1ca1a408a043b9ad5f1a3ccf1e2, type: 3}
 --- !u!114 &2183338013668072568
 MonoBehaviour:
   m_ObjectHideFlags: 0

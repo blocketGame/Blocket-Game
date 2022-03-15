@@ -10,6 +10,7 @@ using UnityEngine;
 /// </summary>
 //Client
 public class Movement : MonoBehaviour {
+	public static Movement Singleton { get; private set; }
 
 	#region Properties + Atributes
 	#region Player-Settings
@@ -44,7 +45,7 @@ public class Movement : MonoBehaviour {
 
 	///public Animator animator;
 
-	public Transform PlayerModelT => GlobalVariables.PlayerVariables.playerModel.transform != null ? GlobalVariables.PlayerVariables.playerModel.transform : throw new NullReferenceException();
+	public Transform PlayerModelT => PlayerVariables.Singleton.playerModel.transform != null ? PlayerVariables.Singleton.playerModel.transform : throw new NullReferenceException();
 
 	/// <summary>
 	/// Player Position
@@ -73,7 +74,7 @@ public class Movement : MonoBehaviour {
 	private bool _playerLocked;
 
 	#region UnityMethods
-	public void Awake() => GlobalVariables.Movement = this;
+	public void Awake() => Singleton = this;
 
 	/// <summary>
 	/// Most frequent Update used for realtime movement calculations
@@ -83,6 +84,12 @@ public class Movement : MonoBehaviour {
 		if (GameManager.State != GameState.INGAME)	return;
 
 		Camera.main.orthographicSize = camZoom;
+		if (movement > 0)
+		{
+			GlobalVariables.LocalPlayer.transform.rotation = new Quaternion(0, 0, 0, 0);
+		}
+		else if (movement < 0)
+			GlobalVariables.LocalPlayer.transform.rotation = new Quaternion(0, 180, 0, 0);
 
 		if (!PlayerLocked && PlayerVariables.Gamemode==Gamemode.CREATIVE)
 			CreativeModeMovement();
@@ -104,6 +111,7 @@ public class Movement : MonoBehaviour {
     {
 		VelocityUpdate();
 		MoveHorizontally();
+
 		if (PlayerVariables.Gamemode != Gamemode.CREATIVE)
 		{
 			FallAcceleration();
@@ -115,7 +123,7 @@ public class Movement : MonoBehaviour {
 	/// <returns><see langword="true"/> if player is locked</returns>
 	public bool CheckChunk()
 	{
-		bool locked = !GlobalVariables.ClientTerrainHandler.CurrentChunkReady;
+		bool locked = !ClientTerrainHandler.Singleton.CurrentChunkReady;
 		if (locked != PlayerLocked)
 			PlayerLocked = locked;
 		return locked;
@@ -140,14 +148,14 @@ public class Movement : MonoBehaviour {
 		if (playerRigidbody.velocity.y != 0){
 			if (Input.GetKeyDown(GameManager.SettingsProfile.JumpKey))
 			{
-				if (GlobalVariables.TerrainHandler.GetBlockFormCoordinate(
-				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(RigidBodyPosition.x + (-0.5f), RigidBodyPosition.y, 0)).x,
-				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(RigidBodyPosition.x, RigidBodyPosition.y - 2, 0)).y)
+				if (TerrainHandler.Singleton.GetBlockFormCoordinate(
+				WorldData.Singleton.Grid.WorldToCell(new Vector3(RigidBodyPosition.x + (-0.5f), RigidBodyPosition.y, 0)).x,
+				WorldData.Singleton.Grid.WorldToCell(new Vector3(RigidBodyPosition.x, RigidBodyPosition.y - 2, 0)).y)
 				!= 0 
 				||
-				GlobalVariables.TerrainHandler.GetBlockFormCoordinate(
-				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(RigidBodyPosition.x + (0.5f), RigidBodyPosition.y, 0)).x,
-				GlobalVariables.WorldData.Grid.WorldToCell(new Vector3(RigidBodyPosition.x, RigidBodyPosition.y - 2, 0)).y)
+				TerrainHandler.Singleton.GetBlockFormCoordinate(
+				WorldData.Singleton.Grid.WorldToCell(new Vector3(RigidBodyPosition.x + (0.5f), RigidBodyPosition.y, 0)).x,
+				WorldData.Singleton.Grid.WorldToCell(new Vector3(RigidBodyPosition.x, RigidBodyPosition.y - 2, 0)).y)
 				!= 0)
 				{
 					Walljump(); return;
@@ -175,7 +183,7 @@ public class Movement : MonoBehaviour {
 	/// Set Horizontal Movement
 	/// </summary>
 	private void SetHorizontalMovement(){
-		if(!GlobalVariables.UIInventory.ChatOpened)
+		if(!UIInventory.Singleton.ChatOpened)
 			movement = Input.GetAxis("Horizontal");
 	}
 
@@ -238,7 +246,7 @@ public class Movement : MonoBehaviour {
     {
 		if (!lockvar)
 		{
-			Vector3Int playerCell = GlobalVariables.WorldData.Grid.WorldToCell(RigidBodyPosition);
+			Vector3Int playerCell = WorldData.Singleton.Grid.WorldToCell(RigidBodyPosition);
 
 			sbyte direction = 0;
 			if (movement > 0)
@@ -246,8 +254,8 @@ public class Movement : MonoBehaviour {
 			else if (movement < 0)
 				direction = -1;
 
-			if (!(GlobalVariables.TerrainHandler.GetBlockFormCoordinate(playerCell.x+(int)direction, playerCell.y) != 0 
-				|| GlobalVariables.TerrainHandler.GetBlockFormCoordinate(playerCell.x + (int)direction, playerCell.y-1) != 0))
+			if (!(TerrainHandler.Singleton.GetBlockFormCoordinate(playerCell.x+(int)direction, playerCell.y) != 0 
+				|| TerrainHandler.Singleton.GetBlockFormCoordinate(playerCell.x + (int)direction, playerCell.y-1) != 0))
             {
 				Vector3 destination = RigidBodyPosition + MovementSpeed * new Vector3(movement, 0, 0);
 				RigidBodyPosition = Vector3.Lerp(RigidBodyPosition, destination, Time.deltaTime);
@@ -270,8 +278,8 @@ public class Movement : MonoBehaviour {
 	/// </summary>
 	private void PreventFloorGlitch()
     {
-		Vector3Int playerCell = GlobalVariables.WorldData.Grid.WorldToCell(RigidBodyPosition);
-		if (GlobalVariables.TerrainHandler.GetBlockFormCoordinate(playerCell.x, playerCell.y) != 0)
+		Vector3Int playerCell = WorldData.Singleton.Grid.WorldToCell(RigidBodyPosition);
+		if (TerrainHandler.Singleton.GetBlockFormCoordinate(playerCell.x, playerCell.y) != 0)
         {
 			Debug.LogWarning("UWU - WALL_GLITCH_HANDLED");
 			RigidBodyPosition = RigidBodyPosition + Vector3.up ;

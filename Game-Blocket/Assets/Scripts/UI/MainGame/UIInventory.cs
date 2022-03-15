@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
@@ -11,6 +11,8 @@ using UnityEngine.XR;
 /// </summary>
 public class UIInventory : MonoBehaviour
 {
+	public static UIInventory Singleton { get; private set; }
+
 	#region General Settings
 	[Header("Settings: Changable - Backgrounds")]
 	public Color inventoryBackground;
@@ -74,7 +76,7 @@ public class UIInventory : MonoBehaviour
 	#endregion
 
 	/// <summary><see cref="global::Inventory"/></summary>
-	private Inventory Inventory => GlobalVariables.Inventory;
+	private Inventory Inventory => Inventory.Singleton;
 
 	#region Initzializement
 
@@ -94,7 +96,7 @@ public class UIInventory : MonoBehaviour
 	/// </summary>
 	private void InitAtHand()
 	{
-		atHandSlot = Instantiate(prefabItemSlot, GlobalVariables.UIInventory.transform);
+		atHandSlot = Instantiate(prefabItemSlot, UIInventory.Singleton.transform);
 		atHandSlot.name = "SlotAtHand";
 		atHandSlot.SetActive(false);
 		Destroy(atHandSlot.GetComponentInChildren<Image>());
@@ -209,7 +211,7 @@ public class UIInventory : MonoBehaviour
 	/// <summary>"Reload" at the beginning</summary>
 	public void Awake()
 	{
-		GlobalVariables.UIInventory = this;
+		Singleton = this;
 		name = "UI";
 	}
 
@@ -229,22 +231,22 @@ public class UIInventory : MonoBehaviour
 			//Carfting?
 			///TODO: CLEANUP
 			if (InventoryOpened){
-				if (GlobalVariables.activatedCraftingInterface != null)
+				if (GlobalVariables.ActivatedCraftingInterface != null)
 				{
 					craftingInterfacePlaceholder.SetActive(true);
-					GlobalVariables.activatedCraftingInterface.SetActive(false);
+					GlobalVariables.ActivatedCraftingInterface.SetActive(false);
 					uiParentPosition = uiParent.transform.position;
 					uiParent.transform.position = new Vector2(uiParent.transform.position.x + 900, uiParent.transform.position.y);
-					craftingInterfacePlaceholder.GetComponent<Image>().sprite = GlobalVariables.activatedCraftingInterface.GetComponent<Image>().sprite;
-					CraftingStation.InstatiateCraftingInterface(prefabItemSlot, craftingInterfacePlaceholder, GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)), GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)).Slotwidth, GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)).Slotheight);
+					craftingInterfacePlaceholder.GetComponent<Image>().sprite = GlobalVariables.ActivatedCraftingInterface.GetComponent<Image>().sprite;
+					CraftingStation.InstatiateCraftingInterface(prefabItemSlot, craftingInterfacePlaceholder, ItemAssets.Singleton.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)), ItemAssets.Singleton.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)).Slotwidth, ItemAssets.Singleton.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)).Slotheight);
 					CraftingStation.RenewRecommendations(new Craftable[2],craftingInterfacePlaceholder);
 				}
 			}else{
 				//TODO: Optional things to do...
 				//uiParent.SetActive(false);
-				if (GlobalVariables.activatedCraftingInterface != null)
+				if (GlobalVariables.ActivatedCraftingInterface != null)
 				{
-					GlobalVariables.activatedCraftingInterface.SetActive(true);
+					GlobalVariables.ActivatedCraftingInterface.SetActive(true);
 					foreach(UIInventorySlot uis in craftingInterfacePlaceholder.GetComponentsInChildren<UIInventorySlot>())
 					{
 						if (uis.ItemID != 0)
@@ -263,13 +265,22 @@ public class UIInventory : MonoBehaviour
 
 		//Chat
 		if (Input.GetKeyDown(GameManager.SettingsProfile.ChatKey) && !ChatOpened)
+		{
 			ChatOpened = true;
+			Debug.Log("Open");
+			GameManager.SettingsProfile.KeyValues = GameManager.SettingsProfile.LockKeysExceptSpecified(GameManager.SettingsProfile.ChatKey).ToList();
+			Debug.Log(GameManager.SettingsProfile.InventoryKey);
+		}
 		if (ChatOpened){
 			if (Input.GetKeyDown(KeyCode.Escape))
+            {
 				ChatOpened = false;
+				GameManager.SettingsProfile.KeyValues = SettingsProfile.FillKeyValues();
+			}
 			if (Input.GetKeyDown(KeyCode.Return)){ //Return = Enter
 				ConsoleHandler.Handle(chatInput.text);
 				ChatOpened = false;
+				GameManager.SettingsProfile.KeyValues = SettingsProfile.FillKeyValues();
 			}
 		}
 
@@ -370,10 +381,10 @@ public class UIInventory : MonoBehaviour
 
 	public void SynchronizeToHotbar() {
 		for(int i = 0; i < Inventory.HudSlots.Count; i++){ 
-				Inventory.HudSlots[i].ItemID = Inventory.InvSlots[i].ItemID;
-				Inventory.HudSlots[i].ItemCount = Inventory.InvSlots[i].ItemCount;	
-			}
-		GlobalVariables.PlayerVariables.ReloadItemInHand();
+			Inventory.HudSlots[i].ItemID = Inventory.InvSlots[i].ItemID;
+			Inventory.HudSlots[i].ItemCount = Inventory.InvSlots[i].ItemCount;	
+		}
+		PlayerVariables.Singleton.ReloadItemInHand();
 	}
 	#endregion
 

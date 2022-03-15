@@ -2,15 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Clock : MonoBehaviour
-{
+public class ClockHandler : MonoBehaviour{
+    public static ClockHandler Singleton { get; private set; }
+
     public float tick;
     public float seconds = 0;
     public int minutes;
     public int hours;
     public int days = 1;
 
-    // Start is called before the first frame update
+    public void Awake() => Singleton = this;
+
     // Update is called once per frame
     private void FixedUpdate()
     {
@@ -19,6 +21,9 @@ public class Clock : MonoBehaviour
         CalcTime();
     }
 
+    /// <summary>
+    /// Updates the clock
+    /// </summary>
     public void CalcTime()
     {
         //Debug.Log(days + ":" + hours + ":" + minutes + ":" + seconds);
@@ -32,7 +37,6 @@ public class Clock : MonoBehaviour
         {
             hours = hours + (int)(minutes/60);
             minutes = minutes%60;
-            
         }
         if (hours >= 24)
         {

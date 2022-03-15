@@ -112,8 +112,8 @@ public class WorldProfile : Profile {
 		if (chunk == null)
 			throw new ArgumentNullException("Chunk is null!");
 		string data = string.Empty;
-		for (int x = 0; x < GlobalVariables.WorldData.ChunkWidth; x++) {
-			for (int y = 0; y < GlobalVariables.WorldData.ChunkHeight; y++) {
+		for (int x = 0; x < WorldAssets.ChunkLength; x++) {
+			for (int y = 0; y < WorldAssets.ChunkLength; y++) {
 				data += $"{chunk[x, y]},";
 			}
 			//Remove last ,
@@ -138,7 +138,7 @@ public class WorldProfile : Profile {
 		//Drops
 		string tempDrops = string.Empty;
 		foreach (Drop d in cd.drops)
-			tempDrops += $"{d.ItemId},{d.Count},{d.Position};";
+			tempDrops += d;
 		//Remove last ;
 		data.Remove(data.Length - 1);
 		data += tempDrops;

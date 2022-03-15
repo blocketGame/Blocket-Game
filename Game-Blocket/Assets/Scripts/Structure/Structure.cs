@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-[SerializeField]
+[Serializable]
 public class Structure : MonoBehaviour
 {
     public byte id;
@@ -78,7 +78,7 @@ public class Structure : MonoBehaviour
                 TileBase tileForeground = allTilesForeground[x + y * structureSizeForeground.size.x];
                 if (tileForeground != null)
                 {
-                    blocksForeground[x + Math.Abs(structurePostionInEditor.x - structureSizeForeground.position.x), y + Math.Abs(structurePostionInEditor.y - structureSizeForeground.position.y)] = GlobalVariables.WorldAssets.GetBlockFromTile(tileForeground);
+                    blocksForeground[x + Math.Abs(structurePostionInEditor.x - structureSizeForeground.position.x), y + Math.Abs(structurePostionInEditor.y - structureSizeForeground.position.y)] = WorldAssets.Singleton.GetBlockFromTile(tileForeground);
                 }
             }
         }
@@ -90,7 +90,7 @@ public class Structure : MonoBehaviour
                 TileBase tileBackground = allTilesBackground[x + y * structureSizeBackground.size.x];
                 if (tileBackground != null)
                 {
-                    blocksBackground[x + Math.Abs(structurePostionInEditor.x - structureSizeBackground.position.x), y + Math.Abs(structurePostionInEditor.y - structureSizeBackground.position.y)] = GlobalVariables.WorldAssets.GetBlockFromTile(tileBackground);
+                    blocksBackground[x + Math.Abs(structurePostionInEditor.x - structureSizeBackground.position.x), y + Math.Abs(structurePostionInEditor.y - structureSizeBackground.position.y)] = WorldAssets.Singleton.GetBlockFromTile(tileBackground);
                 }
             }
         }

@@ -9,7 +9,7 @@ public class ScrollViewHandler : MonoBehaviour{
 	public GameObject contenGO;
 
 	[Header("General Settings")]
-	[Tooltip("If 0 there could be ulong.maxvalue")]
+	[Tooltip("If 0 there could be int.maxvalue")]
 	public int maxItemsInContent;
 	[Tooltip("If false it will throw nothing")]
 	public bool throwWarningWhenFull;

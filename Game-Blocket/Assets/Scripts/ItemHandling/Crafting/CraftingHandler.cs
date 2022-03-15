@@ -19,9 +19,9 @@ public static class CraftingHandler
     public static IEnumerable<CraftingRecipe> GetRecipesByItems(Craftable[] items)
     {
         //[TODO]
-        CraftingStation cs =GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(GlobalVariables.activatedCraftingInterface.GetComponent<Image>().sprite));
+        CraftingStation cs = ItemAssets.Singleton.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(GlobalVariables.ActivatedCraftingInterface.GetComponent<Image>().sprite));
         ///Filtering Logic
-        foreach(CraftingRecipe cr in GlobalVariables.ItemAssets.Recipes.FindAll(x => x.Station.Equals(cs.blockId)))
+        foreach(CraftingRecipe cr in ItemAssets.Singleton.Recipes.FindAll(x => x.Station.Equals(cs.blockId)))
         {
             int stelle=0; 
             foreach (Craftable i in cr.Recipe)
@@ -45,9 +45,9 @@ public static class CraftingHandler
     public static Craftable GetExactItem(Craftable[] items,out CraftingRecipe usedCraftingRecipe)
     {
         //[TODO]
-        CraftingStation cs = GlobalVariables.ItemAssets.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(GlobalVariables.activatedCraftingInterface.GetComponent<Image>().sprite));
+        CraftingStation cs = ItemAssets.Singleton.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(GlobalVariables.ActivatedCraftingInterface.GetComponent<Image>().sprite));
         ///Filtering Logic
-        foreach (CraftingRecipe cr in GlobalVariables.ItemAssets.Recipes.FindAll(x => x.Station.Equals(cs.blockId)))
+        foreach (CraftingRecipe cr in ItemAssets.Singleton.Recipes.FindAll(x => x.Station.Equals(cs.blockId)))
         {
             int stelle = 0;
             bool correct=true;

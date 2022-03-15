@@ -12,6 +12,8 @@ using UnityEngine.UI;
 /// LobbyUI-Handling
 /// </summary>
 public class UILobby : MonoBehaviour {
+	public static UILobby Singleton { get; protected set; }
+
 	#region UIResources
 	[Header("Static: General")]
 	public NetworkObject playPrefab;
@@ -106,10 +108,10 @@ public class UILobby : MonoBehaviour {
 	}
 
 	public void Awake() {
-		GlobalVariables.UILobby = this;
+		Singleton = this;
 		uiprofileSitePrefab = Instantiate(uiprofileSitePrefab, gameObject.transform);
 		//NetworkManager.Singleton.OnClientConnectedCallback += ClientConnectCallback;
-		SceneManager.sceneLoaded += GlobalVariables.GameManager.SceneSwitched;
+		SceneManager.sceneLoaded += GameManager.Singleton.SceneSwitched;
 		SiteIndexOpen = 0;
 		ipPlaceHolder.text = NetworkVariables.ipAddress;
 		InitButtons();
@@ -117,8 +119,8 @@ public class UILobby : MonoBehaviour {
 
 	private void SetNetworkAddress()
 	{
-		GlobalVariables.GameManager.uNetTransport.ConnectAddress = NetworkVariables.ipAddress;
-		GlobalVariables.GameManager.uNetTransport.ConnectPort = NetworkVariables.portAddress;
+		GameManager.Singleton.uNetTransport.ConnectAddress = NetworkVariables.ipAddress;
+		GameManager.Singleton.uNetTransport.ConnectPort = NetworkVariables.portAddress;
 	}
 
 	/// <summary>

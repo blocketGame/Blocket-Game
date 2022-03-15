@@ -3,12 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveBackgroundWithPlayer : MonoBehaviour
-{
+public class MoveBackgroundWithPlayer : MonoBehaviour{
+    public static MoveBackgroundWithPlayer Singleton { get; private set; }
+
     private Vector3 lastCameraPos;
     private Transform cameraTransf;
     [SerializeField] public Vector2 parallaxEffectMultiplier;
     private float textureUnitSizeX;
+
+    public void Awake() => Singleton = this;
+    
 
     // Start is called before the first frame update
     void Start()

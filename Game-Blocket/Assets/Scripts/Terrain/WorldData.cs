@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -8,8 +9,10 @@ using UnityEngine;
 /// <b>Author : Cse19455 / Thomas Boigner</b>
 /// </summary>
 public class WorldData : MonoBehaviour {
-	
+	public static WorldData Singleton { get; protected set; }
 	public GameObject ChunkParent => Grid.gameObject;
+
+	public GameObject mobParent;
 	public Grid Grid { get; private set; }
 
 	#region Fields
@@ -57,9 +60,12 @@ public class WorldData : MonoBehaviour {
 	public int ChunkDistance { get => chunkDistance; set => chunkDistance = value; }
 
 	//Shortcuts
+	[Obsolete]
 	public int ChunkHeight => WorldAssets.ChunkLength;
+	[Obsolete]
 	public int ChunkWidth => WorldAssets.ChunkLength;
-	public BlockData[] Blocks => GlobalVariables.WorldAssets.blocks.ToArray();
+	[Obsolete]
+	public BlockData[] Blocks => WorldAssets.Singleton.blocks.ToArray();
 	public float Groupdistance { get => groupdistance; set => groupdistance = value; }
 	public float PickUpDistance { get => pickUpDistance; set => pickUpDistance = value; }
 	public Dictionary<int, float[]> Noisemaps { get; set; } = new Dictionary<int, float[]>();
@@ -70,12 +76,13 @@ public class WorldData : MonoBehaviour {
 	/// <summary>Stores this class to <see cref="GlobalVariables"/></summary>
 
 	public void Awake(){
-		GlobalVariables.WorldData = this;
+		Singleton = this;
 		Grid = GetComponentInChildren<Grid>();
-
 	}
 
 }
+
+
 
 #region WorldDataAssets
 

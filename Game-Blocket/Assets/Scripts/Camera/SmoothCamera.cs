@@ -2,17 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SmoothCamera : MonoBehaviour
-{
+public class SmoothCamera : MonoBehaviour{
+    public static SmoothCamera Singleton { get; private set; }
 
     public Transform Target;
     public Vector3 offset;
     [Range(1, 10)]
     public float smoothFactor;
 
-    private void Awake()
-    {
-    }
+    private void Awake() => Singleton = this;
 
     public void FixedUpdate()
     {
