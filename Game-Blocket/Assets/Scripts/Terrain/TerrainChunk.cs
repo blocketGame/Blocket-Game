@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 
+using Unity.Collections.LowLevel.Unsafe;
+
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -34,7 +36,17 @@ public sealed class TerrainChunk : ChunkData{
 		PlaceAllTiles();
 		BuildCollisions();
 		InImportQueue = false;
+		//Import neighbourgh chaunks
+		if(TerrainHandler.Chunks.TryGetValue(new Vector2Int(ChunkPositionInt.x + 1, ChunkPositionInt.y), out TerrainChunk tc1))
+			tc1.BuildCollisions(false, false);
+		if(TerrainHandler.Chunks.TryGetValue(new Vector2Int(ChunkPositionInt.x -1, ChunkPositionInt.y), out TerrainChunk tc2))
+			tc2.BuildCollisions(false, false);
+		if(TerrainHandler.Chunks.TryGetValue(new Vector2Int(ChunkPositionInt.x, ChunkPositionInt.y + 1), out TerrainChunk tc3))
+			tc3.BuildCollisions(false, false);
+		if(TerrainHandler.Chunks.TryGetValue(new Vector2Int(ChunkPositionInt.x, ChunkPositionInt.y - 1), out TerrainChunk tc4))
+			tc4.BuildCollisions(false, false);
 	}
+
 	private void BuildGameObjects(GameObject chunkParent) {
 		if (ParentGO != null) {
 			Debug.LogWarning($"ChunkGO existing!: {ChunkPositionInt}");
@@ -74,25 +86,77 @@ public sealed class TerrainChunk : ChunkData{
 		dropParent.transform.SetParent(TileMap.transform);
 	}
 
-	public void BuildCollisions() {
-		if (CollisionTM == null)
-			throw new NullReferenceException($"CollisionTileMap is null! {ChunkPositionInt}");
-		CollisionTM.ClearAllTiles();
-		for (int x = 0; x < WorldAssets.ChunkLength; x++) {
-			for (int y = 0; y < WorldAssets.ChunkLength; y++) {
-				int worldX = x + ChunkPositionInt.x * WorldAssets.ChunkLength;
-				int worldY = y + ChunkPositionInt.y * WorldAssets.ChunkLength;
-
-				if (BlockIDs[x, y] != 0 &&
-					(TerrainHandler.Singleton.GetBlockFormCoordinate(worldX + 1, worldY) == 0 ||
-					TerrainHandler.Singleton.GetBlockFormCoordinate(worldX, worldY + 1) == 0 ||
-					TerrainHandler.Singleton.GetBlockFormCoordinate(worldX - 1, worldY) == 0 ||
-					TerrainHandler.Singleton.GetBlockFormCoordinate(worldX, worldY - 1) == 0)) {
-					CollisionTM.SetTile(new Vector3Int(x, y, 0), WorldAssets.Singleton.GetBlockbyId(1).tile);
-				}
-			}
-		}
+	/// <summary>
+	/// Bulds Collsions in Collison-TILEMAP
+	/// </summary>
+	/// <param name="borderOnly">If the </param>
+	/// <param name="overwrite"></param>
+	/// <exception cref="NullReferenceException"></exception>
+	public void BuildCollisions(bool borderOnly = false, bool overwrite = true) {
+		if(CollisionTM == null)
+			return;
+		if(overwrite)
+			CollisionTM.ClearAllTiles();
+		if(borderOnly) {
+			for(int i = 0; i < WorldAssets.ChunkLength; i++)
+				BuildCollision(new Vector2Int(0, i), Vector2Int.left);
+			for(int i = 0; i < WorldAssets.ChunkLength; i++)
+				BuildCollision(new Vector2Int(i, 0), Vector2Int.down);
+			for(int i = 0; i < WorldAssets.ChunkLength; i++)
+				BuildCollision(new Vector2Int(31, i), Vector2Int.right);
+			for(int i = 0; i < WorldAssets.ChunkLength; i++)
+				BuildCollision(new Vector2Int(i, 31), Vector2Int.up);
+		} else
+			for(int x = 0; x < WorldAssets.ChunkLength; x++)
+				for(int y = 0; y < WorldAssets.ChunkLength; y++)
+					BuildCollision(new Vector2Int(x, y));
 	}
+
+	/// <summary></summary>
+	/// <param name="inChunk"></param>
+	/// <param name="pivot">The direction where to check collsision</param>
+	/// <returns>true if the block has to be collsions</returns>
+	/// <exception cref="Exception">General Excepteion if c# is not working correctly</exception>
+	/// <exception cref="ArgumentException">If Pivot is not a predefined</exception>
+	public void BuildCollision(Vector2Int inChunk, Vector2Int? pivot = null){
+		if(!BlockHasCollsision(blocks[inChunk.x, inChunk.y]))
+			return;
+		
+		int worldX = inChunk.x + ChunkPositionInt.x * WorldAssets.ChunkLength;
+		int worldY = inChunk.y + ChunkPositionInt.y * WorldAssets.ChunkLength;
+
+		bool build = false;
+
+		if(pivot == null)
+			build = TerrainHandler.Singleton.GetBlockFormCoordinate(worldX + 1, worldY) == 0 ||
+				TerrainHandler.Singleton.GetBlockFormCoordinate(worldX, worldY + 1) == 0 ||
+				TerrainHandler.Singleton.GetBlockFormCoordinate(worldX - 1, worldY) == 0 ||
+				TerrainHandler.Singleton.GetBlockFormCoordinate(worldX, worldY - 1) == 0;
+		else{ 
+			//Pivot NotNull
+			Vector2Int pivotNN = pivot ?? throw new Exception("C# Mistake");
+			if(pivotNN == Vector2Int.left && TerrainHandler.Chunks.ContainsKey(new Vector2Int(ChunkPositionInt.x-1, ChunkPositionInt.y)))
+				build = BlockHasCollsision(TerrainHandler.Singleton.GetBlockFormCoordinate(worldX - 1, worldY));
+			if(pivotNN == Vector2Int.down && TerrainHandler.Chunks.ContainsKey(new Vector2Int(ChunkPositionInt.x, ChunkPositionInt.y -1)))
+				build = BlockHasCollsision(TerrainHandler.Singleton.GetBlockFormCoordinate(worldX, worldY - 1));
+			if(pivotNN == Vector2Int.up && TerrainHandler.Chunks.ContainsKey(new Vector2Int(ChunkPositionInt.x, ChunkPositionInt.y +1)))
+				build = BlockHasCollsision(TerrainHandler.Singleton.GetBlockFormCoordinate(worldX, worldY + 1));
+			if(pivotNN == Vector2Int.right && TerrainHandler.Chunks.ContainsKey(new Vector2Int(ChunkPositionInt.x + 1, ChunkPositionInt.y)))
+				build = BlockHasCollsision(TerrainHandler.Singleton.GetBlockFormCoordinate(worldX + 1, worldY));
+		}
+		//SetTile
+		if(build)
+			CollisionTM.SetTile(new Vector3Int(inChunk.x, inChunk.y, 0), WorldAssets.Singleton.GetBlockbyId(1).tile);
+		else
+			CollisionTM.SetTile(new Vector3Int(inChunk.x, inChunk.y, 0), null);
+	}
+
+	public bool BlockHasCollsision(byte blockId){
+		//TODO: If other Blocks has no Collision
+		if(blockId == 0)
+			return false;
+		return true;
+    }
 
 	/// <summary></summary>
 	public void PlaceAllTiles() {
@@ -247,7 +311,7 @@ public sealed class TerrainChunk : ChunkData{
 				if ((rand.NextDouble() * 100) + 1 < blockDropAble.dropchance)
 					ids.Add(blockDropAble.itemID);
 		return ids;
-    }
+	}
 	#endregion
 
 	//(Server) not sure

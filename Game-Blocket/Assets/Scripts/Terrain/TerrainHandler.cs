@@ -44,9 +44,9 @@ public abstract class TerrainHandler : MonoBehaviour {
 		ChunkData chunk = GetChunkFromCoordinate(x, y);
 		if (chunk != null)
 		{
-			int chunkX = x - WD.ChunkWidth * chunk.ChunkPositionInt.x;
-			int chunkY = y - WD.ChunkHeight * chunk.ChunkPositionInt.y;
-			if (chunkX < WD.ChunkWidth && chunkY < WD.ChunkHeight)
+			int chunkX = x - WorldAssets.ChunkLength * chunk.ChunkPositionInt.x;
+			int chunkY = y - WorldAssets.ChunkLength * chunk.ChunkPositionInt.y;
+			if (chunkX < WorldAssets.ChunkLength && chunkY < WorldAssets.ChunkLength)
 			{
 				return chunk.blocks[chunkX, chunkY];
 			}

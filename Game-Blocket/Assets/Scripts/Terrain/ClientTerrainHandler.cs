@@ -74,7 +74,7 @@ public class ClientTerrainHandler : TerrainHandler {
 	public void RequestChunk(Vector2Int chunkCord) {
 		if(RequestedChunks.Contains(chunkCord))
 			return;
-		if(DebugVariables.WorldNetworking || true)
+		if(DebugVariables.WorldNetworking)
 			Debug.Log($"Requested Chunk: {chunkCord}, {RequestedChunks.Count}");
 		Debug.Log("Send Request");
 		RequestedChunks.Add(chunkCord);
