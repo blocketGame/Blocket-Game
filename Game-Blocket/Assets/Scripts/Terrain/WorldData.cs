@@ -63,7 +63,7 @@ public class WorldData : MonoBehaviour {
 	[Obsolete]
 	public int ChunkHeight => WorldAssets.ChunkLength;
 	[Obsolete]
-	public int ChunkWidth => WorldAssets.ChunkLength;
+	public int ChunkWidth => WorldAssets.ChunkHeight;
 	[Obsolete]
 	public BlockData[] Blocks => WorldAssets.Singleton.blocks.ToArray();
 	public float Groupdistance { get => groupdistance; set => groupdistance = value; }

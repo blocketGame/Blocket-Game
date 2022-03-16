@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class NoiseGenerator : MonoBehaviour
 {
+	public static float lowest = float.MaxValue;
+	public static float highest = float.MinValue;
+
 	public enum NoiseMode
 	{
 		snoise,
@@ -108,12 +111,12 @@ public class NoiseGenerator : MonoBehaviour
 					{
 						perlinValue = Unity.Mathematics.noise.cellular(new Unity.Mathematics.float2(sampleX, sampleY));
 					}
+					noiseMap[x, y] = noiseHeight;
 					noiseHeight += perlinValue.x * amplitude;
 
 					amplitude *= persistance;
 					frequency *= lacunarity;
 				}
-				noiseMap[x, y] = noiseHeight;
 			}
 		}
 		return noiseMap;

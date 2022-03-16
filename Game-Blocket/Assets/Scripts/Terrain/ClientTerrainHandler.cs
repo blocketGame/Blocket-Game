@@ -117,8 +117,8 @@ public class ClientTerrainHandler : TerrainHandler {
 					Debug.LogWarning(names);
 				if(DebugVariables.ShowGameStateEvent)
 					Debug.LogWarning("Switching to Playmode!");
-			}
-			GameManager.State = GameState.INGAME;
+            }
+            GameManager.State = GameState.INGAME;
 		}
 	}
 

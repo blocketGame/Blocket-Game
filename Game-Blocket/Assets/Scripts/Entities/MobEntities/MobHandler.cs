@@ -48,7 +48,7 @@ public class MobHandler : MonoBehaviour{
 		//Random Position
 		Vector2Int posI = new Vector2Int(
 		(Mathf.RoundToInt(GlobalVariables.LocalPlayerPos.x) + GetRandomAchsisFromLocalPlayer()) % WorldAssets.ChunkLength, 
-		(Mathf.RoundToInt(GlobalVariables.LocalPlayerPos.y) + GetRandomAchsisFromLocalPlayer()) % WorldAssets.ChunkLength);
+		(Mathf.RoundToInt(GlobalVariables.LocalPlayerPos.y) + GetRandomAchsisFromLocalPlayer()) % WorldAssets.ChunkHeight);
 
 		if (Vector2.Distance(new Vector2(GlobalVariables.LocalPlayerPos.x, GlobalVariables.LocalPlayerPos.y), new Vector2(posI.x, posI.y)) < minSpawnDistance)
 		return;
@@ -63,7 +63,7 @@ public class MobHandler : MonoBehaviour{
 	private Vector3? CheckSpaceAround(Vector2Int pos, Vector2Int mobSize){
 		//Debug.Log(pos);
 		//If blockId is 0
-		if (GetTerrainChunkFromPos(pos)?.blocks[Math.Abs(pos.x % WorldAssets.ChunkLength), Math.Abs(pos.y % WorldAssets.ChunkLength)] == 0)//If Block in terrain equals Air
+		if (GetTerrainChunkFromPos(pos)?.blocks[Math.Abs(pos.x % WorldAssets.ChunkHeight), Math.Abs(pos.y % WorldAssets.ChunkLength)] == 0)//If Block in terrain equals Air
 		{
 			return CheckSpaceAround(new Vector2Int(pos.x, pos.y - 1), mobSize); //Loop this method and try it below again
 		}
@@ -99,7 +99,7 @@ public class MobHandler : MonoBehaviour{
 				throw new NullReferenceException();
 			if (GetTerrainChunkFromPos(pos)?.blocks[
 			(int)(Math.Abs((float)(posI?.x)) % WorldAssets.ChunkLength), 
-			(int)Mathf.Abs((float)(posI?.y) % WorldAssets.ChunkLength)] == 0)
+			(int)Mathf.Abs((float)(posI?.y) % WorldAssets.ChunkHeight)] == 0)
 				sum++;
 			else
 				break;
