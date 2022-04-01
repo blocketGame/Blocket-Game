@@ -21,9 +21,10 @@ public class GameManager : MonoBehaviour {
 		} 
 	}
 	private static GameState _state;
-	
-	//Client
-	public static PlayerProfile PlayerProfileNow { get; set; }
+			
+
+    //Client
+    public static PlayerProfile PlayerProfileNow { get; set; }
 	public static SettingsProfile SettingsProfile { get; private set; } = new SettingsProfile("local", null);
 
 	public static GameObject LoadinScreenNow { get; set; }

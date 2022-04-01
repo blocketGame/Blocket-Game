@@ -18,6 +18,7 @@ public class UIMainMenu : MonoBehaviour{
 	/// </summary>
 	public Button offlineBtn, onlineBtn, settingsBtn;
 
+
 	private void Awake() => Singleton = this;
 
     /// <summary>

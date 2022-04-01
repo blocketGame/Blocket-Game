@@ -34,6 +34,11 @@ MonoBehaviour:
   structures: 0102040506
   enemies: 
   stoneBlockId: 40
+  stoneBlockIdBg: 13
+  skyBlockInsideId: 0
+  skyBlockInsideIdBg: 0
+  skyBlockOutsideId: 0
+  skyBlockOutsideBg: 0
   size: 1000
   heightCurve:
     serializedVersion: 2
