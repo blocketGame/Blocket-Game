@@ -1,5 +1,5 @@
 using System;
-
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -58,13 +58,53 @@ public class ToolItem : Item {
 	public ToolType toolType;
 
 	public enum ToolType {
-		MEELE, RANGE, SHOVEL, AXE, PICKAXE, DEFAULT
+		SHOVEL, AXE, PICKAXE, DEFAULT
 	}
 }
 
-[System.Serializable]
-public class MeeleItem : ToolItem{
-	
+[Serializable]
+public class WeaponItem : Item
+{
+	//Animations for each kombo
+	public List<String> swingingAnimations;
+	public ushort durability, damage;
+	public bool dmgOnColliderHit;
+	public bool holdShooting;
+	public float coolDownTime;
+	[Header("Ranged-Settings")]
+	//Projectile (0 => no projectile)
+	public uint projectile;
+	public int maxHeight, maxDistance;
+	[Header("Custom")]
+	public CustomWeaponBehaviour behaviour;
+
+	public WeaponType weaponType;
+	public enum WeaponType
+	{
+		MELEE , RANGE , MAGE , BENDER
+	}
+}
+
+[Serializable]
+public class Projectile : Item
+{
+	public ushort durability, damage;
+	[Header("Flying-Behaviour")]
+	//Realtive to the player
+	public Vector2 spawningPos;
+	public Vector3 SpawningPos3 { get => spawningPos;}
+	public float flyingSpeed;
+	[Header("Hit-Attributes")]
+	//0 => Destroy on Block Hit
+	public float bounciness;
+	public float lightEmission;
+	public bool goThroughBlocks, pierce;
+	//In percent to actual Velocity (9,8..)
+	//=> 100% - normal
+	//=> 0% - no Velocity
+	//=> 200% fall really fast
+	public float gravityScale;
+
 }
 
 [Serializable]

@@ -41,11 +41,222 @@ Tilemap:
   m_GameObject: {fileID: 2020165811883497970}
   m_Enabled: 1
   m_Tiles:
+  - first: {x: -8, y: -9, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 50
+      m_TileSpriteIndex: 0
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
+  - first: {x: -7, y: -9, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 44
+      m_TileSpriteIndex: 1
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
+  - first: {x: -6, y: -9, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 45
+      m_TileSpriteIndex: 2
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
+  - first: {x: -5, y: -9, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 49
+      m_TileSpriteIndex: 3
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 49b966e (?)
+  - first: {x: -4, y: -9, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 52
+      m_TileSpriteIndex: 51
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
+<<<<<<< HEAD
+=======
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+>>>>>>> 49b966e (?)
+  - first: {x: -8, y: -8, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 51
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 4
+=======
+      m_TileSpriteIndex: 50
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 4
+>>>>>>> 49b966e (?)
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
+  - first: {x: -7, y: -8, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 43
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 5
+=======
+      m_TileSpriteIndex: 4
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 5
+>>>>>>> 49b966e (?)
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
+  - first: {x: -6, y: -8, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 46
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 6
+=======
+      m_TileSpriteIndex: 5
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 6
+>>>>>>> 49b966e (?)
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
+  - first: {x: -5, y: -8, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 47
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 7
+=======
+      m_TileSpriteIndex: 6
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 7
+>>>>>>> 49b966e (?)
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
+  - first: {x: -4, y: -8, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 48
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 8
+=======
+      m_TileSpriteIndex: 7
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 8
+>>>>>>> 49b966e (?)
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
+  - first: {x: -7, y: -7, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 41
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 9
+=======
+      m_TileSpriteIndex: 8
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 9
+>>>>>>> 49b966e (?)
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
+  - first: {x: -6, y: -7, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 42
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 10
+=======
+      m_TileSpriteIndex: 9
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 10
+>>>>>>> 49b966e (?)
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
+  - first: {x: -7, y: -6, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 40
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 11
+=======
+      m_TileSpriteIndex: 10
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 11
+>>>>>>> 49b966e (?)
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
   - first: {x: -6, y: -6, z: 0}
     second:
       serializedVersion: 2
       m_TileIndex: 36
-      m_TileSpriteIndex: 0
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 12
+=======
+      m_TileSpriteIndex: 11
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 12
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -55,7 +266,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 37
-      m_TileSpriteIndex: 1
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 13
+=======
+      m_TileSpriteIndex: 12
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 13
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -65,7 +284,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 39
-      m_TileSpriteIndex: 38
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 14
+=======
+      m_TileSpriteIndex: 13
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 14
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -75,7 +302,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 1
-      m_TileSpriteIndex: 2
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 15
+=======
+      m_TileSpriteIndex: 14
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 15
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -85,7 +320,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 0
-      m_TileSpriteIndex: 3
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 16
+=======
+      m_TileSpriteIndex: 15
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 16
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -95,7 +338,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 22
-      m_TileSpriteIndex: 4
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 17
+=======
+      m_TileSpriteIndex: 16
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 17
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -105,7 +356,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 30
-      m_TileSpriteIndex: 5
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 18
+=======
+      m_TileSpriteIndex: 17
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 18
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -115,7 +374,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 26
-      m_TileSpriteIndex: 6
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 19
+=======
+      m_TileSpriteIndex: 18
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 19
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -125,7 +392,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 19
-      m_TileSpriteIndex: 7
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 20
+=======
+      m_TileSpriteIndex: 19
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 20
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -135,7 +410,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 18
-      m_TileSpriteIndex: 8
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 21
+=======
+      m_TileSpriteIndex: 20
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 21
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -145,7 +428,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 29
-      m_TileSpriteIndex: 9
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 22
+=======
+      m_TileSpriteIndex: 21
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 22
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -155,7 +446,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 27
-      m_TileSpriteIndex: 10
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 23
+=======
+      m_TileSpriteIndex: 22
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 23
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -165,7 +464,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 28
-      m_TileSpriteIndex: 11
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 24
+=======
+      m_TileSpriteIndex: 23
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 24
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -175,7 +482,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 21
-      m_TileSpriteIndex: 12
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 25
+=======
+      m_TileSpriteIndex: 24
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 25
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -185,7 +500,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 20
-      m_TileSpriteIndex: 13
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 26
+=======
+      m_TileSpriteIndex: 25
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 26
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -195,7 +518,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 25
-      m_TileSpriteIndex: 14
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 27
+=======
+      m_TileSpriteIndex: 26
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 27
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -205,7 +536,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 24
-      m_TileSpriteIndex: 15
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 28
+=======
+      m_TileSpriteIndex: 27
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 28
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -215,7 +554,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 23
-      m_TileSpriteIndex: 16
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 29
+=======
+      m_TileSpriteIndex: 28
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 29
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -225,7 +572,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 38
-      m_TileSpriteIndex: 17
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 30
+=======
+      m_TileSpriteIndex: 29
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 30
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -235,7 +590,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 15
-      m_TileSpriteIndex: 18
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 31
+=======
+      m_TileSpriteIndex: 30
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 31
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -245,7 +608,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 16
-      m_TileSpriteIndex: 19
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 32
+=======
+      m_TileSpriteIndex: 31
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 32
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -265,7 +636,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 2
-      m_TileSpriteIndex: 20
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 33
+=======
+      m_TileSpriteIndex: 32
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 33
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -275,7 +654,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 3
-      m_TileSpriteIndex: 21
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 34
+=======
+      m_TileSpriteIndex: 33
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 34
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -285,7 +672,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 11
-      m_TileSpriteIndex: 22
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 35
+=======
+      m_TileSpriteIndex: 34
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 35
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -295,7 +690,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 10
-      m_TileSpriteIndex: 23
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 36
+=======
+      m_TileSpriteIndex: 35
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 36
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -305,7 +708,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 9
-      m_TileSpriteIndex: 24
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 37
+=======
+      m_TileSpriteIndex: 36
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 37
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -315,7 +726,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 8
-      m_TileSpriteIndex: 25
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 38
+=======
+      m_TileSpriteIndex: 37
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 38
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -325,7 +744,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 7
-      m_TileSpriteIndex: 26
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 39
+=======
+      m_TileSpriteIndex: 38
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 39
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -335,7 +762,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 6
-      m_TileSpriteIndex: 27
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 40
+=======
+      m_TileSpriteIndex: 39
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 40
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -345,7 +780,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 4
-      m_TileSpriteIndex: 28
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 41
+=======
+      m_TileSpriteIndex: 40
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 41
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -355,17 +798,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 35
-      m_TileSpriteIndex: 29
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: -1, y: -1, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 35
-      m_TileSpriteIndex: 34
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 42
+=======
+      m_TileSpriteIndex: 41
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 42
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -375,7 +816,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 14
-      m_TileSpriteIndex: 30
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 43
+=======
+      m_TileSpriteIndex: 42
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 43
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -385,7 +834,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 13
-      m_TileSpriteIndex: 31
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 44
+=======
+      m_TileSpriteIndex: 43
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 44
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -395,7 +852,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 5
-      m_TileSpriteIndex: 32
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 45
+=======
+      m_TileSpriteIndex: 44
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 45
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -405,7 +870,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 12
-      m_TileSpriteIndex: 33
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 46
+=======
+      m_TileSpriteIndex: 45
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 46
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -415,7 +888,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 31
-      m_TileSpriteIndex: 34
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 47
+=======
+      m_TileSpriteIndex: 46
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 47
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -425,7 +906,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 32
-      m_TileSpriteIndex: 35
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 48
+=======
+      m_TileSpriteIndex: 47
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 48
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -435,7 +924,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 33
-      m_TileSpriteIndex: 36
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 49
+=======
+      m_TileSpriteIndex: 48
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 49
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -445,27 +942,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 34
-      m_TileSpriteIndex: 37
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: -2, y: 0, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 33
-      m_TileSpriteIndex: 32
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: -1, y: 0, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 34
-      m_TileSpriteIndex: 33
+<<<<<<< HEAD
+<<<<<<< HEAD
+      m_TileSpriteIndex: 50
+=======
+      m_TileSpriteIndex: 49
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+      m_TileSpriteIndex: 50
+>>>>>>> 49b966e (?)
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -563,11 +1048,79 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: c706feebda529404a87185c490a5575f, type: 2}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: 12922adde41d67e4d8074abfbe1674ef, type: 2}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: 42f54c33403fbc54e8a67165d48a7e5c, type: 2}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: 61aedf1b6da923946b76c67ba1c01ca5, type: 2}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: 89b85b0de77bae84a9736550d5bffd5a, type: 2}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: bf46b1a7c9749d049aa3b70fe4358924, type: 2}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: 51dd16bda235bf44aa15826e4a62aee0, type: 2}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: 55d4239d9740d5a43910d01cbcbd9548, type: 2}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: 530db5cffb2f16746bc53759282246b3, type: 2}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: 62a102a2be14b6f468545748c0f1bcd0, type: 2}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: dd2a34552b5670542a2bd92bb33efe96, type: 2}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: 537804b440dddab449a8bc0260c47c26, type: 2}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: 0722539b8b63de749af04b36b9e031ef, type: 2}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: 2c598a45f72fbaf4a9b41acb93d3c335, type: 2}
+<<<<<<< HEAD
+<<<<<<< HEAD
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: 17107fb2cb2a99249afacb38386adac7, type: 2}
+=======
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: 17107fb2cb2a99249afacb38386adac7, type: 2}
+>>>>>>> 49b966e (?)
   m_TileSpriteArray:
+  - m_RefCount: 1
+    m_Data: {fileID: 21300000, guid: d98352069f4b14146b36e8839649ce0c, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: 21300000, guid: fcb7fd46ce2358c459648b68731c017b, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: 21300000, guid: ebfc500107d87c349be6bbc1fc7c3b8b, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: 21300000, guid: e76fd40537c423e4091e3d03f723dec3, type: 3}
+  - m_RefCount: 1
+<<<<<<< HEAD
+<<<<<<< HEAD
+    m_Data: {fileID: 21300000, guid: 36106ddbcd1f0b348aae1c966fee1f1f, type: 3}
+  - m_RefCount: 1
+=======
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+    m_Data: {fileID: 21300000, guid: 36106ddbcd1f0b348aae1c966fee1f1f, type: 3}
+  - m_RefCount: 1
+>>>>>>> 49b966e (?)
+    m_Data: {fileID: 21300000, guid: d126f5ad50106b248901b360046e010b, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: 21300000, guid: d1c7c82e05ebba24d93f7cf8461988e9, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: 21300000, guid: a061fd74e247fa643a8ef53db960dae8, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: 21300000, guid: dadcacd4e6070fd4a9e5a9efa22d7387, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: 21300000, guid: 157db56d3cd9c7a4581373d67c7d2a21, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: 21300000, guid: 24fba1f8cf543c344a46ad81d8d163a8, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: 21300000, guid: c294875dd6965ea43949bcf8ec45b13c, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 21300000, guid: 87295bda048e9f04fb161620d7733bdb, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 21300000, guid: d5ef36d0a8e547e41acfe8bfb495b116, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: 21300000, guid: 941aa281ca582eb4aa7a3348acefc603, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 21300000, guid: bcc23ecf794494045afb1a5029324464, type: 3}
   - m_RefCount: 1
@@ -641,9 +1194,21 @@ Tilemap:
   - m_RefCount: 1
     m_Data: {fileID: 21300000, guid: f206c93e6f1ddcf48a8289403be00834, type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: 21300000, guid: e3945c0873669d54b9adac60717c6982, type: 3}
+<<<<<<< HEAD
+<<<<<<< HEAD
+    m_Data: {fileID: 21300000, guid: 919bbe4386c06c24aaddaee3b383296d, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 37
+  - m_RefCount: 54
+=======
+    m_Data: {fileID: 21300000, guid: 36106ddbcd1f0b348aae1c966fee1f1f, type: 3}
+  m_TileMatrixArray:
+  - m_RefCount: 53
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+    m_Data: {fileID: 21300000, guid: 919bbe4386c06c24aaddaee3b383296d, type: 3}
+  m_TileMatrixArray:
+  - m_RefCount: 54
+>>>>>>> 49b966e (?)
     m_Data:
       e00: 1
       e01: 0
@@ -662,13 +1227,21 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 37
+<<<<<<< HEAD
+<<<<<<< HEAD
+  - m_RefCount: 54
+=======
+  - m_RefCount: 53
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+  - m_RefCount: 54
+>>>>>>> 49b966e (?)
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Origin: {x: -8, y: -6, z: 0}
-  m_Size: {x: 8, y: 8, z: 1}
+  m_Origin: {x: -8, y: -9, z: 0}
+  m_Size: {x: 8, y: 11, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
@@ -781,7 +1354,15 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
---- !u!114 &41588673191902214
+<<<<<<< HEAD
+<<<<<<< HEAD
+--- !u!114 &93086451420654897
+=======
+--- !u!114 &100240156904534741
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+--- !u!114 &93086451420654897
+>>>>>>> 49b966e (?)
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -793,7 +1374,15 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7292053961732371266
+<<<<<<< HEAD
+<<<<<<< HEAD
+--- !u!114 &1064268565257963028
+=======
+--- !u!114 &7261292681128050065
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+--- !u!114 &1064268565257963028
+>>>>>>> 49b966e (?)
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -805,7 +1394,18 @@ MonoBehaviour:
   m_Script: {fileID: 12395, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: Palette Settings
   m_EditorClassIdentifier: 
---- !u!114 &7691351344297089127
+  cellSizing: 0
+  m_TransparencySortMode: 0
+  m_TransparencySortAxis: {x: 0, y: 0, z: 1}
+<<<<<<< HEAD
+<<<<<<< HEAD
+--- !u!114 &7738413705436662096
+=======
+--- !u!114 &7731260015922861748
+>>>>>>> 9f010fd (creating MELEE + RANGED)
+=======
+--- !u!114 &7738413705436662096
+>>>>>>> 49b966e (?)
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

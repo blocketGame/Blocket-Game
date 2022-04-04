@@ -13,6 +13,8 @@ public class ItemAssets : MonoBehaviour{
 	public List<EquipableItem> EquipableItemsInGame = new List<EquipableItem>();
 	public List<UseAbleItem> UseableItemsInGame = new List<UseAbleItem>();
 	public List<CommonItem> CommonItems = new List<CommonItem>();
+	public List<WeaponItem> WeaponItems = new List<WeaponItem>();
+	public List<Projectile> Projectiles = new List<Projectile>();
 
 	//TODO: Move somewhere else
 	public List<CraftingRecipe> Recipes = new List<CraftingRecipe>();
@@ -52,6 +54,12 @@ public class ItemAssets : MonoBehaviour{
 			if (item.id == itemId)
 				return item;
 		foreach (Item item in CommonItems)
+			if (item.id == itemId)
+				return item;
+		foreach (Item item in WeaponItems)
+			if (item.id == itemId)
+				return item;
+		foreach (Item item in Projectiles)
 			if (item.id == itemId)
 				return item;
 		Debug.LogWarning($"Item not found: {itemId}");
