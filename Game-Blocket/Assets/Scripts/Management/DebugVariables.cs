@@ -14,7 +14,7 @@
 	public static bool ShowChunkHandle => false;
 	public static bool ShowChatEntries => true;
 	public static bool ShowScrollViewInfo => true;
-	public static bool MobHandling => false;
+	public static bool MobHandling => true;
 	public static bool WorldNetworking => false;
 }
 
