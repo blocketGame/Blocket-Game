@@ -6,10 +6,12 @@ using UnityEngine.Experimental.Rendering.Universal;
 public class PlayerVariables : MonoBehaviour{
 	public static PlayerVariables Singleton { get; private set; }
 
-	public static Gamemode Gamemode { get => gamemode; 
-		set {
-			gamemode = value;
-			switch(value){
+
+
+	public static Dimension Dimension { get; set; }
+
+	public static Gamemode Gamemode { get => gamemode; set {	
+		switch(value){
 				case Gamemode.SURVIVAL: 
 					
 				break;
@@ -121,6 +123,10 @@ public class PlayerVariables : MonoBehaviour{
 }
 public enum Gamemode{
 	SURVIVAL, CREATIVE, ADVENTURE
+}
+
+public enum Dimension{
+	OVERWORLD, DUNGEON, OTHER, NULL
 }
 
 public enum CharacterRace

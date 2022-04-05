@@ -67,13 +67,32 @@ public class PlayerInteraction : MonoBehaviour {
     public void Update() {
 		if (GameManager.State != GameState.INGAME || (UIInventory.Singleton?.InventoryOpened ?? false))
 			return;
-
+		//1. Rightclick on Block
+		if(Input.GetKey(GameManager.SettingsProfile.SideInteractionKey) && TargetBlockID(true) != 0)
+			HandleBlockInteraction(TargetBlockID(true));
+		//2. Leftclick + Coroutine
 		if(PlayerVariables.Gamemode != Gamemode.ADVENTURE)
-			HandleBlockInteraction();
+			HandleBlockBreakInteraction();
+		//3. ItemHolding
+		if(Inventory.Singleton.SelectedItemObj != null)
+			HandleHoldItem();
 
-		HandleHoldItem();
-
+		//Crafting
 		HandleCraftingSystem();
+	}
+
+	//TODO: Not pretty
+	private void HandleBlockInteraction(byte blockId){
+		switch(blockId) {
+			case 22:
+			case 23:
+			case 24:
+			case 25:
+			case 26:
+			case 27:
+			GameManager.SwitchDimension(Dimension.DUNGEON);
+			break;
+		}
 	}
 
     private void HandleHoldItem() {
@@ -138,7 +157,7 @@ public class PlayerInteraction : MonoBehaviour {
 	}
 
 	/// <summary>Handles the Blockinteraction</summary>
-	public void HandleBlockInteraction(){
+	public void HandleBlockBreakInteraction(){
 		SetFocusGO(BlockHoverdAbsolute, TargetBlockExisting());
 		
 		if (BreakCoroutine != null && !Input.GetKey(GameManager.SettingsProfile.MainInteractionKey)){
@@ -201,3 +220,4 @@ public class PlayerInteraction : MonoBehaviour {
 	}
     #endregion
 }
+

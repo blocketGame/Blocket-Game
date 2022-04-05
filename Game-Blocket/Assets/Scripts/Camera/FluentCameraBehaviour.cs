@@ -20,7 +20,7 @@ public class FluentCameraBehaviour : MonoBehaviour{
 
     private void Update()
     {
-        if (GameManager.State != GameState.INGAME)
+        if (GameManager.State != GameState.INGAME && !UIInventory.Singleton.ChatOpened)
             return;
         GetComponent<Camera>().orthographicSize = camZoom;
         if (Input.mouseScrollDelta.y != 0 && Input.GetKey(KeyCode.LeftControl))

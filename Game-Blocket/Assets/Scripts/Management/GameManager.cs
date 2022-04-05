@@ -158,18 +158,22 @@ public class GameManager : MonoBehaviour {
     //Both (more server)
     /// <summary>After the Scene switches to the Main Game</summary>
     public void SceneSwitched(Scene s1, LoadSceneMode lsm) {
-		if (s1.name != "MainGame")
-			return;
-		SceneManager.SetActiveScene(s1);
-		State = GameState.LOADING;
-		if (NetworkManager.Singleton.IsServer){
-			SpawnPlayers();
-			//For Server
-			GlobalVariables.World = Instantiate(PrefabAssets.Singleton.world);
-			//For Clients
-			GlobalVariables.World.GetComponent<NetworkObject>().Spawn();
-			GlobalVariables.World.AddComponent<ServerTerrainHandler>();
+		if (s1.name == "MainGame"){ 
+			SceneManager.SetActiveScene(s1);
+			State = GameState.LOADING;
+			if (NetworkManager.Singleton.IsServer){
+				SpawnPlayers();
+				//For Server
+				GlobalVariables.World = Instantiate(PrefabAssets.Singleton.world);
+				//For Clients
+				GlobalVariables.World.GetComponent<NetworkObject>().Spawn();
+				GlobalVariables.World.AddComponent<ServerTerrainHandler>();
+			}
 		}
+
+		if(s1.name == "Dungeon"){
+			Debug.Log("a");
+        }
 	}
 
 	//Server
@@ -190,6 +194,31 @@ public class GameManager : MonoBehaviour {
 	}
 
     #endregion
+
+	public static void SwitchDimension(Dimension dimensionTo){
+		if(PlayerVariables.Dimension == dimensionTo)
+			return;
+		State = GameState.LOADING;
+		switch(dimensionTo) {
+			case Dimension.OVERWORLD:
+				SceneManager.LoadScene("MainGame", LoadSceneMode.Additive);
+				SceneManager.UnloadSceneAsync("Dungeon");
+			break;
+			case Dimension.DUNGEON:
+				SceneManager.LoadScene("Dungeon", LoadSceneMode.Additive);
+				SceneManager.UnloadSceneAsync("MainGame");
+			break;
+			case Dimension.OTHER:
+				//Future
+			break;
+			case Dimension.NULL:
+				throw new ArgumentException();
+			default: 
+				throw new ArgumentOutOfRangeException();
+		}
+		State = GameState.INGAME;
+		PlayerVariables.Dimension = dimensionTo;
+	}
 
 }
 
