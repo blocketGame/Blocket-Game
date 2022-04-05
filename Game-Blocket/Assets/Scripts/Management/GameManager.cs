@@ -38,14 +38,14 @@ public class GameManager : MonoBehaviour {
 		if (DebugVariables.ShowGameStateEvent)
 			Debug.Log($"GameState Switched to: {state}");
 		switch (state) {
-			case GameState.MENU: 
-
-				break;
-			case GameState.LOBBY: 
-
-				break;
+			case GameState.MENU:
+				UILoadingscreen.Visible = false;
+			break;
+			case GameState.LOBBY:
+			UILoadingscreen.Visible = false;
+			break;
 			case GameState.LOADING:
-				UIInventory.Singleton?.loadingScreen?.SetActive(true);
+			UILoadingscreen.Visible = true;
 				break;
 			case GameState.INGAME:
 				///TODO: Clean
@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour {
 				rig.simulated = true;
 				rig.gravityScale = 1;
 
-				UIInventory.Singleton.loadingScreen.SetActive(false);
+				UILoadingscreen.Visible = false;
 			break;
 			case GameState.PAUSED: break;
 			case GameState.NEVER: throw new ArgumentException();
