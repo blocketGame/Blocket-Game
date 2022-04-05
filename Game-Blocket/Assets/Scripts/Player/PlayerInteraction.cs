@@ -12,10 +12,13 @@ public class PlayerInteraction : MonoBehaviour {
 	public GameObject deleteSprite;
 	public Sprite crackTile;
 
-	private CursorMode cursorMode = CursorMode.Auto;
+	private CursorMode CursorMode => CursorMode.Auto;
 	private Vector2 hotSpot = Vector2.zero;
 
 	public Coroutine BreakCoroutine { get; set; }
+
+	private KeyCode Main => GameManager.SettingsProfile.MainInteractionKey;
+	private KeyCode Side => GameManager.SettingsProfile.SideInteractionKey;
 
 	#region Util
 	/// <summary>Used for the Mouse Offset<br></br>Due to not perfect input</summary>
@@ -57,46 +60,54 @@ public class PlayerInteraction : MonoBehaviour {
 	#region UnityMethods
 	public void Awake() => Singleton = this;
 
-	public void Update() {
+    private void Start() {
+        Cursor.SetCursor(ItemAssets.Singleton.InventoryCursor.texture,hotSpot, CursorMode);
+    }
+
+    public void Update() {
 		if (GameManager.State != GameState.INGAME || (UIInventory.Singleton?.InventoryOpened ?? false))
-		{
-			Cursor.SetCursor(ItemAssets.Singleton.InventoryCursor.texture,hotSpot, cursorMode);
 			return;
+
+		if(PlayerVariables.Gamemode != Gamemode.ADVENTURE)
+			HandleBlockInteraction();
+
+		HandleHoldItem();
+
+		HandleCraftingSystem();
+	}
+
+    private void HandleHoldItem() {
+		if (Inventory.Singleton.SelectedItemObj is BlockItem bI) { 
+			if (Input.GetKey(Side) && PlayerVariables.Gamemode != Gamemode.ADVENTURE)
+				bI.OnSideInteractionKey();
+			if (Input.GetKey(Main))
+				bI.OnMainInteractionKey();
 		}
-		HandleBlockInteraction();
-
-		KeyCode main = GameManager.SettingsProfile.MainInteractionKey;
-		KeyCode side = GameManager.SettingsProfile.SideInteractionKey;
-
+		if (Inventory.Singleton.SelectedItemObj is ToolItem tI)
+		{
+			if (Input.GetKey(Side))
+				tI.OnSideInteractionKey();
+			if (Input.GetKey(Side))
+				tI.OnMainInteractionKey();
+		}
+    }
+	
+	private void HandleCraftingSystem() {
 		if (Input.GetKeyDown(GameManager.SettingsProfile.CraftingInterface))
 		{
 			CraftingStation.HandleCraftingInterface(BlockHoverdAbsolute, ItemAssets.Singleton.CraftingStations.Find(x => x.blockId.Equals(255)));
 		}
 
-		if (Input.GetKeyDown(side) && ItemAssets.Singleton.CraftingStations.Find(x => x.blockId.Equals(TargetBlockID(true))) != null)
+		if (Input.GetKeyDown(Side) && ItemAssets.Singleton.CraftingStations.Find(x => x.blockId.Equals(TargetBlockID(true))) != null)
 		{
 			//Open Menu
 			//Crafting System
 			CraftingStation.HandleCraftingInterface(new Vector2Int((int)GlobalVariables.LocalPlayerPos.x, (int)GlobalVariables.LocalPlayerPos.y), ItemAssets.Singleton.CraftingStations.Find(x => x.blockId.Equals(TargetBlockID(true))));
 		}
+    }
 
-		if (Inventory.Singleton.SelectedItemObj is BlockItem bI) { 
-			if (Input.GetKey(side))
-				bI.OnSideInteractionKey();
-			if (Input.GetKey(main))
-				bI.OnMainInteractionKey();
-		}
-		if (Inventory.Singleton.SelectedItemObj is ToolItem tI)
-		{
-			if (Input.GetKey(side))
-				tI.OnSideInteractionKey();
-			if (Input.GetKey(side))
-				tI.OnMainInteractionKey();
-		}
-	}
-
-	//TODO: Remove
-	public void LateUpdate() {
+    //TODO: Remove
+    public void LateUpdate() {
 		if (Input.GetKeyDown(KeyCode.Z))
 			Inventory.Singleton.AddItem(101, 1, out _);
 		if (Input.GetKeyDown(KeyCode.K))
@@ -163,9 +174,9 @@ public class PlayerInteraction : MonoBehaviour {
 	/// <param name="mouseWorldPos">Position of the Mouse</param>
 	private void SetFocusGO(Vector2Int mouseWorldPos, bool activate) {
 		if(activate)
-			Cursor.SetCursor(ItemAssets.Singleton.MiningCursor.texture, hotSpot, cursorMode);
+			Cursor.SetCursor(ItemAssets.Singleton.MiningCursor.texture, hotSpot, CursorMode);
 		else
-			Cursor.SetCursor(ItemAssets.Singleton.AttackingCursor.texture, hotSpot, cursorMode);
+			Cursor.SetCursor(ItemAssets.Singleton.AttackingCursor.texture, hotSpot, CursorMode);
 		deleteSprite.transform.position = new Vector3(mouseWorldPos.x + 0.5f, mouseWorldPos.y + 0.5f, deleteSprite.transform.position.z);
 		deleteSprite.SetActive(activate);
 	}

@@ -159,6 +159,7 @@ public class GameManager : MonoBehaviour {
     public void SceneSwitched(Scene s1, LoadSceneMode lsm) {
 		if (s1.name != "MainGame")
 			return;
+		SceneManager.SetActiveScene(s1);
 		State = GameState.LOADING;
 		if (NetworkManager.Singleton.IsServer){
 			SpawnPlayers();

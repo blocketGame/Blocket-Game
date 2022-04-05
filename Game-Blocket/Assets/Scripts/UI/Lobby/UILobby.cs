@@ -116,6 +116,7 @@ public class UILobby : MonoBehaviour {
 		SiteIndexOpen = 0;
 		ipPlaceHolder.text = NetworkVariables.ipAddress;
 		InitButtons();
+		UIMainMenu.CheckForLoadingScene();
 	}
 
 	private void SetNetworkAddress()

@@ -200,7 +200,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 351122645414068863, guid: bf0b35f4090f7fc409bc4e6c5154ffcf, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1659422467158985314, guid: bf0b35f4090f7fc409bc4e6c5154ffcf, type: 3}
       propertyPath: m_Name
@@ -208,15 +208,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1659422467158985314, guid: bf0b35f4090f7fc409bc4e6c5154ffcf, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1659422467158985314, guid: bf0b35f4090f7fc409bc4e6c5154ffcf, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4727444083193656337, guid: bf0b35f4090f7fc409bc4e6c5154ffcf, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6722834871928223468, guid: bf0b35f4090f7fc409bc4e6c5154ffcf, type: 3}
       propertyPath: m_Sprite
