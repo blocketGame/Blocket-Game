@@ -31,14 +31,11 @@ public class MobHandler : MonoBehaviour{
 	public IEnumerator CheckEnviroment(){
 		while (true) {
 			yield return new WaitForSeconds(1);
-				if (MobCache >= maxMobs)
-					continue;
+			if (MobCache >= maxMobs)
+				continue;
+			try{
 				HandleRandomSpawning();
-				try
-			{
-			}
-			catch (Exception e)
-			{
+			}catch (Exception e){
 				Debug.LogError(e.Message);
 			}
 		}
@@ -53,7 +50,7 @@ public class MobHandler : MonoBehaviour{
 		(Mathf.RoundToInt(GlobalVariables.LocalPlayerPos.x) + GetRandomAchsisFromLocalPlayer()) % WorldAssets.ChunkLength, 
 		(Mathf.RoundToInt(GlobalVariables.LocalPlayerPos.y) + GetRandomAchsisFromLocalPlayer()) % WorldAssets.ChunkLength);
 
-		if (Vector2.Distance(new Vector2(GlobalVariables.LocalPlayerPos.x, GlobalVariables.LocalPlayerPos.y), new Vector2(posI.x, posI.y)) < 20)
+		if (Vector2.Distance(new Vector2(GlobalVariables.LocalPlayerPos.x, GlobalVariables.LocalPlayerPos.y), new Vector2(posI.x, posI.y)) < minSpawnDistance)
 		return;
 
 
@@ -125,7 +122,7 @@ public class MobHandler : MonoBehaviour{
 			return;
 		Vector3 pos = position ?? Vector3.zero;
 		if (pos == Vector3.zero) return;
-		GameObject mgo = Instantiate(PrefabAssets.Singleton.mobEntity, pos, Quaternion.identity);
+		GameObject mgo = Instantiate(PrefabAssets.Singleton.mobEntity, pos, Quaternion.identity, transform);
 		FlyingEnemyBehaviour fb =mgo.AddComponent<FlyingEnemyBehaviour>();
 		fb.currentchunk = GetTerrainChunkFromPos(new Vector2Int((int)position?.x, (int)position?.y));
 		mgo.transform.parent = GetTerrainChunkFromPos(new Vector2Int((int)position?.x, (int)position?.y)).ParentGO.transform;

@@ -89,8 +89,9 @@ public class UILobby : MonoBehaviour {
 			if(role == 1) {
 				NetworkManager.Singleton.StartClient();
 			}
+			SceneManager.UnloadSceneAsync("Lobby");
 			if(NetworkManager.Singleton.IsServer)
-				NetworkManager.Singleton.SceneManager.LoadScene("MainGame", LoadSceneMode.Single);
+				NetworkManager.Singleton.SceneManager.LoadScene("MainGame", LoadSceneMode.Additive);
 			if(NetworkManager.Singleton.IsClient && !NetworkManager.Singleton.IsServer)
 				SceneManager.LoadScene("MainGame", LoadSceneMode.Single);
 		});
@@ -115,6 +116,7 @@ public class UILobby : MonoBehaviour {
 		SiteIndexOpen = 0;
 		ipPlaceHolder.text = NetworkVariables.ipAddress;
 		InitButtons();
+		UIMainMenu.CheckForLoadingScene();
 	}
 
 	private void SetNetworkAddress()

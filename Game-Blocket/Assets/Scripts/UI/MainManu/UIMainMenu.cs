@@ -39,5 +39,11 @@ public class UIMainMenu : MonoBehaviour{
 
 		///<see cref="Buttons.settingsBtn"/>
 		settingsBtn.onClick.AddListener(() => { });
+		CheckForLoadingScene();
+	}
+
+	public static void CheckForLoadingScene(){
+		if(SceneManager.sceneCount == 1 && SceneManager.GetSceneAt(0).name != "LoadingScene")
+			SceneManager.LoadScene("LoadingScene", new LoadSceneParameters(LoadSceneMode.Additive, LocalPhysicsMode.None));
 	}
 }
