@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using Random = System.Random;
+
 public class MobHandler : MonoBehaviour{
 	public static MobHandler Singleton { get; private set; }
 
@@ -14,13 +16,13 @@ public class MobHandler : MonoBehaviour{
 
 	public List<Mob> mobsNow = new List<Mob>();
 
-	private System.Random Random { get; set; }
+	private Random Random { get; set; }
 
 	public Coroutine Coroutine { get; set; }
 
 	public void Awake() {
 		Singleton = this;
-		Random = new System.Random();
+		Random = new Random();
 	}
 
 	public void FixedUpdate() {
@@ -112,18 +114,18 @@ public class MobHandler : MonoBehaviour{
 	private int GetRandomAchsisFromLocalPlayer() => Random.Next(-WorldData.Singleton.ChunkDistance* WorldAssets.ChunkLength, WorldData.Singleton.ChunkDistance* WorldAssets.ChunkLength);
 
 
-	private void SpawnMob(uint entityId, Vector3? position)=>SpawnMob(MobAssets.Singleton.GetMobFromID(entityId, false), position);
-	
-	
+	public void SpawnMob(uint entityId, Vector3? position) => SpawnMob(MobAssets.Singleton.GetMobFromID(entityId, false), position);
 
-	private void SpawnMob(Mob mob, Vector3? position)
+
+
+	public void SpawnMob(Mob mob, Vector3? position)
 	{
 		if (position == null && mobsNow.Count>=maxMobs)
 			return;
 		Vector3 pos = position ?? Vector3.zero;
 		if (pos == Vector3.zero) return;
 		GameObject mgo = Instantiate(PrefabAssets.Singleton.mobEntity, pos, Quaternion.identity, transform);
-		FlyingEnemyBehaviour fb =mgo.AddComponent<FlyingEnemyBehaviour>();
+		FlyingEnemyBehaviour fb = mgo.AddComponent<FlyingEnemyBehaviour>();
 		fb.currentchunk = GetTerrainChunkFromPos(new Vector2Int((int)position?.x, (int)position?.y));
 		mgo.transform.parent = GetTerrainChunkFromPos(new Vector2Int((int)position?.x, (int)position?.y)).ParentGO.transform;
 		SpriteRenderer sr = mgo.AddComponent<SpriteRenderer>();
