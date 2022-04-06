@@ -199,13 +199,17 @@ public class GameManager : MonoBehaviour {
 		if(PlayerVariables.Dimension == dimensionTo)
 			return;
 		State = GameState.LOADING;
+		PlayerVariables.Dimension = dimensionTo;
 		switch(dimensionTo) {
 			case Dimension.OVERWORLD:
 				SceneManager.LoadScene("MainGame", LoadSceneMode.Additive);
 				SceneManager.UnloadSceneAsync("Dungeon");
+				
 			break;
 			case Dimension.DUNGEON:
 				SceneManager.LoadScene("Dungeon", LoadSceneMode.Additive);
+				MoveImportantThings(SceneManager.GetSceneByName("Dungeon"));
+				PlayerInteraction.Singleton.enabled = false;
 				SceneManager.UnloadSceneAsync("MainGame");
 			break;
 			case Dimension.OTHER:
@@ -217,10 +221,18 @@ public class GameManager : MonoBehaviour {
 				throw new ArgumentOutOfRangeException();
 		}
 		State = GameState.INGAME;
-		PlayerVariables.Dimension = dimensionTo;
+		
+		GlobalVariables.LocalPlayer = Instantiate(GlobalVariables.LocalPlayer);
+		Instantiate(SmoothCamera.Singleton);
 	}
-
+	public static void MoveImportantThings(Scene scene){
+		SceneManager.MoveGameObjectToScene(GlobalVariables.LocalPlayer, scene);
+		SceneManager.MoveGameObjectToScene(SmoothCamera.Singleton.gameObject, scene);
+		SceneManager.MoveGameObjectToScene(UIInventory.Singleton.gameObject, scene);
+	}
 }
+
+
 
 /// <summary>
 /// Defines in which State our Game is

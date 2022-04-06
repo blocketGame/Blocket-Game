@@ -244,7 +244,7 @@ public class Movement : MonoBehaviour {
 	/// </summary>
 	private void MoveHorizontally()
     {
-		if (!lockvar)
+		if (!lockvar && PlayerVariables.Dimension == Dimension.OVERWORLD)
 		{
 			Vector3Int playerCell = WorldData.Singleton.Grid.WorldToCell(RigidBodyPosition);
 
@@ -281,6 +281,8 @@ public class Movement : MonoBehaviour {
 	/// </summary>
 	private void PreventFloorGlitch()
     {
+		if(PlayerVariables.Dimension == Dimension.DUNGEON)
+			return;
 		Vector3Int playerCell = WorldData.Singleton.Grid.WorldToCell(RigidBodyPosition);
 		if (TerrainHandler.Singleton.GetBlockFormCoordinate(playerCell.x, playerCell.y) != 0)
         {

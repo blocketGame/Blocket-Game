@@ -71,13 +71,14 @@ public class PlayerInteraction : MonoBehaviour {
 		if(Input.GetKey(GameManager.SettingsProfile.SideInteractionKey) && TargetBlockID(true) != 0)
 			HandleBlockInteraction(TargetBlockID(true));
 		//2. Leftclick + Coroutine
-		if(PlayerVariables.Gamemode != Gamemode.ADVENTURE)
+		if(PlayerVariables.Gamemode != Gamemode.ADVENTURE && PlayerVariables.Dimension == Dimension.OVERWORLD)
 			HandleBlockBreakInteraction();
 		//3. ItemHolding
 		if(Inventory.Singleton.SelectedItemObj != null)
 			HandleHoldItem();
 
 		//Crafting
+		if(PlayerVariables.Dimension == Dimension.OVERWORLD)
 		HandleCraftingSystem();
 	}
 
