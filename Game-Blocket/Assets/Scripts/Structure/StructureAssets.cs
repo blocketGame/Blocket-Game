@@ -6,10 +6,11 @@ public class StructureAssets : MonoBehaviour{
 
 	public List<Structure> Structures = new List<Structure>();
 
-	private void Awake() => Singleton = this;
-
-
-	public void Start() => ReadAllStructures();
+	private void Awake()
+	{
+		Singleton = this;
+		ReadAllStructures();
+	}
 
 	public void ReadAllStructures(){
 		foreach (Structure structure in Structures)

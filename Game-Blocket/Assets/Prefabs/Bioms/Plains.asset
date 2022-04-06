@@ -34,6 +34,11 @@ MonoBehaviour:
   structures: 00010206
   enemies: 
   stoneBlockId: 12
+  stoneBlockIdBg: 8
+  skyBlockInsideId: 12
+  skyBlockInsideIdBg: 8
+  skyBlockOutsideId: 3
+  skyBlockOutsideBg: 8
   size: 1000
   heightCurve:
     serializedVersion: 2
@@ -59,4 +64,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  biomtype: 0100000000000000
+  biomtype: 010000000000000002000000

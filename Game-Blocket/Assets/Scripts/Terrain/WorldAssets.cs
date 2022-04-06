@@ -10,6 +10,7 @@ public class WorldAssets : MonoBehaviour{
 
 	/// <summary>Needs to be static! Else: BigRip</summary>
 	public static byte ChunkLength => 32;
+	public static byte ChunkHeight => 32;
 
 	public List<Biom> bioms = new List<Biom>();
 	public List<BlockData> blocks = new List<BlockData> ();

@@ -25,6 +25,16 @@ public class Biom : ScriptableObject, ISerializationCallbackReceiver {
 	private byte[] enemies;
 	[SerializeField]
 	private byte stoneBlockId;
+	[SerializeField]
+	private byte stoneBlockIdBg;
+	[SerializeField]
+	private byte skyBlockInsideId;
+	[SerializeField]
+	private byte skyBlockInsideIdBg;
+	[SerializeField]
+	private byte skyBlockOutsideId;
+	[SerializeField]
+	private byte skyBlockOutsideBg;
 	#endregion
 
 	#region TerrainAndSpawn
@@ -48,9 +58,14 @@ public class Biom : ScriptableObject, ISerializationCallbackReceiver {
 	public List<Biomtype> Biomtype { get => biomtype; set => biomtype = value; }
     public byte[] Structures { get => structures; set => structures = value; }
 	public byte StoneBlockId { get => stoneBlockId; set => stoneBlockId = value; }
-	#endregion
+    public byte StoneBlockIdBg { get => stoneBlockIdBg; set => stoneBlockIdBg = value; }
+    public byte SkyBlockInsideId { get => skyBlockInsideId; set => skyBlockInsideId = value; }
+    public byte SkyBlockInsideIdBg { get => skyBlockInsideIdBg; set => skyBlockInsideIdBg = value; }
+    public byte SkyBlockOutsideId { get => skyBlockOutsideId; set => skyBlockOutsideId = value; }
+    public byte SkyBlockOutsideBg { get => skyBlockOutsideBg; set => skyBlockOutsideBg = value; }
+    #endregion
 
-	public void OnAfterDeserialize() {
+    public void OnAfterDeserialize() {
 		//[TODO]
 		
 	}

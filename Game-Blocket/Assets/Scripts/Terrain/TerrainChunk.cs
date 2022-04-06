@@ -57,7 +57,7 @@ public sealed class TerrainChunk : ChunkData{
 			tag = GlobalVariables.chunkTag
 		};
 		ParentGO.transform.SetParent(chunkParent.transform);
-		ParentGO.transform.position = new Vector3(chunkPosition.x * WorldAssets.ChunkLength, chunkPosition.y * WorldAssets.ChunkLength, 0f);
+		ParentGO.transform.position = new Vector3(chunkPosition.x * WorldAssets.ChunkLength, chunkPosition.y * WorldAssets.ChunkHeight, 0f);
 
 		TileMap = ParentGO.AddComponent<Tilemap>();
 		TileMapRenderer = ParentGO.AddComponent<TilemapRenderer>();
@@ -66,7 +66,7 @@ public sealed class TerrainChunk : ChunkData{
 		///BGChunk GO
 		BackgroundGO = new GameObject(ChunkName(chunkPosition, 1));
 		BackgroundGO.transform.SetParent(TileMap.transform);
-		BackgroundGO.transform.position = new Vector3(chunkPosition.x * WorldAssets.ChunkLength, chunkPosition.y * WorldAssets.ChunkLength, 0.001f);
+		BackgroundGO.transform.position = new Vector3(chunkPosition.x * WorldAssets.ChunkLength, chunkPosition.y * WorldAssets.ChunkHeight, 0.001f);
 		BGTileMap = BackgroundGO.AddComponent<Tilemap>();
 		BackgroundGO.AddComponent<TilemapRenderer>();
 
@@ -76,7 +76,7 @@ public sealed class TerrainChunk : ChunkData{
 			layer = 6
 		};
 		CollisionGO.transform.SetParent(TileMap.transform);
-		CollisionGO.transform.position = new Vector3(chunkPosition.x * WorldAssets.ChunkLength, chunkPosition.y * WorldAssets.ChunkLength, 0f);
+		CollisionGO.transform.position = new Vector3(chunkPosition.x * WorldAssets.ChunkLength, chunkPosition.y * WorldAssets.ChunkHeight, 0f);
 		CollisionTM = CollisionGO.AddComponent<Tilemap>();
 		TileMapCollider = CollisionGO.AddComponent<TilemapCollider2D>();
 		CollisionTM.tileAnchor = new Vector3(0.5f, 0.5f, 0f);
@@ -100,15 +100,15 @@ public sealed class TerrainChunk : ChunkData{
 		if(borderOnly) {
 			for(int i = 0; i < WorldAssets.ChunkLength; i++)
 				BuildCollision(new Vector2Int(0, i), Vector2Int.left);
-			for(int i = 0; i < WorldAssets.ChunkLength; i++)
+			for(int i = 0; i < WorldAssets.ChunkHeight; i++)
 				BuildCollision(new Vector2Int(i, 0), Vector2Int.down);
 			for(int i = 0; i < WorldAssets.ChunkLength; i++)
 				BuildCollision(new Vector2Int(31, i), Vector2Int.right);
-			for(int i = 0; i < WorldAssets.ChunkLength; i++)
+			for(int i = 0; i < WorldAssets.ChunkHeight; i++)
 				BuildCollision(new Vector2Int(i, 31), Vector2Int.up);
 		} else
 			for(int x = 0; x < WorldAssets.ChunkLength; x++)
-				for(int y = 0; y < WorldAssets.ChunkLength; y++)
+				for(int y = 0; y < WorldAssets.ChunkHeight; y++)
 					BuildCollision(new Vector2Int(x, y));
 	}
 
@@ -123,7 +123,7 @@ public sealed class TerrainChunk : ChunkData{
 			return;
 		
 		int worldX = inChunk.x + ChunkPositionInt.x * WorldAssets.ChunkLength;
-		int worldY = inChunk.y + ChunkPositionInt.y * WorldAssets.ChunkLength;
+		int worldY = inChunk.y + ChunkPositionInt.y * WorldAssets.ChunkHeight;
 
 		bool build = false;
 
@@ -161,7 +161,7 @@ public sealed class TerrainChunk : ChunkData{
 	/// <summary></summary>
 	public void PlaceAllTiles() {
 		for (int x = 0; x < WorldAssets.ChunkLength; x++) {
-			for (int y = 0; y < WorldAssets.ChunkLength; y++) {
+			for (int y = 0; y < WorldAssets.ChunkHeight; y++) {
 				PlaceTile(x, y, WorldAssets.Singleton.blocks[BlockIDs[x, y]].tile, false);
 				PlaceTile(x, y, WorldAssets.Singleton.blocks[BlockIDsBG[x, y]].tile, true);
 			}
@@ -324,7 +324,7 @@ public sealed class TerrainChunk : ChunkData{
 	public void InstantiateDrop(Vector3Int coorBevore, byte count, uint itemID) {
 		Vector3Int coordinate = new Vector3Int(
 			coorBevore.x + (ChunkPositionInt.x * WorldAssets.ChunkLength),
-			coorBevore.y + (ChunkPositionInt.y * WorldAssets.ChunkLength),
+			coorBevore.y + (ChunkPositionInt.y * WorldAssets.ChunkHeight),
 			coorBevore.z);
 
 		GameObject dropGO = new GameObject($"Drop ItemID: {itemID}");
@@ -371,7 +371,7 @@ public class ChunkData {
 	public Vector3 ChunkPostionWorldSpace => new Vector3(chunkPosition.x, chunkPosition.y);
 
 	public ChunkData(byte[,] blocks, byte[,] bgBlocks, Drop[] drops, Vector2Int chunkPosition) {
-		this.blocks = blocks ?? (new byte[WorldData.Singleton.ChunkWidth, WorldData.Singleton.ChunkHeight]);
+		this.blocks = blocks ?? (new byte[WorldAssets.ChunkLength, WorldData.Singleton.ChunkHeight]);
 		this.bgBlocks = bgBlocks ?? (new byte[WorldData.Singleton.ChunkWidth, WorldData.Singleton.ChunkHeight]);
 		this.drops = drops ?? new Drop[0];
 		if (chunkPosition == null)
