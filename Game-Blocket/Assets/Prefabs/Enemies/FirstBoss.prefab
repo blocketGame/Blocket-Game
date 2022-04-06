@@ -131,7 +131,7 @@ MonoBehaviour:
   timeBeetweenEachStompAttack: 12
   timeBeetweenEachTurretAttack: 20
   projectileSprite: {fileID: 21300000, guid: 91e4d78a30089114d9681f1ba6363cfb, type: 3}
-  shockwaveSprite: {fileID: 21300000, guid: 91e4d78a30089114d9681f1ba6363cfb, type: 3}
+  shockwaveSprite: {fileID: 21300000, guid: 4b4b8e83a85db81429ff9f7b47ae73c6, type: 3}
   turretSprite: {fileID: 21300000, guid: 91e4d78a30089114d9681f1ba6363cfb, type: 3}
 --- !u!61 &1651843917782263370
 BoxCollider2D:
