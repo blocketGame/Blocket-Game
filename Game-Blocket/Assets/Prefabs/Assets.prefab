@@ -1856,6 +1856,7 @@ MonoBehaviour:
     itemImage: {fileID: 21300000, guid: d8e214a5decc71d4c899ab4f76048ab6, type: 3}
     swingingAnimation: Hit
     swingingAnimations:
+    - Hit
     - Hit-Kombo
     - Hit-3
     durability: 0
@@ -2088,9 +2089,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 29b0f6e63e160294face5a7539aa68dc, type: 2}
   - {fileID: 11400000, guid: 6679dc32c099c0d40967d40357bebee9, type: 2}
   - {fileID: 11400000, guid: 1d298b72bcab36c4dbb987164a436deb, type: 2}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 107620d11c4f8f346999680edb427990, type: 2}
   - {fileID: 11400000, guid: 22b361a30a3720345b73f67720401ba2, type: 2}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 7abbbaef424f4c94ab6dafe174e0814e, type: 2}
   blocks:
   - name: Air
     blockID: 0
