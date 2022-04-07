@@ -16,7 +16,7 @@ public class PickRandomItem : MonoBehaviour
     public Sprite PickARandomNumber()
     {
             Sprite image = null;
-            switch (Random.Range(0, 2))
+            switch (Random.Range(0, 3))
             {
                 case 0:
                     Item i = itemAssets.BlockItemsInGame[Random.Range(0, itemAssets.BlockItemsInGame.Count)];
@@ -24,19 +24,24 @@ public class PickRandomItem : MonoBehaviour
                     ItemName.text = i?.name;
                     break;
                 case 1:
-                    Item it = itemAssets.UseableItemsInGame[Random.Range(0, itemAssets.UseableItemsInGame.Count)];
+                    Item it = itemAssets.WeaponItems[Random.Range(0, itemAssets.UseableItemsInGame.Count)];
                     image = it?.itemImage;
                     ItemName.text = it?.name; 
                     break;
-                    /*
                 case 2:
-                    image = GlobalVariables.ItemAssets.ToolItemsInGame[Random.Range(0, GlobalVariables.ItemAssets.CommonItems.Count)]?.itemImage; break;
-                case 3:
-                    image = GlobalVariables.ItemAssets.CommonItems[Random.Range(0, GlobalVariables.ItemAssets.CommonItems.Count)]?.itemImage; break;
-                default:
-                    image = GlobalVariables.ItemAssets.EquipableItemsInGame[Random.Range(0, GlobalVariables.ItemAssets.CommonItems.Count)]?.itemImage; break;
-                    */
-            }
+                    Item pr = itemAssets.Projectiles[Random.Range(0, itemAssets.Projectiles.Count)];
+                    image = pr?.itemImage;
+                    ItemName.text = pr?.name;
+                    break;
+                /*
+            case 2:
+                image = GlobalVariables.ItemAssets.ToolItemsInGame[Random.Range(0, GlobalVariables.ItemAssets.CommonItems.Count)]?.itemImage; break;
+            case 3:
+                image = GlobalVariables.ItemAssets.CommonItems[Random.Range(0, GlobalVariables.ItemAssets.CommonItems.Count)]?.itemImage; break;
+            default:
+                image = GlobalVariables.ItemAssets.EquipableItemsInGame[Random.Range(0, GlobalVariables.ItemAssets.CommonItems.Count)]?.itemImage; break;
+                */
+        }
             if (image != null)
                 return image;
             else

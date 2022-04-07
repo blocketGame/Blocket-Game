@@ -10,20 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e47b045bfe515ff45afe88645f743998, type: 3}
-  m_Name: Plains
+  m_Name: Ice
   m_EditorClassIdentifier: 
-  index: 0
-  biomName: Default Biom
-  ores:
-  - name: Bernstein
-    blockID: 10
+  index: 3
+  biomName: Ice
+  ores: []
   regions:
-  - description: Grass
+  - description: 
     regionRange: 1
-    blockID: 2
-  - description: Dirt
+    blockID: 44
+  - description: 
     regionRange: 2
-    blockID: 3
+    blockID: 45
   bgRegions:
   - description: DIrtBG (Top)
     regionRange: 1
@@ -31,14 +29,9 @@ MonoBehaviour:
   - description: DirtBG
     regionRange: 2
     blockID: 8
-  structures: 0001020607
+  structures: 
   enemies: 
-  stoneBlockId: 12
-  stoneBlockIdBg: 8
-  skyBlockInsideId: 12
-  skyBlockInsideIdBg: 8
-  skyBlockOutsideId: 3
-  skyBlockOutsideBg: 8
+  stoneBlockId: 46
   size: 1000
   heightCurve:
     serializedVersion: 2
@@ -64,4 +57,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  biomtype: 010000000000000002000000
+  biomtype: 00000000
