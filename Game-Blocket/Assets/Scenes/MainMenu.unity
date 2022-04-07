@@ -3363,49 +3363,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Assets
       objectReference: {fileID: 0}
-<<<<<<< HEAD
     - target: {fileID: 2417270971905375398, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
       propertyPath: m_IsActive
-=======
-    - target: {fileID: 5056314862859561374, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
-      propertyPath: Projectiles.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5056314862859561374, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
-      propertyPath: Projectiles.Array.data[2].id
-      value: 3002
-      objectReference: {fileID: 0}
-    - target: {fileID: 5056314862859561374, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
-      propertyPath: Projectiles.Array.data[2].name
-      value: Black hole
-      objectReference: {fileID: 0}
-    - target: {fileID: 5056314862859561374, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
-      propertyPath: Projectiles.Array.data[2].damage
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5056314862859561374, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
-      propertyPath: Projectiles.Array.data[2].itemType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5056314862859561374, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
-      propertyPath: Projectiles.Array.data[2].itemImage
-      value: 
-      objectReference: {fileID: 21300000, guid: a4c21cd6116c67544ad34d466cb20a00, type: 3}
-    - target: {fileID: 5056314862859561374, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
-      propertyPath: Projectiles.Array.data[2].description
-      value: darkness
-      objectReference: {fileID: 0}
-    - target: {fileID: 5056314862859561374, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
-      propertyPath: Projectiles.Array.data[2].flyingSpeed
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5056314862859561374, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
-      propertyPath: Projectiles.Array.data[2].lightEmission
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5056314862859561374, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
-      propertyPath: Projectiles.Array.data[2].spawningPos.y
->>>>>>> ad26004 (creating MELEE + RANGED)
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8512227375263116681, guid: e2504db86ab40fc4893bae27a6468cff, type: 3}
