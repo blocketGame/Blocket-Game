@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +11,7 @@ public class WorldAssets : MonoBehaviour{
 
 	/// <summary>Needs to be static! Else: BigRip</summary>
 	public static byte ChunkLength => 32;
+	[Obsolete]
 	public static byte ChunkHeight => 32;
 
 	public List<Biom> bioms = new List<Biom>();

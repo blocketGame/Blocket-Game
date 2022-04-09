@@ -19,8 +19,11 @@ public class ItemUsageHandler : MonoBehaviour
     {
         if(PlayerVariables.Singleton.Race == CharacterRace.MAGICIAN)
             TurnItemToMouseAngle();
-        AnimateWeapon();
-        Physics2D.IgnoreLayerCollision(0,6);
+
+        //Don´t go into method if selected item is 0 (No Item in hand)
+        if(Inventory.Singleton.SelectedItemId != 0)
+            AnimateWeapon();
+        Physics2D.IgnoreLayerCollision(0,6);//TODO: Use Projectsettings
     }
 
     private void TurnItemToMouseAngle()
@@ -41,7 +44,7 @@ public class ItemUsageHandler : MonoBehaviour
     }
 
     private void AnimateWeapon()
-    {
+    {   
         WeaponItem weapon = (WeaponItem)(ItemAssets.Singleton.GetItemFromItemID(Inventory.Singleton.SelectedItemId)) ?? new WeaponItem();
         if(weapon.weaponType==WeaponItem.WeaponType.RANGE)
         if(Inventory.Singleton.FindFirstItem(ItemAssets.Singleton.GetItemFromItemID(weapon.projectile))==null)
@@ -52,10 +55,10 @@ public class ItemUsageHandler : MonoBehaviour
         {
             case CustomWeaponBehaviour.DEFAULT:
 
-                timer += weapon.coolDownTime < (timer) ? 0 : Time.deltaTime;
-                if (Input.GetKeyDown(GameManager.SettingsProfile.MainInteractionKey) && timer >(weapon.coolDownTime * 0.75f))
+                timer += weapon.CoolDownTime < (timer) ? 0 : Time.deltaTime;
+                if (Input.GetKeyDown(GameManager.SettingsProfile.MainInteractionKey) && timer >(weapon.CoolDownTime * 0.75f))
                 {
-                    if(timer<(weapon.coolDownTime * 0.95f))
+                    if(timer<(weapon.CoolDownTime * 0.95f))
                     {
                         komboCounter++;
                         Debug.Log("KomboCounter" + komboCounter);
@@ -67,7 +70,7 @@ public class ItemUsageHandler : MonoBehaviour
                         CreateProjectile(weapon);
 
                 }
-                else if (Input.GetKey(GameManager.SettingsProfile.MainInteractionKey) && timer > weapon.coolDownTime)
+                else if (Input.GetKey(GameManager.SettingsProfile.MainInteractionKey) && timer > weapon.CoolDownTime)
                 {
                     komboCounter = 0;
                     PlayAnim();
