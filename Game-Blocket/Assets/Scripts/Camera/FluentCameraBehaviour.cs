@@ -40,9 +40,9 @@ public class FluentCameraBehaviour : MonoBehaviour{
     }
     private void FixedUpdate()
     {
-        if (GameManager.State != GameState.INGAME)
+        if (GameManager.State != GameState.INGAME && PlayerVariables.Dimension == Dimension.OVERWORLD)
             return;
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift) && !(UIInventory.Singleton?.ChatOpened ?? false))
         {
             //if(OffSetX< (GlobalVariables.World.GetComponentInChildren<Grid>().LocalToWorld(Input.mousePosition).x / 60) - 18  || -OffSetX > (GlobalVariables.World.GetComponentInChildren<Grid>().LocalToWorld(Input.mousePosition).x / 60 - 18))
             //if (0 < (GlobalVariables.World.GetComponentInChildren<Grid>().LocalToWorld(Input.mousePosition).x / 60) - 18)

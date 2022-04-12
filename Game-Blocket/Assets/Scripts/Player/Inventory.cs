@@ -22,7 +22,7 @@ public class Inventory : MonoBehaviour {
 	/// <summary>List of the Hud Slots</summary>
 	public List<UIInventorySlot> HudSlots { get; } = new List<UIInventorySlot>();
 
-	public uint SelectedItemId => InvSlots[SelectedSlot].ItemID;
+	public uint SelectedItemId => InvSlots[SelectedSlot]?.ItemID ?? 0;
 	public Item SelectedItemObj => ItemAssets.Singleton.GetItemFromItemID(SelectedItemId, null);
 
 	public byte SelectedSlot { get => _selectedSlot; set {

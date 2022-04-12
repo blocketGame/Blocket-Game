@@ -12,6 +12,8 @@ public static class GlobalVariables {
 	public static readonly ushort maxItemCountForMultiple = 128;
 	public static string chunkTag = "Chunk";
 
+	public static bool Multiplayer { get; set; } = false;
+
 	[Obsolete]
 	public static WorldData WorldData => WorldData.Singleton;
 

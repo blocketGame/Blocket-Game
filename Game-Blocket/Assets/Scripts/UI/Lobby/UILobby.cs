@@ -7,6 +7,8 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System;
+using UnityEngine.Events;
 
 /// <summary>
 /// LobbyUI-Handling
@@ -21,7 +23,7 @@ public class UILobby : MonoBehaviour {
 
 	[Header("Static: Start Site")]
 	public Button serverBtn;
-	public Button hostBtn, clientBtn;
+	public Button hostBtn, clientBtn, backBtn;
 	public Text ipInput, portInput, ipPlaceHolder;
 
 	[Header("Static: Lobby Site")]
@@ -29,7 +31,26 @@ public class UILobby : MonoBehaviour {
 	public Button goBackBtn, testBtn;
 	#endregion
 
-	private byte _siteIndexOpen;
+	#region Delegates
+	private UnityAction StartGameAct => () => {
+		if(role == 1) {
+			NetworkManager.Singleton.StartClient();
+		}
+		SceneManager.UnloadSceneAsync("Lobby");
+		if(NetworkManager.Singleton.IsServer)
+			NetworkManager.Singleton.SceneManager.LoadScene("MainGame", LoadSceneMode.Additive);
+		if(NetworkManager.Singleton.IsClient && !NetworkManager.Singleton.IsServer)
+			SceneManager.LoadScene("MainGame", LoadSceneMode.Single);
+	};
+
+	public UnityAction BackToMainMenuAct => () => {
+		if(NetworkManager.Singleton?.isActiveAndEnabled ?? false)
+			NetworkManager.Singleton.Shutdown();
+		SceneManager.LoadScene("MainMenu");
+	};
+    #endregion
+
+    private byte _siteIndexOpen;
 	public byte SiteIndexOpen { get => _siteIndexOpen; set{
 			_siteIndexOpen = value;
 			ManageSites(value);
@@ -63,6 +84,8 @@ public class UILobby : MonoBehaviour {
 	/// </summary>
 	private void InitButtons()
 	{
+		backBtn.onClick.AddListener(BackToMainMenuAct);
+
 		serverBtn.onClick.AddListener(() => {
 			CheckAndSetInputs();
 			SetNetworkAddress();
@@ -85,21 +108,15 @@ public class UILobby : MonoBehaviour {
 			role = 1;
 		});
 
-		startGame.onClick.AddListener(() => {
-			if(role == 1) {
-				NetworkManager.Singleton.StartClient();
-			}
-			SceneManager.UnloadSceneAsync("Lobby");
-			if(NetworkManager.Singleton.IsServer)
-				NetworkManager.Singleton.SceneManager.LoadScene("MainGame", LoadSceneMode.Additive);
-			if(NetworkManager.Singleton.IsClient && !NetworkManager.Singleton.IsServer)
-				SceneManager.LoadScene("MainGame", LoadSceneMode.Single);
-		});
+		startGame.onClick.AddListener(StartGameAct);
 
 		goBackBtn.onClick.AddListener(() => {
-			SiteIndexOpen = 0;
-			startGame.gameObject.SetActive(true);
-			NetworkManager.Singleton.Shutdown();
+			if(GlobalVariables.Multiplayer) {
+				SiteIndexOpen = 0;
+				startGame.gameObject.SetActive(true);
+				NetworkManager.Singleton.Shutdown();
+			} else
+				BackToMainMenuAct();
 		});
 
 		testBtn.onClick.AddListener(() => {
@@ -113,8 +130,14 @@ public class UILobby : MonoBehaviour {
 		uiprofileSitePrefab = Instantiate(uiprofileSitePrefab, gameObject.transform);
 		//NetworkManager.Singleton.OnClientConnectedCallback += ClientConnectCallback;
 		SceneManager.sceneLoaded += GameManager.Singleton.SceneSwitched;
-		SiteIndexOpen = 0;
 		ipPlaceHolder.text = NetworkVariables.ipAddress;
+		if(GlobalVariables.Multiplayer)
+			SiteIndexOpen = 0;
+		else{
+			SiteIndexOpen = 2;
+			NetworkManager.Singleton.StartHost();
+		}
+		
 		InitButtons();
 		UIMainMenu.CheckForLoadingScene();
 	}

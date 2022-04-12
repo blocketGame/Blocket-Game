@@ -7,13 +7,17 @@ using UnityEngine;
 /// Class that is used to store running variables of an world
 /// TODO: Move to TerrainGeneeration
 /// <b>Author : Cse19455 / Thomas Boigner</b>
+/// Hard modified by: HyFabi
 /// </summary>
 public class WorldData : MonoBehaviour {
 	public static WorldData Singleton { get; protected set; }
 	public GameObject ChunkParent => Grid.gameObject;
 
 	public GameObject mobParent;
-	public Grid Grid { get; private set; }
+	public Grid Grid { get {
+		return GetComponentInChildren<Grid>();
+		}
+	}
 
 	#region general fields
 	[SerializeField]
@@ -173,11 +177,15 @@ public class WorldData : MonoBehaviour {
     /// <summary>Stores this class to <see cref="GlobalVariables"/></summary>
     public void Awake(){
 		Singleton = this;
-		Grid = GetComponentInChildren<Grid>();
 	}
 }
 
+public class OverworldData : WorldData{
 
+}
+public class DungeonworldData : WorldData{
+
+}
 
 #region WorldDataAssets
 

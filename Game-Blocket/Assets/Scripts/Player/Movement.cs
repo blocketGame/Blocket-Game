@@ -123,6 +123,14 @@ public class Movement : MonoBehaviour {
 	/// <returns><see langword="true"/> if player is locked</returns>
 	public bool CheckChunk()
 	{
+		//Dungeon
+		if(PlayerVariables.Dimension == Dimension.DUNGEON){
+			if(PlayerLocked)
+				PlayerLocked = false;
+			return false;
+		}
+
+		//Overworld
 		bool locked = !ClientTerrainHandler.Singleton.CurrentChunkReady;
 		if (locked != PlayerLocked)
 			PlayerLocked = locked;

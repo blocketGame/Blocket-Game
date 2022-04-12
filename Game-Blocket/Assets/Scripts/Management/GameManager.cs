@@ -14,14 +14,13 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour {
 	public static GameManager Singleton { get; private set; }
 	//Both
-	public static GameState State { get => _state; 
-		set { 
+	public static GameState State { get => _state;
+		set {
 			_state = value;
 			SateSwitched(value);
-		} 
+		}
 	}
 	private static GameState _state;
-			
 
     //Client
     public static PlayerProfile PlayerProfileNow { get; set; }

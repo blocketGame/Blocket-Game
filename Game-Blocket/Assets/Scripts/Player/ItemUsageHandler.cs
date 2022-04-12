@@ -17,6 +17,9 @@ public class ItemUsageHandler : MonoBehaviour
 
     private void LateUpdate()
     {
+        if(GameManager.State != GameState.INGAME)
+            return;
+
         if(PlayerVariables.Singleton.Race == CharacterRace.MAGICIAN)
             TurnItemToMouseAngle();
 
