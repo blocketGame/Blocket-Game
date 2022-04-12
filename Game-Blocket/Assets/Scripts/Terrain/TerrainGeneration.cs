@@ -127,7 +127,7 @@ public class TerrainGeneration {
 				if (y + tc.ChunkPositionInt.y * WorldAssets.ChunkHeight < positionHeight)
 				{
 
-					foreach (RegionData regionBG in biom.BgRegions)
+					foreach (RegionData regionBG in biom.Regions)
 					{
 						if (regionBG.RegionRange <= positionHeight - (y + tc.ChunkPositionInt.y * WorldAssets.ChunkHeight))
 						{

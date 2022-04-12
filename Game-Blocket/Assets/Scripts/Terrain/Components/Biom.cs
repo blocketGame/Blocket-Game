@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +16,8 @@ public class Biom : ScriptableObject, ISerializationCallbackReceiver {
 	private OreData[] ores;
 	[SerializeField]
 	private RegionData[] regions;
+
+	[Obsolete]
 	[SerializeField]
 	private RegionData[] bgRegions;
 	[SerializeField]
@@ -54,6 +57,8 @@ public class Biom : ScriptableObject, ISerializationCallbackReceiver {
 	public AnimationCurve HeightCurve { get => heightCurve; set => heightCurve = value; }
 	public RegionData[] Regions { get => regions; set => regions = value; }
 	public OreData[] Ores { get => ores; set => ores = value; }
+
+	[Obsolete]
 	public RegionData[] BgRegions { get => bgRegions; set => bgRegions = value; }
 	public List<Biomtype> Biomtype { get => biomtype; set => biomtype = value; }
     public byte[] Structures { get => structures; set => structures = value; }

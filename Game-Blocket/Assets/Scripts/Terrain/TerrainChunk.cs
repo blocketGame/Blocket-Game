@@ -14,6 +14,8 @@ using Random = System.Random;
 /// </summary>
 [Serializable]
 public sealed class TerrainChunk : ChunkData{
+	public static readonly float bgTileMapTransparency = 0.5f;
+
 
 	public GameObject dropParent;
 	public GameObject ParentGO { get; set; }
@@ -69,6 +71,8 @@ public sealed class TerrainChunk : ChunkData{
 		BackgroundGO.transform.position = new Vector3(chunkPosition.x * WorldAssets.ChunkLength, chunkPosition.y * WorldAssets.ChunkHeight, 0.001f);
 		BGTileMap = BackgroundGO.AddComponent<Tilemap>();
 		BackgroundGO.AddComponent<TilemapRenderer>();
+
+		BGTileMap.color = new Color(bgTileMapTransparency, bgTileMapTransparency, bgTileMapTransparency);
 
 		///Collision GO
 		CollisionGO = new GameObject(ChunkName(chunkPosition, 2)) {
