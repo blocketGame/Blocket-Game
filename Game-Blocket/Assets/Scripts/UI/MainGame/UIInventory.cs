@@ -199,6 +199,11 @@ public class UIInventory : MonoBehaviour
 		Inventory.AccessoiresSlots = accessoiresSlots;
 		InventoryOpened = false;
 		Inventory.SelectedSlot = 0;
+		
+		foreach(Canvas canvas in GetComponentsInChildren<Canvas>()){
+			canvas.worldCamera = Camera.main;
+        }
+		
 	}
 	#endregion
 

@@ -136,8 +136,8 @@ public class GameManager : MonoBehaviour {
 				//If Local player
 				GlobalVariables.LocalPlayer = iGo;
 				iGo.name += "(this)";
-				
-				GlobalVariables.LocalUI = Instantiate(PrefabAssets.Singleton.prefabUI);
+				Instantiate(PrefabAssets.Singleton.camera).GetComponent<SmoothCamera>().target = iGo.transform;
+				GlobalVariables.LocalUI = Instantiate(PrefabAssets.Singleton.mainGameUI);
 				InitLocal();
 			} else {
 				//If not Local player
@@ -221,9 +221,6 @@ public class GameManager : MonoBehaviour {
 				throw new ArgumentOutOfRangeException();
 		}
 		State = GameState.INGAME;
-		
-		GlobalVariables.LocalPlayer = Instantiate(GlobalVariables.LocalPlayer);
-		Instantiate(SmoothCamera.Singleton);
 	}
 	public static void MoveImportantThings(Scene scene){
 		SceneManager.MoveGameObjectToScene(GlobalVariables.LocalPlayer, scene);

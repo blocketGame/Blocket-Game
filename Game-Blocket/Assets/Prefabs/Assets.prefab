@@ -2472,13 +2472,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 099bed9885470a94786eebc896493957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabUI: {fileID: 7667816536096445537, guid: bf4126c4be557a040815a7c30aa8e3c3, type: 3}
+  mainGameUI: {fileID: 7667816536096445537, guid: bf4126c4be557a040815a7c30aa8e3c3, type: 3}
   world: {fileID: 1085889088375208448, guid: 6f8afa7ba4b1ace43a1488e9989f22f5, type: 3}
   playerNetPrefab: {fileID: 2794137725677328093, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
   loadingScreenPrefab: {fileID: 1659422467158985314, guid: bf0b35f4090f7fc409bc4e6c5154ffcf, type: 3}
   consoleText: {fileID: 8550470931165025056, guid: 1cc895b1a9eb24540bc01a2b54a9ecfa, type: 3}
   craftingUIListView: {fileID: 4904731259523108657, guid: 29f3864126b1a234f96e83dc5e192912, type: 3}
   mobEntity: {fileID: 3431033053258429059, guid: 2b092efc1a3a3a04794a42fa7c49a410, type: 3}
+  camera: {fileID: 4180692969551620913, guid: 5c89fd5534d680c45b090ff4ec056c98, type: 3}
 --- !u!1 &2729332452247671524
 GameObject:
   m_ObjectHideFlags: 0
