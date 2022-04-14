@@ -12,8 +12,7 @@ public class BackgroundParallax : ScriptableObject
 [Serializable]
 public class ParalaxLayer{
 	public string name;
-	[Min(1)]
-	public byte speed;
+	public float speed;
 	public Sprite image;
 
 	public float offsetX, offsetY;

@@ -950,7 +950,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3672340399577668127}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -985,6 +985,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96be68fcf433a204b9c3c837064f8f4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parallaxPrefab: {fileID: 6985660502606392098, guid: 8b3445e7c28e9284f9695e84ee4ff383, type: 3}
   paralaxNow: {fileID: 11400000, guid: 8d55f6477a5e73f49b0f5c7bedf77007, type: 2}
 --- !u!1 &3772000648908713424
 GameObject:
