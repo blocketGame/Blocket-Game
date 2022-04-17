@@ -1833,7 +1833,14 @@ MonoBehaviour:
     swingingAnimation: 
     blockId: 16
   ToolItemsInGame: []
-  EquipableItemsInGame: []
+  EquipableItemsInGame:
+  - name: Helmet
+    id: 4000
+    description: Protect your head
+    itemType: 0
+    itemImage: {fileID: 21300000, guid: b5495816b53ccf241a644d96e18a84f3, type: 3}
+    swingingAnimation: 
+    defenseStat: 2
   UseableItemsInGame: []
   CommonItems:
   - name: Opal

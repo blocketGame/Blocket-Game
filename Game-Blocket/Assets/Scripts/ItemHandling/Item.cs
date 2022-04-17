@@ -110,6 +110,7 @@ public class Projectile : Item
 [Serializable]
 public class EquipableItem : Item {
 	//TODO:
+	public float defenseStat;
 	
 }
 
