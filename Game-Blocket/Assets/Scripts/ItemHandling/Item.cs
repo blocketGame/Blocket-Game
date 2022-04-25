@@ -58,7 +58,7 @@ public class ToolItem : Item {
 	public ToolType toolType;
 
 	public enum ToolType {
-		SHOVEL, AXE, PICKAXE, DEFAULT
+		DEFAULT, SHOVEL, AXE, PICKAXE
 	}
 }
 

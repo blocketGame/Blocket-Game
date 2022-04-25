@@ -2150,7 +2150,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 1
       dropchance: 100
-      toolItemType: 5
+      toolItemType: 0
   - name: Dirtblock
     blockID: 3
     tile: {fileID: 11400000, guid: 0bcc34212cd215a4584d42c3c4ba8f29, type: 2}
@@ -2158,7 +2158,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 1
       dropchance: 100
-      toolItemType: 5
+      toolItemType: 0
   - name: Sandblock (Top)
     blockID: 4
     tile: {fileID: 11400000, guid: 6db0c34d3b5fc7b49a67163528b99ce5, type: 2}
@@ -2166,7 +2166,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 3
       dropchance: 100
-      toolItemType: 5
+      toolItemType: 0
   - name: Sandblock
     blockID: 5
     tile: {fileID: 11400000, guid: 240b651a1bc670d4793c99d2d9d9748e, type: 2}
@@ -2174,7 +2174,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 3
       dropchance: 100
-      toolItemType: 5
+      toolItemType: 0
   - name: Snowblock
     blockID: 6
     tile: {fileID: 11400000, guid: cf38a69b1c9243a4a98ca4aca2367547, type: 2}
@@ -2182,7 +2182,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 4
       dropchance: 100
-      toolItemType: 5
+      toolItemType: 0
   - name: SnowedDirtblock
     blockID: 7
     tile: {fileID: 11400000, guid: 0230af7654f2e154f8a8cfe6ab61bdd1, type: 2}

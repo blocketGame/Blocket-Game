@@ -311,7 +311,7 @@ public sealed class TerrainChunk : ChunkData{
 		Random rand = new Random();
 
 		foreach (BlockData.BlockDropAble blockDropAble in WorldAssets.Singleton.GetBlockbyId(blockId).blockDrops)
-			if(Inventory.Singleton.SelectedItemObj is ToolItem tool && tool.toolType == blockDropAble.toolItemType || blockDropAble.toolItemType == ToolItem.ToolType.DEFAULT)
+			if(Inventory.Singleton.SelectedItemObj is ToolItem tool && tool.toolType == blockDropAble.toolItemType || (blockDropAble.toolItemType == ToolItem.ToolType.DEFAULT))
 				if ((rand.NextDouble() * 100) + 1 < blockDropAble.dropchance)
 					ids.Add(blockDropAble.itemID);
 		return ids;

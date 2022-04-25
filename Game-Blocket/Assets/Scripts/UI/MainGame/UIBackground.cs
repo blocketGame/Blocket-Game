@@ -18,10 +18,8 @@ public class UIBackground : MonoBehaviour
 	public float OffsetX => -(GlobalVariables.LocalPlayerPos.x % fullWithInWorld);
 
 	public void FixedUpdate() {
-		//TODO: ...
 
 		foreach(UIBackgroundLayer uIBackgroundLayer in Layers){
-
 			float x = OffsetX * uIBackgroundLayer.speedIndicator;
 
 			if(x >= canvasWith)
@@ -54,6 +52,7 @@ public class UIBackground : MonoBehaviour
 	}
 
 	public void InitBackgroundLayers(sbyte? layer, ParalaxLayer paralaxLayer, UIBackgroundLayer uIBackgroundLayer) {
+		Debug.Log("");
 		//Center
 		if(layer == null || layer == 0){
 			if(uIBackgroundLayer.layerCenter != null)

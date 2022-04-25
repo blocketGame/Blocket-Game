@@ -42,8 +42,8 @@ public class PlayerInteraction : MonoBehaviour {
 			if (blockInchunkCoord.y < 0)
 				blockInchunkCoord.y = WorldAssets.ChunkLength + blockInchunkCoord.y;
 			return blockInchunkCoord;
-}
-}
+		}
+	}
 
 	/// <summary>If Chunk == null => Return 0</summary>
 	/// <param name="foreground">If background array</param>
@@ -53,8 +53,8 @@ public class PlayerInteraction : MonoBehaviour {
 	/// <summary>If foreground == null check if one of both tilemaps has a block</summary>
 	public bool TargetBlockExisting(bool? foreground = null){
 		bool foregroundId = TargetBlockID(true) != 0, backgroundId = TargetBlockID(false) != 0;
-		return foreground == null ? foregroundId || backgroundId : foreground ?? false ? foregroundId : backgroundId;
-	}
+        return foreground.HasValue ? foreground.Value ? foregroundId : backgroundId : foregroundId ? foregroundId : backgroundId;
+    }
 	#endregion
 
 	#region UnityMethods
@@ -161,6 +161,7 @@ public class PlayerInteraction : MonoBehaviour {
 	public void HandleBlockBreakInteraction(){
 		SetFocusGO(BlockHoverdAbsolute, TargetBlockExisting());
 		
+		//Stop Coroutine
 		if (BreakCoroutine != null && !Input.GetKey(GameManager.SettingsProfile.MainInteractionKey)){
 			if (DebugVariables.BlockInteractionCR)
 				Debug.Log("Stopped");
@@ -171,7 +172,7 @@ public class PlayerInteraction : MonoBehaviour {
 		if (DebugVariables.BlockInteractionInfo)
 			Debug.Log(ThisChunk.blocks[BlockInchunkCoord.x, BlockInchunkCoord.y]);
 
-		///Routine
+		// Start Routine
 		if (BreakCoroutine == null && Input.GetKey(GameManager.SettingsProfile.MainInteractionKey)){
 			bool? foreground = null;
 			if(TargetBlockExisting(true)) 
@@ -179,10 +180,10 @@ public class PlayerInteraction : MonoBehaviour {
 			else if(TargetBlockExisting(false))
 				foreground = false;
 			
-			if(foreground != null){
-				byte targetRemoveDuration = WorldAssets.Singleton.blocks[TargetBlockID(false)].removeDuration;
+			if(foreground.HasValue){
+				byte targetRemoveDuration = WorldAssets.Singleton.blocks[TargetBlockID(foreground ?? throw new NullReferenceException())].removeDuration;
 
-				BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int, bool>(targetRemoveDuration, TargetBlockID(false), ThisChunk, BlockInchunkCoord, foreground ?? throw new NullReferenceException()));
+				BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int, bool>(targetRemoveDuration, TargetBlockID(false), ThisChunk, BlockInchunkCoord, foreground.Value));
 
 				if(DebugVariables.BlockInteractionCR)
 					Debug.Log("Started!");
