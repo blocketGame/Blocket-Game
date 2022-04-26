@@ -110,10 +110,10 @@ public class Movement : MonoBehaviour {
 	private void ExecuteCalculationsAndChecks()
     {
 		VelocityUpdate();
-		MoveHorizontally();
 
 		if (PlayerVariables.Gamemode != Gamemode.CREATIVE)
 		{
+			MoveHorizontally();
 			FallAcceleration();
 			PreventFloorGlitch();
 		}
@@ -257,8 +257,11 @@ public class Movement : MonoBehaviour {
 			if (!(TerrainHandler.Singleton.GetBlockFormCoordinate(playerCell.x+(int)direction, playerCell.y) != 0 
 				|| TerrainHandler.Singleton.GetBlockFormCoordinate(playerCell.x + (int)direction, playerCell.y-1) != 0))
             {
-				Vector3 destination = RigidBodyPosition + MovementSpeed * new Vector3(movement, 0, 0);
-				RigidBodyPosition = Vector3.Lerp(RigidBodyPosition, destination, Time.deltaTime);
+				//Vector3 destination = RigidBodyPosition + MovementSpeed * new Vector3(movement, 0, 0);
+				//playerRigidbody.velocity = Vector3.Lerp(RigidBodyPosition, destination, Time.deltaTime);
+
+				float x = Input.GetAxis("Horizontal");
+				playerRigidbody.velocity = (new Vector2(x * MovementSpeed, playerRigidbody.velocity.y));
 			}
 		}
 	}
