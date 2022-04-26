@@ -109,8 +109,42 @@ public class Projectile : Item
 
 [Serializable]
 public class EquipableItem : Item {
-	//TODO:
 	public float defenseStat;
+	public AccessoryInfliction inflictedStat;
+	public float value;
+	public EquipableType type;
+
+	public void InflictStat(bool direction)
+    {
+        switch (inflictedStat)
+        {
+			case AccessoryInfliction.RAISESPEEDBY: {
+					if(direction)
+					Movement.Singleton.MovementSpeed += value;
+					else
+					Movement.Singleton.MovementSpeed -= value;
+					break;
+				}
+			case AccessoryInfliction.RAISEJUMPBY:
+				{
+					if (direction)
+						Movement.Singleton.JumpForce += value;
+					else
+						Movement.Singleton.JumpForce -= value;
+					break;
+				}
+		}
+    }
+
+	public enum AccessoryInfliction
+    {
+		RAISESPEEDBY,RAISEJUMPBY
+    }
+
+	public enum EquipableType
+    {
+		ARMOR , Accessory
+    }
 	
 }
 

@@ -86,10 +86,10 @@ public class Movement : MonoBehaviour {
 		Camera.main.orthographicSize = camZoom;
 		if (movement > 0)
 		{
-			GlobalVariables.LocalPlayer.transform.rotation = new Quaternion(0, 0, 0, 0);
+			PlayerModelT.transform.rotation = new Quaternion(0, 0, 0, 0);
 		}
 		else if (movement < 0)
-			GlobalVariables.LocalPlayer.transform.rotation = new Quaternion(0, 180, 0, 0);
+			PlayerModelT.transform.rotation = new Quaternion(0, 180, 0, 0);
 
 		if (!PlayerLocked && PlayerVariables.Gamemode==Gamemode.CREATIVE)
 			CreativeModeMovement();

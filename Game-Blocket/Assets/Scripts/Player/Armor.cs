@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Armor : MonoBehaviour
 {
+    public static Armor Singleton { get; private set; }
+
     public List<UIInventorySlot> uIInventorySlots;
 
     public Sprite HelmetSprite => GetSpriteBySlotId(0);
@@ -32,8 +34,5 @@ public class Armor : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        Debug.Log(DefenseArmor);
-    }
+    public void Start() => Singleton = this;
 }

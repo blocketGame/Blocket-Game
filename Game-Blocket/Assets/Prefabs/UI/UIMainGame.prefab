@@ -3971,6 +3971,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1052645123328090694, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
+      propertyPath: AccessorySlot
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3032319131892145362, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
       propertyPath: m_Name
       value: AccSlot4
@@ -4099,6 +4103,10 @@ PrefabInstance:
     - target: {fileID: 800909088422366983, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1052645123328090694, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
+      propertyPath: ArmorSlot
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3032319131892145362, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
       propertyPath: m_Name
@@ -4236,6 +4244,10 @@ PrefabInstance:
     - target: {fileID: 800909088422366983, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1052645123328090694, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
+      propertyPath: ArmorSlot
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3032319131892145362, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
       propertyPath: m_Name
@@ -4382,6 +4394,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1052645123328090694, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
+      propertyPath: AccessorySlot
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 3032319131892145362, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
       propertyPath: m_Name
       value: AccSlot5
@@ -4518,6 +4534,10 @@ PrefabInstance:
     - target: {fileID: 800909088422366983, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1052645123328090694, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
+      propertyPath: AccessorySlot
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3032319131892145362, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
       propertyPath: m_Name
@@ -4664,6 +4684,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1052645123328090694, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
+      propertyPath: AccessorySlot
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 3032319131892145362, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
       propertyPath: m_Name
       value: AccSlot3
@@ -4800,6 +4824,10 @@ PrefabInstance:
     - target: {fileID: 800909088422366983, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1052645123328090694, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
+      propertyPath: AccessorySlot
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3032319131892145362, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
       propertyPath: m_Name
@@ -4938,6 +4966,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1052645123328090694, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
+      propertyPath: AccessorySlot
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3032319131892145362, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
       propertyPath: m_Name
       value: AccSlot1
@@ -5067,6 +5099,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1052645123328090694, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
+      propertyPath: ArmorSlot
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3032319131892145362, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
       propertyPath: m_Name
       value: ArmorTop
@@ -5180,6 +5216,10 @@ PrefabInstance:
     - target: {fileID: 800909088422366983, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 110
+      objectReference: {fileID: 0}
+    - target: {fileID: 1052645123328090694, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
+      propertyPath: AccessorySlot
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3032319131892145362, guid: 08b57b6a984ad5246b5145e9856bbb24, type: 3}
       propertyPath: m_Name
