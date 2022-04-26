@@ -22,10 +22,24 @@ public class UIBackground : MonoBehaviour
 		foreach(UIBackgroundLayer uIBackgroundLayer in Layers){
 			float x = OffsetX * uIBackgroundLayer.speedIndicator;
 
-			if(x >= canvasWith)
-				InitBackgroundLayers(-1, uIBackgroundLayer.layer, uIBackgroundLayer);
-			if(x <= -canvasWith)
-				InitBackgroundLayers(1, uIBackgroundLayer.layer, uIBackgroundLayer);
+			//if(x >= canvasWith)
+			//	InitBackgroundLayers(1, uIBackgroundLayer);
+			//if(x <= -canvasWith)
+			//	InitBackgroundLayers(-1, uIBackgroundLayer);
+			try{ 
+				if(uIBackgroundLayer.speedIndicator == 3)
+					Debug.Log($"Speed: {uIBackgroundLayer?.speedIndicator}; Left:{uIBackgroundLayer?.layerLeft?.transform.position.x}; Center:{uIBackgroundLayer?.layerCenter?.transform.position.x}; Right:{uIBackgroundLayer?.layerRight?.transform.position.x}");
+			}catch(Exception e){
+				Debug.LogWarning(e);
+            }
+
+			float withToSwitch = canvasWith / uIBackgroundLayer.speedIndicator;
+			if(Mathf.Abs(x) > withToSwitch){
+				if(x > 0)
+					CanvasSwitch(true, uIBackgroundLayer);
+				else
+					CanvasSwitch(false, uIBackgroundLayer);
+            }
 
 			if(uIBackgroundLayer.layerLeft != null)
 				uIBackgroundLayer.layerLeft.transform.localPosition = new Vector3(x - canvasWith, 0);
@@ -38,6 +52,27 @@ public class UIBackground : MonoBehaviour
 		}
 	}
 
+
+
+	public bool LayersNotNull(UIBackgroundLayer uIBackgroundLayer) => uIBackgroundLayer.layerCenter != null && uIBackgroundLayer.layerRight != null && uIBackgroundLayer.layerLeft;
+
+	private void CanvasSwitch(bool left, UIBackgroundLayer uIBackgroundLayer) {
+		if(!LayersNotNull(uIBackgroundLayer)){
+			Debug.LogWarning("BackgroundLayer null!");
+			return;
+        }
+
+		if(left){
+			uIBackgroundLayer.layerCenter = uIBackgroundLayer.layerLeft;
+			Destroy(uIBackgroundLayer.layerRight);
+			InitBackgroundLayers(-1, uIBackgroundLayer);
+		} else{
+			uIBackgroundLayer.layerCenter = uIBackgroundLayer.layerRight;
+			Destroy(uIBackgroundLayer.layerLeft);
+			InitBackgroundLayers(1, uIBackgroundLayer);
+		}
+    }
+
 	private void Awake() {
 		//Clean
 		for(int i = 0; i < paralaxNow.paralaxLayers.Count; i++){
@@ -46,15 +81,21 @@ public class UIBackground : MonoBehaviour
 				layer = paralaxLayer,
 				speedIndicator = paralaxLayer.speed
 			};
-			InitBackgroundLayers(null, paralaxLayer, uIBackgroundLayer);
+			InitBackgroundLayers(null, uIBackgroundLayer);
 			Layers.Add(uIBackgroundLayer);
 		}
 	}
 
-	public void InitBackgroundLayers(sbyte? layer, ParalaxLayer paralaxLayer, UIBackgroundLayer uIBackgroundLayer) {
-		Debug.Log("");
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="allignment">1 = Right; -1 = Left; 0 = Center</param>
+	/// <param name="uIBackgroundLayer"></param>
+	public void InitBackgroundLayers(sbyte? allignment, UIBackgroundLayer uIBackgroundLayer) {
+		Debug.Log("Delete this");
+		ParalaxLayer paralaxLayer = uIBackgroundLayer.layer;
 		//Center
-		if(layer == null || layer == 0){
+		if(allignment == null || allignment == 0){
 			if(uIBackgroundLayer.layerCenter != null)
 				Destroy(uIBackgroundLayer.layerCenter);
 			uIBackgroundLayer.layerCenter = Instantiate(parallaxPrefab, transform);
@@ -62,10 +103,11 @@ public class UIBackground : MonoBehaviour
 			uIBackgroundLayer.layerCenter.layer = 5;
 			uIBackgroundLayer.layerCenter.transform.localPosition = new Vector3(0,0);
 			uIBackgroundLayer.layerCenter.GetComponent<Image>().sprite = paralaxLayer.image;
+			Debug.Log("Instantiate Left");
 		}
 		   
 		//Left
-		if(layer == null || layer < 0){
+		if(allignment == null || allignment < 0){
 			if(uIBackgroundLayer.layerLeft != null)
 				Destroy(uIBackgroundLayer.layerLeft);
 			uIBackgroundLayer.layerLeft = Instantiate(parallaxPrefab, transform);
@@ -73,10 +115,11 @@ public class UIBackground : MonoBehaviour
 			uIBackgroundLayer.layerLeft.layer = 5;
 			uIBackgroundLayer.layerLeft.transform.localPosition = new Vector3(-canvasWith, 0);
 			uIBackgroundLayer.layerLeft.GetComponent<Image>().sprite = paralaxLayer.image;
+			Debug.Log("Instantiate Center");
 		}
 
 		//Right
-		if(layer == null || layer > 0) {
+		if(allignment == null || allignment > 0) {
 			//Right
 			if(uIBackgroundLayer.layerRight != null)
 				Destroy(uIBackgroundLayer.layerRight);
@@ -85,6 +128,7 @@ public class UIBackground : MonoBehaviour
 			uIBackgroundLayer.layerRight.layer = 5;
 			uIBackgroundLayer.layerRight.transform.localPosition = new Vector3(canvasWith, 0);
 			uIBackgroundLayer.layerRight.GetComponent<Image>().sprite = paralaxLayer.image;
+			Debug.Log("Instantiate Right");
 		}
 	}
 
