@@ -20,7 +20,7 @@ public class ItemUsageHandler : MonoBehaviour
         if(PlayerVariables.Singleton.Race == CharacterRace.MAGICIAN)
             TurnItemToMouseAngle();
 
-        //Don´t go into method if selected item is 0 (No Item in hand)
+        //DonÂ´t go into method if selected item is 0 (No Item in hand)
         if(Inventory.Singleton.SelectedItemId != 0)
             AnimateWeapon();
         Physics2D.IgnoreLayerCollision(0,6);//TODO: Use Projectsettings

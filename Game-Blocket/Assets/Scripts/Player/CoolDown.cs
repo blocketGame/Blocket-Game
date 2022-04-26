@@ -7,8 +7,8 @@ public class CoolDown : MonoBehaviour
 {
     public GameObject greenBar;
     public Image weaponImage;
+    
     public float Timer => ItemUsageHandler.Singleton.timer/((Inventory.Singleton.SelectedItemObj ?? new WeaponItem()) as WeaponItem)?.CoolDownTime ?? 1;
-
 
     // Update is called once per frame
     void Update()

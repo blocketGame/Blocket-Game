@@ -1829,11 +1829,51 @@ MonoBehaviour:
     id: 6
     description: Dead tree
     itemType: 1
-    itemImage: {fileID: 21300000, guid: 4318a7de18532f2409f3a2dd127ba0b8, type: 3}
+    itemImage: {fileID: 21300000, guid: cff06dda4aad311449a62fba9deed956, type: 3}
     swingingAnimation: 
     blockId: 16
   ToolItemsInGame: []
-  EquipableItemsInGame: []
+  EquipableItemsInGame:
+  - name: Helmet
+    id: 4000
+    description: Protect your head
+    itemType: 0
+    itemImage: {fileID: 21300000, guid: b5495816b53ccf241a644d96e18a84f3, type: 3}
+    swingingAnimation: 
+    defenseStat: 2
+    inflictedStat: 0
+    value: 0
+    type: 0
+  - name: chestplate
+    id: 4001
+    description: Protect your head
+    itemType: 0
+    itemImage: {fileID: 21300000, guid: 40a4ee0551dc052459196ca2c206ff03, type: 3}
+    swingingAnimation: 
+    defenseStat: 2
+    inflictedStat: 0
+    value: 0
+    type: 0
+  - name: leggins
+    id: 4002
+    description: Protect your head
+    itemType: 0
+    itemImage: {fileID: 21300000, guid: 7926be40855a9754ab6f5107f40e60aa, type: 3}
+    swingingAnimation: 
+    defenseStat: 2
+    inflictedStat: 0
+    value: 0
+    type: 0
+  - name: Boots
+    id: 4003
+    description: Old boots. Maybe they can be worn
+    itemType: 0
+    itemImage: {fileID: 21300000, guid: c378be739051e124286fd4d9559013a7, type: 3}
+    swingingAnimation: 
+    defenseStat: 0
+    inflictedStat: 0
+    value: 2
+    type: 1
   UseableItemsInGame: []
   CommonItems:
   - name: Opal
@@ -1930,11 +1970,11 @@ MonoBehaviour:
     durability: 0
     damage: 0
     dmgOnColliderHit: 0
-    holdShooting: 0
-    coolDownTime: 0
-    projectile: 0
-    maxHeight: 0
-    maxDistance: 0
+    holdShooting: 1
+    coolDownTime: 0.3
+    projectile: 3002
+    maxHeight: 100
+    maxDistance: 100
     behaviour: 0
     weaponType: 0
   - name: Black hole canon
