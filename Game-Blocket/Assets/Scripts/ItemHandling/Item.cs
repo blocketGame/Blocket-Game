@@ -70,7 +70,15 @@ public class WeaponItem : Item
 	public ushort durability, damage;
 	public bool dmgOnColliderHit;
 	public bool holdShooting;
-	public float coolDownTime;
+
+	[SerializeField]
+	private float coolDownTime;
+	public float CoolDownTime {
+		get => float.IsInfinity(coolDownTime) ? 0 : coolDownTime;
+		set => coolDownTime = value;
+	}
+	
+
 	[Header("Ranged-Settings")]
 	//Projectile (0 => no projectile)
 	public uint projectile;
