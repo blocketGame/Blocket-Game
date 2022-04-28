@@ -1843,8 +1843,8 @@ MonoBehaviour:
     defenseStat: 2
     inflictedStat: 0
     value: 0
-    type: 0
-  - name: chestplate
+    type: 1
+  - name: Chestplate
     id: 2001
     description: Protect your head
     itemType: 0
@@ -1853,8 +1853,8 @@ MonoBehaviour:
     defenseStat: 2
     inflictedStat: 0
     value: 0
-    type: 0
-  - name: leggins
+    type: 1
+  - name: Leggins
     id: 2002
     description: Protect your head
     itemType: 0
@@ -1863,7 +1863,7 @@ MonoBehaviour:
     defenseStat: 2
     inflictedStat: 0
     value: 0
-    type: 0
+    type: 1
   - name: Boots
     id: 2003
     description: Old boots. Maybe they can be worn
@@ -2352,12 +2352,18 @@ MonoBehaviour:
     blockID: 47
     tile: {fileID: 11400000, guid: bf46b1a7c9749d049aa3b70fe4358924, type: 2}
     removeDuration: 3
-    blockDrops: []
+    blockDrops:
+    - itemID: 1
+      dropchance: 100
+      toolItemType: 0
   - name: Mush
     blockID: 48
     tile: {fileID: 11400000, guid: 51dd16bda235bf44aa15826e4a62aee0, type: 2}
     removeDuration: 3
-    blockDrops: []
+    blockDrops:
+    - itemID: 1
+      dropchance: 100
+      toolItemType: 0
   - name: Crystal-Cave-Block
     blockID: 49
     tile: {fileID: 11400000, guid: 55d4239d9740d5a43910d01cbcbd9548, type: 2}

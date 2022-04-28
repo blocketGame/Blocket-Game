@@ -146,12 +146,12 @@ public class EquipableItem : Item {
 
 	public enum AccessoryInfliction
     {
-		RAISESPEEDBY,RAISEJUMPBY
+		RAISESPEEDBY, RAISEJUMPBY
     }
 
 	public enum EquipableType
     {
-		ARMOR , Accessory
+		None, Armor , Accessory
     }
 	
 }

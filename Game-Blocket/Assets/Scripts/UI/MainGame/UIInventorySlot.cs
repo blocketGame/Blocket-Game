@@ -21,7 +21,10 @@ public class UIInventorySlot : MonoBehaviour {
 	public Sprite imgActive, imagInactive, defaultSprite;
 	/// <summary>Checks Whether or not this Slot is just a copy</summary>
 	public bool isHotBarSlot;
-	public int ArmorSlot,AccessorySlot;
+
+	public EquipableItem.EquipableType type;
+
+	//public int ArmorSlot,AccessorySlot;
 	/// <summary>InventorySlots parent => this Slot will be the copy for Hotbar <summary>
 	public UIInventorySlot parent;
 	#endregion
@@ -45,32 +48,32 @@ public class UIInventorySlot : MonoBehaviour {
 	public uint ItemID {
 		get => _itemId;
 		set {
-			if (value >= 4000 && ArmorSlot > 0)
-			{
-				if (((EquipableItem)ItemAssets.Singleton.GetItemFromItemID(value)).type != EquipableItem.EquipableType.ARMOR)
-				{
-					Inventory.Singleton.atHand.ItemID = value;
-					return;
-				}
-					ArmorPlaceholder.Singleton.SetArmorSprite(ArmorSlot - 1, ItemAssets.Singleton.GetSpriteFromItemID(value));
-			}
-			else if (ArmorSlot > 0)
-				ArmorPlaceholder.Singleton.SetArmorSprite(ArmorSlot - 1, null);
+			//if (value >= 4000 && ArmorSlot > 0)
+			//{
+			//	if (((EquipableItem)ItemAssets.Singleton.GetItemFromItemID(value)).type != EquipableItem.EquipableType.ARMOR)
+			//	{
+			//		Inventory.Singleton.atHand.ItemID = value;
+			//		return;
+			//	}
+			//		ArmorPlaceholder.Singleton.SetArmorSprite(ArmorSlot - 1, ItemAssets.Singleton.GetSpriteFromItemID(value));
+			//}
+			//else if (ArmorSlot > 0)
+			//	ArmorPlaceholder.Singleton.SetArmorSprite(ArmorSlot - 1, null);
 
 
-			if (value >= 4000 && AccessorySlot > 0)
-			{
-				if (((EquipableItem)ItemAssets.Singleton.GetItemFromItemID(value)).type != EquipableItem.EquipableType.Accessory)
-				{
-					Inventory.Singleton.atHand.ItemID = value;
-					return;
-				}
-					((EquipableItem)ItemAssets.Singleton?.GetItemFromItemID(value)).InflictStat(true);
-			}
-			else if (AccessorySlot > 0)
-			{
-				((EquipableItem)ItemAssets.Singleton?.GetItemFromItemID(ItemID)).InflictStat(false);
-			}
+			//if (value >= 4000 && AccessorySlot > 0)
+			//{
+			//	if (((EquipableItem)ItemAssets.Singleton.GetItemFromItemID(value)).type != EquipableItem.EquipableType.Accessory)
+			//	{
+			//		Inventory.Singleton.atHand.ItemID = value;
+			//		return;
+			//	}
+			//		((EquipableItem)ItemAssets.Singleton?.GetItemFromItemID(value)).InflictStat(true);
+			//}
+			//else if (AccessorySlot > 0)
+			//{
+			//	((EquipableItem)ItemAssets.Singleton?.GetItemFromItemID(ItemID)).InflictStat(false);
+			//}
 
 			_itemId = value;
 			ItemObject = ItemAssets.Singleton?.GetItemFromItemID(value);
@@ -101,6 +104,8 @@ public class UIInventorySlot : MonoBehaviour {
 		itemImage.sprite = ItemObject?.itemImage;
 		itemImage.sprite ??= defaultSprite;
 		//Hide counttext if item is Single type
+		itemImage.gameObject.SetActive(ItemObject != null);
+		textDown.gameObject.SetActive(ItemObject != null);
 		if (ItemObject != null) {
 			textDown.gameObject.SetActive(ItemObject.itemType == Item.ItemType.STACKABLE);
 			//Write itemCount into the texfield
@@ -108,8 +113,7 @@ public class UIInventorySlot : MonoBehaviour {
 			//textDown.gameObject.transform.position.Set(textDown.gameObject.transform.position.x,textDown.gameObject.transform.position.y + 100, textDown.gameObject.transform.position.z);
 			textDown.text = string.Empty + _itemCount;
 		}
-		itemImage.gameObject.SetActive(ItemObject != null);
-		textDown.gameObject.SetActive(ItemObject != null);
+		
 	}
 
 	private bool _active;

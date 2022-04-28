@@ -48,12 +48,12 @@ public class PlayerInteraction : MonoBehaviour {
 	/// <summary>If Chunk == null => Return 0</summary>
 	/// <param name="foreground">If background array</param>
 	/// <returns>The Id of the mouse-hovered block</returns>
-	public byte TargetBlockID(bool foreground) => foreground ? ThisChunk?.bgBlocks[BlockInchunkCoord.x, BlockInchunkCoord.y] ?? 0: ThisChunk?.blocks[BlockInchunkCoord.x, BlockInchunkCoord.y] ?? 0;
+	public byte TargetBlockID(bool foreground) => foreground ? ThisChunk?.blocks[BlockInchunkCoord.x, BlockInchunkCoord.y] ?? 0: ThisChunk?.bgBlocks[BlockInchunkCoord.x, BlockInchunkCoord.y] ?? 0;
 
 	/// <summary>If foreground == null check if one of both tilemaps has a block</summary>
 	public bool TargetBlockExisting(bool? foreground = null){
 		bool foregroundId = TargetBlockID(true) != 0, backgroundId = TargetBlockID(false) != 0;
-        return foreground.HasValue ? foreground.Value ? foregroundId : backgroundId : foregroundId ? foregroundId : backgroundId;
+        return foreground.HasValue ? (foreground.Value ? foregroundId : backgroundId) : (foregroundId ? foregroundId : backgroundId);
     }
 	#endregion
 
@@ -180,7 +180,7 @@ public class PlayerInteraction : MonoBehaviour {
 				foreground = false;
 			
 			if(foreground.HasValue){
-				byte targetRemoveDuration = WorldAssets.Singleton.blocks[TargetBlockID(foreground ?? throw new NullReferenceException())].removeDuration;
+				byte targetRemoveDuration = WorldAssets.Singleton.blocks[TargetBlockID(foreground.Value)].removeDuration;
 
 				BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int, bool>(targetRemoveDuration, TargetBlockID(false), ThisChunk, BlockInchunkCoord, foreground.Value));
 

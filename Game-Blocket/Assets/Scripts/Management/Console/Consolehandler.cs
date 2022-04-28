@@ -72,8 +72,7 @@ public static class ConsoleHandler{
 
 	private class Command {
 
-		public static List<Command> Commands { get; } = new List<Command>()
-		{
+		public static List<Command> Commands { get; } = new List<Command>(){
 			new Command("ping"){ 
 			func = (str) => "Pong"},
 			new Command("summon"){ func = (str) => { 
@@ -95,7 +94,8 @@ public static class ConsoleHandler{
 				}
 				return "Spawned!";
 			} },
-			new Command("kill"){ func = (x) => {
+			new Command("kill"){ 
+			func = (x) => {
 				GameManager.SwitchDimension(Dimension.OVERWORLD);
 				GlobalVariables.LocalPlayer.transform.position = new Vector3(0, 10);
 				return "Killed player";
@@ -129,17 +129,18 @@ public static class ConsoleHandler{
 			},
 			new Command("give"){ 
 			func = (x) => {
-				uint id = (uint.TryParse(x.Split(' ')[1], out uint res) ? res : 0);
-				if(id == 0)
-					return $"Item {x.Split(' ')[1]} does not exist!"; 
-				
-				ushort count = ushort.TryParse(x.Split(' ')[2], out ushort countres) ? countres : (ushort)0 ;
-				if(count ==0){ return$"Item {id} could not be added with the Count - {count} !";  }
-				Item i = ItemAssets.Singleton.GetItemFromItemID(id) ?? null;
-				if(i==null)
-					PrintToChat($"Item {x.Split(' ')[1]} does not exist!");
-				else
-					Inventory.Singleton.AddItem(i,count,out ushort itemCountNotAdded);
+					uint id = (uint.TryParse(x.Split(' ')[1], out uint res) ? res : 0);
+					if(id == 0)
+						return $"Item {x.Split(' ')[1]} does not exist!";
+
+					string[] args =  x.Split(' ');
+
+					ushort count = (ushort) (args.Length == 3 ? ushort.TryParse(args[2], out ushort countres) ? countres :  1 : 1) ;
+					Item i = ItemAssets.Singleton.GetItemFromItemID(id);
+					if(i == null)
+						PrintToChat($"Item {x.Split(' ')[1]} does not exist!");
+					else
+						Inventory.Singleton.AddItem(i,count, out ushort itemCountNotAdded);
 					return "Gave Item to player";
 				}
 			},

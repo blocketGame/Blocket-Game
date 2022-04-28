@@ -47,6 +47,11 @@ public class Inventory : MonoBehaviour {
 	/// </summary>
 	/// <param name="slotPressed">Slot that was pressed by the local user</param>
 	public void PressedSlot(UIInventorySlot slotPressed) {
+		//Equipable
+		if(slotPressed.type != EquipableItem.EquipableType.None && atHand.ItemID != 0)
+			if(!(ItemAssets.Singleton.GetItemFromItemID(atHand.ItemID) is EquipableItem eI && eI.type == slotPressed.type))
+				return;
+
 		uint temp = atHand.ItemID;
 		ushort iCT = atHand.ItemCount;
 

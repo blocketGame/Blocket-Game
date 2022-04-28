@@ -33,7 +33,7 @@ public class UILobby : MonoBehaviour {
 
 	#region Delegates
 	private UnityAction StartGameAct => () => {
-		if(role == 1) {
+		if(Role == 1 || !GlobalVariables.Multiplayer) {
 			NetworkManager.Singleton.StartClient();
 		}
 		SceneManager.UnloadSceneAsync("Lobby");
@@ -45,10 +45,13 @@ public class UILobby : MonoBehaviour {
 
 	public static UnityAction BackToMainMenuAct => () => {
 		if(NetworkManager.Singleton?.isActiveAndEnabled ?? false)
-			NetworkManager.Singleton.Shutdown();
-		SceneManager.LoadScene("MainMenu");
+			NetworkManager.Singleton.Shutdown(true);
+		SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
+		SceneManager.UnloadSceneAsync("MainGame");
 
-		GameManager.Players.Clear();
+		Role = 0;
+		GameManager.Singleton = null;
+		GC.Collect();
 	};
     #endregion
 
@@ -59,7 +62,7 @@ public class UILobby : MonoBehaviour {
 		}
 	}
 
-	public static byte role = 0;
+	public static byte Role { get; set; }
 
 	/// <summary>
 	/// Manages the sides
@@ -107,7 +110,7 @@ public class UILobby : MonoBehaviour {
 			SiteIndexOpen = 2;
 			//startGame.gameObject.SetActive(false);
 			SetNetworkAddress();
-			role = 1;
+			Role = 1;
 		});
 
 		startGame.onClick.AddListener(StartGameAct);

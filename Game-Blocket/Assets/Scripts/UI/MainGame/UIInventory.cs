@@ -258,7 +258,7 @@ public class UIInventory : MonoBehaviour
 						{
 							Inventory.AddItem(uis.ItemID, uis.ItemCount, out ushort itemCountNotAdded);
 						}
-						GameObject.Destroy(uis.gameObject);
+                        Destroy(uis.gameObject);
 					}
 					uiParent.transform.position = uiParentPosition;
 					craftingInterfacePlaceholder.SetActive(false);

@@ -12,7 +12,7 @@ using UnityEngine.SceneManagement;
 /// Coroutines, Threads, Multiplayerstuff...
 /// </summary>
 public class GameManager : MonoBehaviour {
-	public static GameManager Singleton { get; private set; }
+	public static GameManager Singleton { get; set; }
 	//Both
 	public static GameState State { get => _state;
 		set {
@@ -183,7 +183,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	private void SpawnPlayer(ulong clientNow) {
-		if(!NetworkManager.Singleton.IsServer)
+		if(!NetworkManager.Singleton.IsServer || Players.ContainsKey(clientNow))
 			return;
 		GameObject go = Instantiate(PrefabAssets.Singleton.playerNetPrefab, new Vector3Int(new System.Random().Next(-20, 20), 25, 0), Quaternion.identity);//TODO: Serverrole
 		go.name = $"Player: {clientNow}";
