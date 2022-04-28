@@ -16,7 +16,7 @@ public class CoolDown : MonoBehaviour
     void Update()
     {
         //[TODO] - Bugfix relational scaling while moving weapon in hand
-        weaponImage.sprite = GetSelectedItemAsWeaponItem?.itemImage ?? ItemAssets.Singleton.nullSprite;//Paste DebugImg instead of null
+        weaponImage.sprite = GetSelectedItemAsWeaponItem?.itemImage ?? ItemAssets.Singleton.nullSprite;
         greenBar.transform.localScale = new Vector3(Timer, greenBar.transform.localScale.y, greenBar.transform.localScale.z);
     }
 }

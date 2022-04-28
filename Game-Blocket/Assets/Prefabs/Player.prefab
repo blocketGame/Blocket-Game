@@ -1266,7 +1266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad4799d8469bd5d4fab3ad9fe12d47c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementSpeed: 10
+  movementSpeed: 12
   JumpForce: 15
   fallMulti: 1.06
   playerRigidbody: {fileID: 2886164251458701588}

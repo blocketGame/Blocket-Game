@@ -98,7 +98,7 @@ public class ClientTerrainHandler : TerrainHandler {
 			for(int y = -WD.ChunkDistance; y <= WD.ChunkDistance; y++) {
 				bool needsWork = CheckChunk(new Vector2Int(CurrentChunkCoord.x + x, CurrentChunkCoord.y + y));
 				//if (needsWork && DebugVariables.ShowMultipleTasksOrExecution)
-				Debug.Log($"{x}, {y}");
+				//Debug.Log($"{x}, {y}");
 				if(needsWork && noUpdates) {
 					noUpdates = false;
 				}

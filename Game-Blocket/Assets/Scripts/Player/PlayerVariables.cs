@@ -6,11 +6,11 @@ using UnityEngine.Experimental.Rendering.Universal;
 public class PlayerVariables : MonoBehaviour{
 	public static PlayerVariables Singleton { get; private set; }
 
-
+	public BoxCollider2D BoxCollider2D => GetComponentInChildren<BoxCollider2D>();
 
 	public static Dimension Dimension { get; set; }
 
-	public static Gamemode Gamemode { get => gamemode; set {	
+	public static Gamemode Gamemode { get => _gamemode; set {
 		switch(value){
 				case Gamemode.SURVIVAL: 
 					
@@ -22,11 +22,24 @@ public class PlayerVariables : MonoBehaviour{
 
 				break;
 			}
-		} 
+			_gamemode = value;
+		}
 	}
-	private static Gamemode gamemode;
+	private static Gamemode _gamemode;
 
     private void Awake() => Singleton = this;
+
+    public void Update() {
+		if(GameManager.State != GameState.INGAME)
+			return;
+		if(Input.GetKeyDown(KeyCode.F3)){
+			string cmd = Gamemode == Gamemode.SURVIVAL ? "1" : "0";
+			ConsoleHandler.Handle($"/gamemode {cmd}");
+		}
+		if(Input.GetKeyDown(KeyCode.F4))
+			ConsoleHandler.Handle($"/collision {!HasCollision}");
+
+	}
 
     #region Static Resources
     public GameObject playerModel, playerLogic;
@@ -48,6 +61,8 @@ public class PlayerVariables : MonoBehaviour{
     #endregion
 
     #region Properties
+
+	public bool HasCollision{ get => BoxCollider2D.enabled; set => BoxCollider2D.enabled = value; }
 
     public ushort Health { get => _health; 
 		set 

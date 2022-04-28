@@ -21,9 +21,13 @@ public static class ConsoleHandler{
 			return;
 		if (isCommand){
 			Command command = Command.GetCommand(str.Substring(1));
-			if(command == null)
-				PrintToChat($"Command: \"{str}\" not found");
-			command?.action(str);
+			if(command == null){ 
+				PrintToChat($"Command: \"{str}\" not found", true);
+				return;
+			} 
+			string returnString = command.func(str);
+			if(!string.IsNullOrEmpty(returnString.Trim()))
+				PrintToChat(returnString, true);
 		}
 		else
 			PrintToChat(str);
@@ -32,7 +36,7 @@ public static class ConsoleHandler{
 	/// <summary>Self explaining</summary>
 	/// <param name="str">String to print</param>
 	/// <exception cref="NullReferenceException">If Prefab has no Text Component</exception>
-	private static void PrintToChat(string str){
+	private static void PrintToChat(string str, bool server = false){
 		if(DebugVariables.ShowChatEntries)
 			Debug.Log($"Chat: {str}");
 
@@ -40,7 +44,7 @@ public static class ConsoleHandler{
 			UnityEngine.Object.Destroy(VisibleChatGO);
 		GameObject textGO = UnityEngine.Object.Instantiate(PrefabAssets.Singleton.consoleText, UIInventory.Singleton.chatParent.parent.position, Quaternion.identity ,UIInventory.Singleton.chatParent.parent);
 		Text text = textGO.TryGetComponent(out Text t) ? t : throw new NullReferenceException();
-		text.text = GetPlayerPrefix() + str;
+		text.text = GetPrefix(server) + str;
 		VisibleChatGO = textGO;
 	}
 
@@ -50,8 +54,8 @@ public static class ConsoleHandler{
 	/// TODO: Use real Playernames<br></br><seealso cref="PlayerProfile"/>
 	/// </summary>
 	/// <returns></returns>
-	private static string GetPlayerPrefix(){
-		return "Dev > ";
+	private static string GetPrefix(bool server){
+		return server ? "Server > " : "Dev > ";
 	}
 	
 	/// <summary>Prepares a string and checks if it is a command</summary>
@@ -70,8 +74,9 @@ public static class ConsoleHandler{
 
 		public static List<Command> Commands { get; } = new List<Command>()
 		{
-			new Command("ping"){ action = (str) => PrintToChat("Pong")},
-			new Command("summon"){ action = (str) => { 
+			new Command("ping"){ 
+			func = (str) => "Pong"},
+			new Command("summon"){ func = (str) => { 
 				// /summon 1 ~ ~ ~
 				string[] arguments = CutCmd(str).Split(' ');
 				try{
@@ -86,68 +91,75 @@ public static class ConsoleHandler{
 					
 					//Forget enemyhandler lol
 				}catch(Exception e){
-					PrintToChat(str: e.ToString());
-			}
+					return e.ToString();
+				}
+				return "Spawned!";
 			} },
-			new Command("kill"){ action = (x) => {
+			new Command("kill"){ func = (x) => {
 				GameManager.SwitchDimension(Dimension.OVERWORLD);
 				GlobalVariables.LocalPlayer.transform.position = new Vector3(0, 10);
+				return "Killed player";
 			} },
-			new Command("gamemode"){ action = (x) => {
-				sbyte str = (sbyte.TryParse(x.Split(' ')[1], out sbyte res) ? res : (sbyte)-1) ;
-				switch(str){
-					case 0: PlayerVariables.Gamemode = Gamemode.SURVIVAL;
-					break;
-					case 1: PlayerVariables.Gamemode = Gamemode.CREATIVE;
-					break;
-					case -1:
-						string s = x.Split(' ')[1];
-						switch (s.ToUpper()) {
-							case "CREATIVE":
-								PlayerVariables.Gamemode = Gamemode.CREATIVE;
-								break;
-							case "SURVIVAL":
-								PlayerVariables.Gamemode = Gamemode.SURVIVAL;
-								break;
-						}
-					break;
-					default:PrintToChat($"Gamemode {str} not found!");
-					break;
-				}
-			}, Synms = { "gm", "gamem" } }
-			,new Command("give"){ action = (x) => {
-				uint id = (uint.TryParse(x.Split(' ')[1], out uint res) ? res : 0) ;
-				if(id ==0){ PrintToChat($"Item {x.Split(' ')[1]} does not exist!"); return; }
+			new Command("gamemode"){ 
+				func = (x) => {
+					sbyte str = (sbyte.TryParse(x.Split(' ')[1], out sbyte res) ? res : (sbyte)-1) ;
+					switch(str){
+						case 0: PlayerVariables.Gamemode = Gamemode.SURVIVAL;
+						break;
+						case 1: PlayerVariables.Gamemode = Gamemode.CREATIVE;
+						break;
+						case -1:
+							string s = x.Split(' ')[1];
+							switch (s.ToUpper()) {
+								case "CREATIVE":
+									PlayerVariables.Gamemode = Gamemode.CREATIVE;
+									break;
+								case "SURVIVAL":
+									PlayerVariables.Gamemode = Gamemode.SURVIVAL;
+									break;
+							}
+						break;
+						default:PrintToChat($"Gamemode {str} not found!");
+						break;
+						
+					}
+					return $"Gamemode has been set to {PlayerVariables.Gamemode}";
+				}, 
+				Synms = { "gm", "gamem" }
+			},
+			new Command("give"){ 
+			func = (x) => {
+				uint id = (uint.TryParse(x.Split(' ')[1], out uint res) ? res : 0);
+				if(id == 0)
+					return $"Item {x.Split(' ')[1]} does not exist!"; 
+				
 				ushort count = ushort.TryParse(x.Split(' ')[2], out ushort countres) ? countres : (ushort)0 ;
-				if(count ==0){ PrintToChat($"Item {id} could not be added with the Count - {count} !"); return; }
+				if(count ==0){ return$"Item {id} could not be added with the Count - {count} !";  }
 				Item i = ItemAssets.Singleton.GetItemFromItemID(id) ?? null;
 				if(i==null)
 					PrintToChat($"Item {x.Split(' ')[1]} does not exist!");
 				else
 					Inventory.Singleton.AddItem(i,count,out ushort itemCountNotAdded);
-			}
-			},new Command("collision")
-			{
-				action = (x) => {
-				string s = x.Split(' ')[1];
-					switch (s)
-					{
-						case "true":
-							GlobalVariables.LocalPlayer.GetComponentInChildren<BoxCollider2D>().enabled = true;
-							break;
-						case "false":
-							GlobalVariables.LocalPlayer.GetComponentInChildren<BoxCollider2D>().enabled = false;
-							break;
-						case "t":
-							GlobalVariables.LocalPlayer.GetComponentInChildren<BoxCollider2D>().enabled = true;
-							break;
-						case "f":
-							GlobalVariables.LocalPlayer.GetComponentInChildren<BoxCollider2D>().enabled = false;
-							break;
-					}
+					return "Gave Item to player";
 				}
 			},
-			new Command("timeset"){action = (x) => {
+			new Command("collision"){
+				func = (x) => {
+					string s = x.Split(' ')[1];
+					switch (s){
+						case "true":
+						case "t":
+							PlayerVariables.Singleton.HasCollision = true;
+						break;
+						case "false":
+						case "f":
+							PlayerVariables.Singleton.HasCollision = false;
+						break;
+					}
+					return $"Collision has been set to {PlayerVariables.Singleton.HasCollision}";
+				}
+			},
+			new Command("timeset"){func = (x) => {
 				ClockHandler clock = ClockHandler.Singleton;
 				string str;
 				if(x.Split(' ').Length > 1)
@@ -156,8 +168,7 @@ public static class ConsoleHandler{
 				}
 				else
 				{
-					PrintToChat("No daytime defined");
-					return;
+					return"No daytime defined";
 				}
 				if (str.Equals("day"))
 				{
@@ -180,9 +191,15 @@ public static class ConsoleHandler{
 				{
 					PrintToChat($"\"{str}\" is not a daytime");
 				}
-			} },
+				return "Setted time";
+				} 
+			},
 			new Command("dungeon"){
-				action = (x) => GameManager.SwitchDimension(Dimension.DUNGEON)	
+				func = (x) => {
+					GameManager.SwitchDimension(Dimension.DUNGEON);
+					return "Teleported to Dungeon Dimension!";
+				}
+				
             }
 		};
 
@@ -205,7 +222,7 @@ public static class ConsoleHandler{
 
 		public string name;
 
-		public Action<string> action;
+		public Func<string, string> func;
 		
 		public Command(List<string> prefix){
 			name = prefix[0];
