@@ -43,7 +43,7 @@ public class UILobby : MonoBehaviour {
 			SceneManager.LoadScene("MainGame", LoadSceneMode.Single);
 	};
 
-	public UnityAction BackToMainMenuAct => () => {
+	public static UnityAction BackToMainMenuAct => () => {
 		if(NetworkManager.Singleton?.isActiveAndEnabled ?? false)
 			NetworkManager.Singleton.Shutdown();
 		SceneManager.LoadScene("MainMenu");

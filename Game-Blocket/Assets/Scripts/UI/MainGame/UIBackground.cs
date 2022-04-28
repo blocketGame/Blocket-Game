@@ -18,6 +18,8 @@ public class UIBackground : MonoBehaviour
 	public float OffsetX => -(GlobalVariables.LocalPlayerPos.x % fullWithInWorld);
 
 	public void FixedUpdate() {
+		if(!DebugVariables.BackgroundParalax)
+			return;
 
 		foreach(UIBackgroundLayer uIBackgroundLayer in Layers){
 			float x = OffsetX * uIBackgroundLayer.speedIndicator;
@@ -130,14 +132,6 @@ public class UIBackground : MonoBehaviour
 			uIBackgroundLayer.layerRight.GetComponent<Image>().sprite = paralaxLayer.image;
 			Debug.Log("Instantiate Right");
 		}
-	}
-
-	private void Start() {
-		//foreach(UIBackgroundLayer uIBackgroundLayer in Layers) {
-		//	InitRectTransfrom(uIBackgroundLayer.layerLeft.transform, -1);
-		//	InitRectTransfrom(uIBackgroundLayer.layerRight.transform, 1);
-		//	InitRectTransfrom(uIBackgroundLayer.layerCenter.transform, 0);
-		//}
 	}
 
 	private void InitRectTransfrom(Transform rT, sbyte x){

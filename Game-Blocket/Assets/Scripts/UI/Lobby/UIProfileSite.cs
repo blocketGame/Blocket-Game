@@ -97,7 +97,7 @@ public class UIProfileSite : MonoBehaviour{
 			if(GlobalVariables.Multiplayer)
 				UILobby.Singleton.SiteIndexOpen = 0;
 			else
-				UILobby.Singleton.BackToMainMenuAct();
+				UILobby.BackToMainMenuAct();
 		});
 
 		//nextBtn.onClick.AddListener(SelectedItem);

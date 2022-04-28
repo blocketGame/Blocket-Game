@@ -28,13 +28,15 @@ public class UIMainMenu : MonoBehaviour{
 		///<see cref="Buttons.offlineBtn"/>
 		offlineBtn.onClick.AddListener(() => {
 			GlobalVariables.Multiplayer = false;
-			SceneManager.LoadScene("Lobby");
+			SceneManager.LoadScene("Lobby", LoadSceneMode.Additive);
+			SceneManager.UnloadSceneAsync("MainMenu");
 		});
 
 		///<see cref="Buttons.onlineBtn"/>
 		onlineBtn.onClick.AddListener(() => {
 			GlobalVariables.Multiplayer = true;
-			SceneManager.LoadScene("Lobby");
+			SceneManager.LoadScene("Lobby", LoadSceneMode.Additive);
+			SceneManager.UnloadSceneAsync("MainMenu");
 		});
 
 		///<see cref="Buttons.settingsBtn"/>
