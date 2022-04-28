@@ -10,26 +10,31 @@ public class PickRandomItem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        this.GetComponent<Image>().sprite = PickARandomNumber();
+        GetComponent<Image>().sprite = PickARandomNumber();
     }
 
-    public Sprite PickARandomNumber()
-    {
+    public Sprite PickARandomNumber(){
             Sprite image = null;
             switch (Random.Range(0, 3))
             {
                 case 0:
+                    if(itemAssets.BlockItemsInGame.Count == 0)
+                        goto case 1;
                     Item i = itemAssets.BlockItemsInGame[Random.Range(0, itemAssets.BlockItemsInGame.Count)];
                     image = i?.itemImage;
                     ItemName.text = i?.name;
                     break;
                 case 1:
+                    if(itemAssets.WeaponItems.Count == 0)
+                        goto case 2;
                     Item it = itemAssets.WeaponItems[Random.Range(0, itemAssets.UseableItemsInGame.Count)];
                     image = it?.itemImage;
                     ItemName.text = it?.name; 
                     break;
                 case 2:
-                    Item pr = itemAssets.Projectiles[Random.Range(0, itemAssets.Projectiles.Count)];
+                    if(itemAssets.ProjectileItems.Count == 0)
+                        break;//@Philipp pls
+                    Item pr = itemAssets.ProjectileItems[Random.Range(0, itemAssets.ProjectileItems.Count)];
                     image = pr?.itemImage;
                     ItemName.text = pr?.name;
                     break;

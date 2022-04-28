@@ -29,7 +29,7 @@ public class UIBackground : MonoBehaviour
 			//if(x <= -canvasWith)
 			//	InitBackgroundLayers(-1, uIBackgroundLayer);
 			try{ 
-				if(uIBackgroundLayer.speedIndicator == 3)
+				if(uIBackgroundLayer.speedIndicator == 3 && DebugVariables.BackgroundParalaxDebug)
 					Debug.Log($"Speed: {uIBackgroundLayer?.speedIndicator}; Left:{uIBackgroundLayer?.layerLeft?.transform.position.x}; Center:{uIBackgroundLayer?.layerCenter?.transform.position.x}; Right:{uIBackgroundLayer?.layerRight?.transform.position.x}");
 			}catch(Exception e){
 				Debug.LogWarning(e);
@@ -94,7 +94,6 @@ public class UIBackground : MonoBehaviour
 	/// <param name="allignment">1 = Right; -1 = Left; 0 = Center</param>
 	/// <param name="uIBackgroundLayer"></param>
 	public void InitBackgroundLayers(sbyte? allignment, UIBackgroundLayer uIBackgroundLayer) {
-		Debug.Log("Delete this");
 		ParalaxLayer paralaxLayer = uIBackgroundLayer.layer;
 		//Center
 		if(allignment == null || allignment == 0){
@@ -105,7 +104,8 @@ public class UIBackground : MonoBehaviour
 			uIBackgroundLayer.layerCenter.layer = 5;
 			uIBackgroundLayer.layerCenter.transform.localPosition = new Vector3(0,0);
 			uIBackgroundLayer.layerCenter.GetComponent<Image>().sprite = paralaxLayer.image;
-			Debug.Log("Instantiate Left");
+			if(DebugVariables.BackgroundParalaxDebug)
+				Debug.Log("Instantiate Left");
 		}
 		   
 		//Left
@@ -117,7 +117,8 @@ public class UIBackground : MonoBehaviour
 			uIBackgroundLayer.layerLeft.layer = 5;
 			uIBackgroundLayer.layerLeft.transform.localPosition = new Vector3(-canvasWith, 0);
 			uIBackgroundLayer.layerLeft.GetComponent<Image>().sprite = paralaxLayer.image;
-			Debug.Log("Instantiate Center");
+			if(DebugVariables.BackgroundParalaxDebug)
+				Debug.Log("Instantiate Center");
 		}
 
 		//Right
@@ -130,7 +131,8 @@ public class UIBackground : MonoBehaviour
 			uIBackgroundLayer.layerRight.layer = 5;
 			uIBackgroundLayer.layerRight.transform.localPosition = new Vector3(canvasWith, 0);
 			uIBackgroundLayer.layerRight.GetComponent<Image>().sprite = paralaxLayer.image;
-			Debug.Log("Instantiate Right");
+			if(DebugVariables.BackgroundParalaxDebug)
+				Debug.Log("Instantiate Right");
 		}
 	}
 

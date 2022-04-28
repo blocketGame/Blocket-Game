@@ -112,7 +112,7 @@ public class ItemUsageHandler : MonoBehaviour
         anim.Play(animationname == string.Empty ? "Default" : animationname ?? "Default");
     }
 
-    private void CreateProjectile(WeaponItem weapon) => CreateProjectile(ItemAssets.Singleton.Projectiles.Find(item => item.id.Equals(weapon.projectile)) ?? new Projectile(), weapon);
+    private void CreateProjectile(WeaponItem weapon) => CreateProjectile(ItemAssets.Singleton.ProjectileItems.Find(item => item.id.Equals(weapon.projectile)) ?? new Projectile(), weapon);
 
     #endregion
 

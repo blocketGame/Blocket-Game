@@ -47,6 +47,8 @@ public class UILobby : MonoBehaviour {
 		if(NetworkManager.Singleton?.isActiveAndEnabled ?? false)
 			NetworkManager.Singleton.Shutdown();
 		SceneManager.LoadScene("MainMenu");
+
+		GameManager.Players.Clear();
 	};
     #endregion
 

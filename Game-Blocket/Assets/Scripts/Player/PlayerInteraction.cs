@@ -103,8 +103,7 @@ public class PlayerInteraction : MonoBehaviour {
 			if (Input.GetKey(Main))
 				bI.OnMainInteractionKey();
 		}
-		if (Inventory.Singleton.SelectedItemObj is ToolItem tI)
-		{
+		if (Inventory.Singleton.SelectedItemObj is ToolItem tI){
 			if (Input.GetKey(Side))
 				tI.OnSideInteractionKey();
 			if (Input.GetKey(Side))

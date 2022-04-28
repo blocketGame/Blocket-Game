@@ -13,7 +13,7 @@ public class PauseMenu : MonoBehaviour
 
 	public static bool PauseMenuOpen { get => Singleton.pauseMenuSide.activeInHierarchy; set {
 			Singleton.pauseMenuSide.SetActive(value);
-			GameManager.State = value ? GameState.PAUSED : GameState.INGAME;
+			GameManager.State = value ? GameState.PAUSED : GameState.LOADING;//TODO ingame or loading?
 			if(value){//Close other
 				UIInventory.Singleton.InventoryOpened = false;
             }
@@ -24,6 +24,8 @@ public class PauseMenu : MonoBehaviour
 		if(Input.GetKeyDown(KeyCode.Escape) && !UIInventory.Singleton.ChatOpened)
 			PauseMenuOpen = !PauseMenuOpen;
 	}
+
+	private void Start() => PauseMenuOpen = false;
 
 	private void Awake() {
 		Singleton = this;
