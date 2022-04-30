@@ -184,6 +184,7 @@ public class PlayerInteraction : MonoBehaviour {
 
 				BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int, bool , ToolItem.ToolType>(targetRemoveDuration, TargetBlockID(false), ThisChunk, BlockInchunkCoord, foreground.Value, WorldAssets.Singleton.blocks[TargetBlockID(foreground.Value)].tooltypes));
 
+
 				if(DebugVariables.BlockInteractionCR)
 					Debug.Log("Started!");
 			}
