@@ -206,13 +206,7 @@ public class PlayerInteraction : MonoBehaviour {
 	/// <returns>WaitTimer as yield return</returns>
 	public IEnumerator BreakBlock(object obj) {
 		Tuple<byte, byte, TerrainChunk,  Vector2Int, bool, ToolItem.ToolType> values = obj as Tuple<byte, byte, TerrainChunk, Vector2Int, bool, ToolItem.ToolType> ?? throw new ArgumentException();
-		if (Inventory.Singleton.SelectedItemObj?.GetType() == typeof(ToolItem) && ((ToolItem)Inventory.Singleton.SelectedItemObj).toolType == values.Item6)
-		{
-			Debug.Log("Picky");
-			yield return new WaitForSecondsRealtime(values.Item1 / ((ToolItem)Inventory.Singleton.SelectedItemObj).ToolPower);
-		}
-		else
-			yield return new WaitForSecondsRealtime(values.Item1 * 1.2f);
+			yield return (Inventory.Singleton.SelectedItemObj?.GetType() == typeof(ToolItem) && ((ToolItem)Inventory.Singleton.SelectedItemObj).toolType == values.Item6) ? new WaitForSecondsRealtime(values.Item1 / ((ToolItem)Inventory.Singleton.SelectedItemObj).ToolPower): new WaitForSecondsRealtime(values.Item1 * 1.2f);
 		if (DebugVariables.BlockInteractionCR)
 			Debug.Log("Finished");
 		StopCoroutine(BreakCoroutine);
