@@ -12,16 +12,15 @@ using UnityEngine.SceneManagement;
 /// Coroutines, Threads, Multiplayerstuff...
 /// </summary>
 public class GameManager : MonoBehaviour {
-	public static GameManager Singleton { get; private set; }
+	public static GameManager Singleton { get; set; }
 	//Both
-	public static GameState State { get => _state; 
-		set { 
+	public static GameState State { get => _state;
+		set {
 			_state = value;
 			SateSwitched(value);
-		} 
+		}
 	}
 	private static GameState _state;
-			
 
     //Client
     public static PlayerProfile PlayerProfileNow { get; set; }
@@ -136,8 +135,8 @@ public class GameManager : MonoBehaviour {
 				//If Local player
 				GlobalVariables.LocalPlayer = iGo;
 				iGo.name += "(this)";
-				
-				GlobalVariables.LocalUI = Instantiate(PrefabAssets.Singleton.prefabUI);
+				Instantiate(PrefabAssets.Singleton.camera).GetComponent<SmoothCamera>().target = iGo.transform;
+				GlobalVariables.LocalUI = Instantiate(PrefabAssets.Singleton.mainGameUI);
 				InitLocal();
 			} else {
 				//If not Local player
@@ -158,18 +157,22 @@ public class GameManager : MonoBehaviour {
     //Both (more server)
     /// <summary>After the Scene switches to the Main Game</summary>
     public void SceneSwitched(Scene s1, LoadSceneMode lsm) {
-		if (s1.name != "MainGame")
-			return;
-		SceneManager.SetActiveScene(s1);
-		State = GameState.LOADING;
-		if (NetworkManager.Singleton.IsServer){
-			SpawnPlayers();
-			//For Server
-			GlobalVariables.World = Instantiate(PrefabAssets.Singleton.world);
-			//For Clients
-			GlobalVariables.World.GetComponent<NetworkObject>().Spawn();
-			GlobalVariables.World.AddComponent<ServerTerrainHandler>();
+		if (s1.name == "MainGame"){ 
+			SceneManager.SetActiveScene(s1);
+			State = GameState.LOADING;
+			if (NetworkManager.Singleton.IsServer){
+				SpawnPlayers();
+				//For Server
+				GlobalVariables.World = Instantiate(PrefabAssets.Singleton.world);
+				//For Clients
+				GlobalVariables.World.GetComponent<NetworkObject>().Spawn();
+				GlobalVariables.World.AddComponent<ServerTerrainHandler>();
+			}
 		}
+
+		if(s1.name == "Dungeon"){
+			Debug.Log("a");
+        }
 	}
 
 	//Server
@@ -180,7 +183,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	private void SpawnPlayer(ulong clientNow) {
-		if(!NetworkManager.Singleton.IsServer)
+		if(!NetworkManager.Singleton.IsServer || Players.ContainsKey(clientNow))
 			return;
 		GameObject go = Instantiate(PrefabAssets.Singleton.playerNetPrefab, new Vector3Int(new System.Random().Next(-20, 20), 25, 0), Quaternion.identity);//TODO: Serverrole
 		go.name = $"Player: {clientNow}";
@@ -191,7 +194,41 @@ public class GameManager : MonoBehaviour {
 
     #endregion
 
+	public static void SwitchDimension(Dimension dimensionTo){
+		if(PlayerVariables.Dimension == dimensionTo)
+			return;
+		State = GameState.LOADING;
+		PlayerVariables.Dimension = dimensionTo;
+		switch(dimensionTo) {
+			case Dimension.OVERWORLD:
+				SceneManager.LoadScene("MainGame", LoadSceneMode.Additive);
+				SceneManager.UnloadSceneAsync("Dungeon");
+				
+			break;
+			case Dimension.DUNGEON:
+				SceneManager.LoadScene("Dungeon", LoadSceneMode.Additive);
+				MoveImportantThings(SceneManager.GetSceneByName("Dungeon"));
+				PlayerInteraction.Singleton.enabled = false;
+				SceneManager.UnloadSceneAsync("MainGame");
+			break;
+			case Dimension.OTHER:
+				//Future
+			break;
+			case Dimension.NULL:
+				throw new ArgumentException();
+			default: 
+				throw new ArgumentOutOfRangeException();
+		}
+		State = GameState.INGAME;
+	}
+	public static void MoveImportantThings(Scene scene){
+		SceneManager.MoveGameObjectToScene(GlobalVariables.LocalPlayer, scene);
+		SceneManager.MoveGameObjectToScene(SmoothCamera.Singleton.gameObject, scene);
+		SceneManager.MoveGameObjectToScene(UIInventory.Singleton.gameObject, scene);
+	}
 }
+
+
 
 /// <summary>
 /// Defines in which State our Game is

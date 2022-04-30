@@ -1835,7 +1835,7 @@ MonoBehaviour:
   ToolItemsInGame: []
   EquipableItemsInGame:
   - name: Helmet
-    id: 4000
+    id: 2000
     description: Protect your head
     itemType: 0
     itemImage: {fileID: 21300000, guid: b5495816b53ccf241a644d96e18a84f3, type: 3}
@@ -1843,9 +1843,9 @@ MonoBehaviour:
     defenseStat: 2
     inflictedStat: 0
     value: 0
-    type: 0
-  - name: chestplate
-    id: 4001
+    type: 1
+  - name: Chestplate
+    id: 2001
     description: Protect your head
     itemType: 0
     itemImage: {fileID: 21300000, guid: 40a4ee0551dc052459196ca2c206ff03, type: 3}
@@ -1853,9 +1853,9 @@ MonoBehaviour:
     defenseStat: 2
     inflictedStat: 0
     value: 0
-    type: 0
-  - name: leggins
-    id: 4002
+    type: 1
+  - name: Leggins
+    id: 2002
     description: Protect your head
     itemType: 0
     itemImage: {fileID: 21300000, guid: 7926be40855a9754ab6f5107f40e60aa, type: 3}
@@ -1863,9 +1863,9 @@ MonoBehaviour:
     defenseStat: 2
     inflictedStat: 0
     value: 0
-    type: 0
+    type: 1
   - name: Boots
-    id: 4003
+    id: 2003
     description: Old boots. Maybe they can be worn
     itemType: 0
     itemImage: {fileID: 21300000, guid: c378be739051e124286fd4d9559013a7, type: 3}
@@ -1877,20 +1877,20 @@ MonoBehaviour:
   UseableItemsInGame: []
   CommonItems:
   - name: Opal
-    id: 5001
+    id: 4001
     description: 
     itemType: 1
     itemImage: {fileID: 21300000, guid: 33430ddc929da284ba9d8fbedc2e7b43, type: 3}
     swingingAnimation: 
   - name: Bernstein
-    id: 5002
+    id: 4002
     description: 
     itemType: 1
     itemImage: {fileID: 21300000, guid: 35aabff55aa791248b87d99dde69c0d1, type: 3}
     swingingAnimation: 
   WeaponItems:
   - name: Wooden Sword
-    id: 2000
+    id: 5000
     description: This sword can cut through enything!!!!
     itemType: 1
     itemImage: {fileID: 21300000, guid: d8e214a5decc71d4c899ab4f76048ab6, type: 3}
@@ -1910,7 +1910,7 @@ MonoBehaviour:
     behaviour: 0
     weaponType: 0
   - name: Magic Sword
-    id: 2001
+    id: 5001
     description: This sword can cut through enything!!!!
     itemType: 1
     itemImage: {fileID: 21300000, guid: a32f97802030f604384d04875180b708, type: 3}
@@ -1927,7 +1927,7 @@ MonoBehaviour:
     behaviour: 0
     weaponType: 0
   - name: Starlight Wooden Bow
-    id: 2002
+    id: 5002
     description: Pew Pew
     itemType: 1
     itemImage: {fileID: 21300000, guid: f980e3ea11ce5c8479091e0ca8010b19, type: 3}
@@ -1944,7 +1944,7 @@ MonoBehaviour:
     behaviour: 0
     weaponType: 1
   - name: Wooden Bow
-    id: 2003
+    id: 5003
     description: Pew Pew
     itemType: 1
     itemImage: {fileID: 21300000, guid: f980e3ea11ce5c8479091e0ca8010b19, type: 3}
@@ -1961,7 +1961,7 @@ MonoBehaviour:
     behaviour: 0
     weaponType: 1
   - name: Black hole canon
-    id: 2004
+    id: 5004
     description: darkness
     itemType: 1
     itemImage: {fileID: 21300000, guid: ce3d57171e2dc8d4da627b3bd7be12e6, type: 3}
@@ -1977,69 +1977,7 @@ MonoBehaviour:
     maxDistance: 100
     behaviour: 0
     weaponType: 0
-  - name: Black hole canon
-    id: 0
-    description: 
-    itemType: 0
-    itemImage: {fileID: 0}
-    swingingAnimation: 
-    swingingAnimations: []
-    durability: 0
-    damage: 10
-    dmgOnColliderHit: 0
-    holdShooting: 1
-    coolDownTime: 0.6
-    projectile: 3002
-    maxHeight: 100
-    maxDistance: 100
-    behaviour: 0
-    weaponType: 1
-  Projectiles:
-  - name: Bullet
-    id: 3000
-    description: hitta hitta
-    itemType: 1
-    itemImage: {fileID: 21300000, guid: 645ed010887d5b04ea167474985d7707, type: 3}
-    swingingAnimation: 
-    durability: 0
-    damage: 5
-    spawningPos: {x: 0, y: 0}
-    flyingSpeed: 1
-    bounciness: 0
-    lightEmission: 0
-    goThroughBlocks: 0
-    pierce: 0
-    gravityScale: 1
-  - name: Star
-    id: 3001
-    description: Shinin bright lika diamond
-    itemType: 1
-    itemImage: {fileID: 21300000, guid: 212c6b6b0e8184c429dd5577e5dd23d7, type: 3}
-    swingingAnimation: 
-    durability: 0
-    damage: 5
-    spawningPos: {x: 0, y: 20}
-    flyingSpeed: 3
-    bounciness: 0
-    lightEmission: 0.5
-    goThroughBlocks: 0
-    pierce: 0
-    gravityScale: 0
-  - name: Black hole
-    id: 3002
-    description: darkness
-    itemType: 1
-    itemImage: {fileID: 21300000, guid: a4c21cd6116c67544ad34d466cb20a00, type: 3}
-    swingingAnimation: 
-    durability: 0
-    damage: 20
-    spawningPos: {x: 0, y: 0}
-    flyingSpeed: 1
-    bounciness: 0
-    lightEmission: 0
-    goThroughBlocks: 0
-    pierce: 0
-    gravityScale: 0
+  ProjectileItems: []
   Recipes:
   - {fileID: 11400000, guid: a82579b4eace29f409f932e7cf1ad59e, type: 2}
   - {fileID: 11400000, guid: 2cbe51554b22dfe41baf7afb307f9e26, type: 2}
@@ -2150,7 +2088,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 1
       dropchance: 100
-      toolItemType: 5
+      toolItemType: 0
   - name: Dirtblock
     blockID: 3
     tile: {fileID: 11400000, guid: 0bcc34212cd215a4584d42c3c4ba8f29, type: 2}
@@ -2158,7 +2096,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 1
       dropchance: 100
-      toolItemType: 5
+      toolItemType: 0
   - name: Sandblock (Top)
     blockID: 4
     tile: {fileID: 11400000, guid: 6db0c34d3b5fc7b49a67163528b99ce5, type: 2}
@@ -2166,7 +2104,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 3
       dropchance: 100
-      toolItemType: 5
+      toolItemType: 0
   - name: Sandblock
     blockID: 5
     tile: {fileID: 11400000, guid: 240b651a1bc670d4793c99d2d9d9748e, type: 2}
@@ -2174,7 +2112,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 3
       dropchance: 100
-      toolItemType: 5
+      toolItemType: 0
   - name: Snowblock
     blockID: 6
     tile: {fileID: 11400000, guid: cf38a69b1c9243a4a98ca4aca2367547, type: 2}
@@ -2182,7 +2120,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 4
       dropchance: 100
-      toolItemType: 5
+      toolItemType: 0
   - name: SnowedDirtblock
     blockID: 7
     tile: {fileID: 11400000, guid: 0230af7654f2e154f8a8cfe6ab61bdd1, type: 2}
@@ -2414,12 +2352,18 @@ MonoBehaviour:
     blockID: 47
     tile: {fileID: 11400000, guid: bf46b1a7c9749d049aa3b70fe4358924, type: 2}
     removeDuration: 3
-    blockDrops: []
+    blockDrops:
+    - itemID: 1
+      dropchance: 100
+      toolItemType: 0
   - name: Mush
     blockID: 48
     tile: {fileID: 11400000, guid: 51dd16bda235bf44aa15826e4a62aee0, type: 2}
     removeDuration: 3
-    blockDrops: []
+    blockDrops:
+    - itemID: 1
+      dropchance: 100
+      toolItemType: 0
   - name: Crystal-Cave-Block
     blockID: 49
     tile: {fileID: 11400000, guid: 55d4239d9740d5a43910d01cbcbd9548, type: 2}
@@ -2472,13 +2416,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 099bed9885470a94786eebc896493957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabUI: {fileID: 7667816536096445537, guid: bf4126c4be557a040815a7c30aa8e3c3, type: 3}
+  mainGameUI: {fileID: 7667816536096445537, guid: bf4126c4be557a040815a7c30aa8e3c3, type: 3}
   world: {fileID: 1085889088375208448, guid: 6f8afa7ba4b1ace43a1488e9989f22f5, type: 3}
   playerNetPrefab: {fileID: 2794137725677328093, guid: 36a2a11a10bb895468184aa8918a22c1, type: 3}
   loadingScreenPrefab: {fileID: 1659422467158985314, guid: bf0b35f4090f7fc409bc4e6c5154ffcf, type: 3}
   consoleText: {fileID: 8550470931165025056, guid: 1cc895b1a9eb24540bc01a2b54a9ecfa, type: 3}
   craftingUIListView: {fileID: 4904731259523108657, guid: 29f3864126b1a234f96e83dc5e192912, type: 3}
   mobEntity: {fileID: 3431033053258429059, guid: 2b092efc1a3a3a04794a42fa7c49a410, type: 3}
+  camera: {fileID: 4180692969551620913, guid: 5c89fd5534d680c45b090ff4ec056c98, type: 3}
 --- !u!1 &2729332452247671524
 GameObject:
   m_ObjectHideFlags: 0

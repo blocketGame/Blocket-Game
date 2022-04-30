@@ -6,7 +6,8 @@ using UnityEngine;
 /// @Cse19455
 /// Real Player Controller<br></br>
 /// <CLEANUP> @Cse19455
-/// <MESSAGE FOR HYFABI> Do not touch my baby , otherwise i will kill u :)</MESSAGE>
+/// <MESSAGE-FOR-HYFABI> Do not touch my baby , otherwise i will kill u :)</MESSAGE>
+/// Idc ~F
 /// </summary>
 //Client
 public class Movement : MonoBehaviour {
@@ -14,7 +15,15 @@ public class Movement : MonoBehaviour {
 
 	#region Properties + Atributes
 	#region Player-Settings
-	public float MovementSpeed = 300f;
+	[SerializeField]
+	private float movementSpeed;
+
+	/// <summary>If creative mode with shift pressing => Move 3x as fast</summary>
+	public float MovementSpeed {
+		get => Input.GetKey(KeyCode.LeftShift) && PlayerVariables.Gamemode == Gamemode.CREATIVE ? movementSpeed * 3 : movementSpeed;
+		set => movement = value;
+	}
+
 	public float JumpForce = 6f;
 	public float fallMulti = 1.06f;
 	private float camZoom = 20f;
@@ -58,9 +67,7 @@ public class Movement : MonoBehaviour {
 
 	#endregion
 
-	/// <summary>
-	/// Locking movement for direction
-	/// </summary>
+	/// <summary>Locking movement for direction</summary>
 	public bool PlayerLocked
 	{
 		get => _playerLocked;
@@ -68,7 +75,7 @@ public class Movement : MonoBehaviour {
 		{
 			playerRigidbody.simulated = !value;
 			playerRigidbody.bodyType = value ? RigidbodyType2D.Static : RigidbodyType2D.Dynamic;
-			_playerLocked = value;
+			_playerLocked = value;//TODO: When player locked => Gamestate: LOADING
 		}
 	}
 	private bool _playerLocked;
@@ -123,6 +130,14 @@ public class Movement : MonoBehaviour {
 	/// <returns><see langword="true"/> if player is locked</returns>
 	public bool CheckChunk()
 	{
+		//Dungeon
+		if(PlayerVariables.Dimension == Dimension.DUNGEON){
+			if(PlayerLocked)
+				PlayerLocked = false;
+			return false;
+		}
+
+		//Overworld
 		bool locked = !ClientTerrainHandler.Singleton.CurrentChunkReady;
 		if (locked != PlayerLocked)
 			PlayerLocked = locked;
@@ -244,7 +259,7 @@ public class Movement : MonoBehaviour {
 	/// </summary>
 	private void MoveHorizontally()
     {
-		if (!lockvar)
+		if (!lockvar && PlayerVariables.Dimension == Dimension.OVERWORLD)
 		{
 			Vector3Int playerCell = WorldData.Singleton.Grid.WorldToCell(RigidBodyPosition);
 
@@ -281,6 +296,8 @@ public class Movement : MonoBehaviour {
 	/// </summary>
 	private void PreventFloorGlitch()
     {
+		if(PlayerVariables.Dimension == Dimension.DUNGEON)
+			return;
 		Vector3Int playerCell = WorldData.Singleton.Grid.WorldToCell(RigidBodyPosition);
 		if (TerrainHandler.Singleton.GetBlockFormCoordinate(playerCell.x, playerCell.y) != 0)
         {

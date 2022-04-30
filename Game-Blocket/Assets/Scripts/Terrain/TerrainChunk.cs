@@ -14,6 +14,8 @@ using Random = System.Random;
 /// </summary>
 [Serializable]
 public sealed class TerrainChunk : ChunkData{
+	public static readonly float bgTileMapTransparency = 0.5f;
+
 
 	public GameObject dropParent;
 	public GameObject ParentGO { get; set; }
@@ -69,6 +71,8 @@ public sealed class TerrainChunk : ChunkData{
 		BackgroundGO.transform.position = new Vector3(chunkPosition.x * WorldAssets.ChunkLength, chunkPosition.y * WorldAssets.ChunkHeight, 0.001f);
 		BGTileMap = BackgroundGO.AddComponent<Tilemap>();
 		BackgroundGO.AddComponent<TilemapRenderer>();
+
+		BGTileMap.color = new Color(bgTileMapTransparency, bgTileMapTransparency, bgTileMapTransparency);
 
 		///Collision GO
 		CollisionGO = new GameObject(ChunkName(chunkPosition, 2)) {
@@ -307,7 +311,7 @@ public sealed class TerrainChunk : ChunkData{
 		Random rand = new Random();
 
 		foreach (BlockData.BlockDropAble blockDropAble in WorldAssets.Singleton.GetBlockbyId(blockId).blockDrops)
-			if(Inventory.Singleton.SelectedItemObj is ToolItem tool && tool.toolType == blockDropAble.toolItemType || blockDropAble.toolItemType == ToolItem.ToolType.DEFAULT)
+			if(Inventory.Singleton.SelectedItemObj is ToolItem tool && tool.toolType == blockDropAble.toolItemType || (blockDropAble.toolItemType == ToolItem.ToolType.DEFAULT))
 				if ((rand.NextDouble() * 100) + 1 < blockDropAble.dropchance)
 					ids.Add(blockDropAble.itemID);
 		return ids;

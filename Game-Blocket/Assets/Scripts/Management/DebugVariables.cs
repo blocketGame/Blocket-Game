@@ -16,5 +16,8 @@
 	public static bool ShowScrollViewInfo => true;
 	public static bool MobHandling => true;
 	public static bool WorldNetworking => false;
+	public static bool BackgroundParalax => false;
+	public static bool BackgroundParalaxDebug => false;
+	public static bool ItemCkeckStat => true;
 }
 

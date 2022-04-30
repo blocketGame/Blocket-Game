@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 230cc5fbbfa07ef409422a41ef5d12c8, type: 3}
+  m_Name: PlainBGParalax
+  m_EditorClassIdentifier: 
+  description: Default
+  paralaxLayers:
+  - name: Sky
+    speed: 1
+    image: {fileID: 21300000, guid: ecb5ab102180bc74bb35a1b01fbf7575, type: 3}
+    offsetX: 0
+    offsetY: 0
+  - name: Mountain
+    speed: 2
+    image: {fileID: 21300000, guid: 8f91b0036b28af04f928f77189f76f17, type: 3}
+    offsetX: 0
+    offsetY: 0
+  - name: Field
+    speed: 3
+    image: {fileID: 21300000, guid: ab81c757477455b4f936afa6d4d0850e, type: 3}
+    offsetX: 0
+    offsetY: 0

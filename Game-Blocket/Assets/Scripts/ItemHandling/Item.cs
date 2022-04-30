@@ -58,7 +58,7 @@ public class ToolItem : Item {
 	public ToolType toolType;
 
 	public enum ToolType {
-		SHOVEL, AXE, PICKAXE, DEFAULT
+		DEFAULT, SHOVEL, AXE, PICKAXE
 	}
 }
 
@@ -146,12 +146,12 @@ public class EquipableItem : Item {
 
 	public enum AccessoryInfliction
     {
-		RAISESPEEDBY,RAISEJUMPBY
+		RAISESPEEDBY, RAISEJUMPBY
     }
 
 	public enum EquipableType
     {
-		ARMOR , Accessory
+		None, Armor , Accessory
     }
 	
 }

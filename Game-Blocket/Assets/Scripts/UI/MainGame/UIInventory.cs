@@ -199,6 +199,11 @@ public class UIInventory : MonoBehaviour
 		Inventory.AccessoiresSlots = accessoiresSlots;
 		InventoryOpened = false;
 		Inventory.SelectedSlot = 0;
+		
+		foreach(Canvas canvas in GetComponentsInChildren<Canvas>()){
+			canvas.worldCamera = Camera.main;
+        }
+		
 	}
 	#endregion
 
@@ -253,7 +258,7 @@ public class UIInventory : MonoBehaviour
 						{
 							Inventory.AddItem(uis.ItemID, uis.ItemCount, out ushort itemCountNotAdded);
 						}
-						GameObject.Destroy(uis.gameObject);
+                        Destroy(uis.gameObject);
 					}
 					uiParent.transform.position = uiParentPosition;
 					craftingInterfacePlaceholder.SetActive(false);

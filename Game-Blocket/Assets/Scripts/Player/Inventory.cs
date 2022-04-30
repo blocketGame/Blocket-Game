@@ -22,8 +22,8 @@ public class Inventory : MonoBehaviour {
 	/// <summary>List of the Hud Slots</summary>
 	public List<UIInventorySlot> HudSlots { get; } = new List<UIInventorySlot>();
 
-	public uint SelectedItemId => InvSlots[SelectedSlot].ItemID;
-	public Item SelectedItemObj => ItemAssets.Singleton.GetItemFromItemID(SelectedItemId, null);
+	public uint SelectedItemId => InvSlots[SelectedSlot]?.ItemID ?? 0;
+	public Item SelectedItemObj => SelectedItemId == 0 ? null : ItemAssets.Singleton.GetItemFromItemID(SelectedItemId);
 
 	public byte SelectedSlot { get => _selectedSlot; set {
 			if (value >= HudSlots.Count || value < 0)
@@ -47,6 +47,11 @@ public class Inventory : MonoBehaviour {
 	/// </summary>
 	/// <param name="slotPressed">Slot that was pressed by the local user</param>
 	public void PressedSlot(UIInventorySlot slotPressed) {
+		//Equipable
+		if(slotPressed.type != EquipableItem.EquipableType.None && atHand.ItemID != 0)
+			if(!(ItemAssets.Singleton.GetItemFromItemID(atHand.ItemID) is EquipableItem eI && eI.type == slotPressed.type))
+				return;
+
 		uint temp = atHand.ItemID;
 		ushort iCT = atHand.ItemCount;
 
