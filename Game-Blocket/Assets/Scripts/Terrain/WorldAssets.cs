@@ -107,6 +107,8 @@ public struct BlockData {
 	public byte removeDuration;
 	[Header("What the block could drop on destory")]
 	public List<BlockDropAble> blockDrops;
+	[Header("Which Tooltype is Optimal to mine it?")]
+	public ToolItem.ToolType tooltypes;
 
 	/// <summary>
 	/// Specifies what the block drops

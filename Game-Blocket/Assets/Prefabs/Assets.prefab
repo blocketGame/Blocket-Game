@@ -1832,7 +1832,16 @@ MonoBehaviour:
     itemImage: {fileID: 21300000, guid: cff06dda4aad311449a62fba9deed956, type: 3}
     swingingAnimation: 
     blockId: 16
-  ToolItemsInGame: []
+  ToolItemsInGame:
+  - name: WoodenPickaxe
+    id: 1000
+    description: 
+    itemType: 0
+    itemImage: {fileID: 21300000, guid: a6baeaa8fbe044842b95eb13bc2dcc63, type: 3}
+    swingingAnimation: Hit
+    toolPower: 400
+    damage: 6
+    toolType: 3
   EquipableItemsInGame:
   - name: Helmet
     id: 2000
@@ -2076,27 +2085,31 @@ MonoBehaviour:
     tile: {fileID: 0}
     removeDuration: 0
     blockDrops: []
+    tooltypes: 0
   - name: Collision
     blockID: 1
     tile: {fileID: 11400000, guid: 0bcc34212cd215a4584d42c3c4ba8f29, type: 2}
     removeDuration: 0
     blockDrops: []
+    tooltypes: 0
   - name: Grasblock
     blockID: 2
     tile: {fileID: 11400000, guid: 02761f359227ea640b301f8ed4704793, type: 2}
-    removeDuration: 5
+    removeDuration: 2
     blockDrops:
     - itemID: 1
       dropchance: 100
-      toolItemType: 0
+      toolItemType: 3
+    tooltypes: 3
   - name: Dirtblock
     blockID: 3
     tile: {fileID: 11400000, guid: 0bcc34212cd215a4584d42c3c4ba8f29, type: 2}
-    removeDuration: 1
+    removeDuration: 2
     blockDrops:
     - itemID: 1
       dropchance: 100
       toolItemType: 0
+    tooltypes: 3
   - name: Sandblock (Top)
     blockID: 4
     tile: {fileID: 11400000, guid: 6db0c34d3b5fc7b49a67163528b99ce5, type: 2}
@@ -2105,6 +2118,7 @@ MonoBehaviour:
     - itemID: 3
       dropchance: 100
       toolItemType: 0
+    tooltypes: 0
   - name: Sandblock
     blockID: 5
     tile: {fileID: 11400000, guid: 240b651a1bc670d4793c99d2d9d9748e, type: 2}
@@ -2113,6 +2127,7 @@ MonoBehaviour:
     - itemID: 3
       dropchance: 100
       toolItemType: 0
+    tooltypes: 0
   - name: Snowblock
     blockID: 6
     tile: {fileID: 11400000, guid: cf38a69b1c9243a4a98ca4aca2367547, type: 2}
@@ -2121,6 +2136,7 @@ MonoBehaviour:
     - itemID: 4
       dropchance: 100
       toolItemType: 0
+    tooltypes: 0
   - name: SnowedDirtblock
     blockID: 7
     tile: {fileID: 11400000, guid: 0230af7654f2e154f8a8cfe6ab61bdd1, type: 2}
@@ -2132,6 +2148,7 @@ MonoBehaviour:
     - itemID: 4
       dropchance: 50
       toolItemType: 5
+    tooltypes: 0
   - name: DirtBG
     blockID: 8
     tile: {fileID: 11400000, guid: 30439b9c5e3b02142848ef927c278843, type: 2}
@@ -2140,11 +2157,13 @@ MonoBehaviour:
     - itemID: 1
       dropchance: 100
       toolItemType: 5
+    tooltypes: 0
   - name: DirtBG (Top)
     blockID: 9
     tile: {fileID: 11400000, guid: 7aa42f6081c4f8a498d228fa119ea557, type: 2}
     removeDuration: 0
     blockDrops: []
+    tooltypes: 0
   - name: Bernstein
     blockID: 10
     tile: {fileID: 11400000, guid: 368f8ab243ec2b24bb4dd5751cbf20f6, type: 2}
@@ -2153,6 +2172,7 @@ MonoBehaviour:
     - itemID: 5002
       dropchance: 100
       toolItemType: 4
+    tooltypes: 0
   - name: Opal
     blockID: 11
     tile: {fileID: 11400000, guid: 69dd537b464e3f142b42eca477a96bc2, type: 2}
@@ -2161,6 +2181,7 @@ MonoBehaviour:
     - itemID: 5001
       dropchance: 100
       toolItemType: 4
+    tooltypes: 0
   - name: Stone
     blockID: 12
     tile: {fileID: 11400000, guid: 4cd28115759dee2499f06013f9211b55, type: 2}
@@ -2172,21 +2193,25 @@ MonoBehaviour:
     - itemID: 2
       dropchance: 100
       toolItemType: 4
+    tooltypes: 0
   - name: SandBG
     blockID: 13
     tile: {fileID: 11400000, guid: 6a63c0c826cab3f4ea878397525659ce, type: 2}
     removeDuration: 2
     blockDrops: []
+    tooltypes: 0
   - name: SandBG (Top)
     blockID: 14
     tile: {fileID: 11400000, guid: c20608446e77f9c44a3819cef2944b0f, type: 2}
     removeDuration: 2
     blockDrops: []
+    tooltypes: 0
   - name: Perl
     blockID: 15
     tile: {fileID: 11400000, guid: bc76d9a08eedba04888f09f100db4f02, type: 2}
     removeDuration: 4
     blockDrops: []
+    tooltypes: 0
   - name: Trunk
     blockID: 16
     tile: {fileID: 11400000, guid: a2b039ad21dbea343a3af1d7a3f3e9c2, type: 2}
@@ -2195,6 +2220,7 @@ MonoBehaviour:
     - itemID: 6
       dropchance: 100
       toolItemType: 5
+    tooltypes: 0
   - name: Leaf
     blockID: 17
     tile: {fileID: 11400000, guid: c706feebda529404a87185c490a5575f, type: 2}
@@ -2203,151 +2229,181 @@ MonoBehaviour:
     - itemID: 6
       dropchance: 50
       toolItemType: 5
+    tooltypes: 0
   - name: CactusFlower
     blockID: 18
     tile: {fileID: 11400000, guid: d6ff0195f0b383e408cde8a71dca16e7, type: 2}
     removeDuration: 4
     blockDrops: []
+    tooltypes: 0
   - name: Cactus
     blockID: 19
     tile: {fileID: 11400000, guid: 6ce94ed2ae6b5c7448c1717aac7342ec, type: 2}
     removeDuration: 4
     blockDrops: []
+    tooltypes: 0
   - name: Brick
     blockID: 20
     tile: {fileID: 11400000, guid: 4ad18dca405397e43ae9a938fdb634b0, type: 2}
     removeDuration: 4
     blockDrops: []
+    tooltypes: 0
   - name: BrickBG
     blockID: 21
     tile: {fileID: 11400000, guid: 62eff008b736d734bbe7b4ebd8e43060, type: 2}
     removeDuration: 4
     blockDrops: []
+    tooltypes: 0
   - name: Door0
     blockID: 22
     tile: {fileID: 11400000, guid: 431680435ca480349ba6a7a8d201f608, type: 2}
     removeDuration: 4
     blockDrops: []
+    tooltypes: 0
   - name: Door1
     blockID: 23
     tile: {fileID: 11400000, guid: 1a70b3074eabb8248890773a8ff9089f, type: 2}
     removeDuration: 4
     blockDrops: []
+    tooltypes: 0
   - name: Door2
     blockID: 24
     tile: {fileID: 11400000, guid: ab3bdefc6932ddf49965fcd293a79d5b, type: 2}
     removeDuration: 4
     blockDrops: []
+    tooltypes: 0
   - name: Door3
     blockID: 25
     tile: {fileID: 11400000, guid: 21431357a8b1b6f4982c565721f45a5c, type: 2}
     removeDuration: 4
     blockDrops: []
+    tooltypes: 0
   - name: Door4
     blockID: 26
     tile: {fileID: 11400000, guid: 1e86859a50878dd459fc243c8594be3c, type: 2}
     removeDuration: 4
     blockDrops: []
+    tooltypes: 0
   - name: Door5
     blockID: 27
     tile: {fileID: 11400000, guid: 33042afddfe7c6740bf6c96c58e02261, type: 2}
     removeDuration: 4
     blockDrops: []
+    tooltypes: 0
   - name: Crafting table
     blockID: 28
     tile: {fileID: 11400000, guid: 6f7e31978d96c2a4886320f4411b7e80, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: Cloud0
     blockID: 29
     tile: {fileID: 11400000, guid: 929cdb6ce97528f4ca677ed1af393305, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: Cloud1
     blockID: 30
     tile: {fileID: 11400000, guid: f578893fdd6fa364fa1b49da42747cb7, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: Cloud2
     blockID: 31
     tile: {fileID: 11400000, guid: 29c36c8a3e919f943b6a7a5aa90b5c27, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: Cloud3
     blockID: 32
     tile: {fileID: 11400000, guid: 7ca6518f77eeb4a4da6058d8fff0fa83, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: Cloud4
     blockID: 33
     tile: {fileID: 11400000, guid: 64d965e8b7eac1142b21cab9c55d0a58, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: Cloud5
     blockID: 34
     tile: {fileID: 11400000, guid: 14db464aabea02a4590ab68c4e4875d3, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: Cloud6
     blockID: 35
     tile: {fileID: 11400000, guid: 4560b5d089103124ca8be43af57f05c9, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: Cloud7
     blockID: 36
     tile: {fileID: 11400000, guid: 9e5efc6a55c48e14d8632f9c3bcbbea9, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: Cloud8
     blockID: 37
     tile: {fileID: 11400000, guid: 6dd88a1aa984b7e438ee5beaa71f6fc2, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: Palm-Tree
     blockID: 38
     tile: {fileID: 11400000, guid: c236d67cf2f44954f9e78a7d5fecdf68, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: Palm-Tree-Leaf
     blockID: 39
     tile: {fileID: 11400000, guid: ac3b45caf45f24a48a3f9a085d356b48, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: Sandstone
     blockID: 40
     tile: {fileID: 11400000, guid: 6dd55900983680643a5a4c0608fa8567, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: SkyBrick
     blockID: 41
     tile: {fileID: 11400000, guid: 6fef2693afd24a341a95bd5c460d826b, type: 2}
     removeDuration: 10
     blockDrops: []
+    tooltypes: 0
   - name: SkyBrick BG
     blockID: 42
     tile: {fileID: 11400000, guid: bdd91a2e0afeb7b4cb764f41c0a61d43, type: 2}
     removeDuration: 10
     blockDrops: []
+    tooltypes: 0
   - name: crafting station
     blockID: 43
     tile: {fileID: 11400000, guid: 12922adde41d67e4d8074abfbe1674ef, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: Ice-top
     blockID: 44
     tile: {fileID: 11400000, guid: 42f54c33403fbc54e8a67165d48a7e5c, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: Ice
     blockID: 45
     tile: {fileID: 11400000, guid: 61aedf1b6da923946b76c67ba1c01ca5, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: Stone-ice
     blockID: 46
     tile: {fileID: 11400000, guid: 89b85b0de77bae84a9736550d5bffd5a, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: Mush-top
     blockID: 47
     tile: {fileID: 11400000, guid: bf46b1a7c9749d049aa3b70fe4358924, type: 2}
@@ -2356,6 +2412,7 @@ MonoBehaviour:
     - itemID: 1
       dropchance: 100
       toolItemType: 0
+    tooltypes: 0
   - name: Mush
     blockID: 48
     tile: {fileID: 11400000, guid: 51dd16bda235bf44aa15826e4a62aee0, type: 2}
@@ -2364,46 +2421,55 @@ MonoBehaviour:
     - itemID: 1
       dropchance: 100
       toolItemType: 0
+    tooltypes: 0
   - name: Crystal-Cave-Block
     blockID: 49
     tile: {fileID: 11400000, guid: 55d4239d9740d5a43910d01cbcbd9548, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: mush-bg-top
     blockID: 50
     tile: {fileID: 11400000, guid: 2c598a45f72fbaf4a9b41acb93d3c335, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: mush-bg
     blockID: 51
     tile: {fileID: 11400000, guid: 0722539b8b63de749af04b36b9e031ef, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: grass
     blockID: 52
     tile: {fileID: 11400000, guid: dd2a34552b5670542a2bd92bb33efe96, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: mushi
     blockID: 53
     tile: {fileID: 11400000, guid: 537804b440dddab449a8bc0260c47c26, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: QB
     blockID: 54
     tile: {fileID: 11400000, guid: 17107fb2cb2a99249afacb38386adac7, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: Crystal
     blockID: 55
     tile: {fileID: 11400000, guid: 530db5cffb2f16746bc53759282246b3, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
   - name: Crystal
     blockID: 56
     tile: {fileID: 11400000, guid: 62a102a2be14b6f468545748c0f1bcd0, type: 2}
     removeDuration: 3
     blockDrops: []
+    tooltypes: 0
 --- !u!114 &3762355363224798812
 MonoBehaviour:
   m_ObjectHideFlags: 0

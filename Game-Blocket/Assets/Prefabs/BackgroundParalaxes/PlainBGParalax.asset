@@ -20,7 +20,7 @@ MonoBehaviour:
     offsetX: 0
     offsetY: 0
   - name: Mountain
-    speed: 2
+    speed: 0
     image: {fileID: 21300000, guid: 8f91b0036b28af04f928f77189f76f17, type: 3}
     offsetX: 0
     offsetY: 0
