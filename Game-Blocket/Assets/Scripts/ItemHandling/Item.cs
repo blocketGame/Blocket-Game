@@ -53,10 +53,11 @@ public class BlockItem : Item {
 
 [Serializable]
 public class ToolItem : Item {
-	public ushort durability, damage;
-	public byte toolHardness;
+	public ushort toolPower, damage;
+	public float ToolPower => (100 + this.toolPower) / 100;
 	public ToolType toolType;
 
+	[Serializable]
 	public enum ToolType {
 		DEFAULT, SHOVEL, AXE, PICKAXE
 	}

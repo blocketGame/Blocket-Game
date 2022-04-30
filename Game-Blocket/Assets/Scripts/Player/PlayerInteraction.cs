@@ -182,7 +182,7 @@ public class PlayerInteraction : MonoBehaviour {
 			if(foreground.HasValue){
 				byte targetRemoveDuration = WorldAssets.Singleton.blocks[TargetBlockID(foreground.Value)].removeDuration;
 
-				BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int, bool>(targetRemoveDuration, TargetBlockID(false), ThisChunk, BlockInchunkCoord, foreground.Value));
+				BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int, bool , ToolItem.ToolType>(targetRemoveDuration, TargetBlockID(false), ThisChunk, BlockInchunkCoord, foreground.Value, WorldAssets.Singleton.blocks[TargetBlockID(foreground.Value)].tooltypes));
 
 				if(DebugVariables.BlockInteractionCR)
 					Debug.Log("Started!");
@@ -205,8 +205,14 @@ public class PlayerInteraction : MonoBehaviour {
 	/// <param name="obj">Tuple of the blockID, the seconds and the position</param>
 	/// <returns>WaitTimer as yield return</returns>
 	public IEnumerator BreakBlock(object obj) {
-		Tuple<byte, byte, TerrainChunk,  Vector2Int, bool> values = obj as Tuple<byte, byte, TerrainChunk, Vector2Int, bool> ?? throw new ArgumentException();
-		yield return new WaitForSecondsRealtime(values.Item1);
+		Tuple<byte, byte, TerrainChunk,  Vector2Int, bool, ToolItem.ToolType> values = obj as Tuple<byte, byte, TerrainChunk, Vector2Int, bool, ToolItem.ToolType> ?? throw new ArgumentException();
+		if (Inventory.Singleton.SelectedItemObj?.GetType() == typeof(ToolItem) && ((ToolItem)Inventory.Singleton.SelectedItemObj).toolType == values.Item6)
+		{
+			Debug.Log("Picky");
+			yield return new WaitForSecondsRealtime(values.Item1 / ((ToolItem)Inventory.Singleton.SelectedItemObj).ToolPower);
+		}
+		else
+			yield return new WaitForSecondsRealtime(values.Item1 * 1.2f);
 		if (DebugVariables.BlockInteractionCR)
 			Debug.Log("Finished");
 		StopCoroutine(BreakCoroutine);
