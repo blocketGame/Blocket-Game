@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -14,7 +15,7 @@ public class DungeonGenerator : MonoBehaviour
     /// <summary>
     /// Starting point of the dungeongenertation
     /// </summary>
-    public void GenerateDungeon()
+    public Vector2Int GenerateDungeon()
     {
         tilemapVisualizer.Parameters = parameters;
 
@@ -37,11 +38,12 @@ public class DungeonGenerator : MonoBehaviour
             roomCenters.Add((Vector2Int)Vector3Int.RoundToInt(room.center));
         }
 
-        HashSet<Vector2Int> corridors = ConnectRooms(roomCenters);
+        HashSet<Vector2Int> corridors = ConnectRooms(new List<Vector2Int>(roomCenters));
         floor.UnionWith(corridors);
 
         tilemapVisualizer.PaintBackgroundTiles(floor);
         WallGenerator.CreateWalls(floor, tilemapVisualizer);
+        return roomCenters.Count > 0 ? roomCenters[0] : throw new NullReferenceException();
     }
 
     /// <summary>

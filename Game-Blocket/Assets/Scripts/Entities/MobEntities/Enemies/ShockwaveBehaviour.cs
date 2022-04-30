@@ -4,18 +4,17 @@ using UnityEngine;
 
 public class ShockwaveBehaviour : MonoBehaviour
 {
-    float damage = 20f;
-    float range = 4f;
-    float timeToLive = 1f;
+    public float damage = 20f;
+    public float range = 4f;
+    public float timeToLive = 1f;
 
-    float delay = 0.3f;
-    float count = 0;
+    public float delay = 0.3f;
+    public float count = 0;
 
     private float startingValue; //starting value and running value
     private float value;
 
-    void Start()
-    {
+    public void Start(){
         startingValue = 0.05f;
         value = (range / 50) / timeToLive;
     }

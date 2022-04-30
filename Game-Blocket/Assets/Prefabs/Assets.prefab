@@ -1825,6 +1825,13 @@ MonoBehaviour:
     itemImage: {fileID: 21300000, guid: 941aa281ca582eb4aa7a3348acefc603, type: 3}
     swingingAnimation: 
     blockId: 43
+  - name: Pour Ice
+    id: 7
+    description: Ice? I think
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: 157db56d3cd9c7a4581373d67c7d2a21, type: 3}
+    swingingAnimation: 
+    blockId: 44
   - name: Wood
     id: 6
     description: Dead tree
@@ -2390,14 +2397,18 @@ MonoBehaviour:
     blockID: 44
     tile: {fileID: 11400000, guid: 42f54c33403fbc54e8a67165d48a7e5c, type: 2}
     removeDuration: 3
-    blockDrops: []
-    tooltypes: 0
+    blockDrops:
+    - itemID: 6
+      dropchance: 100
+      toolItemType: 0
   - name: Ice
     blockID: 45
     tile: {fileID: 11400000, guid: 61aedf1b6da923946b76c67ba1c01ca5, type: 2}
     removeDuration: 3
-    blockDrops: []
-    tooltypes: 0
+    blockDrops:
+    - itemID: 6
+      dropchance: 100
+      toolItemType: 0
   - name: Stone-ice
     blockID: 46
     tile: {fileID: 11400000, guid: 89b85b0de77bae84a9736550d5bffd5a, type: 2}
@@ -2489,7 +2500,7 @@ MonoBehaviour:
   consoleText: {fileID: 8550470931165025056, guid: 1cc895b1a9eb24540bc01a2b54a9ecfa, type: 3}
   craftingUIListView: {fileID: 4904731259523108657, guid: 29f3864126b1a234f96e83dc5e192912, type: 3}
   mobEntity: {fileID: 3431033053258429059, guid: 2b092efc1a3a3a04794a42fa7c49a410, type: 3}
-  camera: {fileID: 4180692969551620913, guid: 5c89fd5534d680c45b090ff4ec056c98, type: 3}
+  playerCamera: {fileID: 4180692969551620913, guid: 5c89fd5534d680c45b090ff4ec056c98, type: 3}
 --- !u!1 &2729332452247671524
 GameObject:
   m_ObjectHideFlags: 0

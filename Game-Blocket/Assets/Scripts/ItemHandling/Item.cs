@@ -59,7 +59,7 @@ public class ToolItem : Item {
 
 	[Serializable]
 	public enum ToolType {
-		DEFAULT, SHOVEL, AXE, PICKAXE
+		NONE, SHOVEL, AXE, PICKAXE
 	}
 }
 

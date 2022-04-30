@@ -11,8 +11,7 @@ public class WorldAssets : MonoBehaviour{
 
 	/// <summary>Needs to be static! Else: BigRip</summary>
 	public static byte ChunkLength => 32;
-	[Obsolete]
-	public static byte ChunkHeight => 32;
+	public static byte ChunkHeight => ChunkLength;
 
 	public List<Biom> bioms = new List<Biom>();
 	public List<BlockData> blocks = new List<BlockData> ();
@@ -111,7 +110,8 @@ public struct BlockData {
 	public ToolItem.ToolType tooltypes;
 
 	/// <summary>
-	/// Specifies what the block drops
+	/// Specifies what the block drops<br></br>
+	/// TODO: Dropcount
 	/// </summary>
 	[System.Serializable]
 	public class BlockDropAble {

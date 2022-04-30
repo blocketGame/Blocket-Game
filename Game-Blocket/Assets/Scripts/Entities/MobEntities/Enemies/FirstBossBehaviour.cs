@@ -4,37 +4,37 @@ using UnityEngine;
 
 public class FirstBossBehaviour : MonoBehaviour
 {
-    #region public Variables
+    #region Variables
+    #region Public Var
     [Header("[Boss Attributes]")]
-    [Range(0, 50)] [SerializeField]
-    float attackDamage = 25f;
-    [Range(0,50)] [SerializeField]
-    float siteRadius = 20f;
-    [Range(0, 20)] [SerializeField]
-    float stopMoveIfInRadius = 0.5f;
-    [Range(0, 20)] [SerializeField]
-    float attackRadius = 10f;
-    [Range(0, 20)] [SerializeField]
-    float moveAwayIfPlayerInRadius = 0f;
-    [Range(0, 12)] [SerializeField]
-    float movementSpeed = 4f;
-    [Range(0, 12)] [SerializeField]
-    float jumpForce = 4f;
-    [Range(3, 30)] [SerializeField]
-    float projectileSpeed = 12f;
-    [Range(0.01f, 4)] [SerializeField]
-    float timeBeetweenEachNormalAttack = 2f;
-    [Range(10, 120)] [SerializeField]
-    float timeBeetweenEachStompAttack = 12f;
-    [Range(10, 120)] [SerializeField]
-    float timeBeetweenEachTurretAttack = 20f;
-    [SerializeField] Sprite projectileSprite;
-    [SerializeField] Sprite shockwaveSprite;
-    [SerializeField] Sprite turretSprite;
+    [Range(0, 50)]
+    public float attackDamage = 25f;
+    [Range(0,50)]
+    public float siteRadius = 20f;
+    [Range(0, 20)]
+    public float stopMoveIfInRadius = 0.5f;
+    [Range(0, 20)]
+    public float attackRadius = 10f;
+    [Range(0, 20)]
+    public float moveAwayIfPlayerInRadius = 0f;
+    [Range(0, 12)]
+    public float movementSpeed = 4f;
+    [Range(0, 12)]
+    public float jumpForce = 4f;
+    [Range(3, 30)]
+    public float projectileSpeed = 12f;
+    [Range(0.01f, 4)]
+    public float timeBeetweenEachNormalAttack = 2f;
+    [Range(10, 120)]
+    public float timeBeetweenEachStompAttack = 12f;
+    [Range(10, 120)]
+    public float timeBeetweenEachTurretAttack = 20f;
+
+    public Sprite projectileSprite, shockwaveSprite, turretSprite;
     
     #endregion
 
-    #region privat Variables
+    #region Private Var
     GameObject player;
     bool isInPlayerRange;
     bool isBurning;
@@ -49,6 +49,7 @@ public class FirstBossBehaviour : MonoBehaviour
     bool isSpawningTurretOnNextCollision;
     byte side = 0;
     float localScaleX;
+    #endregion
     #endregion
 
     void Start() {

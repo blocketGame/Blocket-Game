@@ -259,25 +259,34 @@ public class Movement : MonoBehaviour {
 	/// </summary>
 	private void MoveHorizontally()
     {
-		if (!lockvar && PlayerVariables.Dimension == Dimension.OVERWORLD)
-		{
-			Vector3Int playerCell = WorldData.Singleton.Grid.WorldToCell(RigidBodyPosition);
+		if (!lockvar ){
+			float x = Input.GetAxis("Horizontal");
 
-			sbyte direction = 0;
-			if (movement > 0)
-				direction = 1;
-			else if (movement < 0)
-				direction = -1;
+			if(PlayerVariables.Dimension == Dimension.OVERWORLD)
+			{
+				Vector3Int playerCell = WorldData.Singleton.Grid.WorldToCell(RigidBodyPosition);
 
-			if (!(TerrainHandler.Singleton.GetBlockFormCoordinate(playerCell.x+(int)direction, playerCell.y) != 0 
-				|| TerrainHandler.Singleton.GetBlockFormCoordinate(playerCell.x + (int)direction, playerCell.y-1) != 0))
-            {
-				//Vector3 destination = RigidBodyPosition + MovementSpeed * new Vector3(movement, 0, 0);
-				//playerRigidbody.velocity = Vector3.Lerp(RigidBodyPosition, destination, Time.deltaTime);
+				sbyte direction = 0;
+				if (movement > 0)
+					direction = 1;
+				else if (movement < 0)
+					direction = -1;
 
-				float x = Input.GetAxis("Horizontal");
-				playerRigidbody.velocity = (new Vector2(x * MovementSpeed, playerRigidbody.velocity.y));
+				if (!(TerrainHandler.Singleton.GetBlockFormCoordinate(playerCell.x+(int)direction, playerCell.y) != 0 
+					|| TerrainHandler.Singleton.GetBlockFormCoordinate(playerCell.x + (int)direction, playerCell.y-1) != 0))
+				{
+					//Vector3 destination = RigidBodyPosition + MovementSpeed * new Vector3(movement, 0, 0);
+					//playerRigidbody.velocity = Vector3.Lerp(RigidBodyPosition, destination, Time.deltaTime);
+
+					
+					playerRigidbody.velocity = (new Vector2(x * MovementSpeed, playerRigidbody.velocity.y));
+				}
+				return;
 			}
+			
+			//Copied from above
+			if(PlayerVariables.Dimension == Dimension.DUNGEON)
+				playerRigidbody.velocity = (new Vector2(x * MovementSpeed, playerRigidbody.velocity.y));
 		}
 	}
 

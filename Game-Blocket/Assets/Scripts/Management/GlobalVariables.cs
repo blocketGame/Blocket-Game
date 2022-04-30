@@ -20,9 +20,26 @@ public static class GlobalVariables {
 	public static GameObject ActivatedCraftingInterface { get; set; }
 	public static GameObject LocalUI { get; set; }
 	public static GameObject CraftingUIListContent { get; set; }
-	public static GameObject World { get; set; }
+	public static GameObject World { get {
+			if(_world != null)
+				return _world;
+			GameObject go = GameObject.Find(PlayerVariables.Dimension == Dimension.DUNGEON ? "Grid" : "World");
+            World = go ?? throw new NullReferenceException();
+			return go;
+		}
+		set => _world = value; }
+	private static GameObject _world;
 	public static Vector3 LocalPlayerPos { get => LocalPlayer.transform.position; }
 	public static GameObject LocalPlayer { get; set; }
+
+	public static void RemoveAllObjects(){
+		if(LocalPlayer)
+			UnityEngine.Object.Destroy(LocalPlayer);
+		if(World)
+			UnityEngine.Object.Destroy(World);
+		if(LocalUI)
+			UnityEngine.Object.Destroy(LocalUI);
+	}
 
     /// <summary>Does the nothing</summary>
     public static void DoNothing(){

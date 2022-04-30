@@ -6,7 +6,7 @@ public class PrefabAssets : NetworkBehaviour{
     public static PrefabAssets Singleton { get; private set; }
 
     public GameObject mainGameUI, world, playerNetPrefab, loadingScreenPrefab, consoleText, craftingUIListView;
-    public GameObject mobEntity, camera;
+    public GameObject mobEntity, playerCamera;
 
 
     public void Awake() => Singleton = this;

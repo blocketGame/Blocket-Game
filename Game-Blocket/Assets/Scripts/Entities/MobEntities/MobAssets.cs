@@ -12,7 +12,7 @@ public class MobAssets: MonoBehaviour{
 		foreach (Mob m in mobsInGame)
 			if (m.entityId == id)
 				return m;
-        return queryBosses ? GetBossFromID(id) : null;
+        return queryBosses ? GetBossFromID(id) : throw new System.Exception($"No mob with ID: {id} found");
     }
 
     public Mob GetBossFromID(uint id)

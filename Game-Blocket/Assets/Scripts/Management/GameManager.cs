@@ -76,6 +76,7 @@ public class GameManager : MonoBehaviour {
 		};
 		NetworkManager.Singleton.OnClientDisconnectCallback += (id) => {
 			Players[id].Despawn(true);
+			Players.Remove(id);
 			if(NetworkManager.Singleton.ServerClientId == id && NetworkManager.Singleton.IsClient)
 				QuitGame();
         };
@@ -88,11 +89,7 @@ public class GameManager : MonoBehaviour {
 	}
 
     public void FixedUpdate(){
-		if(NetworkManager.Singleton.IsClient){
-			//Find and set World
-			if(GlobalVariables.World == null)
-				GlobalVariables.World ??= GameObject.FindGameObjectWithTag("World");
-
+		if(NetworkManager.Singleton.IsClient && (State == GameState.LOADING || State == GameState.INGAME)){
 			if(GlobalVariables.World != null && ClientTerrainHandler.Singleton == null)
 				GlobalVariables.World.AddComponent<ClientTerrainHandler>();
 
@@ -135,7 +132,7 @@ public class GameManager : MonoBehaviour {
 				//If Local player
 				GlobalVariables.LocalPlayer = iGo;
 				iGo.name += "(this)";
-				Instantiate(PrefabAssets.Singleton.camera).GetComponent<SmoothCamera>().target = iGo.transform;
+				Instantiate(PrefabAssets.Singleton.playerCamera).GetComponent<SmoothCamera>().target = iGo.transform;
 				GlobalVariables.LocalUI = Instantiate(PrefabAssets.Singleton.mainGameUI);
 				InitLocal();
 			} else {
@@ -171,8 +168,14 @@ public class GameManager : MonoBehaviour {
 		}
 
 		if(s1.name == "Dungeon"){
-			Debug.Log("a");
-        }
+			SceneManager.SetActiveScene(SceneManager.GetSceneByName("Dungeon"));
+			//Dungeon only
+			GameObject generator = GameObject.Find("Dungeongenerator");
+			DungeonGenerator dg = generator.GetComponent<DungeonGenerator>();
+			Vector2Int pos = dg.GenerateDungeon();
+			GlobalVariables.LocalPlayer.transform.position = new Vector3(pos.x, pos.y);
+			Debug.Log($"Pos: {pos}");
+		}
 	}
 
 	//Server
@@ -202,13 +205,14 @@ public class GameManager : MonoBehaviour {
 		switch(dimensionTo) {
 			case Dimension.OVERWORLD:
 				SceneManager.LoadScene("MainGame", LoadSceneMode.Additive);
+				MoveImportantThings(SceneManager.GetSceneByName("MainGame"));
 				SceneManager.UnloadSceneAsync("Dungeon");
 				
 			break;
 			case Dimension.DUNGEON:
 				SceneManager.LoadScene("Dungeon", LoadSceneMode.Additive);
 				MoveImportantThings(SceneManager.GetSceneByName("Dungeon"));
-				PlayerInteraction.Singleton.enabled = false;
+				//PlayerInteraction.Singleton.enabled = false;
 				SceneManager.UnloadSceneAsync("MainGame");
 			break;
 			case Dimension.OTHER:

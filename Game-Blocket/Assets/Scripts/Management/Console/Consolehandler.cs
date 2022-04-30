@@ -80,16 +80,25 @@ public static class ConsoleHandler{
 				string[] arguments = CutCmd(str).Split(' ');
 				try{
 					//Enemy id
-					int enemyId = int.Parse(arguments[0]);
+					uint enemyId = uint.Parse(arguments[1]);
 					//X
-					int x = int.Parse(arguments[1]);
-					//Y
-					int y = int.Parse(arguments[2]);
-					//Z
-					int z = int.Parse(arguments[3]);
+					float x = arguments[2].StartsWith("~")
+                        ? arguments[2].Length > 1
+                            ? GlobalVariables.LocalPlayerPos.x + float.Parse(arguments[2].Substring(1))
+                            : GlobalVariables.LocalPlayerPos.x
+                        : float.Parse(arguments[2]);
+
+                    //Y
+                    float y = arguments[3].StartsWith("~")
+                        ? arguments[3].Length > 1
+                            ? GlobalVariables.LocalPlayerPos.y + float.Parse(arguments[3].Substring(1))
+                            : GlobalVariables.LocalPlayerPos.y
+                        : float.Parse(arguments[3]);
+
+					MobHandler.Singleton.SpawnMob(enemyId, new Vector3(x,y,0));
 					
-					//Forget enemyhandler lol
-				}catch(Exception e){
+                    //Forget enemyhandler lol
+                }catch(Exception e){
 					return e.ToString();
 				}
 				return "Spawned!";
