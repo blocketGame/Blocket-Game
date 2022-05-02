@@ -19,14 +19,15 @@ public static class CraftingHandler
     public static IEnumerable<CraftingRecipe> GetRecipesByItems(Craftable[] items)
     {
         //[TODO]
-        CraftingStation cs = ItemAssets.Singleton.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(GlobalVariables.ActivatedCraftingInterface.GetComponent<Image>().sprite));
+        CraftingStation cs = ItemAssets.Singleton.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(GlobalVariables.ActivatedCraftingInterface?.GetComponent<Image>()?.sprite ?? UIInventory.Singleton.handCrafting.GetComponent<Image>().sprite));
+        Debug.Log(cs.blockId);
         ///Filtering Logic
-        foreach(CraftingRecipe cr in ItemAssets.Singleton.Recipes.FindAll(x => x.Station.Equals(cs.blockId)))
+        foreach (CraftingRecipe cr in ItemAssets.Singleton.Recipes.FindAll(x => x.Station.Equals(cs.blockId)))
         {
             int stelle=0; 
             foreach (Craftable i in cr.Recipe)
             {
-                if(items[stelle].Item.id==i.Item.id && i.Item.id != 0)
+                if(items[stelle].Item?.id==i.Item?.id && i.Item?.id != 0)
                 {
                     Debug.Log("Recommendation Should be created!!");
                     yield return cr;
@@ -45,7 +46,7 @@ public static class CraftingHandler
     public static Craftable GetExactItem(Craftable[] items, out CraftingRecipe usedCraftingRecipe)
     {
         //[TODO]
-        CraftingStation cs = ItemAssets.Singleton.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(GlobalVariables.ActivatedCraftingInterface.GetComponent<Image>().sprite));
+        CraftingStation cs = ItemAssets.Singleton.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(GlobalVariables.ActivatedCraftingInterface?.GetComponent<Image>()?.sprite ?? UIInventory.Singleton.handCrafting.GetComponent<Image>().sprite));
         ///Filtering Logic
         foreach (CraftingRecipe cr in ItemAssets.Singleton.Recipes.FindAll(x => x.Station.Equals(cs.blockId)))
         {

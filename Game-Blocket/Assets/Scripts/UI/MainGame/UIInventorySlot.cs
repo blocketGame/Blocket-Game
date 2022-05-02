@@ -101,8 +101,7 @@ public class UIInventorySlot : MonoBehaviour {
 	/// <summary>Reloads the Itemslot<br></br><b>Be carfull when deleting!</b></summary>
 	public void ReloadSlot() {
 		
-		itemImage.sprite = ItemObject?.itemImage;
-		itemImage.sprite ??= defaultSprite;
+		itemImage.sprite = ItemObject.itemImage ?? defaultSprite;
 		//Hide counttext if item is Single type
 		itemImage.gameObject.SetActive(ItemObject != null);
 		textDown.gameObject.SetActive(ItemObject != null);
@@ -148,7 +147,7 @@ public class UIInventorySlot : MonoBehaviour {
 						x++;
                     }
 
-					CraftingStation.RenewRecommendations(array, UIInventory.Singleton.craftingInterfacePlaceholder);
+					CraftingStation.RenewRecommendations(array,this.transform.parent.gameObject);
                 }
 			});
         else

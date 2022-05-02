@@ -130,7 +130,7 @@ public class CraftingStation{
                 s.GetComponent<UIInventorySlot>().button.gameObject.GetComponent<Image>().sprite = craftingStation.craftingSlotSprite;
                 s.GetComponent<UIInventorySlot>().CraftingStation = craftingStation;
                 s.GetComponent <UIInventorySlot>().parentCraftingInterface = CraftingInterfacePlaceholder;
-                s.transform.position = new Vector3(s.transform.position.x + 90 + i * 70, s.transform.position.y - 130 - o * 70, s.transform.position.z);
+                s.transform.position = new Vector3(s.transform.position.x + 3 + i * 3, s.transform.position.y - 4 - o * 3, s.transform.position.z);
                 InstatiateSlots(prefabItemSlot, CraftingInterfacePlaceholder, craftingStation, width, height, i, o + 1);
             }
             else InstatiateSlots(prefabItemSlot, CraftingInterfacePlaceholder, craftingStation, width, height, i + 1, 0);
@@ -167,16 +167,20 @@ public class CraftingStation{
             Inventory.Singleton.AddItem(i.Item.id, i.count, out ushort item);
             foreach(UIInventorySlot uIInventorySlot in CraftingInterfacePlaceholder.GetComponentsInChildren<UIInventorySlot>())
             {
-                if(uIInventorySlot.ItemCount!=0)
-                    foreach(Craftable c in craftingRecipe.Recipe)
-                        if(c.Item.id.Equals(uIInventorySlot.ItemID))
-                            uIInventorySlot.ItemCount-= c.count;
+                if (uIInventorySlot.ItemCount != 0)
+                    foreach (Craftable c in craftingRecipe.Recipe)
+                        if (c.Item.id.Equals(uIInventorySlot.ItemID))
+                        {
+                            uIInventorySlot.ItemCount = (ushort)(uIInventorySlot.ItemCount - c.count);
+                            break;
+                        }
                 if(uIInventorySlot.ItemCount == 0)
                 {
                     uIInventorySlot.ItemID = 0;
                     uIInventorySlot.itemImage = null;
                 }
             }
+            RenewRecommendations(array, CraftingInterfacePlaceholder);
         }
         else Debug.LogError("Naughty Naughty , you can't craft something that doesn't exist!");
 
@@ -216,6 +220,5 @@ public class CraftingStation{
             offSetY += 100;
         }
         ///Spawning Recommendations
-        Debug.Log(GlobalVariables.ActivatedCraftingInterface.name);
         }
 }
