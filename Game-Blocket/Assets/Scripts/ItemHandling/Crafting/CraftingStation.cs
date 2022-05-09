@@ -180,7 +180,7 @@ public class CraftingStation{
                     uIInventorySlot.itemImage = null;
                 }
             }
-            RenewRecommendations(array, CraftingInterfacePlaceholder);
+            RenewRecommendations(new Craftable[2], CraftingInterfacePlaceholder);
         }
         else Debug.LogError("Naughty Naughty , you can't craft something that doesn't exist!");
 

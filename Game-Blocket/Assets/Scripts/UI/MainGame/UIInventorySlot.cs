@@ -101,7 +101,7 @@ public class UIInventorySlot : MonoBehaviour {
 	/// <summary>Reloads the Itemslot<br></br><b>Be carfull when deleting!</b></summary>
 	public void ReloadSlot() {
 		
-		itemImage.sprite = ItemObject.itemImage ?? defaultSprite;
+		itemImage.sprite = ItemObject?.itemImage ?? defaultSprite;
 		//Hide counttext if item is Single type
 		itemImage.gameObject.SetActive(ItemObject != null);
 		textDown.gameObject.SetActive(ItemObject != null);
