@@ -241,7 +241,7 @@ public class UIInventory : MonoBehaviour
 					craftingInterfacePlaceholder.SetActive(true);
 					GlobalVariables.ActivatedCraftingInterface.SetActive(false);
 					uiParentPosition = uiParent.transform.position;
-					uiParent.transform.position = new Vector2(uiParent.transform.position.x + 900, uiParent.transform.position.y);
+					uiParent.transform.position = new Vector2(uiParent.transform.position.x + 35, uiParent.transform.position.y);
 					craftingInterfacePlaceholder.GetComponent<Image>().sprite = GlobalVariables.ActivatedCraftingInterface.GetComponent<Image>().sprite;
 					CraftingStation.InstatiateCraftingInterface(prefabItemSlot, craftingInterfacePlaceholder, ItemAssets.Singleton.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)), ItemAssets.Singleton.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)).Slotwidth, ItemAssets.Singleton.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)).Slotheight);
 					CraftingStation.RenewRecommendations(new Craftable[2],craftingInterfacePlaceholder);

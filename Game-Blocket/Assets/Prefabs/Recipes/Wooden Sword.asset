@@ -12,12 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b849f401b9246c41804f744118f2441, type: 3}
   m_Name: Wooden Sword
   m_EditorClassIdentifier: 
-  station: 5
+  station: 43
   recipe:
   - item: 6
     count: 2
+    type: 0
   - item: 1
     count: 1
+    type: 0
   output:
-    item: 0
-    count: 0
+    item: 5000
+    count: 1
+    type: 1
