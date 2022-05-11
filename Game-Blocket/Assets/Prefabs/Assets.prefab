@@ -2845,7 +2845,7 @@ MonoBehaviour:
     itemType: 1
     itemImage: {fileID: 21300000, guid: 74bbea64cb1802a43967b7af1eb4dd03, type: 3}
     swingingAnimation: 
-    blockId: 3
+    blockId: 12
   - name: Sand
     id: 3
     description: I do not know how i can hold that
@@ -3054,6 +3054,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2cbe51554b22dfe41baf7afb307f9e26, type: 2}
   - {fileID: 11400000, guid: 1af853b6a7d2d824b9d95c0e09fe29c6, type: 2}
   - {fileID: 11400000, guid: 406e79a9bc34f7b49b52ff1577c020fd, type: 2}
+  - {fileID: 11400000, guid: 7ae85393d29d45b4684f805c37fb9017, type: 2}
   CraftingStations:
   - blockId: 255
     slotwidth: 2
@@ -3187,8 +3188,8 @@ MonoBehaviour:
     blockDrops:
     - itemID: 3
       dropchance: 100
-      toolItemType: 0
-    tooltypes: 0
+      toolItemType: 1
+    tooltypes: 1
   - name: Sandblock
     blockID: 5
     tile: {fileID: 11400000, guid: 240b651a1bc670d4793c99d2d9d9748e, type: 2}
@@ -3196,8 +3197,8 @@ MonoBehaviour:
     blockDrops:
     - itemID: 3
       dropchance: 100
-      toolItemType: 0
-    tooltypes: 0
+      toolItemType: 1
+    tooltypes: 1
   - name: Snowblock
     blockID: 6
     tile: {fileID: 11400000, guid: cf38a69b1c9243a4a98ca4aca2367547, type: 2}
@@ -3255,15 +3256,12 @@ MonoBehaviour:
   - name: Stone
     blockID: 12
     tile: {fileID: 11400000, guid: 4cd28115759dee2499f06013f9211b55, type: 2}
-    removeDuration: 7
+    removeDuration: 3
     blockDrops:
     - itemID: 2
-      dropchance: 50
-      toolItemType: 5
-    - itemID: 2
       dropchance: 100
-      toolItemType: 4
-    tooltypes: 0
+      toolItemType: 3
+    tooltypes: 3
   - name: SandBG
     blockID: 13
     tile: {fileID: 11400000, guid: 6a63c0c826cab3f4ea878397525659ce, type: 2}
@@ -3281,16 +3279,16 @@ MonoBehaviour:
     tile: {fileID: 11400000, guid: bc76d9a08eedba04888f09f100db4f02, type: 2}
     removeDuration: 4
     blockDrops: []
-    tooltypes: 0
+    tooltypes: 3
   - name: Trunk
     blockID: 16
     tile: {fileID: 11400000, guid: a2b039ad21dbea343a3af1d7a3f3e9c2, type: 2}
-    removeDuration: 4
+    removeDuration: 2
     blockDrops:
     - itemID: 6
       dropchance: 100
-      toolItemType: 0
-    tooltypes: 0
+      toolItemType: 2
+    tooltypes: 2
   - name: Leaf
     blockID: 17
     tile: {fileID: 11400000, guid: c706feebda529404a87185c490a5575f, type: 2}
@@ -3472,12 +3470,17 @@ MonoBehaviour:
     - itemID: 6
       dropchance: 100
       toolItemType: 0
+    blockDrops: []
+    tooltypes: 1
   - name: Stone-ice
     blockID: 46
     tile: {fileID: 11400000, guid: 89b85b0de77bae84a9736550d5bffd5a, type: 2}
     removeDuration: 3
-    blockDrops: []
-    tooltypes: 0
+    blockDrops:
+    - itemID: 2
+      dropchance: 80
+      toolItemType: 3
+    tooltypes: 3
   - name: Mush-top
     blockID: 47
     tile: {fileID: 11400000, guid: bf46b1a7c9749d049aa3b70fe4358924, type: 2}
