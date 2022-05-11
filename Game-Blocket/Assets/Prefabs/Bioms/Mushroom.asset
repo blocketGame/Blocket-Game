@@ -29,7 +29,7 @@ MonoBehaviour:
   - description: 
     regionRange: 2
     blockID: 51
-  structures: 0809
+  structures: 08090b0c
   enemies: 
   stoneBlockId: 12
   stoneBlockIdBg: 8

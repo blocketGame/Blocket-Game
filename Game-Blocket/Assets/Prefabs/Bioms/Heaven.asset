@@ -10,34 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e47b045bfe515ff45afe88645f743998, type: 3}
-  m_Name: Ice
+  m_Name: Heaven
   m_EditorClassIdentifier: 
-  index: 3
-  biomName: Ice
+  index: 7
+  biomName: Heaven
   ores: []
   regions:
   - description: 
     regionRange: 1
-    blockID: 44
-  - description: 
-    regionRange: 2
-    blockID: 45
+    blockID: 59
   bgRegions:
-  - description: DIrtBG (Top)
+  - description: 
     regionRange: 1
-    blockID: 9
-  - description: DirtBG
-    regionRange: 2
-    blockID: 8
-  structures: 0a030d
+    blockID: 59
+  structures: 06
   enemies: 
-  stoneBlockId: 46
-  stoneBlockIdBg: 0
-  skyBlockInsideId: 0
-  skyBlockInsideIdBg: 0
-  skyBlockOutsideId: 0
-  skyBlockOutsideBg: 0
-  size: 1000
+  stoneBlockId: 59
+  stoneBlockIdBg: 59
+  skyBlockInsideId: 59
+  skyBlockInsideIdBg: 59
+  skyBlockOutsideId: 59
+  skyBlockOutsideBg: 59
+  size: 5000
   heightCurve:
     serializedVersion: 2
     m_Curve:
@@ -62,4 +56,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  biomtype: 00000000
+  biomtype: 02000000

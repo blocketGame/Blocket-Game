@@ -56,8 +56,8 @@ public class PlayerHealth : MonoBehaviour{
             for (int i = 0; i < hearthContainers; i++){
                 GameObject hc = new GameObject();
                 hc.AddComponent<Image>();
-                hc.transform.position = new Vector3(60 + transform.position.x + i * 15, -30 + transform.position.y, transform.position.z);
-                hc.transform.localScale = new Vector3(0.4f, 0.4f, 1);
+                hc.transform.position = new Vector3(transform.position.x + i ,transform.position.y, transform.position.z);
+                hc.transform.localScale = new Vector3(0.01f, 0.01f, 1);
                 hc.transform.SetParent(gameObject.transform);
                 hc.transform.name = $"HeartSlot{i}";
                 HearthSlots.Add(hc);

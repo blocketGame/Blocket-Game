@@ -18,14 +18,11 @@ MonoBehaviour:
   - name: Opal
     blockID: 11
   regions:
-  - description: Snow
-    regionRange: 1
-    blockID: 6
   - description: SnowDirtblock
-    regionRange: 2
+    regionRange: 1
     blockID: 7
   - description: Dirt
-    regionRange: 3
+    regionRange: 2
     blockID: 3
   bgRegions:
   - description: DIrtBG (Top)
@@ -34,7 +31,7 @@ MonoBehaviour:
   - description: DirtBG
     regionRange: 2
     blockID: 8
-  structures: 01020306
+  structures: 010203060a0d
   enemies: 
   stoneBlockId: 12
   stoneBlockIdBg: 8
