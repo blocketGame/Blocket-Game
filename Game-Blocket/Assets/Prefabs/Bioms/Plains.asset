@@ -17,6 +17,8 @@ MonoBehaviour:
   ores:
   - name: Bernstein
     blockID: 10
+  - name: Iron
+    blockID: 79
   regions:
   - description: Grass
     regionRange: 1

@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 3
   biomName: Ice
-  ores: []
+  ores:
+  - name: crystallin
+    blockID: 80
   regions:
   - description: 
     regionRange: 1

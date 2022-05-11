@@ -2881,6 +2881,13 @@ MonoBehaviour:
     itemImage: {fileID: 21300000, guid: cff06dda4aad311449a62fba9deed956, type: 3}
     swingingAnimation: 
     blockId: 16
+  - name: crystallin ore
+    id: 7
+    description: lies in the ice
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: 82db693aedbaa564ea4a99cfc33f0dd5, type: 3}
+    swingingAnimation: 
+    blockId: 80
   ToolItemsInGame:
   - name: WoodenPickaxe
     id: 1000
@@ -3274,7 +3281,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 6
       dropchance: 100
-      toolItemType: 5
+      toolItemType: 0
     tooltypes: 0
   - name: Leaf
     blockID: 17
@@ -3648,19 +3655,34 @@ MonoBehaviour:
     tile: {fileID: 11400000, guid: bf667c0e032abf442bbf31224e59097c, type: 2}
     removeDuration: 1
     blockDrops: []
-    tooltypes: 0
+    tooltypes: 1
   - name: snow
     blockID: 77
     tile: {fileID: 11400000, guid: c2978f454f286c6499a2507a2328c015, type: 2}
     removeDuration: 1
     blockDrops: []
-    tooltypes: 0
+    tooltypes: 1
   - name: snow
     blockID: 78
     tile: {fileID: 11400000, guid: 8b856b3d084ee8c40bd8d2544b1b4497, type: 2}
     removeDuration: 1
     blockDrops: []
-    tooltypes: 0
+    tooltypes: 1
+  - name: iron-ore
+    blockID: 79
+    tile: {fileID: 11400000, guid: e2c44d1ef0f4c134e9c1dcdff54f38c3, type: 2}
+    removeDuration: 4
+    blockDrops: []
+    tooltypes: 3
+  - name: crystalin-ore
+    blockID: 80
+    tile: {fileID: 11400000, guid: 35712a17b7f01934f9ba63412d20146e, type: 2}
+    removeDuration: 4
+    blockDrops:
+    - itemID: 7
+      dropchance: 100
+      toolItemType: 3
+    tooltypes: 3
 --- !u!114 &3762355363224798812
 MonoBehaviour:
   m_ObjectHideFlags: 0

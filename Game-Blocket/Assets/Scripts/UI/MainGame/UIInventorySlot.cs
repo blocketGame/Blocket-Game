@@ -76,9 +76,13 @@ public class UIInventorySlot : MonoBehaviour {
 			//}
 
 			_itemId = value;
-			ItemObject = ItemAssets.Singleton?.GetItemFromItemID(value);
+
 			if (value == 0)
+			{
 				ItemCount = 0;
+				ItemObject = null;
+			}else
+			ItemObject = ItemAssets.Singleton?.GetItemFromItemID(value);
 			ReloadSlot();
 		}
 	}

@@ -177,7 +177,7 @@ public class CraftingStation{
                 if(uIInventorySlot.ItemCount == 0)
                 {
                     uIInventorySlot.ItemID = 0;
-                    uIInventorySlot.itemImage = null;
+                    uIInventorySlot.ReloadSlot();
                 }
             }
             RenewRecommendations(new Craftable[2], CraftingInterfacePlaceholder);
@@ -193,6 +193,9 @@ public class CraftingStation{
     public static void RenewRecommendations(Craftable[] items, GameObject CraftingInterfacePlaceholder)
     {
         IEnumerable<CraftingRecipe> recipes = CraftingHandler.GetRecipesByItems(items); //RecipeResponse
+        HashSet<CraftingRecipe> craftingRecipes = new HashSet<CraftingRecipe>();
+        foreach(CraftingRecipe cr in recipes)
+            craftingRecipes.Add(cr);
         CraftingInterfacePlaceholder.GetComponentInChildren<ScrollRect>().GetComponentInChildren<Mask>().GetComponentInChildren<RecipeRecommendationList>().PruneRecommendations();
 
         Item i = CraftingHandler.GetExactItem(items,out CraftingRecipe c).Item;
@@ -208,7 +211,7 @@ public class CraftingStation{
 
         int offSetY=0;
         ///Insert into Graphical View
-        foreach (CraftingRecipe cr in recipes)
+        foreach (CraftingRecipe cr in craftingRecipes)
         {
             GameObject g = GameObject.Instantiate(PrefabAssets.Singleton.craftingUIListView, CraftingInterfacePlaceholder.GetComponentInChildren<ScrollRect>().GetComponentInChildren<Mask>().GetComponentInChildren<RecipeRecommendationList>().transform);
             CraftingInterfacePlaceholder.GetComponentInChildren<ScrollRect>().GetComponentInChildren<Mask>().GetComponentInChildren<RecipeRecommendationList>().currentRecommendations.Add(g);
