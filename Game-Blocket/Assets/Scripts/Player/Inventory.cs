@@ -54,13 +54,21 @@ public class Inventory : MonoBehaviour {
 
 		uint temp = atHand.ItemID;
 		ushort iCT = atHand.ItemCount;
+		/*if (Input.GetKey(KeyCode.Mouse1))
+		{
+			atHand.ItemCount--;
+			slotPressed.ItemCount++;
+			slotPressed.ItemID = temp;
+		}
+		else if (Input.GetKey(KeyCode.Mouse0))
+		{*/
+			atHand.ItemID = slotPressed.ItemID;
+			atHand.ItemCount = slotPressed.ItemCount;
 
-		atHand.ItemID = slotPressed.ItemID;
-		atHand.ItemCount = slotPressed.ItemCount;
+			slotPressed.ItemCount = iCT;
+			slotPressed.ItemID = temp;
 
-		slotPressed.ItemCount = iCT;
-		slotPressed.ItemID = temp;
-
+		//}
 		atHand.gameObject.SetActive(atHand.ItemID != 0);
 		UIInventory.Singleton.SynchronizeToHotbar();
 	}

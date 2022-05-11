@@ -2953,6 +2953,12 @@ MonoBehaviour:
     itemType: 1
     itemImage: {fileID: 21300000, guid: 35aabff55aa791248b87d99dde69c0d1, type: 3}
     swingingAnimation: 
+  - name: stick
+    id: 4003
+    description: 
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: 73a11ffd6443a1d409e1eac3e05cc17a, type: 3}
+    swingingAnimation: 
   WeaponItems:
   - name: Wooden Sword
     id: 5000
@@ -3047,6 +3053,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a82579b4eace29f409f932e7cf1ad59e, type: 2}
   - {fileID: 11400000, guid: 2cbe51554b22dfe41baf7afb307f9e26, type: 2}
   - {fileID: 11400000, guid: 1af853b6a7d2d824b9d95c0e09fe29c6, type: 2}
+  - {fileID: 11400000, guid: 406e79a9bc34f7b49b52ff1577c020fd, type: 2}
   CraftingStations:
   - blockId: 255
     slotwidth: 2

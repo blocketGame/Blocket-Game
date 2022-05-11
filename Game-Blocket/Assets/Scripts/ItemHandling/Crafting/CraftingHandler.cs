@@ -27,7 +27,7 @@ public static class CraftingHandler
             int stelle=0; 
             foreach (Craftable i in cr.Recipe)
             {
-                if(items[stelle].Item?.id==i.Item?.id && i.Item?.id != 0)
+                if (items[stelle].Item?.id == i.Item?.id && i.Item?.id != 0 && i.Item!=null)
                 {
                     Debug.Log("Recommendation Should be created!!");
                     yield return cr;
