@@ -24,6 +24,12 @@ public class ArmorPlaceholder : MonoBehaviour
         foreach (SpriteRenderer sr in ArmorRenderer) sr.sprite = null;
     }
 
+    private void FixedUpdate()
+    {
+        if (this.gameObject.transform.position.z != 0)
+            transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+    }
+
     void Start() => GameObject.Destroy(CharacterPreview);
     private void Awake() => Instantiate();
 }
