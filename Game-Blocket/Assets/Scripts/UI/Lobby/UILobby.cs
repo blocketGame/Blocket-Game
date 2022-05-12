@@ -33,22 +33,18 @@ public class UILobby : MonoBehaviour {
 
 	#region Delegates
 	private UnityAction StartGameAct => () => {
-		if(Role == 1 || !GlobalVariables.Multiplayer) {
+		if(Role == 1 || !GlobalVariables.Multiplayer)
 			NetworkManager.Singleton.StartClient();
-		}
 		SceneManager.UnloadSceneAsync("Lobby");
 		if(NetworkManager.Singleton.IsServer)
 			NetworkManager.Singleton.SceneManager.LoadScene("MainGame", LoadSceneMode.Additive);
-		if(NetworkManager.Singleton.IsClient && !NetworkManager.Singleton.IsServer)
-			SceneManager.LoadScene("MainGame", LoadSceneMode.Single);
 	};
 
 	public static UnityAction BackToMainMenuAct => () => {
+		GlobalVariables.RemoveAllObjects();
 		if(NetworkManager.Singleton?.isActiveAndEnabled ?? false)
 			NetworkManager.Singleton.Shutdown(true);
-		SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
-		SceneManager.UnloadSceneAsync("MainGame");
-
+		SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
 		Role = 0;
 		GameManager.Singleton = null;
 		GC.Collect();

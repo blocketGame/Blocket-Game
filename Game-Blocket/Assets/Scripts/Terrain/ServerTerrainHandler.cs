@@ -10,7 +10,7 @@ using UnityEngine;
 
 /// <summary>Handles the <b>Serverside</b> of the Infrastructure</summary>
 public class ServerTerrainHandler : TerrainHandler {
-	public static ServerTerrainHandler Singleton { get; private set; }
+	public static new ServerTerrainHandler Singleton { get; private set; }
 
 	/// <summary>The payload for handle client requests</summary>
 	public byte UpdatePayload { get{

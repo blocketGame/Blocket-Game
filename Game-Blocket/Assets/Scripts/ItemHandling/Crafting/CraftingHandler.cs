@@ -42,7 +42,7 @@ public static class CraftingHandler
     /// </summary>
     /// <param name="item"></param>
     /// <returns></returns>
-    public static Craftable GetExactItem(Craftable[] items,out CraftingRecipe usedCraftingRecipe)
+    public static Craftable GetExactItem(Craftable[] items, out CraftingRecipe usedCraftingRecipe)
     {
         //[TODO]
         CraftingStation cs = ItemAssets.Singleton.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(GlobalVariables.ActivatedCraftingInterface.GetComponent<Image>().sprite));

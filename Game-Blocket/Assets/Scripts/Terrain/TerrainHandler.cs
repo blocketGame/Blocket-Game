@@ -28,7 +28,7 @@ public abstract class TerrainHandler : MonoBehaviour {
 	/// <param name="x">coordinate in a chunk</param>
 	/// <returns></returns>
 	public TerrainChunk GetChunkFromCoordinate(float x, float y){
-		Vector2Int chunkPosition = new Vector2Int(Mathf.FloorToInt(x / WorldData.Singleton.ChunkWidth), Mathf.FloorToInt(y / WorldData.Singleton.ChunkHeight));
+		Vector2Int chunkPosition = new Vector2Int(Mathf.FloorToInt(x / WorldAssets.ChunkLength), Mathf.FloorToInt(y / WorldAssets.ChunkLength));
 
 		return Chunks.TryGetValue(chunkPosition, out TerrainChunk chunk) ? chunk : null;
 	}
@@ -45,8 +45,8 @@ public abstract class TerrainHandler : MonoBehaviour {
 		if (chunk != null)
 		{
 			int chunkX = x - WorldAssets.ChunkLength * chunk.ChunkPositionInt.x;
-			int chunkY = y - WorldAssets.ChunkHeight * chunk.ChunkPositionInt.y;
-			if (chunkX < WorldAssets.ChunkLength && chunkY < WorldAssets.ChunkHeight)
+			int chunkY = y - WorldAssets.ChunkLength * chunk.ChunkPositionInt.y;
+			if (chunkX < WorldAssets.ChunkLength && chunkY < WorldAssets.ChunkLength)
 			{
 				return chunk.blocks[chunkX, chunkY];
 			}

@@ -36,7 +36,7 @@ public class ClientTerrainHandler : TerrainHandler {
 
     #region Util-Methods
     /// <summary>Calculates the current Chunkcorrdinate (<seealso cref="Vector2Int"/>) where the player stands in</summary>
-    public Vector2Int CurrentChunkCoord => new Vector2Int((int)(PlPosNow.x / WD.ChunkWidth), (int)(PlPosNow.y / WD.ChunkHeight));
+    public Vector2Int CurrentChunkCoord => new Vector2Int((int)(PlPosNow.x / WorldAssets.ChunkLength), (int)(PlPosNow.y / WorldAssets.ChunkLength));
 
 	/// <summary>Own variable due to unity: "No plsss noo other thread on gameobject >:("</summary>
 	public static Vector3 PlPosNow { get; private set; }
@@ -203,7 +203,9 @@ public class ClientTerrainHandler : TerrainHandler {
 	}
 
     public void Update() {
-        //Always
+		if(PlayerVariables.Dimension == Dimension.DUNGEON)
+			return;
+			//Always
 		PlPosNow = GlobalVariables.LocalPlayerPos;
 		lock(ChunkTileInitializationQueue) {
 			for(int i = 0; i < ChunkTileInitializationQueue.Count && i < _updatePayload; i++) {
@@ -222,7 +224,8 @@ public class ClientTerrainHandler : TerrainHandler {
     public void FixedUpdate() {
 		//If game loading or Chunk swiched
 		if(GameManager.State == GameState.LOADING || (LastChunk?.chunkPosition != CurrentChunk?.chunkPosition))
-			IterateChunksAroundPlayer();
+			if(PlayerVariables.Dimension == Dimension.OVERWORLD)
+				IterateChunksAroundPlayer();
 
 
 

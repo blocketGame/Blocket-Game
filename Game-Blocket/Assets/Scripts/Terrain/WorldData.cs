@@ -15,7 +15,8 @@ public class WorldData : MonoBehaviour {
 
 	public GameObject mobParent;
 	public Grid Grid { get {
-		return GetComponentInChildren<Grid>();
+			
+		return PlayerVariables.Dimension == Dimension.OVERWORLD ? GetComponentInChildren<Grid>() : GameObject.Find("Grid").GetComponentInChildren<Grid>();
 		}
 	}
 

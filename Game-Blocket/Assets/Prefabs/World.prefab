@@ -251,8 +251,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d551c67418ab734e96de608f4f6a463, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mobParent: {fileID: 4782355462478599089}
   minSpawnDistance: 20
-  maxMobs: 0
+  maxMobs: 20
   mobsNow: []
 --- !u!1 &4601285368144110772
 GameObject:

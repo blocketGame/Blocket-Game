@@ -4,11 +4,14 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-public class MobHandler : MonoBehaviour{
+public class MobHandler : MonoBehaviour {
 	public static MobHandler Singleton { get; private set; }
 
+	public Transform mobParent;
+
 	public byte minSpawnDistance = 20;
-	
+
+	[Range(1f, 200f, order = 5)]
 	public ushort maxMobs;
 	public int MobCache => mobsNow.Count;
 
@@ -48,7 +51,7 @@ public class MobHandler : MonoBehaviour{
 		//Random Position
 		Vector2Int posI = new Vector2Int(
 		(Mathf.RoundToInt(GlobalVariables.LocalPlayerPos.x) + GetRandomAchsisFromLocalPlayer()) % WorldAssets.ChunkLength, 
-		(Mathf.RoundToInt(GlobalVariables.LocalPlayerPos.y) + GetRandomAchsisFromLocalPlayer()) % WorldAssets.ChunkHeight);
+		(Mathf.RoundToInt(GlobalVariables.LocalPlayerPos.y) + GetRandomAchsisFromLocalPlayer()) % WorldAssets.ChunkLength);
 
 		if (Vector2.Distance(new Vector2(GlobalVariables.LocalPlayerPos.x, GlobalVariables.LocalPlayerPos.y), new Vector2(posI.x, posI.y)) < minSpawnDistance)
 		return;
@@ -63,7 +66,7 @@ public class MobHandler : MonoBehaviour{
 	private Vector3? CheckSpaceAround(Vector2Int pos, Vector2Int mobSize){
 		//Debug.Log(pos);
 		//If blockId is 0
-		if (GetTerrainChunkFromPos(pos)?.blocks[Math.Abs(pos.x % WorldAssets.ChunkHeight), Math.Abs(pos.y % WorldAssets.ChunkLength)] == 0)//If Block in terrain equals Air
+		if (GetTerrainChunkFromPos(pos)?.blocks[Math.Abs(pos.x % WorldAssets.ChunkLength), Math.Abs(pos.y % WorldAssets.ChunkLength)] == 0)//If Block in terrain equals Air
 		{
 			return CheckSpaceAround(new Vector2Int(pos.x, pos.y - 1), mobSize); //Loop this method and try it below again
 		}
@@ -99,7 +102,7 @@ public class MobHandler : MonoBehaviour{
 				throw new NullReferenceException();
 			if (GetTerrainChunkFromPos(pos)?.blocks[
 			(int)(Math.Abs((float)(posI?.x)) % WorldAssets.ChunkLength), 
-			(int)Mathf.Abs((float)(posI?.y) % WorldAssets.ChunkHeight)] == 0)
+			(int)Mathf.Abs((float)(posI?.y) % WorldAssets.ChunkLength)] == 0)
 				sum++;
 			else
 				break;
@@ -112,20 +115,21 @@ public class MobHandler : MonoBehaviour{
 	private int GetRandomAchsisFromLocalPlayer() => Random.Next(-WorldData.Singleton.ChunkDistance* WorldAssets.ChunkLength, WorldData.Singleton.ChunkDistance* WorldAssets.ChunkLength);
 
 
-	private void SpawnMob(uint entityId, Vector3? position)=>SpawnMob(MobAssets.Singleton.GetMobFromID(entityId, false), position);
+	public void SpawnMob(uint entityId, Vector3? position)=>SpawnMob(MobAssets.Singleton.GetMobFromID(entityId, false), position);
 	
 	
 
-	private void SpawnMob(Mob mob, Vector3? position)
+	public void SpawnMob(Mob mob, Vector3? position)
 	{
-		if (position == null && mobsNow.Count>=maxMobs)
+		if (!position.HasValue || mobsNow.Count>=maxMobs)
 			return;
-		Vector3 pos = position ?? Vector3.zero;
-		if (pos == Vector3.zero) return;
-		GameObject mgo = Instantiate(PrefabAssets.Singleton.mobEntity, pos, Quaternion.identity, transform);
+		Vector3 pos = position.Value;
+		GameObject mgo = Instantiate(PrefabAssets.Singleton.mobEntity, pos, Quaternion.identity, mobParent);
+
 		FlyingEnemyBehaviour fb =mgo.AddComponent<FlyingEnemyBehaviour>();
 		fb.currentchunk = GetTerrainChunkFromPos(new Vector2Int((int)position?.x, (int)position?.y));
 		mgo.transform.parent = GetTerrainChunkFromPos(new Vector2Int((int)position?.x, (int)position?.y)).ParentGO.transform;
+
 		SpriteRenderer sr = mgo.AddComponent<SpriteRenderer>();
 		sr.sprite = mob.sprite;
 
