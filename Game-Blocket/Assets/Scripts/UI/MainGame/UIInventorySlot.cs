@@ -119,6 +119,12 @@ public class UIInventorySlot : MonoBehaviour {
 		
 	}
 
+	public void DescribeItem()
+    {
+		UIInventory.Singleton.DescriptionText = ItemObject?.description;
+		UIInventory.Singleton.TitleText = ItemObject?.name;
+	}
+
 	private bool _active;
 	public bool Active {
 		get { return _active; }
