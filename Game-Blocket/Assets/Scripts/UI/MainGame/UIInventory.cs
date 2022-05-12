@@ -227,7 +227,8 @@ public class UIInventory : MonoBehaviour
 
 		if (Input.GetKeyDown(GameManager.SettingsProfile.InventoryKey))
 		{
-
+			hudslotfieldParent.SetActive(InventoryOpened);
+			uiHud.SetActive(InventoryOpened);
 			//Inv
 			InventoryOpened = !InventoryOpened;
 			if (!InventoryOpened)
