@@ -12,6 +12,7 @@ TagManager:
   - Chunk
   - Terrain
   - World
+  - Light
   layers:
   - Default
   - TransparentFX

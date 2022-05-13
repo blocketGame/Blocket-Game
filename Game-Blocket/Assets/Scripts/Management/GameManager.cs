@@ -5,6 +5,7 @@ using Unity.Netcode;
 using Unity.Netcode.Transports.UNET;
 
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -204,16 +205,19 @@ public class GameManager : MonoBehaviour {
 		PlayerVariables.Dimension = dimensionTo;
 		switch(dimensionTo) {
 			case Dimension.OVERWORLD:
+				SetGlobalLight(false);
 				SceneManager.LoadScene("MainGame", LoadSceneMode.Additive);
 				MoveImportantThings(SceneManager.GetSceneByName("MainGame"));
 				SceneManager.UnloadSceneAsync("Dungeon");
-				
+				SetGlobalLight(true);
 			break;
 			case Dimension.DUNGEON:
+				SetGlobalLight(false);
 				SceneManager.LoadScene("Dungeon", LoadSceneMode.Additive);
 				MoveImportantThings(SceneManager.GetSceneByName("Dungeon"));
 				//PlayerInteraction.Singleton.enabled = false;
 				SceneManager.UnloadSceneAsync("MainGame");
+				SetGlobalLight(true);
 			break;
 			case Dimension.OTHER:
 				//Future
@@ -229,6 +233,12 @@ public class GameManager : MonoBehaviour {
 		SceneManager.MoveGameObjectToScene(GlobalVariables.LocalPlayer, scene);
 		SceneManager.MoveGameObjectToScene(SmoothCamera.Singleton.gameObject, scene);
 		SceneManager.MoveGameObjectToScene(UIInventory.Singleton.gameObject, scene);
+	}
+
+	private static void SetGlobalLight(bool value){
+		foreach(GameObject go in GameObject.FindGameObjectsWithTag("Light"))
+			if(go.TryGetComponent(out Light2D light) && light.lightType == Light2D.LightType.Global)
+				light.enabled = value;
 	}
 }
 

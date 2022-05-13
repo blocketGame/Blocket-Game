@@ -144,7 +144,6 @@ public enum Dimension{
 	OVERWORLD, DUNGEON, OTHER, NULL
 }
 
-public enum CharacterRace
-{
+public enum CharacterRace{
 	MAGICIAN, HUMAN
 }

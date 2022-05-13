@@ -93,7 +93,6 @@ GameObject:
   m_Component:
   - component: {fileID: 110203904416622305}
   - component: {fileID: 4056544286149196144}
-  - component: {fileID: 1910926137408122541}
   - component: {fileID: 7600437172013351600}
   m_Layer: 0
   m_Name: Minimap Camera Inv
@@ -159,14 +158,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &1910926137408122541
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3223844570710011687}
-  m_Enabled: 1
 --- !u!114 &7600437172013351600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -431,7 +422,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6542156328544852786}
   - component: {fileID: 8888861827378265181}
-  - component: {fileID: 1688543492302373960}
   - component: {fileID: 117808615779128818}
   m_Layer: 0
   m_Name: Minimap Camera
@@ -497,14 +487,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &1688543492302373960
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4238813741461057642}
-  m_Enabled: 1
 --- !u!114 &117808615779128818
 MonoBehaviour:
   m_ObjectHideFlags: 0

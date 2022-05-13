@@ -131,6 +131,8 @@ public class PlayerInteraction : MonoBehaviour {
 
     //TODO: Remove
     public void LateUpdate() {
+		if(PlayerVariables.Dimension != Dimension.OVERWORLD)
+			return;
 		if (Input.GetKeyDown(KeyCode.Z))
 			Inventory.Singleton.AddItem(101, 1, out _);
 		if (Input.GetKeyDown(KeyCode.K))
