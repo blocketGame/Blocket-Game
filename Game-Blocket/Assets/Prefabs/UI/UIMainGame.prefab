@@ -5936,7 +5936,7 @@ MonoBehaviour:
   heartLayers:
   - Heart: {fileID: 21300000, guid: 1afa3bb64e1862b4c97274737ea1f08c, type: 3}
     halfHeart: {fileID: 21300000, guid: 8027fc85adf4b45489e194ac69fae9b3, type: 3}
-    heartValue: 1
+    heartValue: 10
   emptyHeartSprite: {fileID: 21300000, guid: a34bc39d1ba28924190067e08e3d011c, type: 3}
   emptyMiddleHeartSprite: {fileID: 21300000, guid: 0b56094f8ca53e04cad500c895db2e53, type: 3}
 --- !u!1 &9121825587574852660

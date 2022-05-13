@@ -12,6 +12,7 @@ public class ZombieBrain : MonoBehaviour
     public float speed = 4f;
     [Range(1, 20)]
     public float JumpForce = 6f;
+    public int damage;
 
     private double animationCooldown;
     private double activeCooldown;
@@ -33,7 +34,7 @@ public class ZombieBrain : MonoBehaviour
         if (gameObject.transform.localScale.x != side && side != 0
             && gameObject.transform.localScale.x < 1
             && gameObject.transform.localScale.x > -1)
-            gameObject.transform.localScale = new Vector3(gameObject.transform.localScale.x + side * 0.05f, 1, 0);
+            gameObject.transform.localScale = new Vector3(gameObject.transform.localScale.x * side, 1, 0);
 
     }
     void FixedUpdate()
@@ -108,8 +109,9 @@ public class ZombieBrain : MonoBehaviour
         if (attackAllowed) {
             //play animation attack 1
             //Player Health--
+            PlayerHealth.Singleton.CurrentHealth= PlayerHealth.Singleton.CurrentHealth-damage;
             animator.SetBool("isNormalAttacking", true);
-            
+            attackAllowed = false;
             //animator.SetBool("isNormalAttacking", false);
             Cooldown(1);
         }// Attack 1, 2 etc.

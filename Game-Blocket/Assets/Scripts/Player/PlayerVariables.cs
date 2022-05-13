@@ -47,7 +47,7 @@ public class PlayerVariables : MonoBehaviour{
 	#endregion
 
 	#region Dyniamic Variables
-	private ushort _health, _maxHealth, _maxArmor, _maxStrength, _armor, _strength;
+	private int _health, _maxHealth, _maxArmor, _maxStrength, _armor, _strength;
 	public Inventory inventory;
 	#endregion
 
@@ -64,7 +64,7 @@ public class PlayerVariables : MonoBehaviour{
 
 	public bool HasCollision{ get => BoxCollider2D.enabled; set => BoxCollider2D.enabled = value; }
 
-    public ushort Health { get => _health; 
+    public int Health { get => _health; 
 		set 
 		{ 
 			_health = value;
@@ -73,7 +73,7 @@ public class PlayerVariables : MonoBehaviour{
 			PlayerHealth.Singleton.CurrentHealth = _health;
 		} 
 	}
-	public ushort MaxHealth {
+	public int MaxHealth {
 		get => _maxHealth;
 		set 
 		{ 
@@ -84,19 +84,19 @@ public class PlayerVariables : MonoBehaviour{
 			PlayerHealth.Singleton.InitiateSprites();
 		}
 	}
-	public ushort MaxArmor {
+	public int MaxArmor {
 		get => _maxArmor;
 		set { _maxArmor = value; UIInventory.Singleton.shieldStat.text = $"{_armor}/{_maxArmor}";}
 	}
-	public ushort Armor {
+	public int Armor {
 		get => _armor;
 		set { _armor = value; UIInventory.Singleton.shieldStat.text = $"{_armor}/{_maxArmor}"; }
 	}
-	public ushort Strength {
+	public int Strength {
 		get => _strength;
 		set { _strength = value; UIInventory.Singleton.swordStat.text = $"{_strength}/{_maxStrength}"; }
 	}
-	public ushort MaxStrength {
+	public int MaxStrength {
 		get => _maxStrength;
 		set { _maxStrength = value; UIInventory.Singleton.swordStat.text = $"{_strength}/{_maxStrength}"; }
 	}
@@ -127,8 +127,8 @@ public class PlayerVariables : MonoBehaviour{
 	}
 
 	public void Init(){
-		MaxHealth = GameManager.PlayerProfileNow.maxHealth;
-		Health = GameManager.PlayerProfileNow.health != 0 ? GameManager.PlayerProfileNow.health : MaxHealth;
+		MaxHealth = GameManager.PlayerProfileNow.maxHealth == 0 ? 100 : PlayerVariables.Singleton.MaxHealth;
+		Health = GameManager.PlayerProfileNow.health != 0 ? GameManager.PlayerProfileNow.health : MaxHealth==0? 100 : MaxHealth; //THIS IS THE PROBLEM AHHHHHH
 		Armor = GameManager.PlayerProfileNow.armor;
 		healthGained = GameManager.PlayerProfileNow.healthGained;
 		healthLost = GameManager.PlayerProfileNow.healthLost;
