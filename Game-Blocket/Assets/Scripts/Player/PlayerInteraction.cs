@@ -10,8 +10,9 @@ using UnityEngine.SceneManagement;
 public class PlayerInteraction : MonoBehaviour {
 	public static PlayerInteraction Singleton { get; private set; }
 
-	public GameObject deleteSprite;
-	public Sprite crackTile;
+	public GameObject focusSprite;
+	public GameObject breakSprite;
+	public Sprite[] crackTile = new Sprite[4];
 
 	private CursorMode CursorMode => CursorMode.Auto;
 	private Vector2 hotSpot = Vector2.zero;
@@ -20,6 +21,8 @@ public class PlayerInteraction : MonoBehaviour {
 
 	private KeyCode Main => GameManager.SettingsProfile.MainInteractionKey;
 	private KeyCode Side => GameManager.SettingsProfile.SideInteractionKey;
+
+	private float breakCounter=0;
 
 	#region Util
 	/// <summary>Used for the Mouse Offset<br></br>Due to not perfect input</summary>
@@ -160,36 +163,56 @@ public class PlayerInteraction : MonoBehaviour {
 	/// <summary>Handles the Blockinteraction</summary>
 	public void HandleBlockBreakInteraction(){
 		SetFocusGO(BlockHoverdAbsolute, TargetBlockExisting());
-		
+
+
 		//Stop Coroutine
 		if (BreakCoroutine != null && !Input.GetKey(GameManager.SettingsProfile.MainInteractionKey)){
 			if (DebugVariables.BlockInteractionCR)
 				Debug.Log("Stopped");
 			StopCoroutine(BreakCoroutine);
 			BreakCoroutine = null;
+			breakCounter = 0;
 		}
 
 		if (DebugVariables.BlockInteractionInfo)
 			Debug.Log(ThisChunk.blocks[BlockInchunkCoord.x, BlockInchunkCoord.y]);
 
 		// Start Routine
-		if (BreakCoroutine == null && Input.GetKey(GameManager.SettingsProfile.MainInteractionKey)){
+		if (BreakCoroutine == null && Input.GetKey(GameManager.SettingsProfile.MainInteractionKey))
+		{
 			bool? foreground = null;
-			if(TargetBlockExisting(true)) 
+			if (TargetBlockExisting(true))
 				foreground = true;
-			else if(TargetBlockExisting(false))
+			else if (TargetBlockExisting(false))
 				foreground = false;
-			
-			if(foreground.HasValue){
+
+			if (foreground.HasValue)
+			{
 				byte targetRemoveDuration = WorldAssets.Singleton.blocks[TargetBlockID(foreground.Value)].removeDuration;
 
-				BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int, bool , ToolItem.ToolType>(targetRemoveDuration, TargetBlockID(false), ThisChunk, BlockInchunkCoord, foreground.Value, WorldAssets.Singleton.blocks[TargetBlockID(foreground.Value)].tooltypes));
+				BreakCoroutine = StartCoroutine(nameof(BreakBlock), new Tuple<byte, byte, TerrainChunk, Vector2Int, bool, ToolItem.ToolType>(targetRemoveDuration, TargetBlockID(false), ThisChunk, BlockInchunkCoord, foreground.Value, WorldAssets.Singleton.blocks[TargetBlockID(foreground.Value)].tooltypes));
+				breakCounter = targetRemoveDuration;
 
-
-				if(DebugVariables.BlockInteractionCR)
+				if (DebugVariables.BlockInteractionCR)
 					Debug.Log("Started!");
 			}
 		}
+		else if (BreakCoroutine != null && breakCounter>0)
+		{
+			bool? foreground = null;
+			if (TargetBlockExisting(true))
+				foreground = true;
+			else if (TargetBlockExisting(false))
+				foreground = false;
+
+			byte targetRemoveDuration = WorldAssets.Singleton.blocks[TargetBlockID(foreground.Value)].removeDuration;
+			breakSprite.GetComponent<SpriteRenderer>().sprite = crackTile[breakCounter > targetRemoveDuration / 1.5f ? 1 : breakCounter > targetRemoveDuration / 2 ? 2 : breakCounter > targetRemoveDuration / 3 ? 3 : 0];
+			//Here the sprite implementation
+
+			breakCounter -= Time.deltaTime;
+		}
+		else if(BreakCoroutine==null&& breakSprite.GetComponent<SpriteRenderer>().sprite != null) breakSprite.GetComponent<SpriteRenderer>().sprite = null;
+
 	}
 
 	/// <summary>Set the Position of the FocusGO</summary>
@@ -199,8 +222,8 @@ public class PlayerInteraction : MonoBehaviour {
 			Cursor.SetCursor(ItemAssets.Singleton.MiningCursor.texture, hotSpot, CursorMode);
 		else
 			Cursor.SetCursor(ItemAssets.Singleton.AttackingCursor.texture, hotSpot, CursorMode);
-		deleteSprite.transform.position = new Vector3(mouseWorldPos.x + 0.5f, mouseWorldPos.y + 0.5f, deleteSprite.transform.position.z);
-		deleteSprite.SetActive(activate);
+		focusSprite.transform.position = new Vector3(mouseWorldPos.x + 0.5f, mouseWorldPos.y + 0.5f, focusSprite.transform.position.z);
+		focusSprite.SetActive(activate);
 	}
 
 	/// <summary>Waits the amount of time. Then it will execute the statements after</summary>
@@ -220,6 +243,7 @@ public class PlayerInteraction : MonoBehaviour {
 		if (DebugVariables.BlockInteractionCR)
 			Debug.Log($"Block breaked: {blockID}");
 		thisChunk.DeleteBlock(new Vector3Int(blockInChunk.x, blockInChunk.y, 0), foreGround);
+		breakSprite.GetComponent<SpriteRenderer>().sprite = null;
 	}
     #endregion
 }

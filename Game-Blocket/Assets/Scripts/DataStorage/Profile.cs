@@ -43,7 +43,7 @@ public class SettingsProfile : Profile{
 			new KeyTupple("JumpKey", KeyCode.Space),
 			new KeyTupple("RollKey", KeyCode.LeftControl),
 			new KeyTupple("CrawlKey", KeyCode.LeftShift),
-			new KeyTupple("CraftingInterface", KeyCode.F)
+			new KeyTupple("CraftingInterface", KeyCode.None) //Obsolete
 		};
 	} 
 	public List<KeyTupple> KeyValues { get; set; } = new List<KeyTupple>();

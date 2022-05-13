@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 3
   biomName: Ice
-  ores: []
+  ores:
+  - name: crystallin
+    blockID: 80
   regions:
   - description: 
     regionRange: 1
@@ -29,9 +31,14 @@ MonoBehaviour:
   - description: DirtBG
     regionRange: 2
     blockID: 8
-  structures: 
+  structures: 0a030d
   enemies: 
   stoneBlockId: 46
+  stoneBlockIdBg: 0
+  skyBlockInsideId: 0
+  skyBlockInsideIdBg: 0
+  skyBlockOutsideId: 0
+  skyBlockOutsideBg: 0
   size: 1000
   heightCurve:
     serializedVersion: 2

@@ -17,6 +17,8 @@ MonoBehaviour:
   ores:
   - name: Bernstein
     blockID: 10
+  - name: Iron
+    blockID: 79
   regions:
   - description: Grass
     regionRange: 1
@@ -31,7 +33,7 @@ MonoBehaviour:
   - description: DirtBG
     regionRange: 2
     blockID: 8
-  structures: 0001020607
+  structures: 00010207
   enemies: 
   stoneBlockId: 12
   stoneBlockIdBg: 8

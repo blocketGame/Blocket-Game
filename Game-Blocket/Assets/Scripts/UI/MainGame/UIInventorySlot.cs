@@ -24,7 +24,7 @@ public class UIInventorySlot : MonoBehaviour {
 
 	public EquipableItem.EquipableType type;
 
-	//public int ArmorSlot,AccessorySlot;
+	public int ArmorSlot,AccessorySlot;
 	/// <summary>InventorySlots parent => this Slot will be the copy for Hotbar <summary>
 	public UIInventorySlot parent;
 	#endregion
@@ -48,37 +48,41 @@ public class UIInventorySlot : MonoBehaviour {
 	public uint ItemID {
 		get => _itemId;
 		set {
-			//if (value >= 4000 && ArmorSlot > 0)
-			//{
-			//	if (((EquipableItem)ItemAssets.Singleton.GetItemFromItemID(value)).type != EquipableItem.EquipableType.ARMOR)
-			//	{
-			//		Inventory.Singleton.atHand.ItemID = value;
-			//		return;
-			//	}
-			//		ArmorPlaceholder.Singleton.SetArmorSprite(ArmorSlot - 1, ItemAssets.Singleton.GetSpriteFromItemID(value));
-			//}
-			//else if (ArmorSlot > 0)
-			//	ArmorPlaceholder.Singleton.SetArmorSprite(ArmorSlot - 1, null);
+			if (value >= 2000 && ArmorSlot > 0)
+			{
+				if (((EquipableItem)ItemAssets.Singleton.GetItemFromItemID(value)).type != EquipableItem.EquipableType.Armor)
+				{
+					Inventory.Singleton.atHand.ItemID = value;
+					return;
+				}
+				ArmorPlaceholder.Singleton.SetArmorSprite(ArmorSlot - 1, ItemAssets.Singleton.GetSpriteFromItemID(value));
+			}
+			else if (ArmorSlot > 0)
+				ArmorPlaceholder.Singleton.SetArmorSprite(ArmorSlot - 1, null);
 
 
-			//if (value >= 4000 && AccessorySlot > 0)
-			//{
-			//	if (((EquipableItem)ItemAssets.Singleton.GetItemFromItemID(value)).type != EquipableItem.EquipableType.Accessory)
-			//	{
-			//		Inventory.Singleton.atHand.ItemID = value;
-			//		return;
-			//	}
-			//		((EquipableItem)ItemAssets.Singleton?.GetItemFromItemID(value)).InflictStat(true);
-			//}
-			//else if (AccessorySlot > 0)
-			//{
-			//	((EquipableItem)ItemAssets.Singleton?.GetItemFromItemID(ItemID)).InflictStat(false);
-			//}
+			if (value >= 2000 && AccessorySlot > 0)
+			{
+				if (((EquipableItem)ItemAssets.Singleton.GetItemFromItemID(value)).type != EquipableItem.EquipableType.Accessory)
+				{
+					Inventory.Singleton.atHand.ItemID = value;
+					return;
+				}
+					((EquipableItem)ItemAssets.Singleton?.GetItemFromItemID(value)).InflictStat(true);
+			}
+			else if (AccessorySlot > 0)
+			{
+				((EquipableItem)ItemAssets.Singleton?.GetItemFromItemID(ItemID)).InflictStat(false);
+			}
 
 			_itemId = value;
-			ItemObject = ItemAssets.Singleton?.GetItemFromItemID(value);
+
 			if (value == 0)
+			{
 				ItemCount = 0;
+				ItemObject = null;
+			}else
+			ItemObject = ItemAssets.Singleton?.GetItemFromItemID(value);
 			ReloadSlot();
 		}
 	}
@@ -101,8 +105,7 @@ public class UIInventorySlot : MonoBehaviour {
 	/// <summary>Reloads the Itemslot<br></br><b>Be carfull when deleting!</b></summary>
 	public void ReloadSlot() {
 		
-		itemImage.sprite = ItemObject?.itemImage;
-		itemImage.sprite ??= defaultSprite;
+		itemImage.sprite = ItemObject?.itemImage ?? defaultSprite;
 		//Hide counttext if item is Single type
 		itemImage.gameObject.SetActive(ItemObject != null);
 		textDown.gameObject.SetActive(ItemObject != null);
@@ -114,6 +117,12 @@ public class UIInventorySlot : MonoBehaviour {
 			textDown.text = string.Empty + _itemCount;
 		}
 		
+	}
+
+	public void DescribeItem()
+    {
+		UIInventory.Singleton.DescriptionText = ItemObject?.description;
+		UIInventory.Singleton.TitleText = ItemObject?.name;
 	}
 
 	private bool _active;
@@ -148,7 +157,7 @@ public class UIInventorySlot : MonoBehaviour {
 						x++;
                     }
 
-					CraftingStation.RenewRecommendations(array, UIInventory.Singleton.craftingInterfacePlaceholder);
+					CraftingStation.RenewRecommendations(array,this.transform.parent.gameObject);
                 }
 			});
         else

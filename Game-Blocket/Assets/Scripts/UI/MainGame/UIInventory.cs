@@ -68,7 +68,7 @@ public class UIInventory : MonoBehaviour
 	public InputField chatInput;
 	public ScrollViewHandler chatHistoryView;
 	/// <summary>Prefab from Inspector</summary>
-	public GameObject prefabItemSlot, _slotOptions, loadingScreen, craftingInterfacePlaceholder;
+	public GameObject prefabItemSlot, _slotOptions, loadingScreen, craftingInterfacePlaceholder,handCrafting;
 	/// <summary>
 	/// Original position of the Inventory
 	/// </summary>
@@ -227,7 +227,8 @@ public class UIInventory : MonoBehaviour
 
 		if (Input.GetKeyDown(GameManager.SettingsProfile.InventoryKey))
 		{
-
+			hudslotfieldParent.SetActive(InventoryOpened);
+			uiHud.SetActive(InventoryOpened);
 			//Inv
 			InventoryOpened = !InventoryOpened;
 			if (!InventoryOpened)
@@ -241,14 +242,23 @@ public class UIInventory : MonoBehaviour
 					craftingInterfacePlaceholder.SetActive(true);
 					GlobalVariables.ActivatedCraftingInterface.SetActive(false);
 					uiParentPosition = uiParent.transform.position;
-					uiParent.transform.position = new Vector2(uiParent.transform.position.x + 900, uiParent.transform.position.y);
+					uiParent.transform.position = new Vector2(uiParent.transform.position.x + 35, uiParent.transform.position.y);
 					craftingInterfacePlaceholder.GetComponent<Image>().sprite = GlobalVariables.ActivatedCraftingInterface.GetComponent<Image>().sprite;
 					CraftingStation.InstatiateCraftingInterface(prefabItemSlot, craftingInterfacePlaceholder, ItemAssets.Singleton.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)), ItemAssets.Singleton.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)).Slotwidth, ItemAssets.Singleton.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(craftingInterfacePlaceholder.GetComponent<Image>().sprite)).Slotheight);
 					CraftingStation.RenewRecommendations(new Craftable[2],craftingInterfacePlaceholder);
+                }
+                else
+                {
+					if (handCrafting.GetComponentInChildren<UIInventorySlot>() == null)
+					{
+						CraftingStation.InstatiateCraftingInterface(prefabItemSlot, handCrafting, ItemAssets.Singleton.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(handCrafting.GetComponent<Image>().sprite)), ItemAssets.Singleton.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(handCrafting.GetComponent<Image>().sprite)).Slotwidth, ItemAssets.Singleton.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(handCrafting.GetComponent<Image>().sprite)).Slotheight);
+						CraftingStation.RenewRecommendations(new Craftable[2], handCrafting);
+					}
 				}
 			}else{
 				//TODO: Optional things to do...
 				//uiParent.SetActive(false);
+
 				if (GlobalVariables.ActivatedCraftingInterface != null)
 				{
 					GlobalVariables.ActivatedCraftingInterface.SetActive(true);
@@ -262,7 +272,7 @@ public class UIInventory : MonoBehaviour
 					}
 					uiParent.transform.position = uiParentPosition;
 					craftingInterfacePlaceholder.SetActive(false);
-				}
+                }
 				//uiHud.SetActive(!InventoryOpened);
 
 			}

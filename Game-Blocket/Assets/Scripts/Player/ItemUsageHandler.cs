@@ -49,8 +49,12 @@ public class ItemUsageHandler : MonoBehaviour
 	}
 
 	private void AnimateWeapon(){
-        if(!(Inventory.Singleton.SelectedItemObj is WeaponItem weapon))
-            return;
+		if (!(Inventory.Singleton.SelectedItemObj is WeaponItem weapon))
+		{
+			if(Input.GetKey(GameManager.SettingsProfile.MainInteractionKey))
+			PlayAnim();
+			return;
+		}
 
         if(weapon.weaponType == WeaponItem.WeaponType.RANGE)
 		if(Inventory.Singleton.FindFirstItem(ItemAssets.Singleton.GetItemFromItemID(weapon.projectile))==null)
@@ -92,7 +96,8 @@ public class ItemUsageHandler : MonoBehaviour
 	{
 		timer = 0;
 		string animationname;
-		if (((WeaponItem)(ItemAssets.Singleton.GetItemFromItemID(Inventory.Singleton.SelectedItemId)) ?? new WeaponItem()).weaponType == WeaponItem.WeaponType.RANGE)
+		if(!(Inventory.Singleton.SelectedItemObj is WeaponItem)) animationname = ItemAssets.Singleton.GetItemFromItemID(Inventory.Singleton.SelectedItemId)?.swingingAnimation;
+		else if (((WeaponItem)(ItemAssets.Singleton.GetItemFromItemID(Inventory.Singleton.SelectedItemId)) ?? new WeaponItem())?.weaponType == WeaponItem.WeaponType.RANGE)
 		{
 			animationname = ItemAssets.Singleton.GetItemFromItemID(Inventory.Singleton.SelectedItemId)?.swingingAnimation;
 		}
@@ -109,7 +114,8 @@ public class ItemUsageHandler : MonoBehaviour
 			else
 				animationname = weapon?.swingingAnimations[komboCounter];
 		}
-		
+			
+
 		anim.Play(animationname == string.Empty ? "Default" : animationname ?? "Default");
 	}
 
