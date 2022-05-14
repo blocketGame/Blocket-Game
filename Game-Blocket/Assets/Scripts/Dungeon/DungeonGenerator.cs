@@ -11,21 +11,17 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField]
     private TilemapVisualizer tilemapVisualizer;
     [HideInInspector]
-    public BoundsInt firstroom;
-    [HideInInspector]
-    public BoundsInt lastroom;
+    public Vector3 startposition;
 
     /// <summary>
     /// Starting point of the dungeongenertation
     /// </summary>
     public void GenerateDungeon()
     {
-        Debug.Log(new BoundsInt(new Vector3Int(0, 0, 0), new Vector3Int(10, 10, 1)).Contains(new Vector3Int(2, 2, 0)));
-
         tilemapVisualizer.Parameters = parameters;
 
         tilemapVisualizer.Clear();
-        List<BoundsInt> roomsList = ProceduralGenerationAlgorithms.BinarySpacePartitioning(parameters.seed, new BoundsInt((Vector3Int)parameters.startPosition, new Vector3Int(parameters.dungeonWidth, parameters.dungeonHeight, 1)), parameters.minRoomWidth, parameters.minRoomHeight);
+        List<BoundsInt> roomsList = ProceduralGenerationAlgorithms.BinarySpacePartitioning(parameters.seed, new BoundsInt((Vector3Int)parameters.startPosition, new Vector3Int(parameters.dungeonWidth, parameters.dungeonHeight, 0)), parameters.minRoomWidth, parameters.minRoomHeight);
         HashSet<Vector2Int> floor = new HashSet<Vector2Int>();
 
         if (parameters.randomWalkRooms)
@@ -43,6 +39,8 @@ public class DungeonGenerator : MonoBehaviour
         tilemapVisualizer.PaintBackgroundTiles(floor);
         tilemapVisualizer.PaintPlattfroms(roomsList);
         WallGenerator.CreateWalls(floor, tilemapVisualizer);
+
+
     }
 
     /// <summary>
@@ -113,20 +111,21 @@ public class DungeonGenerator : MonoBehaviour
         List<BoundsInt> temporalRoomsList = new List<BoundsInt>(roomsList);
         HashSet<Vector2Int> corridors = new HashSet<Vector2Int>();
         BoundsInt currentRoom = temporalRoomsList[Random.Range(0, temporalRoomsList.Count)];
+        startposition = new Vector3Int(currentRoom.position.x + parameters.offset + 1, currentRoom.position.y + parameters.offset + 1, currentRoom.position.z);
         temporalRoomsList.Remove(currentRoom);
 
         while (temporalRoomsList.Count > 0)
         {
             BoundsInt closest = FindClosestPointToCenter(currentRoom, temporalRoomsList);
             temporalRoomsList.Remove(closest);
-            HashSet<Vector2Int> newCorridor = CreateCorridor(currentRoom, closest);
+            HashSet<Vector2Int> newCorridor = CreateCorridor(currentRoom, closest, roomsList);
             currentRoom = closest;
             corridors.UnionWith(newCorridor);
         }
         return corridors;
     }
 
-    private HashSet<Vector2Int> CreateCorridor(BoundsInt currentRoom, BoundsInt closest)
+    private HashSet<Vector2Int> CreateCorridor(BoundsInt currentRoom, BoundsInt closest, List<BoundsInt> roomsList)
     {
         Vector2Int currentRoomCenter = Vector2Int.RoundToInt(currentRoom.center);
         Vector2Int destinaiton = Vector2Int.RoundToInt(closest.center);
@@ -139,7 +138,7 @@ public class DungeonGenerator : MonoBehaviour
             if (destinaiton.y > position.y)
             {
                 position += Vector2Int.up;
-                if (!currentRoom.Contains((Vector3Int)position) && !closest.Contains((Vector3Int)position))
+                if (!IsInRoom(position, roomsList))
                 {
                     if (position.y % parameters.platformSpace == 0)
                     {
@@ -159,7 +158,7 @@ public class DungeonGenerator : MonoBehaviour
             if (destinaiton.y < position.y)
             {
                 position += Vector2Int.down;
-                if (!currentRoom.Contains((Vector3Int)position) && !closest.Contains((Vector3Int)position))
+                if (!IsInRoom(position, roomsList))
                 {
                     if (position.y % parameters.platformSpace == 0)
                     {
@@ -201,6 +200,17 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
         return corridor;
+    }
+
+    public bool IsInRoom(Vector2Int position, List<BoundsInt> roomsList)
+    {
+        foreach(BoundsInt room in roomsList)
+        {
+            BoundsInt actualRoom = new BoundsInt(new Vector3Int(room.position.x + parameters.offset, room.position.y + parameters.offset, room.position.z), new Vector3Int(room.size.x - parameters.offset * 2, room.size.y - parameters.offset * 2, 1));
+            if (actualRoom.Contains(new Vector3Int(position.x, position.y, 0)))
+                return true;
+        }
+        return false;
     }
 
     private BoundsInt FindClosestPointToCenter(BoundsInt currentRoom, List<BoundsInt> roomsList)

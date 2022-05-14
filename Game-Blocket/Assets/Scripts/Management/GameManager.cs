@@ -173,7 +173,7 @@ public class GameManager : MonoBehaviour {
 			GameObject generator = GameObject.Find("Dungeongenerator");
 			DungeonGenerator dg = generator.GetComponent<DungeonGenerator>();
 			dg.GenerateDungeon();
-			GlobalVariables.LocalPlayer.transform.position = new Vector3(dg.firstroom.x + 1, dg.firstroom.y + 1);
+			GlobalVariables.LocalPlayer.transform.position = dg.startposition;
 		}
 	}
 
