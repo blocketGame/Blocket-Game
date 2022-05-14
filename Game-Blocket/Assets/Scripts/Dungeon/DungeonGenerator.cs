@@ -21,6 +21,12 @@ public class DungeonGenerator : MonoBehaviour
         tilemapVisualizer.Parameters = parameters;
 
         tilemapVisualizer.Clear();
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            DestroyImmediate(enemy);
+        }
+
         List<BoundsInt> roomsList = ProceduralGenerationAlgorithms.BinarySpacePartitioning(parameters.seed, new BoundsInt((Vector3Int)parameters.startPosition, new Vector3Int(parameters.dungeonWidth, parameters.dungeonHeight, 0)), parameters.minRoomWidth, parameters.minRoomHeight);
         HashSet<Vector2Int> floor = new HashSet<Vector2Int>();
 
@@ -121,6 +127,11 @@ public class DungeonGenerator : MonoBehaviour
             HashSet<Vector2Int> newCorridor = CreateCorridor(currentRoom, closest, roomsList);
             currentRoom = closest;
             corridors.UnionWith(newCorridor);
+            if (temporalRoomsList.Count == 0)
+            {
+                Instantiate(parameters.boss, new Vector3Int(currentRoom.position.x + parameters.offset + 1, currentRoom.position.y + parameters.offset + 1, currentRoom.position.z), Quaternion.identity);
+            }
+                
         }
         return corridors;
     }
@@ -140,7 +151,7 @@ public class DungeonGenerator : MonoBehaviour
                 position += Vector2Int.up;
                 if (!IsInRoom(position, roomsList))
                 {
-                    if (position.y % parameters.platformSpace == 0)
+                    if (position.y % parameters.platformSpaceCorridor == 0)
                     {
                         tilemapVisualizer.PaintSinglePlattform(position, Vector2.zero);
 
@@ -160,7 +171,7 @@ public class DungeonGenerator : MonoBehaviour
                 position += Vector2Int.down;
                 if (!IsInRoom(position, roomsList))
                 {
-                    if (position.y % parameters.platformSpace == 0)
+                    if (position.y % parameters.platformSpaceCorridor == 0)
                     {
                         tilemapVisualizer.PaintSinglePlattform(position, Vector2.zero);
 

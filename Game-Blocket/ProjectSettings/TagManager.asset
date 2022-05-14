@@ -12,6 +12,7 @@ TagManager:
   - Chunk
   - Terrain
   - World
+  - Enemy
   layers:
   - Default
   - TransparentFX

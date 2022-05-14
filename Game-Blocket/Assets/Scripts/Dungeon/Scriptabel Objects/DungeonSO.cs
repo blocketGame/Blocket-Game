@@ -19,8 +19,10 @@ public class DungeonSO : ScriptableObject
     public List<GameObject> gameObjects = new List<GameObject> ();
     [Range(0, 20)]
     public int corridorWidth;
-    [Range(0, 20)]
-    public int platformSpace;
+    [Range(1, 20)]
+    public int platformSpaceRoom;
+    [Range(1, 20)]
+    public int platformSpaceCorridor;
 
     //Tilemapvisulizer
     public TileBase backgroundTile;
@@ -28,4 +30,8 @@ public class DungeonSO : ScriptableObject
     public TileBase plattformMiddleTile;
     public TileBase plattformRightTile;
     public TileBase plattformLeftTile;
+
+    //Mobhandling
+    public List<GameObject> enemies;
+    public GameObject boss;
 }

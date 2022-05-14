@@ -17,17 +17,22 @@ MonoBehaviour:
   iterations: 100
   walkLength: 20
   startRandomlyEachIteration: 1
-  minRoomWidth: 50
-  minRoomHeight: 20
+  minRoomWidth: 25
+  minRoomHeight: 15
   dungeonWidth: 500
   dungeonHeight: 80
   offset: 3
   randomWalkRooms: 0
   gameObjects: []
   corridorWidth: 3
-  platformSpace: 4
+  platformSpaceRoom: 3
+  platformSpaceCorridor: 2
   backgroundTile: {fileID: 11400000, guid: 62eff008b736d734bbe7b4ebd8e43060, type: 2}
   wallTile: {fileID: 11400000, guid: 4ad18dca405397e43ae9a938fdb634b0, type: 2}
   plattformMiddleTile: {fileID: 11400000, guid: dff50c4adb5a7284db7e1fcc5e753d50, type: 2}
   plattformRightTile: {fileID: 11400000, guid: e24a75952e92ffb4d830996965c18ef7, type: 2}
   plattformLeftTile: {fileID: 11400000, guid: 6d39e6be7fc224544aa995e43564908c, type: 2}
+  enemies:
+  - {fileID: 3671747509784202347, guid: cbb9d2bf748a81a478259df4cbaa861b, type: 3}
+  - {fileID: 4945687359444657655, guid: cd8aee1ec0df2d546afc67f2ce6f1936, type: 3}
+  boss: {fileID: 8749025095333314164, guid: e5cd2afc47dc8544fabcb63cab2531a3, type: 3}

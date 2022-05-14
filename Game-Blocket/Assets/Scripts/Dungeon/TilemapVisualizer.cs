@@ -36,24 +36,27 @@ public class TilemapVisualizer : MonoBehaviour
     {
         foreach (BoundsInt room in rooms)
         {
-            for (int y = Parameters.offset; y < room.size.y - Parameters.offset; y++)
+            BoundsInt actualRoom = new BoundsInt(new Vector3Int(room.position.x + Parameters.offset, room.position.y + Parameters.offset, room.position.z), new Vector3Int(room.size.x - Parameters.offset * 2, room.size.y - Parameters.offset * 2, 1));
+            
+            for (int y = 0; y < actualRoom.size.y; y++)
             {
-                for (int x = Parameters.offset; x < room.size.x - Parameters.offset; x++)
+                int platformOffset = Random.Range(0, actualRoom.size.x / 2);
+                for (int x = 0; x < (actualRoom.size.x / 2); x++)
                 {
-                    if(y%Parameters.platformSpace == 0)
+                    if((y+1)%Parameters.platformSpaceRoom == 0)
                     {
-                        if(x == Parameters.offset)
+                        if(x == 0)
                         {
-                            PaintSinglePlattform(new Vector2Int(x + room.position.x, y + room.position.y), Vector2.left);
+                            PaintSinglePlattform(new Vector2Int(x + platformOffset + actualRoom.position.x, y + actualRoom.position.y), Vector2.left);
                         }
                         else
-                        if(x == room.size.x - Parameters.offset - 1)
+                        if(x == (actualRoom.size.x / 2) - 1)
                         {
-                            PaintSinglePlattform(new Vector2Int(x + room.position.x, y + room.position.y), Vector2.right);
+                            PaintSinglePlattform(new Vector2Int(x + platformOffset + actualRoom.position.x, y + actualRoom.position.y), Vector2.right);
                         }
                         else
                         {
-                            PaintSinglePlattform(new Vector2Int(x + room.position.x, y + room.position.y), Vector2.zero);
+                            PaintSinglePlattform(new Vector2Int(x + platformOffset + actualRoom.position.x, y + actualRoom.position.y), Vector2.zero);
                         }
                     }
                 }
