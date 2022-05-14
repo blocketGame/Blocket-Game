@@ -17,12 +17,17 @@ MonoBehaviour:
   iterations: 100
   walkLength: 20
   startRandomlyEachIteration: 1
-  minRoomWidth: 20
+  minRoomWidth: 50
   minRoomHeight: 20
-  dungeonWidth: 200
+  dungeonWidth: 500
   dungeonHeight: 80
   offset: 3
   randomWalkRooms: 0
+  gameObjects: []
+  corridorWidth: 3
+  platformSpace: 4
   backgroundTile: {fileID: 11400000, guid: 62eff008b736d734bbe7b4ebd8e43060, type: 2}
   wallTile: {fileID: 11400000, guid: 4ad18dca405397e43ae9a938fdb634b0, type: 2}
-  collisionTile: {fileID: 11400000, guid: 0bcc34212cd215a4584d42c3c4ba8f29, type: 2}
+  plattformMiddleTile: {fileID: 11400000, guid: dff50c4adb5a7284db7e1fcc5e753d50, type: 2}
+  plattformRightTile: {fileID: 11400000, guid: e24a75952e92ffb4d830996965c18ef7, type: 2}
+  plattformLeftTile: {fileID: 11400000, guid: 6d39e6be7fc224544aa995e43564908c, type: 2}
