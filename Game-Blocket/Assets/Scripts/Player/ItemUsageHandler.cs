@@ -11,6 +11,7 @@ public class ItemUsageHandler : MonoBehaviour
 	public Animator anim;
 	public int komboCounter;
 	public float timer;
+	private string lastanim;
 	private Vector2 NormalizeVector(Vector3 vector) => Vector3.Normalize(vector);
 
 	public WeaponItem GetSelectedItemAsWeaponItem => Inventory.Singleton.SelectedItemObj as WeaponItem;
@@ -114,7 +115,7 @@ public class ItemUsageHandler : MonoBehaviour
 			else
 				animationname = weapon?.swingingAnimations[komboCounter];
 		}
-			
+		lastanim = animationname;
 
 		anim.Play(animationname == string.Empty ? "Default" : animationname ?? "Default");
 	}
@@ -132,7 +133,7 @@ public class ItemUsageHandler : MonoBehaviour
 
 		Debug.Log("Collision");
 		//Damage Enemy
-		Mob mob = collision.gameObject.GetComponent<Mob>() ?? new Mob();
+		EnemyBehaviour mob = collision.gameObject.GetComponent<EnemyBehaviour>() ?? new ZombieBrain();
 		DealDamageOnHit(mob);
 	}
 
@@ -140,13 +141,14 @@ public class ItemUsageHandler : MonoBehaviour
 	/// Dealing Damage to Enemy instance
 	/// </summary>
 	/// <param name="mob"></param>
-	private void DealDamageOnHit(Mob mob)
+	private void DealDamageOnHit(EnemyBehaviour mob)
 	{
 		WeaponItem w = (WeaponItem)(ItemAssets.Singleton.GetItemFromItemID(Inventory.Singleton.SelectedItemId)) ?? new WeaponItem();
 		if (w.dmgOnColliderHit)
 		{
 			Debug.Log(w.damage);
-			mob.HealthNow -= w.damage;
+			mob.Health -= w.damage;
+			Debug.Log("HEALTH :"+mob.Health);
 		}
 	}
 

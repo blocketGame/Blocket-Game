@@ -5,12 +5,26 @@ using UnityEngine;
 /// <summary>
 /// Behaviour for flying Enemies
 /// </summary>
-public class FlyingEnemyBehaviour : MonoBehaviour
+public class FlyingEnemyBehaviour : EnemyBehaviour
 {
     private Vector2 flyingDirection;
     private float[] flyingmodifyer = new float[2];
     private float counter=0;
     public TerrainChunk currentchunk;
+
+    #region overwrittenFields
+    private int damage;
+    public override int Damage { get => damage; set => damage=value; }
+    private int health;
+    public override int Health { get => health; set => health = value; }
+    private int maxHealth;
+    public override int MaxHealth { get => maxHealth; set => maxHealth=value; }
+    private int regeneration;
+    public override int Regeneration { get => regeneration; set => regeneration=value; }
+    private uint mobId;
+    public override uint MobID { get=> mobId; set=>mobId=value; }
+    #endregion
+
     // Start is called before the first frame update
     void Start()
     {

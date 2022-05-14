@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ZombieBrain : MonoBehaviour
+public class ZombieBrain : EnemyBehaviour
 {
     [Range(1,20)]
     public float lineOfSite = 10f;
@@ -12,18 +12,42 @@ public class ZombieBrain : MonoBehaviour
     public float speed = 4f;
     [Range(1, 20)]
     public float JumpForce = 6f;
-    public int damage;
+
+    #region overwrittenFields
+    [SerializeField]
+    private int damage;
+    public override int Damage { get => damage; set => damage = value; }
+    [SerializeField]
+    private int health;
+    public override int Health { get => health; set => health = value; }
+    [SerializeField]
+    private int maxHealth;
+    public override int MaxHealth { get => maxHealth; set => maxHealth = value; }
+    [SerializeField]
+    private int regeneration;
+    public override int Regeneration { get => regeneration; set => regeneration = value; }
+
+    private string deathanim;
+    public override string deathAnimation { get=> deathanim; set=> deathanim=value; }
+
+    [SerializeField]
+    private Animator animator;
+    public override Animator Animator { get => animator; set => animator = value; }
+    [SerializeField]
+    private uint mobId;
+    public override uint MobID { get => mobId; set => mobId = value; }
+    #endregion
+
 
     private double animationCooldown;
     private double activeCooldown;
     private bool attackAllowed;
     private bool jumpAllowed;
 
-   public Animator animator;
-
     private int side = 0;
     private Transform player;
-    
+
+
     void Start()
     {
         attackAllowed = true;
@@ -109,7 +133,7 @@ public class ZombieBrain : MonoBehaviour
         if (attackAllowed) {
             //play animation attack 1
             //Player Health--
-            PlayerHealth.Singleton.CurrentHealth= PlayerHealth.Singleton.CurrentHealth-damage;
+            PlayerHealth.Singleton.CurrentHealth= PlayerHealth.Singleton.CurrentHealth-Damage;
             animator.SetBool("isNormalAttacking", true);
             attackAllowed = false;
             //animator.SetBool("isNormalAttacking", false);
