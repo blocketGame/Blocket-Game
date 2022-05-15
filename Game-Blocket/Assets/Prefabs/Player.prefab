@@ -1268,7 +1268,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 12
-  JumpForce: 15
+  JumpForce: 20
   fallMulti: 1.06
   playerRigidbody: {fileID: 2886164251458701588}
   dust: {fileID: 8320444108215976180}
