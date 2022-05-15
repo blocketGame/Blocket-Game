@@ -10,6 +10,7 @@ public class Mob : Entity{
 	public ushort maxHealth;
 	public float HealthNow { get; set; }
 	public MobKind mobKind;
+	public EnemyBehaviour enemyBehaviour;
 
 	//TODO: More Detail
 	public uint[] itemsEquiped;

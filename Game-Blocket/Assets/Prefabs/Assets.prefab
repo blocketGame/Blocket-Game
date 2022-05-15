@@ -2974,6 +2974,7 @@ MonoBehaviour:
     damage: 10
     dmgOnColliderHit: 1
     holdShooting: 1
+    knockBack: 30
     coolDownTime: 1.5
     projectile: 0
     maxHeight: 0
@@ -2991,6 +2992,7 @@ MonoBehaviour:
     damage: 10
     dmgOnColliderHit: 1
     holdShooting: 0
+    knockBack: 0
     coolDownTime: 0.5
     projectile: 0
     maxHeight: 0
@@ -3008,6 +3010,7 @@ MonoBehaviour:
     damage: 10
     dmgOnColliderHit: 0
     holdShooting: 1
+    knockBack: 0
     coolDownTime: 0.6
     projectile: 3001
     maxHeight: 100
@@ -3025,6 +3028,7 @@ MonoBehaviour:
     damage: 10
     dmgOnColliderHit: 0
     holdShooting: 1
+    knockBack: 0
     coolDownTime: 0.6
     projectile: 3000
     maxHeight: 100
@@ -3042,6 +3046,7 @@ MonoBehaviour:
     damage: 0
     dmgOnColliderHit: 0
     holdShooting: 1
+    knockBack: 0
     coolDownTime: 0.3
     projectile: 3002
     maxHeight: 100
@@ -3126,6 +3131,7 @@ MonoBehaviour:
     damage: 0
     maxHealth: 100
     mobKind: 0
+    enemyBehaviour: {fileID: 5732049107447389158, guid: e24b80883c99a7a4b884488ee2ef4e08, type: 3}
     itemsEquiped: 
     inBiomSpawning:
     - {fileID: 11400000, guid: 29b0f6e63e160294face5a7539aa68dc, type: 2}
@@ -3134,10 +3140,11 @@ MonoBehaviour:
     sizeX: 2
     sizeY: 3
     sprite: {fileID: -4044060951398954831, guid: c78eac950d1a0844da98edee28ddbdf6, type: 3}
-    spawnChance: 5
+    spawnChance: 100
     damage: 10
     maxHealth: 100
     mobKind: 2
+    enemyBehaviour: {fileID: 5732049107447389158, guid: e24b80883c99a7a4b884488ee2ef4e08, type: 3}
     itemsEquiped: 
     inBiomSpawning:
     - {fileID: 11400000, guid: 29b0f6e63e160294face5a7539aa68dc, type: 2}

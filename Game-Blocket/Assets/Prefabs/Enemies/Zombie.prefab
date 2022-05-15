@@ -157,7 +157,7 @@ MonoBehaviour:
   maxHealth: 100
   regeneration: 5
   animator: {fileID: 7497225574276930414}
-  mobId: 1
+  mobId: 2
 --- !u!95 &7497225574276930414
 Animator:
   serializedVersion: 3

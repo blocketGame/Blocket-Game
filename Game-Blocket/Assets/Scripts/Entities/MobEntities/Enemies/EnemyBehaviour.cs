@@ -40,4 +40,19 @@ public abstract class EnemyBehaviour : MonoBehaviour
         //Play death anim
         //Leave drops
     }
+
+    /// <summary>
+	/// Is just used when chunks are unable to load (Player doesn't stay in Wall)
+	/// </summary>
+	private void PreventFloorGlitch()
+    {
+        if (PlayerVariables.Dimension == Dimension.DUNGEON)
+            return;
+        Vector3Int playerCell = WorldData.Singleton.Grid.WorldToCell(gameObject.GetComponent<Rigidbody2D>().transform.position);
+        if (TerrainHandler.Singleton.GetBlockFormCoordinate(playerCell.x, playerCell.y) != 0)
+        {
+            Debug.LogWarning("UWU - WALL_GLITCH_HANDLED");
+            gameObject.GetComponent<Rigidbody2D>().transform.position = gameObject.GetComponent<Rigidbody2D>().transform.position + Vector3.up;
+        }
+    }
 }

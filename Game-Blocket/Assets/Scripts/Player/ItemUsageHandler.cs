@@ -148,6 +148,11 @@ public class ItemUsageHandler : MonoBehaviour
 		{
 			Debug.Log(w.damage);
 			mob.Health -= w.damage;
+			//doesn't work right now
+			if(Movement.Singleton.PlayerModelT.transform.rotation.y==100)
+				mob.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(-w.knockBack,0));
+			else
+				mob.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(w.knockBack, 0));
 			Debug.Log("HEALTH :"+mob.Health);
 		}
 	}

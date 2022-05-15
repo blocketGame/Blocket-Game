@@ -126,8 +126,8 @@ public class MobHandler : MonoBehaviour {
 		Vector3 pos = position.Value;
 		GameObject mgo = Instantiate(PrefabAssets.Singleton.mobEntity, pos, Quaternion.identity, mobParent);
 
-		FlyingEnemyBehaviour fb =mgo.AddComponent<FlyingEnemyBehaviour>();
-		fb.currentchunk = GetTerrainChunkFromPos(new Vector2Int((int)position?.x, (int)position?.y));
+		var fb =mgo.AddComponent(mob.enemyBehaviour?.GetType());
+		//((EnemyBehaviour)fb).currentchunk = GetTerrainChunkFromPos(new Vector2Int((int)position?.x, (int)position?.y));
 		mgo.transform.parent = GetTerrainChunkFromPos(new Vector2Int((int)position?.x, (int)position?.y)).ParentGO.transform;
 
 		SpriteRenderer sr = mgo.AddComponent<SpriteRenderer>();
@@ -136,6 +136,8 @@ public class MobHandler : MonoBehaviour {
 		BoxCollider2D bc = mgo.AddComponent<BoxCollider2D>();
 		bc.size = mob.sprite.rect.size/100;
 		if (DebugVariables.MobHandling)
-			Debug.Log("MobSpawning");
+		{
+			Debug.Log("MobSpawning"+ GetTerrainChunkFromPos(new Vector2Int((int)position?.x, (int)position?.y)).ChunkPositionInt);
+		}
 	}
 }

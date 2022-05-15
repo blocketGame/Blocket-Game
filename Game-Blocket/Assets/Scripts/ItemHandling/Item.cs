@@ -71,6 +71,7 @@ public class WeaponItem : Item
 	public ushort durability, damage;
 	public bool dmgOnColliderHit;
 	public bool holdShooting;
+	public int knockBack;
 
 	[SerializeField]
 	private float coolDownTime;
