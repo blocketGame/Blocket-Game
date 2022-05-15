@@ -57,8 +57,26 @@ public class TilemapVisualizer : MonoBehaviour
                         else
                         {
                             PaintSinglePlattform(new Vector2Int(x + platformOffset + actualRoom.position.x, y + actualRoom.position.y), Vector2.zero);
+                            int id = 0;
+                            foreach(GameObject enemy in Parameters.enemies)
+                            {
+                                if(y + 1 + enemy.transform.localScale.y <= actualRoom.size.y &&
+                                    NoiseGenerator.GenerateStructureCoordinates2d(x + platformOffset + actualRoom.position.x, y + actualRoom.position.y + 1, Parameters.seed, Parameters.enemieProbability*Parameters.enemies.Count, id))
+                                    Instantiate(enemy, new Vector3Int(x + platformOffset + actualRoom.position.x, y + actualRoom.position.y + 1, 0), Quaternion.identity);
+                                id++;
+                            }
                         }
                     }
+                }
+            }
+            for(int x = 0; x < actualRoom.size.x; x++)
+            {
+                int id = 0;
+                foreach (GameObject enemy in Parameters.enemies)
+                {
+                    if (NoiseGenerator.GenerateStructureCoordinates2d(x + actualRoom.position.x, actualRoom.position.y, Parameters.seed, Parameters.enemieProbability * Parameters.enemies.Count, id))
+                        Instantiate(enemy, new Vector3Int(x + actualRoom.position.x, actualRoom.position.y, 0), Quaternion.identity);
+                    id++;
                 }
             }
         }

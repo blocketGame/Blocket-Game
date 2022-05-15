@@ -33,5 +33,7 @@ public class DungeonSO : ScriptableObject
 
     //Mobhandling
     public List<GameObject> enemies;
+    [Range(0, 50)]
+    public int enemieProbability;
     public GameObject boss;
 }

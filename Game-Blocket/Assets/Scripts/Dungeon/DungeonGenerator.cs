@@ -43,10 +43,8 @@ public class DungeonGenerator : MonoBehaviour
         floor.UnionWith(corridors);
 
         tilemapVisualizer.PaintBackgroundTiles(floor);
-        tilemapVisualizer.PaintPlattfroms(roomsList);
         WallGenerator.CreateWalls(floor, tilemapVisualizer);
-
-
+        tilemapVisualizer.PaintPlattfroms(roomsList);
     }
 
     /// <summary>
@@ -129,7 +127,7 @@ public class DungeonGenerator : MonoBehaviour
             corridors.UnionWith(newCorridor);
             if (temporalRoomsList.Count == 0)
             {
-                Instantiate(parameters.boss, new Vector3Int(currentRoom.position.x + parameters.offset + 1, currentRoom.position.y + parameters.offset + 1, currentRoom.position.z), Quaternion.identity);
+                Instantiate(parameters.boss, new Vector3Int(currentRoom.position.x + currentRoom.size.x/2, currentRoom.position.y + parameters.offset + 1, currentRoom.position.z), Quaternion.identity);
             }
                 
         }

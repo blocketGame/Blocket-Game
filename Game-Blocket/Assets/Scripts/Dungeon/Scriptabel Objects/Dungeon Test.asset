@@ -25,7 +25,7 @@ MonoBehaviour:
   randomWalkRooms: 0
   gameObjects: []
   corridorWidth: 3
-  platformSpaceRoom: 3
+  platformSpaceRoom: 4
   platformSpaceCorridor: 2
   backgroundTile: {fileID: 11400000, guid: 62eff008b736d734bbe7b4ebd8e43060, type: 2}
   wallTile: {fileID: 11400000, guid: 4ad18dca405397e43ae9a938fdb634b0, type: 2}
@@ -35,4 +35,5 @@ MonoBehaviour:
   enemies:
   - {fileID: 3671747509784202347, guid: cbb9d2bf748a81a478259df4cbaa861b, type: 3}
   - {fileID: 4945687359444657655, guid: cd8aee1ec0df2d546afc67f2ce6f1936, type: 3}
+  enemieProbability: 25
   boss: {fileID: 8749025095333314164, guid: e5cd2afc47dc8544fabcb63cab2531a3, type: 3}
