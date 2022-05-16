@@ -28,7 +28,8 @@ public class PlayerHealth : MonoBehaviour {
     public int CurrentHealth { get => currentHealth; 
         set{
             currentHealth = value;
-            float percent = maxHealth, singlevalue = percent;
+            UIInventory.Singleton.heartStat.text = currentHealth+ "/"+maxHealth;
+            float percent = maxHealth==0 ? 100:maxHealth;
             Debug.Log("SETTING VALUE OF HEARTS");
             //Alle hearth layer durchgehen
             for (int h = heartLayers.Count-1; h >= 0; h--)
