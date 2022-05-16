@@ -1053,7 +1053,6 @@ MonoBehaviour:
   playerModel: {fileID: 148350212174688266}
   playerLogic: {fileID: 4913946665464429532}
   holdingItemPlaceholder: {fileID: 2736179197418371224}
-  health: {fileID: 0}
   inventory: {fileID: 4126958736040315794}
   healthGained: 0
   healthLost: 0
@@ -1273,6 +1272,8 @@ MonoBehaviour:
   playerRigidbody: {fileID: 2886164251458701588}
   dust: {fileID: 8320444108215976180}
   wallDust: {fileID: 2860485288748685333}
+  fallingDamageThreshhold: 5
+  startingHeight: -1
 --- !u!1 &7171847213287697915
 GameObject:
   m_ObjectHideFlags: 0
