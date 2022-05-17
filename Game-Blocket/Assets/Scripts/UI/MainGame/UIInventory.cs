@@ -62,7 +62,7 @@ public class UIInventory : MonoBehaviour
 	public GameObject uiParent, slotField, uiHud, hudslotfieldParent;
 	/// <summary>Image from Inspector</summary>
 	public Image inventoryBackgroundImage;
-	public GameObject buffDisplayingParent;
+	public GameObject buffDisplayingParent,deathScreen;
 
 	[Header("Other Prefabs")]
 	public RectTransform chatParent;
@@ -403,5 +403,19 @@ public class UIInventory : MonoBehaviour
 		PlayerVariables.Singleton.ReloadItemInHand();
 	}
 	#endregion
+
+	public void DeathScreen()
+    {
+		deathScreen.SetActive(true);
+		uiHud.SetActive(false);
+		InventoryOpened = false;
+    }
+
+	public void RespawnUI()
+    {
+		deathScreen.SetActive(false);
+		uiHud.SetActive(true);
+		InventoryOpened = false;
+	}
 
 }

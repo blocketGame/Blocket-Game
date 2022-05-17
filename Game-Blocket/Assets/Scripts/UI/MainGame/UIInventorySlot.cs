@@ -142,10 +142,14 @@ public class UIInventorySlot : MonoBehaviour {
 
 		button ??= GetComponentInChildren<Button>();
 
+
 		if (useOldPointerhandling)
 			button.onClick.AddListener(() => {
-				Inventory.Singleton.PressedSlot(this); 
-				if(CraftingStation!=null)
+				Inventory.Singleton.PressedSlot(this);
+
+				if (ArmorSlot != 0)
+					UIInventory.shieldStat.text = Armor.Singleton.DefenseArmor+ "/"+ Armor.Singleton.DefenseArmor;
+				if (CraftingStation!=null)
                 {
 					int x=0;
 					Craftable[] array = new Craftable[CraftingStation.Slotwidth*CraftingStation.Slotheight] ;

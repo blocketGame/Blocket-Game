@@ -61,8 +61,11 @@ public class ItemUsageHandler : MonoBehaviour
 			{
 				BuffHandler.Singleton.AddBuffToPlayer(((UseAbleItem)Inventory.Singleton.SelectedItemObj).buffType);
 				Inventory.Singleton.InvSlots[Inventory.Singleton.SelectedSlot].ItemCount--;
-				if(Inventory.Singleton.InvSlots[Inventory.Singleton.SelectedSlot].ItemCount==0)
+				if (Inventory.Singleton.InvSlots[Inventory.Singleton.SelectedSlot].ItemCount == 0)
+				{
 					Inventory.Singleton.InvSlots[Inventory.Singleton.SelectedSlot].ItemID = 0;
+					UIInventory.Singleton.SynchronizeToHotbar();
+				}
 			}
 				return;
 		}

@@ -63,9 +63,27 @@ public class ProjectileBehaviour : MonoBehaviour
     {
         //Debug.Log("HIT "+CalculatedDamage);
         EnemyBehaviour eb = collision.gameObject.GetComponentInChildren<EnemyBehaviour>();
-        if(eb != null)
+        if (eb != null)
+        {
             eb.Health -= (int)CalculatedDamage;
+            InstantiateIndicator(collision.transform, (int)CalculatedDamage);
+        }
         if(collision.gameObject.layer != 7)
             GameObject.Destroy(gameObject);
+    }
+
+    /// <summary>
+	/// Instantiates the hit indicator
+	/// </summary>
+	/// <param name="mobT"></param>
+	/// <param name="damage"></param>
+	private void InstantiateIndicator(Transform mobT, int damage = -1)
+    {
+        Vector3 position = new Vector3(mobT.position.x - mobT.gameObject.GetComponent<BoxCollider2D>().size.x / 2, mobT.position.y + mobT.gameObject.GetComponent<BoxCollider2D>().size.y / 2);
+
+        GameObject dmgIndicator = Instantiate(PrefabAssets.Singleton.DamageText, position, Quaternion.identity, mobT.transform);
+        HitIndicator hitIndicator = dmgIndicator.GetComponent<HitIndicator>();
+        hitIndicator.textmesh.text = string.Empty + damage;
+        dmgIndicator.name = $"DamageIndicator-{damage}";
     }
 }

@@ -163,7 +163,8 @@ public class Movement : MonoBehaviour {
 	/// </summary>
 	public void VelocityUpdate()
 	{
-		FallingDamageCalc();
+		if(PlayerVariables.Gamemode != Gamemode.CREATIVE)
+			FallingDamageCalc();
 		if (playerRigidbody.velocity.y != 0){
 			if (Input.GetKeyDown(GameManager.SettingsProfile.JumpKey))
 			{
@@ -321,6 +322,7 @@ public class Movement : MonoBehaviour {
 
 	private void FallingDamageCalc()
     {
+		
         if (playerRigidbody.velocity.y<0 && startingHeight==-1)
         {
 			startingHeight = WorldData.Singleton.Grid.WorldToCell(RigidBodyPosition).y;
