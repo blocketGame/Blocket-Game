@@ -160,7 +160,7 @@ public class EquipableItem : Item {
 
 [Serializable]
 public class UseAbleItem : Item{
-
+	public BuffType buffType;
 }
 
 [Serializable]

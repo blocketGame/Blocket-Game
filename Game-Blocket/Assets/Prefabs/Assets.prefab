@@ -2948,7 +2948,14 @@ MonoBehaviour:
     inflictedStat: 0
     value: 2
     type: 1
-  UseableItemsInGame: []
+  UseableItemsInGame:
+  - name: Healing Potion
+    id: 3000
+    description: Heal yourself up to victory
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: a7ec475f867eddf4bba1ed179066059d, type: 3}
+    swingingAnimation: 
+    buffType: 3
   CommonItems:
   - name: Opal
     id: 4001
@@ -3039,7 +3046,7 @@ MonoBehaviour:
     holdShooting: 1
     knockBack: 0
     coolDownTime: 0.6
-    projectile: 3000
+    projectile: 6000
     maxHeight: 100
     maxDistance: 100
     behaviour: 0
@@ -3062,7 +3069,22 @@ MonoBehaviour:
     maxDistance: 100
     behaviour: 0
     weaponType: 0
-  ProjectileItems: []
+  ProjectileItems:
+  - name: Bullet
+    id: 6000
+    description: Pew Pew
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: 645ed010887d5b04ea167474985d7707, type: 3}
+    swingingAnimation: 
+    durability: 0
+    damage: 10
+    spawningPos: {x: 0, y: 0}
+    flyingSpeed: 1
+    bounciness: 0
+    lightEmission: 0
+    goThroughBlocks: 0
+    pierce: 0
+    gravityScale: 1
   Recipes:
   - {fileID: 11400000, guid: a82579b4eace29f409f932e7cf1ad59e, type: 2}
   - {fileID: 11400000, guid: 2cbe51554b22dfe41baf7afb307f9e26, type: 2}
@@ -3089,7 +3111,10 @@ MonoBehaviour:
   Buffs:
   - buffPicture: {fileID: 21300000, guid: 44089b669f8432a4a9e51bd1c80536b6, type: 3}
     buffType: 0
-    length: 10
+    length: 5
+  - buffPicture: {fileID: 21300000, guid: c071f51a8b5734540af1d3b751518162, type: 3}
+    buffType: 3
+    length: 7
   InventoryCursor: {fileID: 21300000, guid: 983843a460c359244887c9a663229125, type: 3}
   MiningCursor: {fileID: 21300000, guid: 42919adbd3d899d4aae5841d0e00a632, type: 3}
   AttackingCursor: {fileID: 21300000, guid: f02ed4b66ab720f46b851139dfc87cbf, type: 3}
@@ -3747,6 +3772,7 @@ MonoBehaviour:
   craftingUIListView: {fileID: 4904731259523108657, guid: 29f3864126b1a234f96e83dc5e192912, type: 3}
   mobEntity: {fileID: 3431033053258429059, guid: 2b092efc1a3a3a04794a42fa7c49a410, type: 3}
   playerCamera: {fileID: 4180692969551620913, guid: 5c89fd5534d680c45b090ff4ec056c98, type: 3}
+  DamageText: {fileID: 8263108231648621801, guid: af40dbc76d4cf9a47b97aef9f480b345, type: 3}
 --- !u!1 &2729332452247671524
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,8 +10,7 @@ public class ProjectileBehaviour : MonoBehaviour
     public Projectile projectile;
     public float weaponDamage;
     
-    //Just an idea
-    public float CalculatedDamage { get => (weaponDamage + projectile.damage) *
+    public float CalculatedDamage { get => (weaponDamage/2 + projectile.damage) +
             (1 +
             ((gameObject.GetComponent<Rigidbody2D>().velocity.x < 0) ? gameObject.GetComponent<Rigidbody2D>().velocity.x * -1 : gameObject.GetComponent<Rigidbody2D>().velocity.x)
             * ((gameObject.GetComponent<Rigidbody2D>().velocity.y < 0) ? gameObject.GetComponent<Rigidbody2D>().velocity.y * -1 : gameObject.GetComponent<Rigidbody2D>().velocity.y));
@@ -56,13 +55,16 @@ public class ProjectileBehaviour : MonoBehaviour
     void Update()
     {
         //doesn't work
-        //Physics2D.IgnoreCollision(this.gameObject.GetComponent<Collider2D>(), GlobalVariables.LocalPlayer.GetComponent<BoxCollider2D>());
+        Physics2D.IgnoreCollision(this.gameObject.GetComponent<Collider2D>(), GlobalVariables.LocalPlayer.GetComponentInChildren<BoxCollider2D>());
         
         //Despawn on hit....
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("HIT "+CalculatedDamage);
+        //Debug.Log("HIT "+CalculatedDamage);
+        EnemyBehaviour eb = collision.gameObject.GetComponentInChildren<EnemyBehaviour>();
+        if(eb != null)
+            eb.Health -= (int)CalculatedDamage;
         if(collision.gameObject.layer != 7)
             GameObject.Destroy(gameObject);
     }

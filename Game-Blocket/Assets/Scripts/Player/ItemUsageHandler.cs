@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ItemUsageHandler : MonoBehaviour
 {
@@ -54,7 +55,16 @@ public class ItemUsageHandler : MonoBehaviour
 		{
 			if(Input.GetKey(GameManager.SettingsProfile.MainInteractionKey))
 			PlayAnim();
-			return;
+
+
+			if (Input.GetKeyDown(GameManager.SettingsProfile.SideInteractionKey) && (Inventory.Singleton.SelectedItemObj is UseAbleItem useable))
+			{
+				BuffHandler.Singleton.AddBuffToPlayer(((UseAbleItem)Inventory.Singleton.SelectedItemObj).buffType);
+				Inventory.Singleton.InvSlots[Inventory.Singleton.SelectedSlot].ItemCount--;
+				if(Inventory.Singleton.InvSlots[Inventory.Singleton.SelectedSlot].ItemCount==0)
+					Inventory.Singleton.InvSlots[Inventory.Singleton.SelectedSlot].ItemID = 0;
+			}
+				return;
 		}
 
         if(weapon.weaponType == WeaponItem.WeaponType.RANGE)
@@ -154,6 +164,9 @@ public class ItemUsageHandler : MonoBehaviour
 			else
 				mob.gameObject.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(w.knockBack, 0));
 			Debug.Log("HEALTH :"+mob.Health);
+			Instantiate(PrefabAssets.Singleton.DamageText, mob.transform.position+Vector3.up*5,Quaternion.identity,mob.transform);
+
+			
 		}
 	}
 

@@ -14,7 +14,7 @@ public class BuffInfliction : MonoBehaviour
 
     private void Awake() => gameObject.AddComponent<Image>();
 
-    void Update()
+    void FixedUpdate()
     {
         if (gameObject.GetComponent<Image>().sprite == null)
             gameObject.GetComponent<Image>().sprite = buff.buffPicture;
@@ -27,7 +27,10 @@ public class BuffInfliction : MonoBehaviour
         {
             case BuffType.Poisened:
                 //Apply Poison
-                PlayerHealth.Singleton.CurrentHealth -= 1 * Time.deltaTime;
+                PlayerHealth.Singleton.CurrentHealth -= 1 * Time.fixedDeltaTime;
+                break;
+            case BuffType.Regeneration:
+                PlayerHealth.Singleton.CurrentHealth += 1 * Time.fixedDeltaTime;
                 break;
         }
 

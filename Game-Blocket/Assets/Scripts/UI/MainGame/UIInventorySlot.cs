@@ -92,7 +92,7 @@ public class UIInventorySlot : MonoBehaviour {
 		get => _itemCount;
 		set {
 			_itemCount = value;
-			ReloadSlot();
+				ReloadSlot();
 		}
 	}
 	private ushort _itemCount = 0;
