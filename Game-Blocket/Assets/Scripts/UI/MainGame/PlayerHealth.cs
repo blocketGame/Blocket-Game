@@ -11,7 +11,7 @@ public class PlayerHealth : MonoBehaviour {
     /// <summary>maxHealth of the Player</summary>
     public int maxHealth;
     /// <summary>currentHealth of the Player</summary>
-    private int currentHealth;
+    private float currentHealth;
     /// <summary>Number of HeartContainers</summary>
     [SerializeField]
     private int hearthContainers;
@@ -25,7 +25,7 @@ public class PlayerHealth : MonoBehaviour {
 
     public void Awake() {Singleton = this; GameManager.PlayerProfileNow.Health = maxHealth; }
 
-    public int CurrentHealth { get => currentHealth; 
+    public float CurrentHealth { get => currentHealth; 
         set{
             currentHealth = value;
             UIInventory.Singleton.heartStat.text = currentHealth+ "/"+maxHealth;

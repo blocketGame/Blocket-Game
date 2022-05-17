@@ -62,6 +62,7 @@ public class UIInventory : MonoBehaviour
 	public GameObject uiParent, slotField, uiHud, hudslotfieldParent;
 	/// <summary>Image from Inspector</summary>
 	public Image inventoryBackgroundImage;
+	public GameObject buffDisplayingParent;
 
 	[Header("Other Prefabs")]
 	public RectTransform chatParent;

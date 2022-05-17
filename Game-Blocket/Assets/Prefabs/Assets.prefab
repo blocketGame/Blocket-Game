@@ -2867,13 +2867,6 @@ MonoBehaviour:
     itemImage: {fileID: 21300000, guid: 941aa281ca582eb4aa7a3348acefc603, type: 3}
     swingingAnimation: 
     blockId: 43
-  - name: Pour Ice
-    id: 7
-    description: Ice? I think
-    itemType: 1
-    itemImage: {fileID: 21300000, guid: 157db56d3cd9c7a4581373d67c7d2a21, type: 3}
-    swingingAnimation: 
-    blockId: 44
   - name: Wood
     id: 6
     description: Dead tree
@@ -2881,6 +2874,13 @@ MonoBehaviour:
     itemImage: {fileID: 21300000, guid: cff06dda4aad311449a62fba9deed956, type: 3}
     swingingAnimation: 
     blockId: 16
+  - name: Pour Ice
+    id: 7
+    description: Ice? I think
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: 157db56d3cd9c7a4581373d67c7d2a21, type: 3}
+    swingingAnimation: 
+    blockId: 44
   - name: crystallin ore
     id: 7
     description: lies in the ice
@@ -2898,6 +2898,15 @@ MonoBehaviour:
     toolPower: 400
     damage: 6
     toolType: 3
+  - name: Wooden Shovel
+    id: 1001
+    description: Tool with great digging power
+    itemType: 0
+    itemImage: {fileID: 21300000, guid: cad2482a490f18448be189d0a6d7dc00, type: 3}
+    swingingAnimation: Hit
+    toolPower: 200
+    damage: 6
+    toolType: 1
   EquipableItemsInGame:
   - name: Helmet
     id: 2000
@@ -2974,7 +2983,7 @@ MonoBehaviour:
     damage: 10
     dmgOnColliderHit: 1
     holdShooting: 1
-    knockBack: 30
+    knockBack: 500
     coolDownTime: 1.5
     projectile: 0
     maxHeight: 0
@@ -3077,6 +3086,10 @@ MonoBehaviour:
     buttonColor: {r: 0.5471698, g: 0.30152208, b: 0.038714837, a: 1}
   Enemies:
   - {fileID: 11400000, guid: 5fa23f42fd79765418b7e844d5d84e6b, type: 2}
+  Buffs:
+  - buffPicture: {fileID: 21300000, guid: 44089b669f8432a4a9e51bd1c80536b6, type: 3}
+    buffType: 0
+    length: 10
   InventoryCursor: {fileID: 21300000, guid: 983843a460c359244887c9a663229125, type: 3}
   MiningCursor: {fileID: 21300000, guid: 42919adbd3d899d4aae5841d0e00a632, type: 3}
   AttackingCursor: {fileID: 21300000, guid: f02ed4b66ab720f46b851139dfc87cbf, type: 3}
@@ -3122,11 +3135,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mobsInGame:
-  - name: ForestGhost
+  - name: Sandling
     entityId: 1
-    sizeX: 2
-    sizeY: 2
-    sprite: {fileID: 21300000, guid: 6a461e6915202cd46b7e85799f94e950, type: 3}
+    sizeX: 3
+    sizeY: 3
+    sprite: {fileID: 21300000, guid: 5dcd992ecee6f134fa5cc9708e90db6d, type: 3}
     spawnChance: 5
     damage: 0
     maxHealth: 100
@@ -3479,18 +3492,18 @@ MonoBehaviour:
     tile: {fileID: 11400000, guid: 42f54c33403fbc54e8a67165d48a7e5c, type: 2}
     removeDuration: 3
     blockDrops:
-    - itemID: 6
+    - itemID: 7
       dropchance: 100
-      toolItemType: 0
-    tooltypes: 0
+      toolItemType: 1
+    tooltypes: 1
   - name: Ice
     blockID: 45
     tile: {fileID: 11400000, guid: 61aedf1b6da923946b76c67ba1c01ca5, type: 2}
     removeDuration: 3
     blockDrops:
-    - itemID: 6
+    - itemID: 7
       dropchance: 100
-      toolItemType: 0
+      toolItemType: 1
     tooltypes: 1
   - name: Stone-ice
     blockID: 46

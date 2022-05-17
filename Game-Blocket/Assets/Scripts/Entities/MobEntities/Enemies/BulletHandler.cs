@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class BulletHandler : MonoBehaviour
 {
-    float timeToLive = 10;
-    float delay = 0.3f;
-    float count = 0;
+    public int damage;
+    public float timeToLive = 10;
+    public float delay = 0.3f;
+    public float count = 0;
 
     private float rotate = 0;
 
@@ -35,7 +36,9 @@ public class BulletHandler : MonoBehaviour
     {
         if(collision.gameObject.tag == "Player")
         {
-            //deal dmg to player
+            PlayerHealth.Singleton.CurrentHealth = PlayerHealth.Singleton.CurrentHealth - damage;
+            ///KnockBack required
+            GlobalVariables.LocalPlayer.GetComponent<Rigidbody2D>().AddRelativeForce(70f*GetComponent<Rigidbody2D>().velocity);
         }
     }
 }

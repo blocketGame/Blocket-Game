@@ -15,7 +15,9 @@ MonoBehaviour:
   station: 255
   recipe:
   - item: 6
-    count: 2
+    count: 4
+    type: 0
   output:
     item: 5
     count: 1
+    type: 0

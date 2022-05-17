@@ -135,6 +135,7 @@ public class ZombieBrain : EnemyBehaviour
             //Player Health--
             PlayerHealth.Singleton.CurrentHealth= PlayerHealth.Singleton.CurrentHealth-Damage;
             animator.SetBool("isNormalAttacking", true);
+            GlobalVariables.LocalPlayer.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(0, JumpForce), ForceMode2D.Impulse);
             attackAllowed = false;
             //animator.SetBool("isNormalAttacking", false);
             Cooldown(1);
