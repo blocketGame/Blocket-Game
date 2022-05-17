@@ -163,11 +163,27 @@ public class ItemUsageHandler : MonoBehaviour
 				mob.gameObject.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(-w.knockBack,0));
 			else
 				mob.gameObject.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(w.knockBack, 0));
-			Debug.Log("HEALTH :"+mob.Health);
-			Instantiate(PrefabAssets.Singleton.DamageText, mob.transform.position+Vector3.up*5,Quaternion.identity,mob.transform);
 
-			
+			Debug.Log("HEALTH :" + mob.Health);
+
+			InstantiateIndicator(mob.transform, w.damage);
 		}
+	}
+
+
+	/// <summary>
+	/// Instantiates the hit indicator
+	/// </summary>
+	/// <param name="mobT"></param>
+	/// <param name="damage"></param>
+	private void InstantiateIndicator(Transform mobT, int damage = -1){
+
+		Vector3 position = new Vector3(mobT.position.x - mobT.gameObject.GetComponent<BoxCollider2D>().size.x / 2, mobT.position.y + mobT.gameObject.GetComponent<BoxCollider2D>().size.y / 2);
+
+		GameObject dmgIndicator = Instantiate(PrefabAssets.Singleton.DamageText, position, Quaternion.identity, mobT.transform);
+		HitIndicator hitIndicator = dmgIndicator.GetComponent<HitIndicator>();
+		hitIndicator.textmesh.text = string.Empty + damage;
+		dmgIndicator.name = $"DamageIndicator-{damage}";
 	}
 
 	/// <summary>
