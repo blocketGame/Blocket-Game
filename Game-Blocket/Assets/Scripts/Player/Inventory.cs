@@ -46,32 +46,67 @@ public class Inventory : MonoBehaviour {
 	/// Event if the User presses a slot
 	/// </summary>
 	/// <param name="slotPressed">Slot that was pressed by the local user</param>
-	public void PressedSlot(UIInventorySlot slotPressed) {
+	public void PressedSlot(UIInventorySlot slotPressed,SlotInteractionType click) {
 		//Equipable
 		if(slotPressed.type != EquipableItem.EquipableType.None && atHand.ItemID != 0)
 			if(!(ItemAssets.Singleton.GetItemFromItemID(atHand.ItemID) is EquipableItem eI && eI.type == slotPressed.type))
 				return;
+        switch (click)
+        {
+			case SlotInteractionType.LEFTCLICK:
+				uint temp = atHand.ItemID;
+				ushort iCT = atHand.ItemCount;
+				atHand.ItemID = slotPressed.ItemID;
+				atHand.ItemCount = slotPressed.ItemCount;
 
-		uint temp = atHand.ItemID;
-		ushort iCT = atHand.ItemCount;
-		/*if (Input.GetKey(KeyCode.Mouse1))
-		{
-			atHand.ItemCount--;
-			slotPressed.ItemCount++;
-			slotPressed.ItemID = temp;
+				slotPressed.ItemCount = iCT;
+				slotPressed.ItemID = temp;
+				break;
+			case SlotInteractionType.CONTROL:
+				if (atHand.ItemID == 0 || atHand.ItemID == slotPressed.ItemID)
+				{
+					atHand.ItemID = slotPressed.ItemID;
+					atHand.ItemCount++;
+					slotPressed.ItemCount--;
+					if (slotPressed.ItemCount <= 0)
+						slotPressed.ItemID = 0;
+				}
+				else if (slotPressed.ItemID == 0)
+				{
+					slotPressed.ItemID = atHand.ItemID;
+					slotPressed.ItemCount++;
+					atHand.ItemCount--;
+					if (atHand.ItemCount <= 0)
+						atHand.ItemID = 0;
+				}
+				break;
+			case SlotInteractionType.SHIFT:
+				if (atHand.ItemID == 0 || atHand.ItemID == slotPressed.ItemID)
+				{
+					atHand.ItemID = (ushort)(slotPressed.ItemCount / 2)!=0?slotPressed.ItemID:0;
+					atHand.ItemCount = (ushort)(slotPressed.ItemCount/2);
+					slotPressed.ItemCount-= atHand.ItemCount;
+					if (slotPressed.ItemCount <= 0)
+						slotPressed.ItemID = 0;
+				}
+				else if (slotPressed.ItemID == 0)
+				{
+					slotPressed.ItemID = (ushort)(atHand.ItemCount / 2)!=0?atHand.ItemID:0;
+					slotPressed.ItemCount = (ushort)(atHand.ItemCount/2);
+					atHand.ItemCount-=slotPressed.ItemCount;
+					if (atHand.ItemCount <= 0)
+						atHand.ItemID = 0;
+				}
+				break;
 		}
-		else if (Input.GetKey(KeyCode.Mouse0))
-		{*/
-			atHand.ItemID = slotPressed.ItemID;
-			atHand.ItemCount = slotPressed.ItemCount;
-
-			slotPressed.ItemCount = iCT;
-			slotPressed.ItemID = temp;
 
 		//}
+
 		atHand.gameObject.SetActive(atHand.ItemID != 0);
 		UIInventory.Singleton.SynchronizeToHotbar();
 	}
+
+
 
 	private void Awake() => Singleton = this;        
 
@@ -249,4 +284,13 @@ public class Inventory : MonoBehaviour {
 			sum += slot.ItemCount;
 		return sum;
 	}
+}
+/// <summary>
+/// Defines the State of the Slot interaction => normal- / half- / single- pickup
+/// </summary>
+public enum SlotInteractionType
+{
+	LEFTCLICK,
+	SHIFT,
+	CONTROL
 }

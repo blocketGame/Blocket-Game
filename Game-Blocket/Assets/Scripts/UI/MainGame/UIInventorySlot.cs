@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
@@ -142,11 +143,18 @@ public class UIInventorySlot : MonoBehaviour {
 
 		button ??= GetComponentInChildren<Button>();
 
-
 		if (useOldPointerhandling)
 			button.onClick.AddListener(() => {
-				Inventory.Singleton.PressedSlot(this);
-
+				if (Input.GetKey(KeyCode.LeftControl))
+				{
+					Inventory.Singleton.PressedSlot(this, SlotInteractionType.CONTROL);
+					return;
+				} else if (Input.GetKey(KeyCode.LeftShift))
+                {
+					Inventory.Singleton.PressedSlot(this, SlotInteractionType.SHIFT);
+					return;
+				}
+				Inventory.Singleton.PressedSlot(this,SlotInteractionType.LEFTCLICK);
 				if (ArmorSlot != 0)
 					UIInventory.shieldStat.text = Armor.Singleton.DefenseArmor+ "/"+ Armor.Singleton.DefenseArmor;
 				if (CraftingStation!=null)
@@ -174,6 +182,7 @@ public class UIInventorySlot : MonoBehaviour {
 				button.gameObject.GetComponent<SlotOptionsScript>().SlotOptions = UIInventory._slotOptions;
         }
 	}
+
 
 	/// <summary>
 	/// [TODO]
