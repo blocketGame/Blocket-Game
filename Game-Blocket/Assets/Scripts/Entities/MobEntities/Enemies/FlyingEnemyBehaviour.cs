@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static BlockData;
 
 /// <summary>
 /// Behaviour for flying Enemies
@@ -23,6 +24,10 @@ public class FlyingEnemyBehaviour : EnemyBehaviour
     public override int Regeneration { get => regeneration; set => regeneration=value; }
     private uint mobId;
     public override uint MobID { get=> mobId; set=>mobId=value; }
+
+    [SerializeField]
+    private List<BlockDropAble> drops;
+    public override List<BlockDropAble> Drops { get => drops; set => drops = value; }
     #endregion
 
     // Start is called before the first frame update

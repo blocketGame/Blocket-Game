@@ -120,6 +120,7 @@ public struct BlockData {
 		[Header("Dropchance in percent")]
 		[Range(1, 100)]
 		public float dropchance;
+		public int count;
 		[Header("The item should drop if that Tooltype is used")]
 		public ToolItem.ToolType toolItemType;
 	}

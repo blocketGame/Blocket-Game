@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static BlockData;
 
 /// <summary>
 /// Base Class for every Enemy
@@ -18,6 +19,7 @@ public abstract class EnemyBehaviour : MonoBehaviour
     public virtual string deathAnimation { get; set; }
     public virtual Animator Animator { get; set; }
     public abstract uint MobID { get; set; }
+    public abstract List<BlockDropAble> Drops { get; set; }
 
 
     // Start is called before the first frame update
@@ -39,6 +41,10 @@ public abstract class EnemyBehaviour : MonoBehaviour
         GameObject.Destroy(this.gameObject);
         //Play death anim
         //Leave drops
+        TerrainChunk c = ClientTerrainHandler.Singleton.GetChunkFromCoordinate(transform.position.x, transform.position.y);
+        foreach (BlockDropAble d in Drops) 
+            if (UnityEngine.Random.Range(1f,100f) < d.dropchance)
+                c.InstantiateDrop(new Vector3Int((int)transform.position.x%WorldAssets.ChunkLength,(int)transform.position.y%WorldAssets.ChunkHeight, (int)transform.position.z), (byte)d.count, d.itemID);
     }
 
     /// <summary>

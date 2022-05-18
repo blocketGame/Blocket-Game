@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using static BlockData;
 
 public class ZombieBrain : EnemyBehaviour
 {
@@ -36,6 +38,9 @@ public class ZombieBrain : EnemyBehaviour
     [SerializeField]
     private uint mobId;
     public override uint MobID { get => mobId; set => mobId = value; }
+    [SerializeField]
+    private List<BlockDropAble> drops;
+    public override List<BlockDropAble> Drops { get=>drops; set=>drops=value; }
     #endregion
 
 
