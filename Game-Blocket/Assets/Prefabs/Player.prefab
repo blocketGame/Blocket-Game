@@ -1217,7 +1217,6 @@ GameObject:
   - component: {fileID: 222074096756097637}
   - component: {fileID: 4126958736040315794}
   - component: {fileID: 552804439049964413}
-  - component: {fileID: 7409144473165639398}
   m_Layer: 7
   m_Name: PlayerLogic
   m_TagString: Untagged
@@ -1273,29 +1272,8 @@ MonoBehaviour:
   playerRigidbody: {fileID: 2886164251458701588}
   dust: {fileID: 8320444108215976180}
   wallDust: {fileID: 2860485288748685333}
---- !u!114 &7409144473165639398
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4913946665464429532}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec80d8a6d1179244fabd6fb20fc037b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 40
-  hearthContainers: 10
-  heartLayers:
-  - Heart: {fileID: 21300000, guid: 99e829bd7fc67da44ab73d4763facbd8, type: 3}
-    halfHeart: {fileID: 21300000, guid: 25951076f9b008448b8bc461265d9fbe, type: 3}
-    heartValue: 0
-  - Heart: {fileID: 21300000, guid: e7da1764bd6ac9d479e1daaaebfb5772, type: 3}
-    halfHeart: {fileID: 21300000, guid: 889f0cdca4d846d4a93fa40745fffb2a, type: 3}
-    heartValue: 0
-  emptyHeartSprite: {fileID: 21300000, guid: 8e6e9b90430f8684a9539c9d17b6423a, type: 3}
-  emptyMiddleHeartSprite: {fileID: 21300000, guid: 256cc186c68f28c46bd471c34bcaf89d, type: 3}
+  fallingDamageThreshhold: 5
+  startingHeight: -1
 --- !u!1 &7171847213287697915
 GameObject:
   m_ObjectHideFlags: 0

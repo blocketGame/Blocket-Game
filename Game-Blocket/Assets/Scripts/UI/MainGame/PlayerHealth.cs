@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerHealth : MonoBehaviour{
+public class PlayerHealth : MonoBehaviour {
     public static PlayerHealth Singleton { get; private set; }
 
     #region HealthSettings
     /// <summary>maxHealth of the Player</summary>
-    public ushort maxHealth;
+    public int maxHealth;
     /// <summary>currentHealth of the Player</summary>
-    private ushort currentHealth;
+    private float currentHealth;
     /// <summary>Number of HeartContainers</summary>
     [SerializeField]
     private int hearthContainers;
@@ -23,14 +23,48 @@ public class PlayerHealth : MonoBehaviour{
     public Sprite emptyHeartSprite, emptyMiddleHeartSprite;
     #endregion
 
-    public void Awake() => Singleton = this;
+    public void Awake() {Singleton = this; GameManager.PlayerProfileNow.Health = maxHealth; }
 
-    public ushort CurrentHealth { get => currentHealth; 
+    public float CurrentHealth { get => currentHealth; 
         set{
-            currentHealth = value;
+            if (value < 0)
+                UIInventory.Singleton.DeathScreen();
+                
+            currentHealth = value>100?100:value;
+            UIInventory.Singleton.heartStat.text = currentHealth+ "/"+maxHealth;
+            float percent = maxHealth==0 ? 100:maxHealth;
+            Debug.Log("SETTING VALUE OF HEARTS");
+            //Alle hearth layer durchgehen
+            for (int h = heartLayers.Count-1; h >= 0; h--)
+            {
+                float layervalue = (hearthContainers * heartLayers[h].heartValue); //100
+
+                //Prozent eines Heartslots dieses Layers
+                //singlevalue = percent / (HearthSlots.Count*heartLayers[h].heartValue); //
+                //Durch jeden heartcontainer diesen Layers durchgehen
+                for(int x = hearthContainers; x > 0; x--)
+                {
+                    //Jeden Container checken welchen state dieser hat.
+                    if (currentHealth >= ((percent - layervalue) + (heartLayers[h].heartValue * x))) //100-100+10*10 => 100
+                    {
+                        Change(heartLayers[h].Heart, x);
+                        Debug.Log(((percent - layervalue) + (heartLayers[h].heartValue * x)));
+                    }
+                    else if (currentHealth >= ((percent - layervalue) + heartLayers[h].heartValue * x - heartLayers[h].heartValue / 2)) //100-100+10*10-5 => 95
+                        Change(heartLayers[h].halfHeart, x);
+                    else if (x == 1)
+                        Change(emptyHeartSprite, x);
+                    else
+                        Change(emptyMiddleHeartSprite, x);
+                }
+                percent -= layervalue;
+
+            }
+
+            /*
             for (int h = 0; h < heartLayers.Count; h++){
                 float percent = maxHealth, singlerange = percent / HearthSlots.Count;
-                for (int x = (HearthSlots.Count )- ((HearthSlots.Count / heartLayers.Count) * (h)); x > 0; x--)
+                for (int x = (HearthSlots.Count)- ((HearthSlots.Count / heartLayers.Count) * (h)); x > 0; x--)
                 {
                     float tatsRange = CurrentHealth - (singlerange * (x - 1));
                         if (tatsRange >= singlerange)
@@ -42,11 +76,11 @@ public class PlayerHealth : MonoBehaviour{
                         else
                             Change(emptyMiddleHeartSprite, x);
                 }
-            }
+            }*/
         }
     }
     #endregion
-
+   
     
     /// <summary>
     /// Instantiate HeartContainer GameObject 

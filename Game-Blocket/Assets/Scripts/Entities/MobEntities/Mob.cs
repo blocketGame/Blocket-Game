@@ -6,9 +6,11 @@ public class Mob : Entity{
 	public Sprite sprite;
 	[Tooltip("Higher => more rare")]
 	public double spawnChance = 100;
+	public int damage;
 	public ushort maxHealth;
 	public float HealthNow { get; set; }
 	public MobKind mobKind;
+	public EnemyBehaviour enemyBehaviour;
 
 	//TODO: More Detail
 	public uint[] itemsEquiped;

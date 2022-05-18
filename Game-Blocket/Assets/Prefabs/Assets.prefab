@@ -2867,13 +2867,6 @@ MonoBehaviour:
     itemImage: {fileID: 21300000, guid: 941aa281ca582eb4aa7a3348acefc603, type: 3}
     swingingAnimation: 
     blockId: 43
-  - name: Pour Ice
-    id: 7
-    description: Ice? I think
-    itemType: 1
-    itemImage: {fileID: 21300000, guid: 157db56d3cd9c7a4581373d67c7d2a21, type: 3}
-    swingingAnimation: 
-    blockId: 44
   - name: Wood
     id: 6
     description: Dead tree
@@ -2881,6 +2874,13 @@ MonoBehaviour:
     itemImage: {fileID: 21300000, guid: cff06dda4aad311449a62fba9deed956, type: 3}
     swingingAnimation: 
     blockId: 16
+  - name: Pour Ice
+    id: 7
+    description: Ice? I think
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: 157db56d3cd9c7a4581373d67c7d2a21, type: 3}
+    swingingAnimation: 
+    blockId: 44
   - name: crystallin ore
     id: 7
     description: lies in the ice
@@ -2898,6 +2898,15 @@ MonoBehaviour:
     toolPower: 400
     damage: 6
     toolType: 3
+  - name: Wooden Shovel
+    id: 1001
+    description: Tool with great digging power
+    itemType: 0
+    itemImage: {fileID: 21300000, guid: cad2482a490f18448be189d0a6d7dc00, type: 3}
+    swingingAnimation: Hit
+    toolPower: 200
+    damage: 6
+    toolType: 1
   EquipableItemsInGame:
   - name: Helmet
     id: 2000
@@ -2939,7 +2948,14 @@ MonoBehaviour:
     inflictedStat: 0
     value: 2
     type: 1
-  UseableItemsInGame: []
+  UseableItemsInGame:
+  - name: Healing Potion
+    id: 3000
+    description: Heal yourself up to victory
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: a7ec475f867eddf4bba1ed179066059d, type: 3}
+    swingingAnimation: 
+    buffType: 3
   CommonItems:
   - name: Opal
     id: 4001
@@ -2974,6 +2990,7 @@ MonoBehaviour:
     damage: 10
     dmgOnColliderHit: 1
     holdShooting: 1
+    knockBack: 500
     coolDownTime: 1.5
     projectile: 0
     maxHeight: 0
@@ -2991,6 +3008,7 @@ MonoBehaviour:
     damage: 10
     dmgOnColliderHit: 1
     holdShooting: 0
+    knockBack: 0
     coolDownTime: 0.5
     projectile: 0
     maxHeight: 0
@@ -3008,6 +3026,7 @@ MonoBehaviour:
     damage: 10
     dmgOnColliderHit: 0
     holdShooting: 1
+    knockBack: 0
     coolDownTime: 0.6
     projectile: 3001
     maxHeight: 100
@@ -3025,8 +3044,9 @@ MonoBehaviour:
     damage: 10
     dmgOnColliderHit: 0
     holdShooting: 1
+    knockBack: 0
     coolDownTime: 0.6
-    projectile: 3000
+    projectile: 6000
     maxHeight: 100
     maxDistance: 100
     behaviour: 0
@@ -3042,13 +3062,29 @@ MonoBehaviour:
     damage: 0
     dmgOnColliderHit: 0
     holdShooting: 1
+    knockBack: 0
     coolDownTime: 0.3
     projectile: 3002
     maxHeight: 100
     maxDistance: 100
     behaviour: 0
     weaponType: 0
-  ProjectileItems: []
+  ProjectileItems:
+  - name: Bullet
+    id: 6000
+    description: Pew Pew
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: 645ed010887d5b04ea167474985d7707, type: 3}
+    swingingAnimation: 
+    durability: 0
+    damage: 10
+    spawningPos: {x: 0, y: 0}
+    flyingSpeed: 1
+    bounciness: 0
+    lightEmission: 0
+    goThroughBlocks: 0
+    pierce: 0
+    gravityScale: 1
   Recipes:
   - {fileID: 11400000, guid: a82579b4eace29f409f932e7cf1ad59e, type: 2}
   - {fileID: 11400000, guid: 2cbe51554b22dfe41baf7afb307f9e26, type: 2}
@@ -3061,8 +3097,8 @@ MonoBehaviour:
     slotheight: 2
     craftingInterfaceSprite: {fileID: 21300000, guid: b96c6220787da4b4b9b3d5af1cf05f3f, type: 3}
     craftingSlotSprite: {fileID: 21300000, guid: b4a1fce7afb32db48be3fd7e4c44e4c1, type: 3}
-    listViewColor: {r: 0, g: 0.13418102, b: 1, a: 0.47058824}
-    buttonColor: {r: 0.025752544, g: 0, b: 1, a: 1}
+    listViewColor: {r: 0.76470596, g: 0.8235295, b: 0.8588236, a: 0.47058824}
+    buttonColor: {r: 0.5372549, g: 0.6, b: 0.63529414, a: 1}
   - blockId: 43
     slotwidth: 3
     slotheight: 3
@@ -3072,6 +3108,13 @@ MonoBehaviour:
     buttonColor: {r: 0.5471698, g: 0.30152208, b: 0.038714837, a: 1}
   Enemies:
   - {fileID: 11400000, guid: 5fa23f42fd79765418b7e844d5d84e6b, type: 2}
+  Buffs:
+  - buffPicture: {fileID: 21300000, guid: 44089b669f8432a4a9e51bd1c80536b6, type: 3}
+    buffType: 0
+    length: 5
+  - buffPicture: {fileID: 21300000, guid: c071f51a8b5734540af1d3b751518162, type: 3}
+    buffType: 3
+    length: 7
   InventoryCursor: {fileID: 21300000, guid: 983843a460c359244887c9a663229125, type: 3}
   MiningCursor: {fileID: 21300000, guid: 42919adbd3d899d4aae5841d0e00a632, type: 3}
   AttackingCursor: {fileID: 21300000, guid: f02ed4b66ab720f46b851139dfc87cbf, type: 3}
@@ -3117,14 +3160,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mobsInGame:
-  - name: ForestGhost
+  - name: Sandling
     entityId: 1
-    sizeX: 2
-    sizeY: 2
-    sprite: {fileID: 21300000, guid: 6a461e6915202cd46b7e85799f94e950, type: 3}
+    sizeX: 3
+    sizeY: 3
+    sprite: {fileID: 21300000, guid: 5dcd992ecee6f134fa5cc9708e90db6d, type: 3}
     spawnChance: 5
+    damage: 0
     maxHealth: 100
     mobKind: 0
+    enemyBehaviour: {fileID: 5732049107447389158, guid: e24b80883c99a7a4b884488ee2ef4e08, type: 3}
+    itemsEquiped: 
+    inBiomSpawning:
+    - {fileID: 11400000, guid: 29b0f6e63e160294face5a7539aa68dc, type: 2}
+  - name: Zombie
+    entityId: 2
+    sizeX: 2
+    sizeY: 3
+    sprite: {fileID: -4044060951398954831, guid: c78eac950d1a0844da98edee28ddbdf6, type: 3}
+    spawnChance: 100
+    damage: 10
+    maxHealth: 100
+    mobKind: 2
+    enemyBehaviour: {fileID: 5732049107447389158, guid: e24b80883c99a7a4b884488ee2ef4e08, type: 3}
     itemsEquiped: 
     inBiomSpawning:
     - {fileID: 11400000, guid: 29b0f6e63e160294face5a7539aa68dc, type: 2}
@@ -3459,18 +3517,18 @@ MonoBehaviour:
     tile: {fileID: 11400000, guid: 42f54c33403fbc54e8a67165d48a7e5c, type: 2}
     removeDuration: 3
     blockDrops:
-    - itemID: 6
+    - itemID: 7
       dropchance: 100
-      toolItemType: 0
+      toolItemType: 1
+    tooltypes: 1
   - name: Ice
     blockID: 45
     tile: {fileID: 11400000, guid: 61aedf1b6da923946b76c67ba1c01ca5, type: 2}
     removeDuration: 3
     blockDrops:
-    - itemID: 6
+    - itemID: 7
       dropchance: 100
-      toolItemType: 0
-    blockDrops: []
+      toolItemType: 1
     tooltypes: 1
   - name: Stone-ice
     blockID: 46
@@ -3714,6 +3772,7 @@ MonoBehaviour:
   craftingUIListView: {fileID: 4904731259523108657, guid: 29f3864126b1a234f96e83dc5e192912, type: 3}
   mobEntity: {fileID: 3431033053258429059, guid: 2b092efc1a3a3a04794a42fa7c49a410, type: 3}
   playerCamera: {fileID: 4180692969551620913, guid: 5c89fd5534d680c45b090ff4ec056c98, type: 3}
+  DamageText: {fileID: 8263108231648621801, guid: af40dbc76d4cf9a47b97aef9f480b345, type: 3}
 --- !u!1 &2729332452247671524
 GameObject:
   m_ObjectHideFlags: 0

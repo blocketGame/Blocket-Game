@@ -48,6 +48,9 @@ public class Movement : MonoBehaviour {
 	public Rigidbody2D playerRigidbody;
 	public ParticleSystem dust;
 	public ParticleSystem wallDust;
+	public int fallingDamageThreshhold; // how far can the player fall until he hurts himself
+	public int startingHeight=-1;
+
 	public bool CreativeMode => false; //Toogles Flying state
 
 	private void CreateDust() => dust.Play();
@@ -160,6 +163,8 @@ public class Movement : MonoBehaviour {
 	/// </summary>
 	public void VelocityUpdate()
 	{
+		if(PlayerVariables.Gamemode != Gamemode.CREATIVE)
+			FallingDamageCalc();
 		if (playerRigidbody.velocity.y != 0){
 			if (Input.GetKeyDown(GameManager.SettingsProfile.JumpKey))
 			{
@@ -313,6 +318,24 @@ public class Movement : MonoBehaviour {
 			Debug.LogWarning("UWU - WALL_GLITCH_HANDLED");
 			RigidBodyPosition = RigidBodyPosition + Vector3.up ;
         }
+    }
+
+	private void FallingDamageCalc()
+    {
+		
+        if (playerRigidbody.velocity.y<0 && startingHeight==-1)
+        {
+			startingHeight = WorldData.Singleton.Grid.WorldToCell(RigidBodyPosition).y;
+		}else if(playerRigidbody.velocity.y >= 0 && startingHeight!=-1)
+        {
+			int fallenHeight = startingHeight - WorldData.Singleton.Grid.WorldToCell(RigidBodyPosition).y;
+            if (fallenHeight >= fallingDamageThreshhold)
+            {
+				float damage = (fallenHeight - fallingDamageThreshhold)*1.5f;
+				PlayerHealth.Singleton.CurrentHealth = PlayerHealth.Singleton.CurrentHealth - (int)damage;
+            }
+			startingHeight = -1;
+		}
     }
 
 }

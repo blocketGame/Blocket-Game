@@ -43,6 +43,7 @@ public class ItemAssets : MonoBehaviour{
 	public List<CraftingRecipe> Recipes = new List<CraftingRecipe>();
 	public List<CraftingStation> CraftingStations = new List<CraftingStation>();
 	public List<EnemySO> Enemies = new List<EnemySO>();
+	public List<Buff> Buffs = new List<Buff>();
 	
 	public Sprite InventoryCursor;
 	public Sprite MiningCursor;

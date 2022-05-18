@@ -16,8 +16,16 @@ public class PlayerProfile : Profile {
 	public List<SaveAbleItem> armorItems = new List<SaveAbleItem>(3);
 	#endregion
 	#region PlayerVariables
-	public ushort health, armor, maxHealth, maxArmor;
+	public int health, armor, maxHealth, maxArmor;
 	public uint healthGained, healthLost;
+	public int Health
+	{
+		get => health; set
+		{
+			health = value;
+			health = PlayerVariables.Singleton.Health;
+		}
+	}
 	#endregion
 
 	public PlayerProfile(string name, int? profileHash = null) : base(name, profileHash) {

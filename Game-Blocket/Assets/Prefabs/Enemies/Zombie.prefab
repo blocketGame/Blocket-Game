@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4165313286375481771}
   - component: {fileID: 7467278827113355688}
   - component: {fileID: 7497225574276930414}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ZombieSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -146,10 +146,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5545c2b9de5ee5244926d051411ba205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  regenerationticks: 5
   lineOfSite: 10
   lineOfMove: 1.45
   lineOfAttack: 1.5
   speed: 4
+  JumpForce: 6
+  damage: 3
+  health: 100
+  maxHealth: 100
+  regeneration: 5
+  animator: {fileID: 7497225574276930414}
+  mobId: 2
 --- !u!95 &7497225574276930414
 Animator:
   serializedVersion: 3

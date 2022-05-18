@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ItemUsageHandler : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class ItemUsageHandler : MonoBehaviour
 	public Animator anim;
 	public int komboCounter;
 	public float timer;
+	private string lastanim;
 	private Vector2 NormalizeVector(Vector3 vector) => Vector3.Normalize(vector);
 
 	public WeaponItem GetSelectedItemAsWeaponItem => Inventory.Singleton.SelectedItemObj as WeaponItem;
@@ -53,7 +55,19 @@ public class ItemUsageHandler : MonoBehaviour
 		{
 			if(Input.GetKey(GameManager.SettingsProfile.MainInteractionKey))
 			PlayAnim();
-			return;
+
+
+			if (Input.GetKeyDown(GameManager.SettingsProfile.SideInteractionKey) && (Inventory.Singleton.SelectedItemObj is UseAbleItem useable))
+			{
+				BuffHandler.Singleton.AddBuffToPlayer(((UseAbleItem)Inventory.Singleton.SelectedItemObj).buffType);
+				Inventory.Singleton.InvSlots[Inventory.Singleton.SelectedSlot].ItemCount--;
+				if (Inventory.Singleton.InvSlots[Inventory.Singleton.SelectedSlot].ItemCount == 0)
+				{
+					Inventory.Singleton.InvSlots[Inventory.Singleton.SelectedSlot].ItemID = 0;
+					UIInventory.Singleton.SynchronizeToHotbar();
+				}
+			}
+				return;
 		}
 
         if(weapon.weaponType == WeaponItem.WeaponType.RANGE)
@@ -114,7 +128,7 @@ public class ItemUsageHandler : MonoBehaviour
 			else
 				animationname = weapon?.swingingAnimations[komboCounter];
 		}
-			
+		lastanim = animationname;
 
 		anim.Play(animationname == string.Empty ? "Default" : animationname ?? "Default");
 	}
@@ -132,7 +146,7 @@ public class ItemUsageHandler : MonoBehaviour
 
 		Debug.Log("Collision");
 		//Damage Enemy
-		Mob mob = collision.gameObject.GetComponent<Mob>() ?? new Mob();
+		EnemyBehaviour mob = collision.gameObject.GetComponent<EnemyBehaviour>() ?? new ZombieBrain();
 		DealDamageOnHit(mob);
 	}
 
@@ -140,14 +154,39 @@ public class ItemUsageHandler : MonoBehaviour
 	/// Dealing Damage to Enemy instance
 	/// </summary>
 	/// <param name="mob"></param>
-	private void DealDamageOnHit(Mob mob)
+	private void DealDamageOnHit(EnemyBehaviour mob)
 	{
 		WeaponItem w = (WeaponItem)(ItemAssets.Singleton.GetItemFromItemID(Inventory.Singleton.SelectedItemId)) ?? new WeaponItem();
 		if (w.dmgOnColliderHit)
 		{
 			Debug.Log(w.damage);
-			mob.HealthNow -= w.damage;
+			mob.Health -= w.damage;
+			//doesn't work right now
+			if(Movement.Singleton.PlayerModelT.transform.rotation.y==100)
+				mob.gameObject.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(-w.knockBack,0));
+			else
+				mob.gameObject.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(w.knockBack, 0));
+
+			Debug.Log("HEALTH :" + mob.Health);
+
+			InstantiateIndicator(mob.transform, w.damage);
 		}
+	}
+
+
+	/// <summary>
+	/// Instantiates the hit indicator
+	/// </summary>
+	/// <param name="mobT"></param>
+	/// <param name="damage"></param>
+	private void InstantiateIndicator(Transform mobT, int damage = -1){
+
+		Vector3 position = new Vector3(mobT.position.x - mobT.gameObject.GetComponent<BoxCollider2D>().size.x / 2, mobT.position.y + mobT.gameObject.GetComponent<BoxCollider2D>().size.y / 2);
+
+		GameObject dmgIndicator = Instantiate(PrefabAssets.Singleton.DamageText, position, Quaternion.identity, mobT.transform);
+		HitIndicator hitIndicator = dmgIndicator.GetComponent<HitIndicator>();
+		hitIndicator.textmesh.text = string.Empty + damage;
+		dmgIndicator.name = $"DamageIndicator-{damage}";
 	}
 
 	/// <summary>

@@ -10,8 +10,7 @@ public class ProjectileBehaviour : MonoBehaviour
     public Projectile projectile;
     public float weaponDamage;
     
-    //Just an idea
-    public float CalculatedDamage { get => (weaponDamage + projectile.damage) *
+    public float CalculatedDamage { get => (weaponDamage/2 + projectile.damage) +
             (1 +
             ((gameObject.GetComponent<Rigidbody2D>().velocity.x < 0) ? gameObject.GetComponent<Rigidbody2D>().velocity.x * -1 : gameObject.GetComponent<Rigidbody2D>().velocity.x)
             * ((gameObject.GetComponent<Rigidbody2D>().velocity.y < 0) ? gameObject.GetComponent<Rigidbody2D>().velocity.y * -1 : gameObject.GetComponent<Rigidbody2D>().velocity.y));
@@ -56,14 +55,35 @@ public class ProjectileBehaviour : MonoBehaviour
     void Update()
     {
         //doesn't work
-        //Physics2D.IgnoreCollision(this.gameObject.GetComponent<Collider2D>(), GlobalVariables.LocalPlayer.GetComponent<BoxCollider2D>());
+        Physics2D.IgnoreCollision(this.gameObject.GetComponent<Collider2D>(), GlobalVariables.LocalPlayer.GetComponentInChildren<BoxCollider2D>());
         
         //Despawn on hit....
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("HIT "+CalculatedDamage);
+        //Debug.Log("HIT "+CalculatedDamage);
+        EnemyBehaviour eb = collision.gameObject.GetComponentInChildren<EnemyBehaviour>();
+        if (eb != null)
+        {
+            eb.Health -= (int)CalculatedDamage;
+            InstantiateIndicator(collision.transform, (int)CalculatedDamage);
+        }
         if(collision.gameObject.layer != 7)
             GameObject.Destroy(gameObject);
+    }
+
+    /// <summary>
+	/// Instantiates the hit indicator
+	/// </summary>
+	/// <param name="mobT"></param>
+	/// <param name="damage"></param>
+	private void InstantiateIndicator(Transform mobT, int damage = -1)
+    {
+        Vector3 position = new Vector3(mobT.position.x - mobT.gameObject.GetComponent<BoxCollider2D>().size.x / 2, mobT.position.y + mobT.gameObject.GetComponent<BoxCollider2D>().size.y / 2);
+
+        GameObject dmgIndicator = Instantiate(PrefabAssets.Singleton.DamageText, position, Quaternion.identity, mobT.transform);
+        HitIndicator hitIndicator = dmgIndicator.GetComponent<HitIndicator>();
+        hitIndicator.textmesh.text = string.Empty + damage;
+        dmgIndicator.name = $"DamageIndicator-{damage}";
     }
 }

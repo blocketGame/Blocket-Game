@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FirstBossBehaviour : MonoBehaviour
+public class FirstBossBehaviour : EnemyBehaviour
 {
     #region Variables
     #region Public Var
@@ -49,6 +49,33 @@ public class FirstBossBehaviour : MonoBehaviour
     bool isSpawningTurretOnNextCollision;
     byte side = 0;
     float localScaleX;
+
+
+    #region overwrittenFields
+    
+    [SerializeField]
+    private int damage;
+    public override int Damage { get => damage; set => damage = value; }
+    [SerializeField]
+    private int health;
+    public override int Health { get => health; set => health = value; }
+    [SerializeField]
+    private int maxHealth;
+    public override int MaxHealth { get => maxHealth; set => maxHealth = value; }
+    [SerializeField]
+    private int regeneration;
+    public override int Regeneration { get => regeneration; set => regeneration = value; }
+
+    private string deathanim;
+    public override string deathAnimation { get => deathanim; set => deathanim = value; }
+
+    [SerializeField]
+    private Animator animator;
+    public override Animator Animator { get => animator; set => animator = value; }
+    [SerializeField]
+    private uint mobId;
+    public override uint MobID { get => mobId; set => mobId = value; }
+    #endregion
     #endregion
     #endregion
 
@@ -142,8 +169,8 @@ public class FirstBossBehaviour : MonoBehaviour
         projectile.AddComponent<Rigidbody2D>();
         projectile.AddComponent<SpriteRenderer>();
         projectile.AddComponent<CircleCollider2D>();
-        projectile.AddComponent<BulletHandler>();
-
+        BulletHandler bh = projectile.AddComponent<BulletHandler>();
+        bh.damage = Damage;
         projectile.GetComponent<Rigidbody2D>().gravityScale = 0;
         projectile.GetComponent<CircleCollider2D>().isTrigger = true;
         projectile.GetComponent<SpriteRenderer>().sprite = projectileSprite;

@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 26f9506e8d54c6e4da5ba78ecff95ee9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -119,6 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58bf801b61cfada4cb5ebf03617a33f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  regenerationticks: 5
   attackDamage: 25
   siteRadius: 20
   stopMoveIfInRadius: 0.5
@@ -133,6 +134,12 @@ MonoBehaviour:
   projectileSprite: {fileID: 21300000, guid: 91e4d78a30089114d9681f1ba6363cfb, type: 3}
   shockwaveSprite: {fileID: 21300000, guid: 4b4b8e83a85db81429ff9f7b47ae73c6, type: 3}
   turretSprite: {fileID: 21300000, guid: 91e4d78a30089114d9681f1ba6363cfb, type: 3}
+  damage: 5
+  health: 100
+  maxHealth: 0
+  regeneration: 0
+  animator: {fileID: 0}
+  mobId: 0
 --- !u!61 &1651843917782263370
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -146,16 +153,16 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.1566205}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 1, y: 1.5660378}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 1.2549639}
   m_EdgeRadius: 0
