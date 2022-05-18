@@ -159,9 +159,9 @@ MonoBehaviour:
   animator: {fileID: 7497225574276930414}
   mobId: 2
   drops:
-  - itemID: 1
-    dropchance: 60
-    count: 5
+  - itemID: 4005
+    dropchance: 70
+    count: 2
     toolItemType: 0
 --- !u!95 &7497225574276930414
 Animator:

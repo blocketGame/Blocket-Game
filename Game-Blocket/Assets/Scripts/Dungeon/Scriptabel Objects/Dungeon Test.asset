@@ -33,7 +33,7 @@ MonoBehaviour:
   plattformRightTile: {fileID: 11400000, guid: e24a75952e92ffb4d830996965c18ef7, type: 2}
   plattformLeftTile: {fileID: 11400000, guid: 6d39e6be7fc224544aa995e43564908c, type: 2}
   enemies:
-  - {fileID: 3671747509784202347, guid: cbb9d2bf748a81a478259df4cbaa861b, type: 3}
   - {fileID: 4945687359444657655, guid: cd8aee1ec0df2d546afc67f2ce6f1936, type: 3}
+  - {fileID: 8864517857189748619, guid: 25e96d27f77036248ba82bfd5313d68c, type: 3}
   enemieProbability: 25
   boss: {fileID: 8749025095333314164, guid: e5cd2afc47dc8544fabcb63cab2531a3, type: 3}

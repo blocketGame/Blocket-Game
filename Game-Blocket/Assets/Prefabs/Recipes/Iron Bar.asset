@@ -10,20 +10,35 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b849f401b9246c41804f744118f2441, type: 3}
-  m_Name: Wooden Sword
+  m_Name: Iron Bar
   m_EditorClassIdentifier: 
   station: 43
   recipe:
-  - item: 6
-    count: 2
-    type: 0
-  - item: 6
+  - item: 9
     count: 1
     type: 0
-  - item: 4003
+  - item: 9
+    count: 1
+    type: 0
+  - item: 9
+    count: 1
+    type: 0
+  - item: 9
+    count: 1
+    type: 0
+  - item: 9
+    count: 1
+    type: 0
+  - item: 9
+    count: 1
+    type: 0
+  - item: 9
+    count: 1
+    type: 0
+  - item: 9
     count: 1
     type: 0
   output:
-    item: 5000
+    item: 4004
     count: 1
-    type: 1
+    type: 0

@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class UIBackground : MonoBehaviour
 {
+	
+
 	public GameObject parallaxPrefab;
 	public BackgroundParallax paralaxNow;
 

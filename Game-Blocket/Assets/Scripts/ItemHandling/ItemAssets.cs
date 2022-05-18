@@ -44,6 +44,8 @@ public class ItemAssets : MonoBehaviour{
 	public List<CraftingStation> CraftingStations = new List<CraftingStation>();
 	public List<EnemySO> Enemies = new List<EnemySO>();
 	public List<Buff> Buffs = new List<Buff>();
+	public List<OvenItem> Ovens = new List<OvenItem>();
+
 	
 	public Sprite InventoryCursor;
 	public Sprite MiningCursor;

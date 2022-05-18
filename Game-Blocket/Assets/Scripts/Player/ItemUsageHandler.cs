@@ -53,11 +53,11 @@ public class ItemUsageHandler : MonoBehaviour
 	private void AnimateWeapon(){
 		if (!(Inventory.Singleton.SelectedItemObj is WeaponItem weapon))
 		{
-			if(Input.GetKey(GameManager.SettingsProfile.MainInteractionKey))
+			if(Input.GetKey(GameManager.SettingsProfile.MainInteractionKey)||Input.GetKey(KeyCode.Joystick1Button0))
 			PlayAnim();
 
 
-			if (Input.GetKeyDown(GameManager.SettingsProfile.SideInteractionKey) && (Inventory.Singleton.SelectedItemObj is UseAbleItem useable))
+			if ((Input.GetKeyDown(GameManager.SettingsProfile.SideInteractionKey) || Input.GetKey(KeyCode.Joystick1Button0)) && (Inventory.Singleton.SelectedItemObj is UseAbleItem useable))
 			{
 				BuffHandler.Singleton.AddBuffToPlayer(((UseAbleItem)Inventory.Singleton.SelectedItemObj).buffType);
 				Inventory.Singleton.InvSlots[Inventory.Singleton.SelectedSlot].ItemCount--;
@@ -67,7 +67,7 @@ public class ItemUsageHandler : MonoBehaviour
 					UIInventory.Singleton.SynchronizeToHotbar();
 				}
 			}
-				return;
+			return;
 		}
 
         if(weapon.weaponType == WeaponItem.WeaponType.RANGE)
@@ -78,7 +78,7 @@ public class ItemUsageHandler : MonoBehaviour
 		switch (weapon.behaviour){
 			case CustomWeaponBehaviour.DEFAULT:
 				timer += weapon.CoolDownTime < (timer) ? 0 : Time.deltaTime;
-				if (Input.GetKeyDown(GameManager.SettingsProfile.MainInteractionKey) && timer >(weapon.CoolDownTime * 0.75f))
+				if ((Input.GetKeyDown(GameManager.SettingsProfile.MainInteractionKey) || Input.GetKey(KeyCode.Joystick1Button0)) && timer >(weapon.CoolDownTime * 0.75f))
 				{
 					if(timer<(weapon.CoolDownTime * 0.95f))
 					{
@@ -92,7 +92,7 @@ public class ItemUsageHandler : MonoBehaviour
 						CreateProjectile(weapon);
 
 				}
-				else if (Input.GetKey(GameManager.SettingsProfile.MainInteractionKey) && timer > weapon.CoolDownTime)
+				else if ((Input.GetKey(GameManager.SettingsProfile.MainInteractionKey) || Input.GetKey(KeyCode.Joystick1Button0) && timer > weapon.CoolDownTime))
 				{
 					komboCounter = 0;
 					PlayAnim();

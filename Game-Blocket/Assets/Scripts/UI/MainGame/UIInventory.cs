@@ -59,7 +59,7 @@ public class UIInventory : MonoBehaviour
 	#region Static Resources !DO NOT TOUCH!
 	[Header("Static: General")]
 	///<summary>Gameobject from Inspector</summary>
-	public GameObject uiParent, slotField, uiHud, hudslotfieldParent;
+	public GameObject uiParent, slotField, uiHud, hudslotfieldParent,ovenParent,backgroundParent; //Oven doesn't work
 	/// <summary>Image from Inspector</summary>
 	public Image inventoryBackgroundImage;
 	public GameObject buffDisplayingParent,deathScreen;
@@ -226,7 +226,7 @@ public class UIInventory : MonoBehaviour
 		if (GameManager.State != GameState.INGAME)
 			return;
 
-		if (Input.GetKeyDown(GameManager.SettingsProfile.InventoryKey))
+		if (Input.GetKeyDown(GameManager.SettingsProfile.InventoryKey) || Input.GetKeyDown(KeyCode.Joystick1Button3))
 		{
 			hudslotfieldParent.SetActive(InventoryOpened);
 			uiHud.SetActive(InventoryOpened);
@@ -250,6 +250,13 @@ public class UIInventory : MonoBehaviour
                 }
                 else
                 {
+					if(ovenOpened)
+                    {
+						ovenParent.SetActive(true);
+						OvenCalculation.Singleton.gameObject.SetActive(true);
+						uiParentPosition = uiParent.transform.position;
+						uiParent.transform.position = new Vector2(uiParent.transform.position.x + 35, uiParent.transform.position.y);
+					}
 					if (handCrafting.GetComponentInChildren<UIInventorySlot>() == null)
 					{
 						CraftingStation.InstatiateCraftingInterface(prefabItemSlot, handCrafting, ItemAssets.Singleton.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(handCrafting.GetComponent<Image>().sprite)), ItemAssets.Singleton.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(handCrafting.GetComponent<Image>().sprite)).Slotwidth, ItemAssets.Singleton.CraftingStations.Find(x => x.CraftingInterfaceSprite.Equals(handCrafting.GetComponent<Image>().sprite)).Slotheight);
@@ -280,7 +287,7 @@ public class UIInventory : MonoBehaviour
 		}
 
 		//Chat
-		if (Input.GetKeyDown(GameManager.SettingsProfile.ChatKey) && !ChatOpened)
+		if ((Input.GetKeyDown(GameManager.SettingsProfile.ChatKey)|| Input.GetKeyDown(KeyCode.Joystick1Button12)) && !ChatOpened)
 		{
 			ChatOpened = true;
 			Debug.Log("Open");
@@ -351,6 +358,8 @@ public class UIInventory : MonoBehaviour
 		}
 	}
 	private static bool inventoryOpened;
+
+	public bool ovenOpened=false;
 
 	public bool ChatOpened
 	{

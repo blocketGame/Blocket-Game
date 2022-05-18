@@ -127,7 +127,11 @@ public class PlayerInteraction : MonoBehaviour {
 			//Crafting System
 			CraftingStation.HandleCraftingInterface(new Vector2Int((int)GlobalVariables.LocalPlayerPos.x, (int)GlobalVariables.LocalPlayerPos.y), ItemAssets.Singleton.CraftingStations.Find(x => x.blockId.Equals(TargetBlockID(true))));
 		}
-    }
+		if (Input.GetKeyDown(Side) && ItemAssets.Singleton.Ovens.Find(x => x.itemId.Equals(TargetBlockID(true))) != null)
+			UIInventory.Singleton.ovenOpened = true;
+		else
+			UIInventory.Singleton.ovenOpened = false;
+	}
 
     //TODO: Remove
     public void LateUpdate() {
