@@ -20,7 +20,7 @@ public class SlotOptionsScript : MonoBehaviour, IPointerClickHandler {
         ///React on LeftClick Event
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            GameObject.FindWithTag("Player").GetComponent<Inventory>().PressedSlot(invSlot);
+            GameObject.FindWithTag("Player").GetComponent<Inventory>().PressedSlot(invSlot,SlotInteractionType.LEFTCLICK);
             if (DebugVariables.ItemSlotButtonPressedLog)
                 Debug.Log("Button Pressed");
 
