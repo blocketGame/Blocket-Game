@@ -223,14 +223,14 @@ public class ClientTerrainHandler : TerrainHandler {
 
     public void FixedUpdate() {
 		//If game loading or Chunk swiched
-		if(GameManager.State == GameState.LOADING || (LastChunk?.chunkPosition != CurrentChunk?.chunkPosition))
+		//if(GameManager.State == GameState.LOADING || (LastChunk?.chunkPosition != CurrentChunk?.chunkPosition))
 			if(PlayerVariables.Dimension == Dimension.OVERWORLD)
 				IterateChunksAroundPlayer();
 
 
 
 		if(GameManager.State == GameState.INGAME) {
-			if(LastChunk?.chunkPosition != CurrentChunk?.chunkPosition) {
+			//if(LastChunk?.chunkPosition != CurrentChunk?.chunkPosition) {
 				List<TerrainChunk> chunksVisibleNow = UpdateVisible();
 				foreach(TerrainChunk tc in chunksVisibleNow)
 					if(ChunksLastUpdate.Contains(tc))
@@ -238,7 +238,7 @@ public class ClientTerrainHandler : TerrainHandler {
 				DisableChunks(ChunksLastUpdate);
 				ChunksLastUpdate = chunksVisibleNow;
 				UpdateLoaded();
-			}
+			//}
 			LastChunk = CurrentChunk;
 		}
 	}

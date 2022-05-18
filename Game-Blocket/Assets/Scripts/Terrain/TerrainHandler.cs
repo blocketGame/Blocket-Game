@@ -10,8 +10,8 @@ using UnityEngine;
 public abstract class TerrainHandler : MonoBehaviour {
 	public static TerrainHandler Singleton => ServerTerrainHandler.Singleton as TerrainHandler ?? ClientTerrainHandler.Singleton as TerrainHandler ?? null;
 
-	protected readonly byte _updatePayload = 2;
-	protected readonly byte _pickUpDist = 2;
+	protected readonly byte _updatePayload = byte.MaxValue;
+	protected readonly byte _pickUpDist = byte.MaxValue;
 
 	/// <summary>
 	/// Server: Chunks = World<br></br>

@@ -11,6 +11,7 @@ public class TilemapVisualizer : MonoBehaviour
     private Tilemap wallTilemap;
     [SerializeField]
     private Tilemap platformTilemap;
+    public GameObject enemyGo;
 
     public void PaintBackgroundTiles(IEnumerable<Vector2Int> floorPositions)
     {
@@ -62,7 +63,7 @@ public class TilemapVisualizer : MonoBehaviour
                             {
                                 if(y + 1 + enemy.transform.localScale.y <= actualRoom.size.y &&
                                     NoiseGenerator.GenerateStructureCoordinates2d(x + platformOffset + actualRoom.position.x, y + actualRoom.position.y + 1, Parameters.seed, Parameters.enemieProbability*Parameters.enemies.Count, id))
-                                    Instantiate(enemy, new Vector3Int(x + platformOffset + actualRoom.position.x, y + actualRoom.position.y + 1, 0), Quaternion.identity);
+                                    Instantiate(enemy, new Vector3Int(x + platformOffset + actualRoom.position.x, y + actualRoom.position.y + 1, 0), Quaternion.identity, enemyGo.transform);
                                 id++;
                             }
                         }
@@ -75,7 +76,7 @@ public class TilemapVisualizer : MonoBehaviour
                 foreach (GameObject enemy in Parameters.enemies)
                 {
                     if (NoiseGenerator.GenerateStructureCoordinates2d(x + actualRoom.position.x, actualRoom.position.y, Parameters.seed, Parameters.enemieProbability * Parameters.enemies.Count, id))
-                        Instantiate(enemy, new Vector3Int(x + actualRoom.position.x, actualRoom.position.y, 0), Quaternion.identity);
+                        Instantiate(enemy, new Vector3Int(x + actualRoom.position.x, actualRoom.position.y, 0), Quaternion.identity, enemyGo.transform);
                     id++;
                 }
             }

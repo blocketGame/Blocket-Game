@@ -207,7 +207,6 @@ public class GameManager : MonoBehaviour {
 				MoveImportantThings(SceneManager.GetSceneByName("MainGame"));
 				UIInventory.Singleton.backgroundParent.SetActive(true);
 				SceneManager.UnloadSceneAsync("Dungeon");
-				
 			break;
 			case Dimension.DUNGEON:
 				SceneManager.LoadScene("Dungeon", LoadSceneMode.Additive);

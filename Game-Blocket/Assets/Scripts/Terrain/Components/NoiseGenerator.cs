@@ -155,10 +155,7 @@ public static class NoiseGenerator
 				{
 					for (int x = 0; x < mapWidth; x++)
 					{
-						if (orenoise[x, y] >= (0.5f)
-							&& orenoise[x, y] <= 0.505f
-							|| orenoise[x, y] >= (0.1f)
-							&& orenoise[x, y] <= 0.105f
+						if (orenoise[x, y] >= (0.9f)
 							&& (ore.BlockID != 0))
 						{
 							oreNoiseMap[x, y] = ore.BlockID;
