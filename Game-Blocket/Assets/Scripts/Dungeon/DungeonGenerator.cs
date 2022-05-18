@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,15 +10,23 @@ public class DungeonGenerator : MonoBehaviour
     private DungeonSO parameters;
     [SerializeField]
     private TilemapVisualizer tilemapVisualizer;
+    [HideInInspector]
+    public Vector3 startposition;
 
     /// <summary>
     /// Starting point of the dungeongenertation
     /// </summary>
-    public Vector2Int GenerateDungeon()
+    public void GenerateDungeon()
     {
         tilemapVisualizer.Parameters = parameters;
 
         tilemapVisualizer.Clear();
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            DestroyImmediate(enemy);
+        }
+
         List<BoundsInt> roomsList = ProceduralGenerationAlgorithms.BinarySpacePartitioning(parameters.seed, new BoundsInt((Vector3Int)parameters.startPosition, new Vector3Int(parameters.dungeonWidth, parameters.dungeonHeight, 0)), parameters.minRoomWidth, parameters.minRoomHeight);
         HashSet<Vector2Int> floor = new HashSet<Vector2Int>();
 
@@ -29,21 +36,15 @@ public class DungeonGenerator : MonoBehaviour
         }
         else
         {
-            floor = CreateSipleRooms(roomsList);
+            floor = CreateSimpleRooms(roomsList);
         }
 
-        List<Vector2Int> roomCenters = new List<Vector2Int>();
-        foreach (BoundsInt room in roomsList)
-        {
-            roomCenters.Add((Vector2Int)Vector3Int.RoundToInt(room.center));
-        }
-
-        HashSet<Vector2Int> corridors = ConnectRooms(new List<Vector2Int>(roomCenters));
+        HashSet<Vector2Int> corridors = ConnectRooms(roomsList);
         floor.UnionWith(corridors);
 
         tilemapVisualizer.PaintBackgroundTiles(floor);
         WallGenerator.CreateWalls(floor, tilemapVisualizer);
-        return roomCenters.Count > 0 ? roomCenters[0] : throw new NullReferenceException();
+        tilemapVisualizer.PaintPlattfroms(roomsList);
     }
 
     /// <summary>
@@ -92,7 +93,7 @@ public class DungeonGenerator : MonoBehaviour
         return floorPositions;
     }
 
-    private HashSet<Vector2Int> CreateSipleRooms(List<BoundsInt> roomList)
+    private HashSet<Vector2Int> CreateSimpleRooms(List<BoundsInt> roomList)
     {
         HashSet<Vector2Int> floor = new HashSet<Vector2Int>();
         foreach (BoundsInt room in roomList)
@@ -109,25 +110,35 @@ public class DungeonGenerator : MonoBehaviour
         return floor;
     }
 
-    private HashSet<Vector2Int> ConnectRooms(List<Vector2Int> roomCenters)
+    private HashSet<Vector2Int> ConnectRooms(List<BoundsInt> roomsList)
     {
+        List<BoundsInt> temporalRoomsList = new List<BoundsInt>(roomsList);
         HashSet<Vector2Int> corridors = new HashSet<Vector2Int>();
-        Vector2Int currentRoomCenter = roomCenters[UnityEngine.Random.Range(0, roomCenters.Count)];
-        roomCenters.Remove(currentRoomCenter);
+        BoundsInt currentRoom = temporalRoomsList[Random.Range(0, temporalRoomsList.Count)];
+        startposition = new Vector3Int(currentRoom.position.x + parameters.offset + 1, currentRoom.position.y + parameters.offset + 1, currentRoom.position.z);
+        temporalRoomsList.Remove(currentRoom);
 
-        while (roomCenters.Count > 0)
+        while (temporalRoomsList.Count > 0)
         {
-            Vector2Int closest = FindClosestPointToCenter(currentRoomCenter, roomCenters);
-            roomCenters.Remove(closest);
-            HashSet<Vector2Int> newCorridor = CreateCorridor(currentRoomCenter, closest);
-            currentRoomCenter = closest;
+            BoundsInt closest = FindClosestPointToCenter(currentRoom, temporalRoomsList);
+            temporalRoomsList.Remove(closest);
+            HashSet<Vector2Int> newCorridor = CreateCorridor(currentRoom, closest, roomsList);
+            currentRoom = closest;
             corridors.UnionWith(newCorridor);
+            if (temporalRoomsList.Count == 0)
+            {
+                Instantiate(parameters.boss, new Vector3Int(currentRoom.position.x + currentRoom.size.x/2, currentRoom.position.y + parameters.offset + 1, currentRoom.position.z), Quaternion.identity);
+            }
+                
         }
         return corridors;
     }
 
-    private HashSet<Vector2Int> CreateCorridor(Vector2Int currentRoomCenter, Vector2Int destinaiton)
+    private HashSet<Vector2Int> CreateCorridor(BoundsInt currentRoom, BoundsInt closest, List<BoundsInt> roomsList)
     {
+        Vector2Int currentRoomCenter = Vector2Int.RoundToInt(currentRoom.center);
+        Vector2Int destinaiton = Vector2Int.RoundToInt(closest.center);
+
         HashSet<Vector2Int> corridor = new HashSet<Vector2Int>();
         Vector2Int position = currentRoomCenter;
         corridor.Add(position);
@@ -136,15 +147,48 @@ public class DungeonGenerator : MonoBehaviour
             if (destinaiton.y > position.y)
             {
                 position += Vector2Int.up;
+                if (!IsInRoom(position, roomsList))
+                {
+                    if (position.y % parameters.platformSpaceCorridor == 0)
+                    {
+                        tilemapVisualizer.PaintSinglePlattform(position, Vector2.zero);
+
+                        for (int i = 0; i < parameters.corridorWidth - 1; i++)
+                        {
+                            tilemapVisualizer.PaintSinglePlattform(position + i * Vector2Int.left, Vector2.zero);
+                            tilemapVisualizer.PaintSinglePlattform(position + i * Vector2Int.right, Vector2.zero);
+                        }
+                        tilemapVisualizer.PaintSinglePlattform(position + (parameters.corridorWidth - 1) * Vector2Int.left, Vector2.left);
+                        tilemapVisualizer.PaintSinglePlattform(position + (parameters.corridorWidth - 1) * Vector2Int.right, Vector2.right);
+                    }
+                }
             }
             else
             if (destinaiton.y < position.y)
             {
                 position += Vector2Int.down;
+                if (!IsInRoom(position, roomsList))
+                {
+                    if (position.y % parameters.platformSpaceCorridor == 0)
+                    {
+                        tilemapVisualizer.PaintSinglePlattform(position, Vector2.zero);
+
+                        for (int i = 0; i < parameters.corridorWidth - 1; i++)
+                        {
+                            tilemapVisualizer.PaintSinglePlattform(position + i * Vector2Int.left, Vector2.zero);
+                            tilemapVisualizer.PaintSinglePlattform(position + i * Vector2Int.right, Vector2.zero);
+                        }
+                        tilemapVisualizer.PaintSinglePlattform(position + (parameters.corridorWidth - 1) * Vector2Int.left, Vector2.left);
+                        tilemapVisualizer.PaintSinglePlattform(position + (parameters.corridorWidth - 1) * Vector2Int.right, Vector2.right);
+                    }
+                }
             }
-            corridor.Add(position + Vector2Int.left);
             corridor.Add(position);
-            corridor.Add(position + Vector2Int.right);
+            for (int i = 0; i < parameters.corridorWidth; i++)
+            {
+                corridor.Add(position + i * Vector2Int.left);
+                corridor.Add(position + i * Vector2Int.right);
+            }
         }
         while (position.x != destinaiton.x)
         {
@@ -157,24 +201,38 @@ public class DungeonGenerator : MonoBehaviour
             {
                 position += Vector2Int.left;
             }
-            corridor.Add(position + Vector2Int.down);
             corridor.Add(position);
-            corridor.Add(position + Vector2Int.up);
+            for (int i = 0; i < parameters.corridorWidth; i++)
+            {
+                corridor.Add(position + i * Vector2Int.up);
+                corridor.Add(position + i * Vector2Int.down);
+            }
         }
         return corridor;
     }
 
-    private Vector2Int FindClosestPointToCenter(Vector2Int currentRoomCenter, List<Vector2Int> roomCenters)
+    public bool IsInRoom(Vector2Int position, List<BoundsInt> roomsList)
     {
-        Vector2Int closest = Vector2Int.zero;
-        float distance = float.MaxValue;
-        foreach (Vector2Int position in roomCenters)
+        foreach(BoundsInt room in roomsList)
         {
-            float currentDistatnce = Vector2.Distance(position, currentRoomCenter);
+            BoundsInt actualRoom = new BoundsInt(new Vector3Int(room.position.x + parameters.offset, room.position.y + parameters.offset, room.position.z), new Vector3Int(room.size.x - parameters.offset * 2, room.size.y - parameters.offset * 2, 1));
+            if (actualRoom.Contains(new Vector3Int(position.x, position.y, 0)))
+                return true;
+        }
+        return false;
+    }
+
+    private BoundsInt FindClosestPointToCenter(BoundsInt currentRoom, List<BoundsInt> roomsList)
+    {
+        BoundsInt closest = currentRoom;
+        float distance = float.MaxValue;
+        foreach (BoundsInt room in roomsList)
+        {
+            float currentDistatnce = Vector2.Distance(Vector2Int.RoundToInt(room.center), Vector2Int.RoundToInt(currentRoom.center));
             if (currentDistatnce < distance)
             {
                 distance = currentDistatnce;
-                closest = position;
+                closest = room;
             }
         }
         return closest;

@@ -16,8 +16,24 @@ public class DungeonSO : ScriptableObject
     [Range(0, 10)]
     public int offset = 1;
     public bool randomWalkRooms = false;
+    public List<GameObject> gameObjects = new List<GameObject> ();
+    [Range(0, 20)]
+    public int corridorWidth;
+    [Range(1, 20)]
+    public int platformSpaceRoom;
+    [Range(1, 20)]
+    public int platformSpaceCorridor;
 
     //Tilemapvisulizer
     public TileBase backgroundTile;
     public TileBase wallTile;
+    public TileBase plattformMiddleTile;
+    public TileBase plattformRightTile;
+    public TileBase plattformLeftTile;
+
+    //Mobhandling
+    public List<GameObject> enemies;
+    [Range(0, 50)]
+    public int enemieProbability;
+    public GameObject boss;
 }
