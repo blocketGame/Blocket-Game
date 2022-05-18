@@ -78,6 +78,22 @@ public class WorldData : MonoBehaviour {
 	private float caveSizeIncrease;
 	#endregion
 
+	#region ore noise fields
+	[SerializeField]
+	private float oreScale;
+	[SerializeField]
+	private int oreOctives;
+	[SerializeField]
+	[Range(0, 1)]
+	private float orePersistance;
+	[SerializeField]
+	private float oreLacurinarity;
+	[SerializeField]
+	private float oreOffsetX;
+	[SerializeField]
+	private float oreOffsetY;
+	#endregion
+
 	#region biom noise fields
 	[SerializeField]
 	private int biomOctives;
@@ -171,6 +187,14 @@ public class WorldData : MonoBehaviour {
     public float IlandInitSize { get => ilandInitSize; set => ilandInitSize = value; }
     public float OutsideSize { get => outsideSize; set => outsideSize = value; }
     public float IlandSizeIncrease { get => ilandSizeIncrease; set => ilandSizeIncrease = value; }
+
+	//ore noise fields
+    public float OreScale { get => oreScale; set => oreScale = value; }
+    public int OreOctives { get => oreOctives; set => oreOctives = value; }
+    public float OrePersistance { get => orePersistance; set => orePersistance = value; }
+    public float OreLacurinarity { get => oreLacurinarity; set => oreLacurinarity = value; }
+    public float OreOffsetX { get => oreOffsetX; set => oreOffsetX = value; }
+    public float OreOffsetY { get => oreOffsetY; set => oreOffsetY = value; }
 
 
     #endregion
