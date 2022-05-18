@@ -121,6 +121,12 @@ public class FirstBossBehaviour : EnemyBehaviour
         }
         else turretAttackCooldownLeft -= Time.deltaTime;
 
+        if(health <= 0)
+        {
+            GameManager.SwitchDimension(Dimension.OVERWORLD);
+            GlobalVariables.LocalPlayer.transform.position = new Vector3(0, 10);
+            Inventory.Singleton.AddItem(4001, 50, out ushort i);
+        }
     }
 
     void FixedUpdate() {
