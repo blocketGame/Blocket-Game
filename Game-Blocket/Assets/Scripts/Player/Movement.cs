@@ -21,7 +21,7 @@ public class Movement : MonoBehaviour {
 	/// <summary>If creative mode with shift pressing => Move 3x as fast</summary>
 	public float MovementSpeed {
 		get => Input.GetKey(KeyCode.LeftShift) && PlayerVariables.Gamemode == Gamemode.CREATIVE ? movementSpeed * 3 : movementSpeed;
-		set => movement = value;
+		set => movementSpeed = value;
 	}
 
 	public float JumpForce = 6f;
@@ -166,7 +166,7 @@ public class Movement : MonoBehaviour {
 		if(PlayerVariables.Gamemode != Gamemode.CREATIVE)
 			FallingDamageCalc();
 		if (playerRigidbody.velocity.y != 0){
-			if (Input.GetKeyDown(GameManager.SettingsProfile.JumpKey))
+			if (Input.GetKeyDown(GameManager.SettingsProfile.JumpKey)||Input.GetKeyDown(KeyCode.Joystick1Button1))
 			{
 				if (TerrainHandler.Singleton.GetBlockFormCoordinate(
 				WorldData.Singleton.Grid.WorldToCell(new Vector3(RigidBodyPosition.x + (-0.5f), RigidBodyPosition.y, 0)).x,
@@ -181,17 +181,17 @@ public class Movement : MonoBehaviour {
 					Walljump(); return;
 				}
 			}
-			else if (lockvar && Input.GetKeyDown(GameManager.SettingsProfile.RollKey))
+			else if (lockvar && Input.GetKeyDown(GameManager.SettingsProfile.RollKey) || Input.GetKeyDown(KeyCode.Joystick1Button2))
 			{
 				Wallkick(); return;
 			}
 		}else
-			if (Input.GetKey(GameManager.SettingsProfile.JumpKey))
+			if (Input.GetKey(GameManager.SettingsProfile.JumpKey) || Input.GetKeyDown(KeyCode.Joystick1Button1))
             {
 				Jump();return;
             }
 			//Roll
-			else if (!lockvar && Input.GetKeyDown(GameManager.SettingsProfile.RollKey))
+			else if (!lockvar && Input.GetKeyDown(GameManager.SettingsProfile.RollKey) || Input.GetKeyDown(KeyCode.Joystick1Button2))
             {
 				Roll(); return;
 			}

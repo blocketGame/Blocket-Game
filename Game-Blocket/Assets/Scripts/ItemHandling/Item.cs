@@ -14,6 +14,10 @@ public abstract class Item{
 	public Sprite itemImage;
 	public String swingingAnimation;
 
+	public int meltingDuration;
+	public uint meltedItemVersion; //=> if 0 => doesn't have melted version
+	public uint ovenNeeded;
+
 	protected Action onMainInteractionKey;
 	protected Action onSideInteractionKey;
 	protected Action on2SideInteractionKey;
@@ -129,7 +133,7 @@ public class EquipableItem : Item {
         switch (inflictedStat)
         {
 			case AccessoryInfliction.RAISESPEEDBY: {
-					if(direction)
+                    if (direction)
 					Movement.Singleton.MovementSpeed += value;
 					else
 					Movement.Singleton.MovementSpeed -= value;

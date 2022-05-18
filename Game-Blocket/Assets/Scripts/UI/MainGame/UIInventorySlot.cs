@@ -25,7 +25,7 @@ public class UIInventorySlot : MonoBehaviour {
 
 	public EquipableItem.EquipableType type;
 
-	public int ArmorSlot,AccessorySlot;
+	public int ArmorSlot,AccessorySlot,OvenSlot;
 	/// <summary>InventorySlots parent => this Slot will be the copy for Hotbar <summary>
 	public UIInventorySlot parent;
 	#endregion
@@ -69,12 +69,13 @@ public class UIInventorySlot : MonoBehaviour {
 					Inventory.Singleton.atHand.ItemID = value;
 					return;
 				}
-					((EquipableItem)ItemAssets.Singleton?.GetItemFromItemID(value)).InflictStat(true);
+				((EquipableItem)ItemAssets.Singleton.GetItemFromItemID(value)).InflictStat(true);
 			}
 			else if (AccessorySlot > 0)
 			{
-				((EquipableItem)ItemAssets.Singleton?.GetItemFromItemID(ItemID)).InflictStat(false);
+				((EquipableItem)ItemAssets.Singleton.GetItemFromItemID(ItemID)).InflictStat(false);
 			}
+			
 
 			_itemId = value;
 

@@ -205,12 +205,14 @@ public class GameManager : MonoBehaviour {
 			case Dimension.OVERWORLD:
 				SceneManager.LoadScene("MainGame", LoadSceneMode.Additive);
 				MoveImportantThings(SceneManager.GetSceneByName("MainGame"));
+				UIInventory.Singleton.backgroundParent.SetActive(true);
 				SceneManager.UnloadSceneAsync("Dungeon");
 			break;
 			case Dimension.DUNGEON:
 				SceneManager.LoadScene("Dungeon", LoadSceneMode.Additive);
 				MoveImportantThings(SceneManager.GetSceneByName("Dungeon"));
 				//PlayerInteraction.Singleton.enabled = false;
+				UIInventory.Singleton.backgroundParent.SetActive(false);
 				SceneManager.UnloadSceneAsync("MainGame");
 			break;
 			case Dimension.OTHER:

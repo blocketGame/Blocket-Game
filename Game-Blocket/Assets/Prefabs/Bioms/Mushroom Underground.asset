@@ -27,8 +27,8 @@ MonoBehaviour:
     blockID: 60
   structures: 
   enemies: 
-  stoneBlockId: 60
-  stoneBlockIdBg: 60
+  stoneBlockId: 58
+  stoneBlockIdBg: 58
   skyBlockInsideId: 0
   skyBlockInsideIdBg: 0
   skyBlockOutsideId: 0

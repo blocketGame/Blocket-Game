@@ -2838,6 +2838,9 @@ MonoBehaviour:
     itemType: 1
     itemImage: {fileID: 21300000, guid: f01308597c751ff40bb35eecf55b550d, type: 3}
     swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
     blockId: 3
   - name: Stone
     id: 2
@@ -2845,6 +2848,9 @@ MonoBehaviour:
     itemType: 1
     itemImage: {fileID: 21300000, guid: 74bbea64cb1802a43967b7af1eb4dd03, type: 3}
     swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
     blockId: 12
   - name: Sand
     id: 3
@@ -2852,6 +2858,9 @@ MonoBehaviour:
     itemType: 1
     itemImage: {fileID: 21300000, guid: 2df48377b487aa243b5a6e0e637890bc, type: 3}
     swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
     blockId: 5
   - name: Snowblock
     id: 4
@@ -2859,6 +2868,9 @@ MonoBehaviour:
     itemType: 1
     itemImage: {fileID: 21300000, guid: ef8a05a4ebd504240914473cda9b6542, type: 3}
     swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
     blockId: 6
   - name: Crafting bench
     id: 5
@@ -2866,6 +2878,9 @@ MonoBehaviour:
     itemType: 1
     itemImage: {fileID: 21300000, guid: 941aa281ca582eb4aa7a3348acefc603, type: 3}
     swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
     blockId: 43
   - name: Wood
     id: 6
@@ -2873,6 +2888,9 @@ MonoBehaviour:
     itemType: 1
     itemImage: {fileID: 21300000, guid: cff06dda4aad311449a62fba9deed956, type: 3}
     swingingAnimation: 
+    meltingDuration: 5
+    meltedItemVersion: 1
+    ovenNeeded: 81
     blockId: 16
   - name: Pour Ice
     id: 7
@@ -2880,6 +2898,9 @@ MonoBehaviour:
     itemType: 1
     itemImage: {fileID: 21300000, guid: 157db56d3cd9c7a4581373d67c7d2a21, type: 3}
     swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
     blockId: 44
   - name: crystallin ore
     id: 7
@@ -2887,7 +2908,30 @@ MonoBehaviour:
     itemType: 1
     itemImage: {fileID: 21300000, guid: 82db693aedbaa564ea4a99cfc33f0dd5, type: 3}
     swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
     blockId: 80
+  - name: oven
+    id: 8
+    description: Burn down to hell
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: 8d5558bfbce7d7d4abde6010d600ae5b, type: 3}
+    swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
+    blockId: 81
+  - name: iron ore
+    id: 9
+    description: Burn down to hell
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: ec53456b63f35f14a9738a7b2d20b906, type: 3}
+    swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
+    blockId: 79
   ToolItemsInGame:
   - name: WoodenPickaxe
     id: 1000
@@ -2895,6 +2939,9 @@ MonoBehaviour:
     itemType: 0
     itemImage: {fileID: 21300000, guid: a6baeaa8fbe044842b95eb13bc2dcc63, type: 3}
     swingingAnimation: Hit
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
     toolPower: 400
     damage: 6
     toolType: 3
@@ -2904,6 +2951,9 @@ MonoBehaviour:
     itemType: 0
     itemImage: {fileID: 21300000, guid: cad2482a490f18448be189d0a6d7dc00, type: 3}
     swingingAnimation: Hit
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
     toolPower: 200
     damage: 6
     toolType: 1
@@ -2914,6 +2964,9 @@ MonoBehaviour:
     itemType: 0
     itemImage: {fileID: 21300000, guid: b5495816b53ccf241a644d96e18a84f3, type: 3}
     swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
     defenseStat: 2
     inflictedStat: 0
     value: 0
@@ -2924,6 +2977,9 @@ MonoBehaviour:
     itemType: 0
     itemImage: {fileID: 21300000, guid: 40a4ee0551dc052459196ca2c206ff03, type: 3}
     swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
     defenseStat: 2
     inflictedStat: 0
     value: 0
@@ -2934,19 +2990,25 @@ MonoBehaviour:
     itemType: 0
     itemImage: {fileID: 21300000, guid: 7926be40855a9754ab6f5107f40e60aa, type: 3}
     swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
     defenseStat: 2
     inflictedStat: 0
     value: 0
     type: 1
   - name: Boots
     id: 2003
-    description: Old boots. Maybe they can be worn
+    description: Old boots. Stinkyyy , but maybe they can be worn
     itemType: 0
     itemImage: {fileID: 21300000, guid: c378be739051e124286fd4d9559013a7, type: 3}
     swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
     defenseStat: 0
     inflictedStat: 0
-    value: 2000
+    value: 200
     type: 2
   UseableItemsInGame:
   - name: Healing Potion
@@ -2955,6 +3017,9 @@ MonoBehaviour:
     itemType: 1
     itemImage: {fileID: 21300000, guid: a7ec475f867eddf4bba1ed179066059d, type: 3}
     swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
     buffType: 3
   CommonItems:
   - name: Opal
@@ -2963,18 +3028,74 @@ MonoBehaviour:
     itemType: 1
     itemImage: {fileID: 21300000, guid: 33430ddc929da284ba9d8fbedc2e7b43, type: 3}
     swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
   - name: Bernstein
     id: 4002
     description: 
     itemType: 1
     itemImage: {fileID: 21300000, guid: 35aabff55aa791248b87d99dde69c0d1, type: 3}
     swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
   - name: stick
     id: 4003
     description: 
     itemType: 1
     itemImage: {fileID: 21300000, guid: 73a11ffd6443a1d409e1eac3e05cc17a, type: 3}
     swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
+  - name: Iron bar
+    id: 4004
+    description: Iron to the bar
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: 13dc82d3022afe944a741262461ccafa, type: 3}
+    swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
+  - name: Leather
+    id: 4005
+    description: This smelling Peace of a Human reminds you of youre Grandma... Maybe
+      you are the Monster ?
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: 1c78e277ab332d741bbdd93755cc79c9, type: 3}
+    swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
+  - name: Pearl
+    id: 4006
+    description: A nice round and shining peace from the far oceans. Collectors would
+      kill someone to get it.
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: a6fc044185de41a418b4c04326c7a4a7, type: 3}
+    swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
+  - name: Leaf
+    id: 4007
+    description: Du du du du du du du du .... Baby Tree du du du...
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: 3351f2009a0616749be725dbe256376f, type: 3}
+    swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
+  - name: Cactus Fruit
+    id: 4008
+    description: Ouch don't eat it!  Be better than Timon
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: 9a59845cbe1683447bef0a29005c17e0, type: 3}
+    swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
   WeaponItems:
   - name: Wooden Sword
     id: 5000
@@ -2982,6 +3103,9 @@ MonoBehaviour:
     itemType: 1
     itemImage: {fileID: 21300000, guid: d8e214a5decc71d4c899ab4f76048ab6, type: 3}
     swingingAnimation: Hit
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
     swingingAnimations:
     - Hit
     - Hit-Kombo
@@ -3003,6 +3127,9 @@ MonoBehaviour:
     itemType: 1
     itemImage: {fileID: 21300000, guid: a32f97802030f604384d04875180b708, type: 3}
     swingingAnimation: Hit
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
     swingingAnimations: []
     durability: 0
     damage: 10
@@ -3021,6 +3148,9 @@ MonoBehaviour:
     itemType: 1
     itemImage: {fileID: 21300000, guid: f980e3ea11ce5c8479091e0ca8010b19, type: 3}
     swingingAnimation: BowShot
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
     swingingAnimations: []
     durability: 0
     damage: 10
@@ -3039,6 +3169,9 @@ MonoBehaviour:
     itemType: 1
     itemImage: {fileID: 21300000, guid: f980e3ea11ce5c8479091e0ca8010b19, type: 3}
     swingingAnimation: BowShot
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
     swingingAnimations: []
     durability: 0
     damage: 10
@@ -3057,6 +3190,9 @@ MonoBehaviour:
     itemType: 1
     itemImage: {fileID: 21300000, guid: ce3d57171e2dc8d4da627b3bd7be12e6, type: 3}
     swingingAnimation: BowShot
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
     swingingAnimations: []
     durability: 0
     damage: 0
@@ -3069,6 +3205,27 @@ MonoBehaviour:
     maxDistance: 100
     behaviour: 0
     weaponType: 0
+  - name: Repaired Magic sword
+    id: 5005
+    description: darkness has been recovered!
+    itemType: 0
+    itemImage: {fileID: 21300000, guid: 2c09d4653fc1ec841be4181669d52c32, type: 3}
+    swingingAnimation: Hit
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
+    swingingAnimations: []
+    durability: 1
+    damage: 50
+    dmgOnColliderHit: 1
+    holdShooting: 1
+    knockBack: 50
+    coolDownTime: 0.5
+    projectile: 6001
+    maxHeight: 100
+    maxDistance: 100
+    behaviour: 0
+    weaponType: 0
   ProjectileItems:
   - name: Bullet
     id: 6000
@@ -3076,6 +3233,9 @@ MonoBehaviour:
     itemType: 1
     itemImage: {fileID: 21300000, guid: 645ed010887d5b04ea167474985d7707, type: 3}
     swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
     durability: 0
     damage: 10
     spawningPos: {x: 0, y: 0}
@@ -3085,12 +3245,37 @@ MonoBehaviour:
     goThroughBlocks: 0
     pierce: 0
     gravityScale: 1
+  - name: Cat
+    id: 6001
+    description: Meaw
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: 7b41f308970296f45b15aecfb58c3eae, type: 3}
+    swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
+    durability: 0
+    damage: 10
+    spawningPos: {x: 5, y: 25}
+    flyingSpeed: 1
+    bounciness: 0
+    lightEmission: 1
+    goThroughBlocks: 0
+    pierce: 0
+    gravityScale: 1
   Recipes:
   - {fileID: 11400000, guid: a82579b4eace29f409f932e7cf1ad59e, type: 2}
   - {fileID: 11400000, guid: 2cbe51554b22dfe41baf7afb307f9e26, type: 2}
   - {fileID: 11400000, guid: 1af853b6a7d2d824b9d95c0e09fe29c6, type: 2}
   - {fileID: 11400000, guid: 406e79a9bc34f7b49b52ff1577c020fd, type: 2}
   - {fileID: 11400000, guid: 7ae85393d29d45b4684f805c37fb9017, type: 2}
+  - {fileID: 11400000, guid: 85f055e3331468647b6c14d582e880e5, type: 2}
+  - {fileID: 11400000, guid: 102565a2145a8b646b99c12f660392d0, type: 2}
+  - {fileID: 11400000, guid: 041dc843115370b468ea4c7f474ac8f3, type: 2}
+  - {fileID: 11400000, guid: 054dcddbc79d78547849f19e41630f9a, type: 2}
+  - {fileID: 11400000, guid: e38e45a77bde7f74888b71b4956eec72, type: 2}
+  - {fileID: 11400000, guid: bf3bc915046df154180c7152a0da3a8f, type: 2}
+  - {fileID: 11400000, guid: 69dd546e1cd9c92418259070d9d81a08, type: 2}
   CraftingStations:
   - blockId: 255
     slotwidth: 2
@@ -3115,6 +3300,9 @@ MonoBehaviour:
   - buffPicture: {fileID: 21300000, guid: c071f51a8b5734540af1d3b751518162, type: 3}
     buffType: 3
     length: 7
+  Ovens:
+  - itemId: 81
+    meltingSpeed: 5
   InventoryCursor: {fileID: 21300000, guid: 983843a460c359244887c9a663229125, type: 3}
   MiningCursor: {fileID: 21300000, guid: 42919adbd3d899d4aae5841d0e00a632, type: 3}
   AttackingCursor: {fileID: 21300000, guid: f02ed4b66ab720f46b851139dfc87cbf, type: 3}
@@ -3228,6 +3416,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 1
       dropchance: 100
+      count: 0
       toolItemType: 3
     tooltypes: 3
   - name: Dirtblock
@@ -3237,6 +3426,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 1
       dropchance: 100
+      count: 0
       toolItemType: 0
     tooltypes: 3
   - name: Sandblock (Top)
@@ -3246,6 +3436,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 3
       dropchance: 100
+      count: 0
       toolItemType: 1
     tooltypes: 1
   - name: Sandblock
@@ -3255,6 +3446,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 3
       dropchance: 100
+      count: 0
       toolItemType: 1
     tooltypes: 1
   - name: Snowblock
@@ -3264,6 +3456,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 4
       dropchance: 100
+      count: 0
       toolItemType: 0
     tooltypes: 0
   - name: SnowedDirtblock
@@ -3273,9 +3466,11 @@ MonoBehaviour:
     blockDrops:
     - itemID: 1
       dropchance: 100
+      count: 0
       toolItemType: 5
     - itemID: 4
       dropchance: 50
+      count: 0
       toolItemType: 5
     tooltypes: 0
   - name: DirtBG
@@ -3285,6 +3480,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 1
       dropchance: 100
+      count: 0
       toolItemType: 5
     tooltypes: 0
   - name: DirtBG (Top)
@@ -3300,6 +3496,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 5002
       dropchance: 100
+      count: 0
       toolItemType: 4
     tooltypes: 0
   - name: Opal
@@ -3309,6 +3506,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 5001
       dropchance: 100
+      count: 0
       toolItemType: 4
     tooltypes: 0
   - name: Stone
@@ -3318,6 +3516,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 2
       dropchance: 100
+      count: 0
       toolItemType: 3
     tooltypes: 3
   - name: SandBG
@@ -3336,7 +3535,15 @@ MonoBehaviour:
     blockID: 15
     tile: {fileID: 11400000, guid: bc76d9a08eedba04888f09f100db4f02, type: 2}
     removeDuration: 4
-    blockDrops: []
+    blockDrops:
+    - itemID: 4006
+      dropchance: 50
+      count: 1
+      toolItemType: 3
+    - itemID: 3
+      dropchance: 50
+      count: 1
+      toolItemType: 1
     tooltypes: 3
   - name: Trunk
     blockID: 16
@@ -3345,16 +3552,22 @@ MonoBehaviour:
     blockDrops:
     - itemID: 6
       dropchance: 100
+      count: 1
       toolItemType: 2
+    - itemID: 6
+      dropchance: 80
+      count: 1
+      toolItemType: 0
     tooltypes: 2
   - name: Leaf
     blockID: 17
     tile: {fileID: 11400000, guid: c706feebda529404a87185c490a5575f, type: 2}
     removeDuration: 4
     blockDrops:
-    - itemID: 6
-      dropchance: 50
-      toolItemType: 5
+    - itemID: 4007
+      dropchance: 30
+      count: 1
+      toolItemType: 0
     tooltypes: 0
   - name: CactusFlower
     blockID: 18
@@ -3519,6 +3732,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 7
       dropchance: 100
+      count: 0
       toolItemType: 1
     tooltypes: 1
   - name: Ice
@@ -3528,6 +3742,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 7
       dropchance: 100
+      count: 0
       toolItemType: 1
     tooltypes: 1
   - name: Stone-ice
@@ -3537,6 +3752,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 2
       dropchance: 80
+      count: 0
       toolItemType: 3
     tooltypes: 3
   - name: Mush-top
@@ -3546,6 +3762,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 1
       dropchance: 100
+      count: 0
       toolItemType: 0
     tooltypes: 0
   - name: Mush
@@ -3555,6 +3772,7 @@ MonoBehaviour:
     blockDrops:
     - itemID: 1
       dropchance: 100
+      count: 0
       toolItemType: 0
     tooltypes: 0
   - name: Crystal-Cave-Block
@@ -3591,7 +3809,11 @@ MonoBehaviour:
     blockID: 54
     tile: {fileID: 11400000, guid: 17107fb2cb2a99249afacb38386adac7, type: 2}
     removeDuration: 3
-    blockDrops: []
+    blockDrops:
+    - itemID: 5005
+      dropchance: 50
+      count: 1
+      toolItemType: 0
     tooltypes: 0
   - name: Crystal
     blockID: 55
@@ -3750,8 +3972,19 @@ MonoBehaviour:
     blockDrops:
     - itemID: 7
       dropchance: 100
+      count: 0
       toolItemType: 3
     tooltypes: 3
+  - name: ovens
+    blockID: 81
+    tile: {fileID: 11400000, guid: 37aacdd19329f30449f9a30d5a42f08b, type: 2}
+    removeDuration: 4
+    blockDrops:
+    - itemID: 8
+      dropchance: 100
+      count: 1
+      toolItemType: 0
+    tooltypes: 0
 --- !u!114 &3762355363224798812
 MonoBehaviour:
   m_ObjectHideFlags: 0
