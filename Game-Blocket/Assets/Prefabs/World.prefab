@@ -114,6 +114,12 @@ MonoBehaviour:
   initCaveSize: 0.2
   stoneSize: 0.05
   caveSizeIncrease: 0.0001
+  oreScale: 10
+  oreOctives: 5
+  orePersistance: 0.5
+  oreLacurinarity: 2
+  oreOffsetX: 1000
+  oreOffsetY: 1000
   biomOctives: 5
   biomPersistance: 0.5
   biomLacurinarity: 2
