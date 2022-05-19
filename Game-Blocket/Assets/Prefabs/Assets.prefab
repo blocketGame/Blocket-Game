@@ -3113,7 +3113,7 @@ MonoBehaviour:
     durability: 0
     damage: 10
     dmgOnColliderHit: 1
-    holdShooting: 0
+    holdShooting: 1
     knockBack: 500
     coolDownTime: 1.5
     projectile: 0

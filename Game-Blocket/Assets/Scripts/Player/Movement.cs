@@ -74,7 +74,7 @@ public class Movement : MonoBehaviour {
 	public bool PlayerLocked
 	{
 		get => _playerLocked;
-		private set
+		set
 		{
 			playerRigidbody.simulated = !value;
 			playerRigidbody.bodyType = value ? RigidbodyType2D.Static : RigidbodyType2D.Dynamic;
@@ -203,7 +203,7 @@ public class Movement : MonoBehaviour {
 	/// Set Horizontal Movement
 	/// </summary>
 	private void SetHorizontalMovement(){
-		if(!UIInventory.Singleton.ChatOpened)
+		if(!UIInventory.Singleton.ChatOpened && !UIInventory.Singleton.deathScreen.activeSelf && !PlayerLocked)
 			movement = Input.GetAxis("Horizontal");
 	}
 
@@ -222,6 +222,8 @@ public class Movement : MonoBehaviour {
 	private void Jump()
 	{
 		//animator.SetBool("IsJumping", true);
+		if (PlayerLocked)
+			return;
 		CreateDust();
 		playerRigidbody.AddRelativeForce(new Vector2(0, JumpForce), ForceMode2D.Impulse);
 	}

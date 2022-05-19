@@ -95,7 +95,7 @@ public class ItemUsageHandler : MonoBehaviour
 						CreateProjectile(weapon);
 
 				}
-				else if ((Input.GetKey(GameManager.SettingsProfile.MainInteractionKey) || Input.GetKey(KeyCode.Joystick1Button0) && timer > weapon.CoolDownTime) && weapon.holdShooting)
+				else if ((Input.GetKey(GameManager.SettingsProfile.MainInteractionKey) || Input.GetKey(KeyCode.Joystick1Button0)) && timer > weapon.CoolDownTime) //&& weapon.holdShooting)
 				{
 					komboCounter = 0;
 					Debug.Log("NO KOMBO");

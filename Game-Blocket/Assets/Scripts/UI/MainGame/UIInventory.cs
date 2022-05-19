@@ -308,7 +308,7 @@ public class UIInventory : MonoBehaviour
 		}
 
 		//Scroll
-		if (Input.mouseScrollDelta.y != 0 && !ChatOpened)
+		if (Input.mouseScrollDelta.y != 0 && !ChatOpened && !UIInventory.Singleton.deathScreen.activeSelf)
 		{
 			float val = Input.mouseScrollDelta.y;
 			if (val < 0)
@@ -418,6 +418,7 @@ public class UIInventory : MonoBehaviour
 		deathScreen.SetActive(true);
 		uiHud.SetActive(false);
 		InventoryOpened = false;
+		Movement.Singleton.PlayerLocked = true;
     }
 
 	public void RespawnUI()
@@ -425,6 +426,8 @@ public class UIInventory : MonoBehaviour
 		deathScreen.SetActive(false);
 		uiHud.SetActive(true);
 		InventoryOpened = false;
+		PlayerHealth.Singleton.maxHealth = 100;
+		PlayerHealth.Singleton.CurrentHealth = 100;
+		Movement.Singleton.PlayerLocked = false;
 	}
-
 }

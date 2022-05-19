@@ -21,7 +21,7 @@ public class PauseMenu : MonoBehaviour
 	}
 
 	private void Update() {
-		if(Input.GetKeyDown(KeyCode.Escape) && !UIInventory.Singleton.ChatOpened)
+		if(Input.GetKeyDown(KeyCode.Escape) && !UIInventory.Singleton.ChatOpened && !UIInventory.Singleton.deathScreen.activeSelf)
 			PauseMenuOpen = !PauseMenuOpen;
 	}
 

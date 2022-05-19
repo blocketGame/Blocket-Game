@@ -20,7 +20,7 @@ public class FluentCameraBehaviour : MonoBehaviour{
 
     private void Update()
     {
-        if (GameManager.State != GameState.INGAME && !(UIInventory.Singleton?.ChatOpened ?? true))
+        if (GameManager.State != GameState.INGAME && !(UIInventory.Singleton?.ChatOpened ?? true) && !UIInventory.Singleton.deathScreen.activeSelf)
             return;
         GetComponent<Camera>().orthographicSize = camZoom;
         if (Input.mouseScrollDelta.y != 0 && Input.GetKey(KeyCode.LeftControl))
@@ -42,7 +42,7 @@ public class FluentCameraBehaviour : MonoBehaviour{
     {
         if (GameManager.State != GameState.INGAME && PlayerVariables.Dimension == Dimension.OVERWORLD)
             return;
-        if (Input.GetKey(KeyCode.LeftAlt) && !(UIInventory.Singleton?.ChatOpened ?? false))
+        if (Input.GetKey(KeyCode.LeftAlt) && !(UIInventory.Singleton?.ChatOpened ?? false) && !UIInventory.Singleton.deathScreen.activeSelf)
         {
             //if(OffSetX< (GlobalVariables.World.GetComponentInChildren<Grid>().LocalToWorld(Input.mousePosition).x / 60) - 18  || -OffSetX > (GlobalVariables.World.GetComponentInChildren<Grid>().LocalToWorld(Input.mousePosition).x / 60 - 18))
             //if (0 < (GlobalVariables.World.GetComponentInChildren<Grid>().LocalToWorld(Input.mousePosition).x / 60) - 18)
