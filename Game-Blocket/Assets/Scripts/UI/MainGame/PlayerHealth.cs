@@ -31,7 +31,7 @@ public class PlayerHealth : MonoBehaviour {
                 UIInventory.Singleton.DeathScreen();
                 
             currentHealth = value>100?100:value;
-            UIInventory.Singleton.heartStat.text = currentHealth+ "/"+maxHealth;
+            UIInventory.Singleton.heartStat.text = (int)currentHealth+ "/"+maxHealth;
             float percent = maxHealth==0 ? 100:maxHealth;
             Debug.Log("SETTING VALUE OF HEARTS");
             //Alle hearth layer durchgehen

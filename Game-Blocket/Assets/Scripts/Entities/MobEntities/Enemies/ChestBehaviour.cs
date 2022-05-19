@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static BlockData;
 
 namespace Assets.Scripts.Entities.MobEntities.Enemies
 {
@@ -32,6 +33,10 @@ namespace Assets.Scripts.Entities.MobEntities.Enemies
         [SerializeField]
         private uint mobId;
         public override uint MobID { get => mobId; set => mobId = value; }
+
+        [SerializeField]
+        private List<BlockDropAble> drops;
+        public override List<BlockDropAble> Drops { get => drops; set => drops = value; }
         #endregion
     }
 }

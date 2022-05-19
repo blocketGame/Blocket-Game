@@ -1272,7 +1272,7 @@ MonoBehaviour:
   playerRigidbody: {fileID: 2886164251458701588}
   dust: {fileID: 8320444108215976180}
   wallDust: {fileID: 2860485288748685333}
-  fallingDamageThreshhold: 5
+  fallingDamageThreshhold: 10
   startingHeight: -1
 --- !u!1 &7171847213287697915
 GameObject:
