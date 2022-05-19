@@ -77,8 +77,8 @@ public class GameManager : MonoBehaviour {
 		NetworkManager.Singleton.OnClientDisconnectCallback += (id) => {
 			Players[id].Despawn(true);
 			Players.Remove(id);
-			if(NetworkManager.Singleton.ServerClientId == id && NetworkManager.Singleton.IsClient)
-				QuitGame();
+			//if(NetworkManager.Singleton.ServerClientId == id && NetworkManager.Singleton.IsClient)
+			//	QuitGame();
         };
 	}
 

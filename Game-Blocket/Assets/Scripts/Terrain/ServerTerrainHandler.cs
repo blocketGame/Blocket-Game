@@ -50,8 +50,8 @@ public class ServerTerrainHandler : TerrainHandler {
 	public void HandleChunkRequest(ulong clientId, FastBufferReader fbR) {
 		if(DebugVariables.ShowChunkHandle)
 			Debug.Log("Got Request");
-		fbR.ReadValueSafe(out Vector2Int chunkCoord);
-		HandleChunkRequest(clientId, chunkCoord);
+		//fbR.ReadValueSafe(out Vector2Int chunkCoord);
+		//HandleChunkRequest(clientId, chunkCoord);
 	}
 
 	/// <summary>
@@ -122,7 +122,7 @@ public class ServerTerrainHandler : TerrainHandler {
 		//Debug
 		if(DebugVariables.WorldNetworking){
 			Debug.Log("Registered Chunk Request");
-			Debug.Log($"Server ID: {NetworkManager.Singleton.ServerClientId} Client ID: {NetworkManager.Singleton.LocalClientId}");
+			Debug.Log($"Client ID: {NetworkManager.Singleton.LocalClientId}");
 		}
 	}
 

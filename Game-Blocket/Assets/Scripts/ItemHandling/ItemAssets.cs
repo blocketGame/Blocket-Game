@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using static UnityEditor.Progress;
 
 /// <summary>
 /// Handles all items in Game

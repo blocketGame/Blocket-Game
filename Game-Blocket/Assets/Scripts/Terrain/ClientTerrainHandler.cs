@@ -85,8 +85,8 @@ public class ClientTerrainHandler : TerrainHandler {
 		
 		using FastBufferWriter writer = new FastBufferWriter(5120, Allocator.Persistent, 10000);
 		
-		NetworkManager.Singleton.CustomMessagingManager.SendNamedMessage("RequestChunk", NetworkManager.Singleton.ServerClientId, writer, NetworkDelivery.Reliable);
-		writer.WriteValueSafe(chunkCord);
+		//NetworkManager.Singleton.CustomMessagingManager.SendNamedMessage("RequestChunk", NetworkManager.Singleton.ServerClientId, writer, NetworkDelivery.Reliable);
+		//writer.WriteValueSafe(chunkCord);
 		
 	}
 
@@ -198,7 +198,7 @@ public class ClientTerrainHandler : TerrainHandler {
 		NetworkManager.Singleton.CustomMessagingManager.RegisterNamedMessageHandler("ChunkResponse", HandleChunkResponse);
 		if(DebugVariables.WorldNetworking) {
 			Debug.Log("Registered Chunk Response");
-			Debug.Log($"Client ID: {NetworkManager.Singleton.LocalClientId} Server ID: {NetworkManager.Singleton.ServerClientId}");
+			Debug.Log($"Client ID: {NetworkManager.Singleton.LocalClientId}");
 		}
 	}
 
