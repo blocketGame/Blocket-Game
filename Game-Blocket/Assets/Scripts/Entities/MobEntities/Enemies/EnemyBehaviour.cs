@@ -25,8 +25,11 @@ public abstract class EnemyBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        //MaxHealth = MobAssets.Singleton.GetMobFromID(MobID,false).maxHealth;
-        //Health = MaxHealth;
+        MaxHealth = MobAssets.Singleton.GetMobFromID(MobID,false).maxHealth;
+        Health = MaxHealth;
+        Debug.Log("Enemy");
+        if (Drops == null)
+            Drops = new List<BlockDropAble>();
     }
 
     // Update is called once per frame
@@ -43,8 +46,23 @@ public abstract class EnemyBehaviour : MonoBehaviour
         //Leave drops
         TerrainChunk c = ClientTerrainHandler.Singleton.GetChunkFromCoordinate(transform.position.x, transform.position.y);
         foreach (BlockDropAble d in Drops) 
-            if (UnityEngine.Random.Range(1f,100f) < d.dropchance)
+            if (UnityEngine.Random.Range(1f,100f) < d.dropchance && PlayerVariables.Dimension == Dimension.OVERWORLD)
                 c.InstantiateDrop(new Vector3Int((int)transform.position.x%WorldAssets.ChunkLength,(int)transform.position.y%WorldAssets.ChunkHeight, (int)transform.position.z), (byte)d.count, d.itemID);
+            else if(UnityEngine.Random.Range(1f, 100f) < d.dropchance)
+            {
+                Vector3Int coordinate = new Vector3Int((int)transform.position.x, (int)transform.position.y, (int)transform.position.z);
+
+                GameObject dropGO = new GameObject($"Drop ItemID: {d.itemID}");
+                //dropGO.transform.SetParent(dropParent.transform);
+                dropGO.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+                dropGO.transform.position = new Vector3(coordinate.x + 0.5f, coordinate.y + 0.5f, 0);
+                dropGO.layer = LayerMask.NameToLayer("Drops");
+
+                Drop drop = dropGO.AddComponent<Drop>();
+                drop.ItemId = d.itemID;
+                drop.Count = (ushort)d.count;
+                Debug.Log("Instantiate Drop");
+            }
     }
 
     /// <summary>
@@ -58,7 +76,14 @@ public abstract class EnemyBehaviour : MonoBehaviour
         if (TerrainHandler.Singleton.GetBlockFormCoordinate(playerCell.x, playerCell.y) != 0)
         {
             Debug.LogWarning("UWU - WALL_GLITCH_HANDLED");
+            gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
             gameObject.GetComponent<Rigidbody2D>().transform.position = gameObject.GetComponent<Rigidbody2D>().transform.position + Vector3.up;
+        }
+        else if(gameObject.GetComponent<Rigidbody2D>().gravityScale == 0)
+        {
+            gameObject.GetComponent<BoxCollider2D>().enabled = true;
+            gameObject.GetComponent<Rigidbody2D>().gravityScale = 1;
         }
     }
 }

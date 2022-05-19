@@ -26,7 +26,7 @@ MonoBehaviour:
     regionRange: 1
     blockID: 60
   structures: 
-  enemies: 
+  enemies: 00
   stoneBlockId: 58
   stoneBlockIdBg: 58
   skyBlockInsideId: 0

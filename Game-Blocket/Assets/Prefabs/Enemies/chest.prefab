@@ -130,7 +130,32 @@ MonoBehaviour:
   maxHealth: 1
   regeneration: 0
   animator: {fileID: 0}
-  mobId: 0
+  mobId: 2
+  drops:
+  - itemID: 3000
+    dropchance: 10
+    count: 1
+    toolItemType: 0
+  - itemID: 2003
+    dropchance: 5
+    count: 1
+    toolItemType: 0
+  - itemID: 4006
+    dropchance: 40
+    count: 5
+    toolItemType: 0
+  - itemID: 5006
+    dropchance: 10
+    count: 1
+    toolItemType: 0
+  - itemID: 6000
+    dropchance: 20
+    count: 10
+    toolItemType: 0
+  - itemID: 6001
+    dropchance: 2
+    count: 1
+    toolItemType: 0
 --- !u!50 &4577024133104674040
 Rigidbody2D:
   serializedVersion: 4

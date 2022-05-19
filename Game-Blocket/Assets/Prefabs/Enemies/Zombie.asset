@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e042cbd6e74da8a4db6dcb0a8b1a1001, type: 3}
   m_Name: Zombie
   m_EditorClassIdentifier: 
-  spawnchance: 10
+  spawnchance: 100
   enemiePrefab: {fileID: 8864517857189748619, guid: 25e96d27f77036248ba82bfd5313d68c, type: 3}
   spawnhabitat: 0

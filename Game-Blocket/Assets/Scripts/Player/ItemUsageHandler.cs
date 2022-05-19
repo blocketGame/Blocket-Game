@@ -77,24 +77,28 @@ public class ItemUsageHandler : MonoBehaviour
 		TurnItemUpOrDown();
 		switch (weapon.behaviour){
 			case CustomWeaponBehaviour.DEFAULT:
-				timer += weapon.CoolDownTime < (timer) ? 0 : Time.deltaTime;
-				if ((Input.GetKeyDown(GameManager.SettingsProfile.MainInteractionKey) || Input.GetKey(KeyCode.Joystick1Button0)) && timer >(weapon.CoolDownTime * 0.75f))
+				timer += (weapon.CoolDownTime < (timer)) ? 0 : Time.deltaTime;
+				if ((Input.GetKeyDown(GameManager.SettingsProfile.MainInteractionKey) || Input.GetKeyDown(KeyCode.Joystick1Button0)) && timer >(weapon.CoolDownTime * 0.75f))
 				{
-					if(timer<(weapon.CoolDownTime * 0.95f))
+					if (timer < (weapon.CoolDownTime * 0.99f))
 					{
 						komboCounter++;
 						Debug.Log("KomboCounter" + komboCounter);
 					}
 					else
+					{
 						komboCounter = 0;
+						Debug.Log("NO KOMBO");
+					}
 					PlayAnim();
 					if (weapon.projectile != 0)
 						CreateProjectile(weapon);
 
 				}
-				else if ((Input.GetKey(GameManager.SettingsProfile.MainInteractionKey) || Input.GetKey(KeyCode.Joystick1Button0) && timer > weapon.CoolDownTime))
+				else if ((Input.GetKey(GameManager.SettingsProfile.MainInteractionKey) || Input.GetKey(KeyCode.Joystick1Button0) && timer > weapon.CoolDownTime) && weapon.holdShooting)
 				{
 					komboCounter = 0;
+					Debug.Log("NO KOMBO");
 					PlayAnim();
 					if (weapon.projectile != 0 && weapon.holdShooting)
 						CreateProjectile(weapon);
@@ -110,7 +114,8 @@ public class ItemUsageHandler : MonoBehaviour
 	{
 		timer = 0;
 		string animationname;
-		if(!(Inventory.Singleton.SelectedItemObj is WeaponItem)) animationname = ItemAssets.Singleton.GetItemFromItemID(Inventory.Singleton.SelectedItemId)?.swingingAnimation;
+		if(!(Inventory.Singleton.SelectedItemObj is WeaponItem)) 
+			animationname = ItemAssets.Singleton.GetItemFromItemID(Inventory.Singleton.SelectedItemId)?.swingingAnimation;
 		else if (((WeaponItem)(ItemAssets.Singleton.GetItemFromItemID(Inventory.Singleton.SelectedItemId)) ?? new WeaponItem())?.weaponType == WeaponItem.WeaponType.RANGE)
 		{
 			animationname = ItemAssets.Singleton.GetItemFromItemID(Inventory.Singleton.SelectedItemId)?.swingingAnimation;
@@ -197,7 +202,7 @@ public class ItemUsageHandler : MonoBehaviour
 	{
 		Inventory.Singleton.RemoveItem(ItemAssets.Singleton.GetItemFromItemID(w.projectile), 1);
 		GameObject go = new GameObject(projectile.name);
-		go.transform.position = shotPoint.position + projectile.SpawningPos3;
+		go.transform.position = shotPoint.position + new Vector3(projectile.SpawningPos3.x*(Movement.Singleton.LookingRight?1:-1),projectile.SpawningPos3.y);
 		go.AddComponent<ProjectileBehaviour>().Fill(w.maxHeight,w.maxDistance,projectile,w.damage);
 		//Enemy should listen to Bullet Layer to see if it is hit by one.
 	}

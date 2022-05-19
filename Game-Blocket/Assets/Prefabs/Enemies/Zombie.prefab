@@ -152,12 +152,12 @@ MonoBehaviour:
   lineOfAttack: 1.5
   speed: 4
   JumpForce: 6
-  damage: 3
+  damage: 10
   health: 100
   maxHealth: 100
   regeneration: 5
   animator: {fileID: 7497225574276930414}
-  mobId: 2
+  mobId: 1
   drops:
   - itemID: 4005
     dropchance: 70

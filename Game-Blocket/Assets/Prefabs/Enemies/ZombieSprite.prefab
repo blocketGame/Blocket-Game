@@ -146,12 +146,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5545c2b9de5ee5244926d051411ba205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  regenerationticks: 5
   lineOfSite: 10
   lineOfMove: 1.45
   lineOfAttack: 1.5
   speed: 4
   JumpForce: 6
+  damage: 0
+  health: 0
+  maxHealth: 0
+  regeneration: 0
   animator: {fileID: 4622435104472176928}
+  mobId: 1
+  drops: []
 --- !u!95 &4622435104472176928
 Animator:
   serializedVersion: 3

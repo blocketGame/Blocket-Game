@@ -21,8 +21,13 @@ MonoBehaviour:
     blockID: 49
   bgRegions: []
   structures: 
-  enemies: 
+  enemies: 00
   stoneBlockId: 49
+  stoneBlockIdBg: 0
+  skyBlockInsideId: 0
+  skyBlockInsideIdBg: 0
+  skyBlockOutsideId: 0
+  skyBlockOutsideBg: 0
   size: 1000
   heightCurve:
     serializedVersion: 2

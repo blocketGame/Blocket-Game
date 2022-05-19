@@ -31,7 +31,7 @@ public class Movement : MonoBehaviour {
 
 	#region State-variables
 	//TODO change to boolean lookinng left/right
-	private bool LookingRight{ get => lookingRight; set {
+	public bool LookingRight{ get => lookingRight; set {
 			if(value == lookingRight)
 				return;
 			lookingRight = value;

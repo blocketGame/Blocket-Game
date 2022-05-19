@@ -3113,7 +3113,7 @@ MonoBehaviour:
     durability: 0
     damage: 10
     dmgOnColliderHit: 1
-    holdShooting: 1
+    holdShooting: 0
     knockBack: 500
     coolDownTime: 1.5
     projectile: 0
@@ -3208,20 +3208,44 @@ MonoBehaviour:
   - name: Repaired Magic sword
     id: 5005
     description: darkness has been recovered!
-    itemType: 0
+    itemType: 1
     itemImage: {fileID: 21300000, guid: 2c09d4653fc1ec841be4181669d52c32, type: 3}
+    swingingAnimation: HitHard
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
+    swingingAnimations:
+    - Hit
+    - HitHard
+    - ThrowWeapon
+    durability: 1
+    damage: 50
+    dmgOnColliderHit: 1
+    holdShooting: 0
+    knockBack: 50
+    coolDownTime: 1.5
+    projectile: 6001
+    maxHeight: 100
+    maxDistance: 100
+    behaviour: 0
+    weaponType: 0
+  - name: Magic Wand
+    id: 5006
+    description: darkness has been recovered!
+    itemType: 0
+    itemImage: {fileID: 21300000, guid: e12c6d5ef2218da4b825eb45c37ccaf7, type: 3}
     swingingAnimation: Hit
     meltingDuration: 0
     meltedItemVersion: 0
     ovenNeeded: 0
     swingingAnimations: []
     durability: 1
-    damage: 50
-    dmgOnColliderHit: 1
+    damage: 15
+    dmgOnColliderHit: 0
     holdShooting: 1
-    knockBack: 50
-    coolDownTime: 0.5
-    projectile: 6001
+    knockBack: 0
+    coolDownTime: 2
+    projectile: 6002
     maxHeight: 100
     maxDistance: 100
     behaviour: 0
@@ -3263,6 +3287,24 @@ MonoBehaviour:
     goThroughBlocks: 0
     pierce: 0
     gravityScale: 1
+  - name: Fireball
+    id: 6002
+    description: Burning out your soul
+    itemType: 1
+    itemImage: {fileID: 21300000, guid: 4b1782da8f77d0e479cf3a0780bf74cf, type: 3}
+    swingingAnimation: 
+    meltingDuration: 0
+    meltedItemVersion: 0
+    ovenNeeded: 0
+    durability: 0
+    damage: 5
+    spawningPos: {x: 2, y: 0}
+    flyingSpeed: 0.5
+    bounciness: 0
+    lightEmission: 1
+    goThroughBlocks: 0
+    pierce: 0
+    gravityScale: 0
   Recipes:
   - {fileID: 11400000, guid: a82579b4eace29f409f932e7cf1ad59e, type: 2}
   - {fileID: 11400000, guid: 2cbe51554b22dfe41baf7afb307f9e26, type: 2}
@@ -3293,6 +3335,8 @@ MonoBehaviour:
     buttonColor: {r: 0.5471698, g: 0.30152208, b: 0.038714837, a: 1}
   Enemies:
   - {fileID: 11400000, guid: 5fa23f42fd79765418b7e844d5d84e6b, type: 2}
+  - {fileID: 11400000, guid: c2f5bea987045cb4399b5527fb691007, type: 2}
+  - {fileID: 11400000, guid: 0025b67386b8e5345995936b91cd9925, type: 2}
   Buffs:
   - buffPicture: {fileID: 21300000, guid: 44089b669f8432a4a9e51bd1c80536b6, type: 3}
     buffType: 0

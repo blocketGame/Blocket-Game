@@ -60,9 +60,10 @@ public class ZombieBrain : EnemyBehaviour
     }
     private void TurnAnim()
     {
+        side =-side;
         if (gameObject.transform.localScale.x != side && side != 0
-            && gameObject.transform.localScale.x < 1
-            && gameObject.transform.localScale.x > -1)
+            && gameObject.transform.localScale.x == 1
+            || gameObject.transform.localScale.x == -1)
             gameObject.transform.localScale = new Vector3(gameObject.transform.localScale.x * side, 1, 0);
 
     }
@@ -112,16 +113,14 @@ public class ZombieBrain : EnemyBehaviour
                 //look to left dir
                 if (side != 1)
                 {
-                    side = 1;
-                    gameObject.transform.localScale = new Vector3(GlobalVariables.LocalPlayer.GetComponentInChildren<SpriteRenderer>().gameObject.transform.localScale.x + side, 1, 0);
+                    TurnAnim();
                 }
             }
             else
             {
                 if (side != -1)
                 {
-                    side = -1;
-                    gameObject.transform.localScale = new Vector3(GlobalVariables.LocalPlayer.GetComponentInChildren<SpriteRenderer>().gameObject.transform.localScale.x + side, 1, 0);
+                    TurnAnim();
                 }
 
             }

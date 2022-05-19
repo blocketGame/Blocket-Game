@@ -132,7 +132,7 @@ public class MobHandler : MonoBehaviour {
 
 		SpriteRenderer sr = mgo.AddComponent<SpriteRenderer>();
 		sr.sprite = mob.sprite;
-
+		mgo.AddComponent<Rigidbody2D>();
 		BoxCollider2D bc = mgo.AddComponent<BoxCollider2D>();
 		bc.size = mob.sprite.rect.size/100;
 		if (DebugVariables.MobHandling)

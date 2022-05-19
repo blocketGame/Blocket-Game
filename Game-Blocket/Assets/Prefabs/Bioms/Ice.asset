@@ -32,7 +32,7 @@ MonoBehaviour:
     regionRange: 2
     blockID: 8
   structures: 0a030d
-  enemies: 
+  enemies: 00
   stoneBlockId: 46
   stoneBlockIdBg: 0
   skyBlockInsideId: 0
