@@ -170,7 +170,8 @@ public class PlayerInteraction : MonoBehaviour {
 
 
 		//Stop Coroutine
-		if (BreakCoroutine != null && !Input.GetKey(GameManager.SettingsProfile.MainInteractionKey)){
+		
+		if (BreakCoroutine != null && (!TargetBlockExisting() || !Input.GetKey(GameManager.SettingsProfile.MainInteractionKey))){
 			if (DebugVariables.BlockInteractionCR)
 				Debug.Log("Stopped");
 			StopCoroutine(BreakCoroutine);
@@ -203,13 +204,13 @@ public class PlayerInteraction : MonoBehaviour {
 		}
 		else if (BreakCoroutine != null && breakCounter>0)
 		{
-			bool? foreground = null;
+			bool? mineInForeground = null;
 			if (TargetBlockExisting(true))
-				foreground = true;
+				mineInForeground = true;
 			else if (TargetBlockExisting(false))
-				foreground = false;
+				mineInForeground = false;
 
-			byte targetRemoveDuration = WorldAssets.Singleton.blocks[TargetBlockID(foreground.Value)].removeDuration;
+			byte targetRemoveDuration = WorldAssets.Singleton.blocks[TargetBlockID(mineInForeground.Value)].removeDuration;
 			breakSprite.GetComponent<SpriteRenderer>().sprite = crackTile[breakCounter > targetRemoveDuration / 1.5f ? 1 : breakCounter > targetRemoveDuration / 2 ? 2 : breakCounter > targetRemoveDuration / 3 ? 3 : 0];
 			//Here the sprite implementation
 
@@ -226,6 +227,7 @@ public class PlayerInteraction : MonoBehaviour {
 			Cursor.SetCursor(ItemAssets.Singleton.MiningCursor.texture, hotSpot, CursorMode);
 		else
 			Cursor.SetCursor(ItemAssets.Singleton.AttackingCursor.texture, hotSpot, CursorMode);
+		Debug.Log(Camera.main);
 		focusSprite.transform.position = new Vector3(mouseWorldPos.x + 0.5f, mouseWorldPos.y + 0.5f, focusSprite.transform.position.z);
 		focusSprite.SetActive(activate);
 	}
