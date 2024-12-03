@@ -145,8 +145,8 @@ public class UILobby : MonoBehaviour {
 
 	private void SetNetworkAddress()
 	{
-		GameManager.Singleton.uNetTransport.ConnectAddress = NetworkVariables.ipAddress;
-		GameManager.Singleton.uNetTransport.ConnectPort = NetworkVariables.portAddress;
+		GameManager.Singleton.uNetTransport.ConnectionData.Address = NetworkVariables.ipAddress;
+		GameManager.Singleton.uNetTransport.ConnectionData.Port = NetworkVariables.portAddress;
 	}
 
 	/// <summary>
@@ -160,7 +160,7 @@ public class UILobby : MonoBehaviour {
 			Debug.LogWarning($"IP-Input empty! Using: {NetworkVariables.ipAddress}");
 			
 		if (portInput.text.Trim() != "" && portInput.text.ToUpper() == portInput.text.ToLower())
-			NetworkVariables.portAddress = int.Parse(portInput.text);
+			NetworkVariables.portAddress = ushort.Parse(portInput.text);
 		else
 			Debug.LogWarning($"Port-Input empty! Using: {NetworkVariables.portAddress}");
 		

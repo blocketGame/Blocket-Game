@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
 
 /// <summary>
 /// 
@@ -11,13 +10,13 @@ public class LightScript : MonoBehaviour{
     [SerializeField]
     private LightRegion[] lightRegions;
     [SerializeField]
-    private Light2D[] lights;
+    private Light[] lights;
     [SerializeField]
     private GameObject player;
 
     public GameObject Player { get => player; set => player = value; }
     public LightRegion[] LightRegions { get => lightRegions; set => lightRegions = value; }
-    public Light2D[] Lights { get => lights; set => lights = value; }
+    public Light[] Lights { get => lights; set => lights = value; }
 
     private void Awake() => Singleton = this;
 
@@ -58,7 +57,7 @@ public class LightScript : MonoBehaviour{
                 
             }
         }
-        foreach(Light2D l in lights)
+        foreach(Light l in lights)
         {
             if (l.intensity < 0)
             {

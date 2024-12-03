@@ -10,7 +10,7 @@ public class NetworkVariables : MonoBehaviour
 	public static NetworkVariables Singleton { get; private set; }
 	#region Multiplayer
 	public static string ipAddress = UILobby.GetLocalIPAddress();
-	public static int portAddress = 7777;
+	public static ushort portAddress = 7777;
 	#endregion
 
 	private void Awake() => Singleton = this;

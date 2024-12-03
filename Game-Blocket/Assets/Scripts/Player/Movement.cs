@@ -165,7 +165,7 @@ public class Movement : MonoBehaviour {
 	{
 		if(PlayerVariables.Gamemode != Gamemode.CREATIVE)
 			FallingDamageCalc();
-		if (playerRigidbody.velocity.y != 0){
+		if (playerRigidbody.linearVelocity.y != 0){
 			if (Input.GetKeyDown(GameManager.SettingsProfile.JumpKey)||Input.GetKeyDown(KeyCode.Joystick1Button1))
 			{
 				if (TerrainHandler.Singleton.GetBlockFormCoordinate(
@@ -234,7 +234,7 @@ public class Movement : MonoBehaviour {
 	private void Wallkick()
 	{
 		CreateWallDust();
-		playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, 0);
+		playerRigidbody.linearVelocity = new Vector2(playerRigidbody.linearVelocity.x, 0);
 		playerRigidbody.AddRelativeForce(new Vector2((LookingRight ? 1 : -1) * -1 * 7, fallMulti * 1.5f), ForceMode2D.Impulse);
 		countdown = 0.4f;
 	}
@@ -245,7 +245,7 @@ public class Movement : MonoBehaviour {
 	private void Walljump()
 	{
 		CreateWallDust();
-		playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, 0);
+		playerRigidbody.linearVelocity = new Vector2(playerRigidbody.linearVelocity.x, 0);
 		playerRigidbody.AddRelativeForce(new Vector2((LookingRight ? 1 : -1) * -1 * 4, fallMulti * 4f), ForceMode2D.Impulse);
 		countdown = 0.4f;
 	}
@@ -258,7 +258,7 @@ public class Movement : MonoBehaviour {
 		float x = Input.GetAxis("Horizontal");
 		float y = Input.GetAxis("Vertical");
 		Vector2 dir = new Vector2(x, y);
-		playerRigidbody.velocity = (new Vector2(dir.x * MovementSpeed, dir.y * MovementSpeed));
+		playerRigidbody.linearVelocity = (new Vector2(dir.x * MovementSpeed, dir.y * MovementSpeed));
 	}
 
 	/// <summary>
@@ -286,14 +286,14 @@ public class Movement : MonoBehaviour {
 					//playerRigidbody.velocity = Vector3.Lerp(RigidBodyPosition, destination, Time.deltaTime);
 
 					
-					playerRigidbody.velocity = (new Vector2(x * MovementSpeed, playerRigidbody.velocity.y));
+					playerRigidbody.linearVelocity = (new Vector2(x * MovementSpeed, playerRigidbody.linearVelocity.y));
 				}
 				return;
 			}
 			
 			//Copied from above
 			if(PlayerVariables.Dimension == Dimension.DUNGEON)
-				playerRigidbody.velocity = (new Vector2(x * MovementSpeed, playerRigidbody.velocity.y));
+				playerRigidbody.linearVelocity = (new Vector2(x * MovementSpeed, playerRigidbody.linearVelocity.y));
 		}
 	}
 
@@ -302,9 +302,9 @@ public class Movement : MonoBehaviour {
 	/// </summary>
 	private void FallAcceleration()
     {
-		if (playerRigidbody.velocity.y < 0)
-			if (playerRigidbody.velocity.y > -15)
-				RigidBodyPosition += Time.deltaTime * new Vector3(movement, (playerRigidbody.velocity.y) * fallMulti, 0);
+		if (playerRigidbody.linearVelocity.y < 0)
+			if (playerRigidbody.linearVelocity.y > -15)
+				RigidBodyPosition += Time.deltaTime * new Vector3(movement, (playerRigidbody.linearVelocity.y) * fallMulti, 0);
 	}
 
 	/// <summary>
@@ -325,10 +325,10 @@ public class Movement : MonoBehaviour {
 	private void FallingDamageCalc()
     {
 		
-        if (playerRigidbody.velocity.y<0 && startingHeight==-1)
+        if (playerRigidbody.linearVelocity.y<0 && startingHeight==-1)
         {
 			startingHeight = WorldData.Singleton.Grid.WorldToCell(RigidBodyPosition).y;
-		}else if(playerRigidbody.velocity.y >= 0 && startingHeight!=-1)
+		}else if(playerRigidbody.linearVelocity.y >= 0 && startingHeight!=-1)
         {
 			int fallenHeight = startingHeight - WorldData.Singleton.Grid.WorldToCell(RigidBodyPosition).y;
             if (fallenHeight >= fallingDamageThreshhold)

@@ -159,7 +159,7 @@ public class FirstBossBehaviour : EnemyBehaviour
 
         if(distanceBetweenPlayerAndMe < siteRadius) {
             isInPlayerRange=true;
-            if(GetComponent<Rigidbody2D>().velocity == Vector2.zero) {
+            if(GetComponent<Rigidbody2D>().linearVelocity == Vector2.zero) {
                 Jump();
             }
 
@@ -195,7 +195,7 @@ public class FirstBossBehaviour : EnemyBehaviour
         } else if(Mathf.Abs(diff.x) < Mathf.Abs(diff.y) && Mathf.Abs(diff.y) > 1)
             diff = diff / Mathf.Abs(diff.y);
 
-        projectile.GetComponent<Rigidbody2D>().velocity = (diff*projectileSpeed);
+        projectile.GetComponent<Rigidbody2D>().linearVelocity = (diff*projectileSpeed);
 
         addNormalAttackCooldown(timeBeetweenEachNormalAttack);
              }

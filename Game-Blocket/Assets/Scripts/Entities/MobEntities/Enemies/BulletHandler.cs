@@ -38,7 +38,7 @@ public class BulletHandler : MonoBehaviour
         {
             PlayerHealth.Singleton.CurrentHealth = PlayerHealth.Singleton.CurrentHealth - damage;
             ///KnockBack required
-            GlobalVariables.LocalPlayer.GetComponent<Rigidbody2D>().AddRelativeForce(70f*GetComponent<Rigidbody2D>().velocity);
+            GlobalVariables.LocalPlayer.GetComponent<Rigidbody2D>().AddRelativeForce(70f*GetComponent<Rigidbody2D>().linearVelocity);
         }
     }
 }

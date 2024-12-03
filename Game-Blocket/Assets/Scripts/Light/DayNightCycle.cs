@@ -1,11 +1,10 @@
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine.Rendering;
 
 public class DayNightCycle : MonoBehaviour{
 	public static DayNightCycle Singleton { get; private set; }
 
-	public UnityEngine.Experimental.Rendering.Universal.Light2D globalLight;
+	public Light globalLight;
 	public Volume volume;
 
 	public int duskFrom;
@@ -17,7 +16,7 @@ public class DayNightCycle : MonoBehaviour{
 	//Intensity of the player light
 	public float maxIntensity; 
 
-	public Light2D playerLight;
+	public Light playerLight;
 
 	public void Awake() => Singleton = this;
 

@@ -148,7 +148,7 @@ public class ZombieBrain : EnemyBehaviour
 
     public void Jump() {
 
-        if (GetComponent<Rigidbody2D>().velocity.y == 0)
+        if (GetComponent<Rigidbody2D>().linearVelocity.y == 0)
         {
 
             GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(0, JumpForce), ForceMode2D.Impulse);

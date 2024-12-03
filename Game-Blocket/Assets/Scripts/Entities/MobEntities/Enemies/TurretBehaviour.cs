@@ -98,7 +98,7 @@ public class TurretBehaviour : MonoBehaviour
             else if (Mathf.Abs(diff.x) < Mathf.Abs(diff.y) && Mathf.Abs(diff.y) > 1)
                 diff = diff / Mathf.Abs(diff.y);
 
-            projectile.GetComponent<Rigidbody2D>().velocity = (diff * projectileSpeed);
+            projectile.GetComponent<Rigidbody2D>().linearVelocity = (diff * projectileSpeed);
 
             addAttackCooldown(timeBeetweenEachNormalAttack);
         }

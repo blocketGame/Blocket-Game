@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
+using UnityEngine.U2D;
 
 public class ProjectileBehaviour : MonoBehaviour
 {
@@ -12,8 +12,8 @@ public class ProjectileBehaviour : MonoBehaviour
     
     public float CalculatedDamage { get => (weaponDamage/2 + projectile.damage) +
             (1 +
-            ((gameObject.GetComponent<Rigidbody2D>().velocity.x < 0) ? gameObject.GetComponent<Rigidbody2D>().velocity.x * -1 : gameObject.GetComponent<Rigidbody2D>().velocity.x)
-            * ((gameObject.GetComponent<Rigidbody2D>().velocity.y < 0) ? gameObject.GetComponent<Rigidbody2D>().velocity.y * -1 : gameObject.GetComponent<Rigidbody2D>().velocity.y));
+            ((gameObject.GetComponent<Rigidbody2D>().linearVelocity.x < 0) ? gameObject.GetComponent<Rigidbody2D>().linearVelocity.x * -1 : gameObject.GetComponent<Rigidbody2D>().linearVelocity.x)
+            * ((gameObject.GetComponent<Rigidbody2D>().linearVelocity.y < 0) ? gameObject.GetComponent<Rigidbody2D>().linearVelocity.y * -1 : gameObject.GetComponent<Rigidbody2D>().linearVelocity.y));
     }
 
     public Vector2 flyingDirection;
@@ -41,7 +41,7 @@ public class ProjectileBehaviour : MonoBehaviour
         this.projectile = projectile;
         this.weaponDamage = weaponDamage;
         if (projectile.lightEmission != 0)
-            gameObject.AddComponent<Light2D>().intensity = projectile.lightEmission;
+            gameObject.AddComponent<Light>().intensity = projectile.lightEmission;
         //Adding to bullet layer
         gameObject.AddComponent<Rigidbody2D>().gravityScale = projectile.gravityScale;
         gameObject.AddComponent<BoxCollider2D>();

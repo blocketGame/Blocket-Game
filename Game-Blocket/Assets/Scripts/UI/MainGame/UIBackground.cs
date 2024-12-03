@@ -15,7 +15,7 @@ public class UIBackground : MonoBehaviour
 
 	private List<UIBackgroundLayer> Layers { get; } = new List<UIBackgroundLayer>();
 
-	public Vector2 PlayerVelocity => Movement.Singleton.playerRigidbody.velocity;
+	public Vector2 PlayerVelocity => Movement.Singleton.playerRigidbody.linearVelocity;
 
 	public float OffsetX => -(GlobalVariables.LocalPlayerPos.x % fullWithInWorld);
 

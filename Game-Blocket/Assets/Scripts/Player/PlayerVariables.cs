@@ -1,7 +1,6 @@
 using System;
 
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
 
 public class PlayerVariables : MonoBehaviour{
 	public static PlayerVariables Singleton { get; private set; }
@@ -57,7 +56,7 @@ public class PlayerVariables : MonoBehaviour{
 	#endregion
 
 	#region References
-	public Light2D playerLight;
+	public Light playerLight;
     #endregion
 
     #region Properties

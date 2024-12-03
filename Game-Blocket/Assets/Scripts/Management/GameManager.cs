@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using Unity.Netcode;
-using Unity.Netcode.Transports.UNET;
-
+using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -29,7 +28,7 @@ public class GameManager : MonoBehaviour {
 	public static GameObject LoadinScreenNow { get; set; }
 
 
-	public UNetTransport uNetTransport;
+	public UnityTransport uNetTransport;
 
 	//Server
 	public static Dictionary<ulong, NetworkObject> Players { get; } = new Dictionary<ulong, NetworkObject>();
